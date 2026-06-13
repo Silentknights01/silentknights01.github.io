@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Silent Knights | نقشه راه حرفه‌ای امنیت سایبری</title>
+    <title>Silent Knights | نقشه راه امنیت سایبری - آفنسک</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @font-face {
@@ -14,18 +14,26 @@
 
         :root {
             --primary-bg: #0a0a0f;
-            --secondary-bg: #15151f;
-            --accent-blue: #00f0ff;
-            --accent-green: #7affc9;
-            --text-primary: #e6eef8;
-            --text-secondary: #a0c5e8;
+            --secondary-bg: #111118;
+            --card-bg: #14141f;
+            --accent-red: #ff2a2a;
+            --accent-red-dark: #e60000;
+            --accent-red-light: #ff5555;
+            --accent-red-glow: rgba(255, 42, 42, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --border-glow: rgba(255, 42, 42, 0.4);
         }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
 
         body {
             font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
-            background: radial-gradient(circle at 10% 20%, var(--primary-bg), #02020a);
+            background: var(--primary-bg);
             color: var(--text-primary);
             min-height: 100vh;
             padding: 20px;
@@ -33,12 +41,16 @@
             overflow-x: hidden;
         }
 
+       
         .roadmap-container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
 
+        /* استایل هدر با درخشش بیشتر */
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -49,13 +61,14 @@
             font-family: 'SDGlitchDemo', 'Major Mono Display', 'Orbitron', monospace;
             font-size: clamp(1.8rem, 8vw, 3.5rem);
             font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green), #8a6eff);
+            background: linear-gradient(135deg, #ffffff, var(--accent-red), #ff8888);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin-bottom: 10px;
             letter-spacing: 2px;
             line-height: 1.2;
+            text-shadow: 0 0 30px rgba(255, 42, 42, 0.5);
         }
 
         .subtitle {
@@ -64,26 +77,28 @@
             color: var(--text-secondary);
             font-weight: 500;
             margin-bottom: 30px;
-            border-bottom: 1px dashed rgba(0,240,255,0.3);
+            border-bottom: 1px dashed var(--accent-red);
             display: inline-block;
             padding-bottom: 8px;
         }
 
         /* فهرست جدول محتوا */
         .content-table {
-            background: rgba(10, 10, 20, 0.75);
-            border-radius: 28px;
+            background: rgba(20, 20, 31, 0.95);
+            border-radius: 20px;
             padding: 20px;
             margin: 30px auto;
             max-width: 900px;
-            border: 1px solid rgba(0, 240, 255, 0.25);
-            backdrop-filter: blur(12px);
+            border: 1px solid var(--accent-red);
+            box-shadow: 0 0 30px rgba(255, 42, 42, 0.15);
+            backdrop-filter: blur(4px);
         }
         .content-table h3 {
-            color: var(--accent-green);
+            color: var(--accent-red);
             margin-bottom: 20px;
             text-align: center;
             font-size: 1.5rem;
+            text-shadow: 0 0 10px rgba(255, 42, 42, 0.3);
         }
         .table-content {
             display: flex;
@@ -95,16 +110,16 @@
             flex: 1;
             min-width: 220px;
             padding: 15px;
-            background: rgba(20, 20, 30, 0.4);
-            border-radius: 24px;
+            background: rgba(10, 10, 15, 0.8);
+            border-radius: 16px;
+            border-left: 2px solid var(--accent-red);
         }
         .section-title {
-            color: var(--accent-blue);
+            color: var(--accent-red);
             font-size: 1.2rem;
             margin-bottom: 15px;
             padding-bottom: 8px;
-            border-bottom: 2px solid;
-            border-image: linear-gradient(90deg, var(--accent-blue), transparent) 1;
+            border-bottom: 2px solid var(--accent-red);
             display: flex;
             gap: 8px;
         }
@@ -112,8 +127,8 @@
         .table-section li {
             padding: 10px 15px;
             margin-bottom: 10px;
-            border-radius: 40px;
-            background: rgba(40, 40, 55, 0.7);
+            border-radius: 8px;
+            background: rgba(30, 30, 45, 0.9);
             color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.3s ease;
@@ -121,13 +136,15 @@
             align-items: center;
             gap: 12px;
             font-size: 0.9rem;
+            border: 1px solid transparent;
         }
-        .table-section li i { color: var(--accent-blue); }
+        .table-section li i { color: var(--accent-red); }
         .table-section li:hover {
-            background: linear-gradient(95deg, #1e2a47, #0f172a);
+            background: rgba(255, 42, 42, 0.2);
             color: white;
-            transform: translateX(-5px);
-            border-right: 3px solid var(--accent-blue);
+            transform: translateX(-5px) scale(1.02);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 20px rgba(255, 42, 42, 0.3);
         }
 
         /* ========== دسکتاپ (عرض ≥ 769px) ========== */
@@ -135,26 +152,30 @@
             .timeline {
                 position: relative;
                 max-width: 1200px;
-                margin: 40px auto;
-                min-height: 1500px;
+                margin: 50px auto;
+                /* ===== فاصله عمودی کارت‌ها: هر کارت 30px بیشتر از حالت قبل ===== */
+                /* برای تنظیم فاصله، مقدار top کارت‌ها در کلاس‌های card-01 تا card-06 را تغییر دهید */
+                min-height: 1550px; /* افزایش یافته برای فاصله 30px بیشتر */
             }
+            /* خط وسط عمودی */
             .timeline-line {
                 position: absolute;
                 left: 50%;
                 top: 0;
                 bottom: 0;
                 width: 4px;
-                background: linear-gradient(to bottom, #ff4b4b, #ff8c42, #ffd166, #9b2bff, #2b7bff, #00f0ff);
+                background: linear-gradient(to bottom, var(--accent-red), #ff8c42, #f64403, #ff5555, var(--accent-red));
                 transform: translateX(-50%);
                 border-radius: 4px;
                 opacity: 0;
                 animation: lineGrow 1.4s ease-out 0.6s forwards;
             }
+            /* نقاط روی خط */
             .timeline-point {
                 position: absolute;
                 left: 50%;
-                width: 70px;
-                height: 70px;
+                width: 50px;
+                height: 50px;
                 background: radial-gradient(circle at 30% 25%, var(--point-color-1), var(--point-color-2));
                 border-radius: 50%;
                 transform: translateX(-50%) scale(0);
@@ -163,25 +184,28 @@
                 justify-content: center;
                 font-weight: 900;
                 color: white;
-                font-size: 24px;
+                font-size: 1.3rem;
                 box-shadow: 0 10px 25px rgba(0,0,0,0.6);
                 z-index: 10;
                 border: 2px solid rgba(255,255,240,0.5);
                 cursor: pointer;
                 opacity: 0;
+                font-family: monospace;
+                transition: all 1s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             }
             .timeline-point.animate { animation: pointPopIn 0.7s forwards; }
-            .timeline-point:hover { transform: translateX(-50%) scale(1.15); }
+            .timeline-point:hover { transform: translateX(-50%) scale(1.15); background: radial-gradient(circle at 30% 25%, var(--accent-red), #ff6666); }
             
+            /* کارت‌ها - یکی راست یکی چپ */
             .timeline-card {
                 position: absolute;
-                width: 350px;
-                background: linear-gradient(145deg, rgba(22,22,35,0.98), rgba(12,12,22,0.98));
-                border-radius: 28px;
-                padding: 22px;
-                backdrop-filter: blur(12px);
-                border: 1px solid rgba(255,255,255,0.2);
-                transition: all 0.4s;
+                width: 380px;
+                background: var(--card-bg);
+                border-radius: 20px;
+                padding: 18px;
+                backdrop-filter: blur(4px);
+                border: 1px solid rgba(255, 42, 42, 0.3);
+                transition: all 1s cubic-bezier(0.2, 0.9, 0.4, 1.1);
                 opacity: 0;
                 cursor: pointer;
                 box-shadow: 0 15px 35px rgba(0,0,0,0.5);
@@ -189,80 +213,87 @@
             .timeline-card.card-right {
                 right: calc(50% + 60px);
                 border-right: 4px solid var(--card-border-color);
-                transform: translateX(80px) rotate(2deg);
+                transform: translateX(80px);
             }
             .timeline-card.card-left {
                 left: calc(50% + 60px);
                 border-left: 4px solid var(--card-border-color);
-                transform: translateX(-80px) rotate(-2deg);
+                transform: translateX(-80px);
             }
             .timeline-card.animate { animation: cardSlideIn 0.8s forwards; }
-            .timeline-card:hover { transform: translateY(-8px) scale(1.02) !important; }
-            
-            .timeline-card h3 { font-size: 1.6rem; margin-bottom: 12px; background: linear-gradient(120deg, #fff, var(--accent-blue)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-            .timeline-card p { color: #ccddee; line-height: 1.7; font-size: 0.95rem; }
-            .card-badge { display: inline-block; background: rgba(0,240,255,0.2); padding: 4px 12px; border-radius: 30px; font-size: 0.7rem; margin-top: 12px; color: var(--accent-green); }
-            
-            .point-01 { top: 7%; --point-color-1: #ff4b4b; --point-color-2: #ff1e6a; }
-            .point-02 { top: 22%; --point-color-1: #ff6b3b; --point-color-2: #ff8c42; }
-            .point-03 { top: 37%; --point-color-1: #ffaa33; --point-color-2: #ffcc44; }
-            .point-04 { top: 52%; --point-color-1: #aa55ff; --point-color-2: #d96eff; }
-            .point-05 { top: 67%; --point-color-1: #2b7bff; --point-color-2: #3e9eff; }
-            .point-06 { top: 82%; --point-color-1: #00f0ff; --point-color-2: #6effd0; }
-            .card-01 { top: 4.5%; --card-border-color: #ff5e5e; }
-            .card-02 { top: 19.5%; --card-border-color: #ff8c42; }
-            .card-03 { top: 34.5%; --card-border-color: #ffbd44; }
-            .card-04 { top: 49.5%; --card-border-color: #c273ff; }
-            .card-05 { top: 64.5%; --card-border-color: #4a9eff; }
-            .card-06 { top: 79.5%; --card-border-color: #39ffcf; }
-            
-            .section-divider {
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 280px;
-                text-align: center;
-                padding: 8px 20px;
-                background: rgba(0,0,0,0.7);
-                backdrop-filter: blur(12px);
-                border-radius: 60px;
-                font-weight: bold;
-                border: 1px solid rgba(0,240,255,0.4);
-                z-index: 15;
+            /* هاور کارت‌ها با ترانزیشن نرم */
+            .timeline-card:hover { 
+                transform: translateY(-8px) scale(1.02) !important; 
+                border-color: var(--accent-red); 
+                box-shadow: 0 25px 45px rgba(255, 42, 42, 0.35);
+                background: #1a1a2a;
             }
-            .basic-divider { top: 46%; background: linear-gradient(90deg, #ff5e5e33, #ffaa3344); }
-            .advanced-divider { top: 76%; background: linear-gradient(90deg, #aa55ff33, #00f0ff44); }
+            
+            .timeline-card h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--accent-red); font-family: 'Orbitron', monospace; }
+            .timeline-card p { color: var(--text-secondary); line-height: 1.6; font-size: 0.85rem; }
+            .card-badge { display: inline-block; background: rgba(255, 42, 42, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; margin-top: 12px; color: var(--accent-red-light); transition: all 0.3s ease; }
+            .timeline-card:hover .card-badge { background: rgba(255, 42, 42, 0.4); }
+            
+            /* عکس داخل کارت */
+            .card-image {
+                width: 100%;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 12px;
+                margin-bottom: 12px;
+                transition: transform 0.4s ease;
+            }
+            .timeline-card:hover .card-image {
+                transform: scale(1.02);
+            }
+            
+            /* موقعیت نقاط (بدون تغییر) */
+            .point-01 { top: 7%; --point-color-1:  #722219; --point-color-2:  #722219; }
+            .point-02 { top: 22%; --point-color-1: #722219; --point-color-2: #722219; }
+            .point-03 { top: 37%; --point-color-1: #722219; --point-color-2: #722219; }
+            .point-04 { top: 52%; --point-color-1: #722219; --point-color-2: #722219; }
+            .point-05 { top: 67%; --point-color-1: #722219; --point-color-2: #722219; }
+            .point-06 { top: 82%; --point-color-1: #722219; --point-color-2: #722219; }
+            
+            /* ===== تنظیم فاصله عمودی کارت‌ها (افزایش 30px نسبت به قبل) ===== */
+            /* اگر نیاز به تنظیم بیشتر دارید، مقدار top را تغییر دهید */
+            .card-01 { top: 4%; --card-border-color:  #722219; }      /*减少了 0.5% */
+            .card-02 { top: 19%; --card-border-color: #722219; }     /*减少了 0.5% */
+            .card-03 { top: 34%; --card-border-color: #722219; }     /*减少了 0.5% */
+            .card-04 { top: 49%; --card-border-color: #722219; }     /*减少了 0.5% */
+            .card-05 { top: 64%; --card-border-color: #722219; }     /*减少了 0.5% */
+            .card-06 { top: 79%; --card-border-color: #722219; }     /*减少了 0.5% */
+            /* با کاهش 0.5% از هر top، عملاً فاصله بین کارت‌ها بیشتر شده */
         }
 
-        /* ========== موبایل و تبلت (< 769px) ========== */
+        /* ========== موبایل (< 769px) ========== */
         @media (max-width: 768px) {
             .timeline {
                 display: flex;
                 flex-direction: column;
-                gap: 25px;
+                gap: 30px; /* فاصله 30px بین کارت‌ها در موبایل */
                 margin: 40px 0;
             }
-            /* مخفی کردن خط و نقاط شناور و بخش‌بندها */
-            .timeline-line, .timeline-point, .section-divider {
+            .timeline-line, .timeline-point {
                 display: none;
             }
-            /* کارت‌ها به صورت ستونی */
             .timeline-card {
                 position: relative;
                 width: 100%;
-                background: linear-gradient(145deg, rgba(22,22,35,0.98), rgba(12,12,22,0.98));
-                border-radius: 28px;
-                padding: 20px;
-                backdrop-filter: blur(12px);
-                border: 1px solid rgba(255,255,255,0.2);
+                background: var(--card-bg);
+                border-radius: 20px;
+                padding: 18px;
+                border: 1px solid rgba(255, 42, 42, 0.3);
                 border-right: 4px solid var(--card-border-color);
-                transition: all 0.3s;
+                transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
                 cursor: pointer;
                 box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-                opacity: 1;
-                transform: none !important;
             }
-            /* اضافه کردن شماره (۰ تا ۵) روی هر کارت با pseudo-element */
+            .timeline-card:hover {
+                transform: translateY(-5px);
+                border-color: var(--accent-red);
+                box-shadow: 0 20px 35px rgba(255, 42, 42, 0.25);
+            }
             .timeline-card::before {
                 content: attr(data-number);
                 position: absolute;
@@ -276,50 +307,41 @@
                 align-items: center;
                 justify-content: center;
                 font-weight: bold;
-                font-size: 1.3rem;
+                font-size: 1.2rem;
                 color: white;
                 box-shadow: 0 0 15px rgba(255,75,75,0.6);
                 border: 2px solid rgba(255,255,200,0.8);
-                z-index: 2;
+                z-index: 10;
+                font-family: monospace;
             }
-            /* اختصاص شماره به هر کارت بر اساس کلاس */
-            .card-01 { --card-border-color: #ff5e5e; } .card-01::before { content: "۰"; background: radial-gradient(circle, #ff4b4b, #aa2e2e); }
-            .card-02 { --card-border-color: #ff8c42; } .card-02::before { content: "۱"; background: radial-gradient(circle, #ff6b3b, #cc5522); }
-            .card-03 { --card-border-color: #ffbd44; } .card-03::before { content: "۲"; background: radial-gradient(circle, #ffaa33, #cc8822); }
-            .card-04 { --card-border-color: #c273ff; } .card-04::before { content: "۳"; background: radial-gradient(circle, #aa55ff, #7733cc); }
-            .card-05 { --card-border-color: #4a9eff; } .card-05::before { content: "۴"; background: radial-gradient(circle, #2b7bff, #1a4faa); }
-            .card-06 { --card-border-color: #39ffcf; } .card-06::before { content: "۵"; background: radial-gradient(circle, #00f0ff, #0099aa); }
+            .card-01 { --card-border-color: #722219; }
+            .card-02 { --card-border-color: #722219; }
+            .card-03 { --card-border-color: #722219; }
+            .card-04 { --card-border-color: #722219; }
+            .card-05 { --card-border-color: #722219; }
+            .card-06 { --card-border-color: #722219; }
             
-            .timeline-card h3 {
-                font-size: 1.5rem;
-                margin-top: 15px;
+            .timeline-card h3 { font-size: 1.3rem; margin-bottom: 8px; color: var(--accent-red); font-family: 'Orbitron', monospace; margin-top: 15px; }
+            .timeline-card p { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; }
+            .card-badge { display: inline-block; background: rgba(255, 42, 42, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; margin-top: 10px; color: var(--accent-red-light); }
+            .card-image {
+                width: 100%;
+                height: 160px;
+                object-fit: cover;
+                border-radius: 12px;
                 margin-bottom: 12px;
-                background: linear-gradient(120deg, #fff, var(--accent-blue));
-                -webkit-background-clip: text;
-                background-clip: text;
-                color: transparent;
+                transition: transform 0.3s ease;
             }
-            .timeline-card p {
-                color: #ccddee;
-                line-height: 1.6;
-                font-size: 0.95rem;
-            }
-            .card-badge {
-                display: inline-block;
-                background: rgba(0,240,255,0.2);
-                padding: 4px 12px;
-                border-radius: 30px;
-                font-size: 0.75rem;
-                margin-top: 12px;
-                color: var(--accent-green);
+            .timeline-card:hover .card-image {
+                transform: scale(1.02);
             }
         }
 
-        /* مودال (مشترک) */
+        /* مودال */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.98);
             backdrop-filter: blur(12px);
             z-index: 1000;
             display: flex;
@@ -331,86 +353,139 @@
         }
         .modal-overlay.active { visibility: visible; opacity: 1; }
         .modal-container {
-            background: linear-gradient(145deg, #11121f, #07070f);
-            max-width: 750px;
+            background: linear-gradient(145deg, #111118, #0a0a0f);
+            max-width: 950px;
             width: 90%;
-            border-radius: 40px;
-            border: 1px solid rgba(0,240,255,0.5);
-            transform: scale(0.9);
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 20px;
+            border: 1px solid var(--accent-red);
+            transform: scale(0.95);
             transition: transform 0.3s;
-            overflow: hidden;
+            box-shadow: 0 0 60px rgba(255, 42, 42, 0.3);
         }
         .modal-overlay.active .modal-container { transform: scale(1); }
+        
+        .modal-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-container::-webkit-scrollbar-track {
+            background: #1a1a2a;
+        }
+        .modal-container::-webkit-scrollbar-thumb {
+            background: var(--accent-red);
+            border-radius: 10px;
+        }
+
         .modal-header {
             padding: 20px 24px;
-            background: rgba(0,240,255,0.1);
+            background: rgba(255, 42, 42, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid var(--accent-red);
+            position: sticky;
+            top: 0;
+            background: #0a0a0f;
+            z-index: 10;
         }
-        .modal-header h2 { font-size: 1.4rem; margin: 0; }
+        .modal-header h2 { 
+            font-size: 1.4rem; 
+            margin: 0; 
+            color: var(--accent-red);
+            font-family: 'Orbitron', monospace;
+        }
         .close-modal {
             background: none;
             border: none;
-            color: var(--accent-blue);
+            color: var(--accent-red);
             font-size: 2rem;
             cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-modal:hover {
+            color: #ff8888;
+            transform: scale(1.1) rotate(90deg);
         }
         .modal-body {
             padding: 20px 25px;
-            max-height: 60vh;
-            overflow-y: auto;
         }
-        .video-sample iframe {
+        .modal-course-image {
             width: 100%;
-            aspect-ratio: 16/9;
-            border: none;
-            border-radius: 20px;
+            max-height: 320px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 42, 42, 0.3);
         }
-        .syllabus-list { list-style: none; padding-right: 0; }
+        .syllabus-list { 
+            list-style: none; 
+            padding-right: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+        }
         .syllabus-list li {
             padding: 8px 0;
-            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 42, 42, 0.15);
             display: flex;
             gap: 12px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: #dddddd;
+        }
+        .syllabus-list li i {
+            color: var(--accent-red);
+            margin-top: 3px;
+        }
+        .exam-info {
+            background: rgba(255, 42, 42, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-right: 3px solid var(--accent-red);
         }
         .progress-bar {
             position: fixed;
             top: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #ff4b4b, #00f0ff);
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-red), var(--accent-red-light));
             width: 0%;
             z-index: 1100;
             transition: width 0.2s;
+            box-shadow: 0 0 15px rgba(255, 42, 42, 0.6);
         }
 
-        @keyframes headerSlide { from { opacity: 0; transform: translateY(-60px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes headerSlide { 
+            from { opacity: 0; transform: translateY(-60px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
         @keyframes lineGrow { from { opacity: 0; height: 0; } to { opacity: 1; height: 100%; } }
         @keyframes pointPopIn { 0% { opacity: 0; transform: translateX(-50%) scale(0) rotate(-180deg); } 100% { opacity: 1; transform: translateX(-50%) scale(1) rotate(0); } }
-        @keyframes cardSlideIn { from { opacity: 0; transform: translateX(0) rotate(0deg); } to { opacity: 1; transform: translateX(0) rotate(0deg); } }
+        @keyframes cardSlideIn { from { opacity: 0; transform: translateX(0); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
 <div class="progress-bar" id="progressBar"></div>
 <div class="roadmap-container">
     <div class="header">
-        <h1 class="main-title"><i class="fas fa-shield-hooded"></i> Silent Knights <br> Cyber Security Roadmap</h1>
-        <div class="subtitle">مسیر صفر تا صد امنیت سایبری | هک اخلاقی تا تست نفوذ حرفه‌ای</div>
+        <h1 class="main-title"><i class="fas fa-skull"></i> Silent Knights <br> Offensive Security Roadmap</h1>
+        <div class="subtitle">مسیر صفر تا صد امنیت سایبری | آفند آفنسک | #TryHarder</div>
+        
+        <!-- جدول محتوا -->
         <div class="content-table">
-            <h3><i class="fas fa-map-signs"></i> نقشه راه هک و امنیت</h3>
+            <h3><i class="fas fa-map-skull"></i> نقشه راه هک و امنیت</h3>
             <div class="table-content">
                 <div class="table-section">
-                    <div class="section-title"><i class="fas fa-seedling"></i> Basic (ابتدایی)</div>
+                    <div class="section-title"><i class="fas fa-seedling"></i> Foundation</div>
                     <ul>
-                        <li onclick="openCourseModal(0)"><i class="fas fa-user-secret"></i> Zero Hacker - ابتدا و طرز فکر</li>
+                        <li onclick="openCourseModal(0)"><i class="fas fa-user-secret"></i> Zero Hacker - طرز فکر</li>
                         <li onclick="openCourseModal(1)"><i class="fas fa-network-wired"></i> Network For Hacker</li>
                         <li onclick="openCourseModal(2)"><i class="fab fa-linux"></i> Linux For Hacker</li>
                         <li onclick="openCourseModal(3)"><i class="fab fa-python"></i> Python For Hacker</li>
                     </ul>
                 </div>
                 <div class="table-section">
-                    <div class="section-title"><i class="fas fa-rocket"></i> Advanced (پیشرفته)</div>
+                    <div class="section-title"><i class="fas fa-rocket"></i> Professional</div>
                     <ul>
                         <li onclick="openCourseModal(4)"><i class="fas fa-certificate"></i> CEHv13 - هکر اخلاقی</li>
                         <li onclick="openCourseModal(5)"><i class="fas fa-skull-crossbones"></i> PWK (Pen-200) - OSCP</li>
@@ -420,13 +495,11 @@
         </div>
     </div>
 
-    <!-- تایم‌لاین -->
+    <!-- تایم‌لاین با خط وسط و کارت‌های راست و چپ -->
     <div class="timeline">
-        <!-- این المان‌ها فقط در دسکتاپ دیده می‌شوند -->
         <div class="timeline-line"></div>
-        <div class="section-divider basic-divider"><i class="fas fa-code-branch"></i> مهارت‌های اساسی</div>
-        <div class="section-divider advanced-divider"><i class="fas fa-trophy"></i> مدارک بین‌المللی</div>
         
+        <!-- نقاط روی خط -->
         <div class="timeline-point point-01">0</div>
         <div class="timeline-point point-02">1</div>
         <div class="timeline-point point-03">2</div>
@@ -434,36 +507,42 @@
         <div class="timeline-point point-05">4</div>
         <div class="timeline-point point-06">5</div>
 
-        <!-- کارت‌ها (در موبایل اعداد روی آن‌ها نمایش داده می‌شود) -->
-        <div class="timeline-card card-right card-01" onclick="openCourseModal(0)">
-            <h3><i class="fas fa-robot"></i> Zero Hacker</h3>
+        <!-- کارت‌ها - یکی راست یکی چپ -->
+        <div class="timeline-card card-right card-01" onclick="openCourseModal(0)" data-number="0">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=200&fit=crop" class="card-image" alt="Zero Hacker">
+            <h3><i class="fas fa-user-secret"></i> Zero Hacker</h3>
             <p>آغاز مسیر هکری از صفر مطلق. پرورش ذهنیت هکر، درک تهدیدات، مدلسازی امنیتی و اصول اولیه امنیت سایبری.</p>
-            <div class="card-badge"><i class="fas fa-graduation-cap"></i> ۴ هفته | پایه</div>
+            <div class="card-badge"><i class="fas fa-graduation-cap"></i> ۴ هفته | مبتدی</div>
         </div>
-        <div class="timeline-card card-left card-02" onclick="openCourseModal(1)">
-            <h3><i class="fas fa-globe"></i> Network For Hacker</h3>
+        <div class="timeline-card card-left card-02" onclick="openCourseModal(1)" data-number="1">
+            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=200&fit=crop" class="card-image" alt="Network For Hacker">
+            <h3><i class="fas fa-network-wired"></i> Network For Hacker</h3>
             <p>تحلیل پروتکل‌ها، TCP/IP، مسیریابی، فایروال، Wireshark، Nmap و اصول هک شبکه.</p>
-            <div class="card-badge"><i class="fas fa-chart-line"></i> ۴ هفته | ضروری</div>
+            <div class="card-badge"><i class="fas fa-chart-line"></i> ۴ هفته | مبتدی تا متوسط</div>
         </div>
-        <div class="timeline-card card-right card-03" onclick="openCourseModal(2)">
+        <div class="timeline-card card-right card-03" onclick="openCourseModal(2)" data-number="2">
+            <img src="https://images.unsplash.com/photo-1629654291663-b91ad427698f?w=400&h=200&fit=crop" class="card-image" alt="Linux For Hacker">
             <h3><i class="fab fa-linux"></i> Linux For Hacker</h3>
             <p>تسلط بر خط فرمان لینوکس، امنیت فایل سیستم، اسکریپت‌نویسی Bash، ابزارهای Kali Linux.</p>
-            <div class="card-badge"><i class="fas fa-terminal"></i> ۴ هفته | ضروری</div>
+            <div class="card-badge"><i class="fas fa-terminal"></i> ۴ هفته | مبتدی تا متوسط</div>
         </div>
-        <div class="timeline-card card-left card-04" onclick="openCourseModal(3)">
+        <div class="timeline-card card-left card-04" onclick="openCourseModal(3)" data-number="3">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=200&fit=crop" class="card-image" alt="Python For Hacker">
             <h3><i class="fab fa-python"></i> Python For Hacker</h3>
             <p>نوشتن ابزارهای امنیتی، اسکریپت اسکنر، اتوماسیون حملات، سوکت‌نویسی، keylogger و reverse shell.</p>
-            <div class="card-badge"><i class="fas fa-code"></i> ۶ هفته | ضروری</div>
+            <div class="card-badge"><i class="fas fa-code"></i> ۶ هفته | متوسط</div>
         </div>
-        <div class="timeline-card card-right card-05" onclick="openCourseModal(4)">
-            <h3><i class="fas fa-shield-alt"></i> CEHv13</h3>
+        <div class="timeline-card card-right card-05" onclick="openCourseModal(4)" data-number="4">
+            <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&h=200&fit=crop" class="card-image" alt="CEHv13">
+            <h3><i class="fas fa-certificate"></i> CEHv13 | هکر اخلاقی</h3>
             <p>گواهی هکر اخلاقی نسخه ۱۳ - Footprinting، اسکن، Enumeration، نفوذ به سیستم‌ها، وب اپلیکیشن.</p>
-            <div class="card-badge"><i class="fas fa-crown"></i> ۳ ماه</div>
+            <div class="card-badge"><i class="fas fa-crown"></i> ۳ ماه | پیشرفته</div>
         </div>
-        <div class="timeline-card card-left card-06" onclick="openCourseModal(5)">
-            <h3><i class="fas fa-bolt"></i> PWK (Pen-200)</h3>
+        <div class="timeline-card card-left card-06" onclick="openCourseModal(5)" data-number="5">
+            <img src="https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?w=400&h=200&fit=crop" class="card-image" alt="PWK OSCP">
+            <h3><i class="fas fa-skull-crossbones"></i> PWK (Pen-200) | OSCP</h3>
             <p>دوره تهاجمی OSCP - بهره‌برداری پیشرفته، اکتیو دایرکتوری، Buffer Overflow، پویشگرهای پیشرفته.</p>
-            <div class="card-badge"><i class="fas fa-hands-helping"></i> ۲ ماه</div>
+            <div class="card-badge"><i class="fas fa-hands-helping"></i> ۲ ماه | پیشرفته</div>
         </div>
     </div>
 </div>
@@ -481,131 +560,115 @@
 
 <script>
     const coursesData = [
-       {
-  "title": "Zero Hacker - شروع حرفه‌ای از صفر",
-  "description": "دوره‌ای جامع برای ورود به دنیای هک و امنیت سایبری؛ از مفاهیم پایه، ذهنیت هکری و تست نفوذ گرفته تا لینوکس، ابزارهای هک، مهندسی اجتماعی، امنیت وای‌فای و آینده هوش مصنوعی در سایبرسکیوریتی. این دوره بدون نیاز به دانش قبلی طراحی شده تا شما را قدم‌به‌قدم با دنیای واقعی هکرها و امنیت آشنا کند.",
-  "syllabus": [
-    "1. هک چیست و هکر کیست؟",
-    "2. باورهای غلط درباره هکرها",
-    "3. آیا به‌درد هک می‌خورید؟",
-    "4. ذهنیت یک هکر",
-    "5. انواع هکرها و اخلاق هکری",
-    "6. دانشگاه، کورس یا خودآموزی",
-    "7. آیا باید انگلیسی بلد باشیم؟",
-    "8. مهارت‌های لازم برای یک هکر",
-    "9. مفهوم برنامه‌نویسی برای هکرها",
-    "10. تست نفوذ چیست؟",
-    "11. مراحل تست نفوذ",
-    "12. چرا هکرها از لینوکس استفاده می‌کنند؟",
-    "13. کالی لینوکس چیست؟",
-    "14. ابزارهای اصلی هکرها",
-    "15. ابزار و سیستم مورد نیاز برای شروع حرفه‌ای",
-    "16. ابزارهای سخت‌افزاری",
-    "17. هک واتساپ",
-    "18. هک وای‌فای",
-    "19. هک دوربین‌ها",
-    "20. مهندسی اجتماعی",
-    "21. نقشه راه هک و امنیت",
-    "22. نقش هوش مصنوعی در امنیت سایبری",
-    "23. آیندهٔ تکنولوژی",
-    "24. ناشناس ماندن در اینترنت",
-    "25. اشتباهات رایج مبتدیان",
-    "26. آسیب‌پذیری‌های امنیتی و حفاظت از داده‌ها",
-    "27. راه‌های درآمدی هکرها"]
-  ,"videoUrl": "https://www.youtube.com/watch?v=rWk3fzlrmT4",
-  "extra": "نمونه ویدیوهای ضبط شده"
-},
-       
-    { title: "Network For Hacker", description: "دوره Network For Hackers شما را با مفاهیم اساسی شبکه و طرز کار ارتباطات در دنیای سایبری آشنا می‌کند. در این دوره، از مبانی شبکه، Subnetting و تحلیل ترافیک گرفته تا فایروال‌های لینوکس، امنیت وای‌فای، پروتکل‌های مهم شبکه مانند DNS، ARP، SMB و HTTP را به‌صورت عملی یاد می‌گیرید. همچنان با شبکه‌های بلوتوث، RF، سیستم‌های صنعتی SCADA/ICS و حتی امنیت شبکه‌های موتر آشنا می‌شوید تا درک عمیق‌تری از دنیای هک و امنیت شبکه به‌دست بیاورید."
-        ,   "syllabus": [
-    "1. Network Basics",
-    "2. Sub-netting and CIDR",
-    "3. Network Analysis",
-    "4. Linux Firewalls",
-    "5. Wi-Fi Networks and Hacking",
-    "6. Bluetooth Networks",
-    "7. Address Resolution Protocol (ARP)",
-    "8. Domain Name Service (DNS)",
-    "9. Server Message Block (SMB)",
-    "10. SMTP",
-    "11. SNMP",
-    "12. HTTP",
-    "13. Automobile Networks",
-    "14. SCADA/ICS Networks",
-    "15. Radio Frequency (RF) Networks",
-    "16. Appendix A Cyberwarrior Wisdom"]
-        , videoUrl: "", extra: "به همراه لاب عملی" },
-       
-        { title: "Linux For Hacker", description: "دوره  Linux For Hackers شما را با لینوکس از سطح پایه تا مباحث پیشرفته امنیتی آشنا می‌کند. در این دوره، کار با ترمینل، مدیریت فایل‌ها، شبکه، نصب نرم‌افزارها و Bash Scripting را به‌صورت عملی یاد می‌گیرید. همچنان با مفاهیمی مانند دسترسی‌ها و Privilege Escalation، مدیریت پروسه‌ها، لاگ‌ها، سرویس‌هایی مثل Apache و SSH، ناشناس ماندن در اینترنت، امنیت شبکه‌های وایرلس، کرنل لینوکس و Python Scripting آشنا می‌شوید تا بتوانید لینوکس را به‌عنوان یک هکر و متخصص امنیت به‌صورت حرفه‌ای استفاده کنید.",
-         "syllabus": [
-    "1. File system & terminal basics",
-    "2. Text manipulation",
-    "3. Network management",
-    "4. Adding/removing software",
-    "5. File permissions & privilege escalation",
-    "6. Process management",
-    "7. Environment variables",
-    "8. Bash scripting",
-    "9. Archiving & filesystem management",
-    "10. Logging system",
-    "11. Apache, SSH, MySQL",
-    "12. Anonymity (Tor, VPN, proxies)",
-    "13. Wireless networks",
-    "14. Kernel & LKMs",
-    "15. Job scheduling",
-    "16. Python scripting"]
-         , videoUrl: "https://www.youtube.com/watch?v=UjUtAF-sprc", extra: "آموزش Metasploit و Netcat" },
-      
-         { title: "Python For Hacker", description: "نوشتن ابزارهای امنیتی، اسکنر پورت، brute force، keylogger و reverse shell.",
-          syllabus: ["سوکت و برنامه‌نویسی شبکه", "اسکنر آسیب‌پذیری", "reverse shell ساده", "پردازش packet با Scapy", "API امنیتی"], videoUrl: "https://www.youtube.com/embed/Mf4fLnwEmjs", extra: "پروژه ساخت Vulnerability Scanner" },
-        
-        { title: "CEHv13 | هکر اخلاقی", description: "دوره **CEHv13 (Certified Ethical Hacker v13)** یک دوره تخصصی و عملی در زمینه هک اخلاقی و تست نفوذ است که شما را با تکنیک‌ها، ابزارها و روش‌های واقعی هکرها آشنا می‌کند. در این دوره، از شناسایی و اسکن شبکه‌ها گرفته تا تحلیل آسیب‌پذیری، هک سیستم‌ها، امنیت وب، SQL Injection، مهندسی اجتماعی، امنیت وایرلس، موبایل، Cloud و IoT را به‌صورت عملی یاد می‌گیرید. همچنان با روش‌های دور زدن فایروال‌ها، Sniffing، Session Hijacking، حملات DoS و مفاهیم Cryptography آشنا می‌شوید تا بتوانید مانند یک متخصص امنیت، تهدیدات سایبری را شناسایی و تحلیل کنید.",
-          "syllabus": [
-    "1. Introduction to Ethical Hacking",
-    "2. Footprinting and Reconnaissance",
-    "3. Scanning Networks",
-    "4. Enumeration",
-    "5. Vulnerability Analysis",
-    "6. System Hacking",
-    "7. Malware Threats",
-    "8. Sniffing",
-    "9. Social Engineering",
-    "10. Denial-of-Service (DoS)",
-    "11. Session Hijacking",
-    "12. Evading IDS, Firewalls, and Honeypots",
-    "13. Hacking Web Servers",
-    "14. Hacking Web Applications",
-    "15. SQL Injection",
-    "16. Hacking Wireless Networks",
-    "17. Hacking Mobile Platforms",
-    "18. IoT and OT Hacking",
-    "19. Cloud Computing",
-    "20. Cryptography"]
-        , videoUrl: "https://www.youtube.com/embed/3Kq1MIfTWCE", extra: "ورد به دنیایی سایبری" },
-        
-        { title: "PWK (Pen-200) مسیر OSCP", description: "دوره **PWK (Penetration Testing with Kali Linux)** یک دوره پیشرفته و عملی در زمینه تست نفوذ و هک اخلاقی است که بر مهارت‌های واقعی و تفکر تحلیلی تمرکز دارد. در این دوره، یاد می‌گیرید چگونه اهداف را شناسایی و تحلیل کنید، آسیب‌پذیری‌ها را کشف کرده و به‌صورت عملی Exploit نمایید. همچنان با حملات وب، SQL Injection، Client-Side Attacks، Privilege Escalation، Password Cracking، Pivoting، Active Directory Attacks و استفاده حرفه‌ای از Metasploit آشنا می‌شوید. این دوره با تمرکز بر روش “Try Harder” شما را برای سناریوهای واقعی تست نفوذ، گزارش‌نویسی حرفه‌ای و ورود به دنیای حرفه‌ای Offensive Security آماده می‌کند.",
- "syllabus": [
-    "01. Vulnerability Scanning",
-    "02. Introduction to Web Application Attacks",
-    "03. Common Web Application Attacks",
-    "04. SQL Injection Attacks",
-    "05. Client-side Attacks",
-    "06. Locating Public Exploits",
-    "07. Information Gathering",
-    "08. Fixing Exploits",
-    "09. Antivirus Evasion",
-    "10. Password Attacks",
-    "11. Windows Privilege Escalation",
-    "12. Linux Privilege Escalation",
-    "13. Port Redirection and SSH Tunneling",
-    "14. Tunneling Through Deep Packet Inspection",
-    "15. The Metasploit Framework",
-    "16. Active Directory Introduction and Enumeration",
-    "17. Attacking Active Directory Authentication",
-    "18. Lateral Movement in Active Directory",
-    "19. Assembling the Pieces"
-  ]
-        , videoUrl: "https://www.youtube.com/embed/8HznGcBzG10", extra: "امتحان ۲۴ ساعته" }
+        {
+            "id": 0,
+            "title": "Zero Hacker - شروع حرفه‌ای از صفر",
+            "tag": "Foundation",
+            "level": "مبتدی",
+            "duration": "۴ هفته",
+            "excerpt": "آغاز مسیر هکری از صفر مطلق. پرورش ذهنیت هکر، درک تهدیدات، مدلسازی امنیتی و اصول اولیه امنیت سایبری.",
+            "description": "دوره‌ای جامع برای ورود به دنیای هک و امنیت سایبری؛ از مفاهیم پایه، ذهنیت هکری و تست نفوذ گرفته تا لینوکس، ابزارهای هک، مهندسی اجتماعی، امنیت وای‌فای و آینده هوش مصنوعی در سایبرسکیوریتی. این دوره بدون نیاز به دانش قبلی طراحی شده تا شما را قدم‌به‌قدم با دنیای واقعی هکرها و امنیت آشنا کند.",
+            "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=400&fit=crop",
+            "syllabus": [
+                "هک چیست و هکر کیست؟", "باورهای غلط درباره هکرها", "ذهنیت یک هکر", "انواع هکرها و اخلاق هکری",
+                "مهارت‌های لازم برای یک هکر", "تست نفوذ چیست؟", "مراحل تست نفوذ", "چرا هکرها از لینوکس استفاده می‌کنند؟",
+                "کالی لینوکس چیست؟", "ابزارهای اصلی هکرها", "هک وای‌فای", "مهندسی اجتماعی", "نقشه راه هک و امنیت",
+                "نقش هوش مصنوعی در امنیت سایبری", "ناشناس ماندن در اینترنت", "اشتباهات رایج مبتدیان"
+            ],
+            "videoUrl": "https://www.youtube.com/embed/rWk3fzlrmT4",
+            "extra": "نمونه ویدیوهای ضبط شده + پروژه عملی"
+        },
+        { 
+            "id": 1,
+            "title": "Network For Hacker",
+            "tag": "Foundation", 
+            "level": "مبتدی تا متوسط",
+            "duration": "۴ هفته",
+            "excerpt": "تحلیل پروتکل‌ها، TCP/IP، مسیریابی، فایروال، Wireshark، Nmap و اصول هک شبکه.",
+            "description": "دوره Network For Hackers شما را با مفاهیم اساسی شبکه و طرز کار ارتباطات در دنیای سایبری آشنا می‌کند. از مبانی شبکه، Subnetting و تحلیل ترافیک تا فایروال‌های لینوکس، امنیت وای‌فای، پروتکل‌های مهم شبکه مانند DNS، ARP، SMB و HTTP را به‌صورت عملی یاد می‌گیرید.",
+            "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop",
+            "syllabus": [
+                "Network Basics", "Sub-netting and CIDR", "Network Analysis", "Linux Firewalls",
+                "Wi-Fi Networks and Hacking", "Bluetooth Networks", "ARP (Address Resolution Protocol)",
+                "DNS (Domain Name Service)", "SMB (Server Message Block)", "SMTP", "SNMP", "HTTP"
+            ], 
+            "videoUrl": "https://www.youtube.com/embed/3Kq1MIfTWCE", 
+            "extra": "به همراه لاب عملی و Wireshark" 
+        },
+        { 
+            "id": 2,
+            "title": "Linux For Hacker", 
+            "tag": "Foundation",
+            "level": "مبتدی تا متوسط",
+            "duration": "۴ هفته",
+            "excerpt": "تسلط بر خط فرمان لینوکس، امنیت فایل سیستم، اسکریپت‌نویسی Bash، ابزارهای Kali Linux.",
+            "description": "دوره Linux For Hackers شما را با لینوکس از سطح پایه تا مباحث پیشرفته امنیتی آشنا می‌کند. کار با ترمینال، مدیریت فایل‌ها، شبکه، Bash Scripting، Privilege Escalation، مدیریت پروسه‌ها، سرویس‌هایی مثل Apache و SSH، ناشناس ماندن در اینترنت و کرنل لینوکس.",
+            "image": "https://images.unsplash.com/photo-1629654291663-b91ad427698f?w=600&h=400&fit=crop",
+            "syllabus": [
+                "File system & terminal basics", "Text manipulation", "Network management",
+                "File permissions & privilege escalation", "Process management", "Bash scripting",
+                "Logging system", "Apache, SSH, MySQL", "Anonymity (Tor, VPN, proxies)",
+                "Wireless networks", "Kernel & LKMs", "Python scripting"
+            ],
+            "videoUrl": "https://www.youtube.com/embed/UjUtAF-sprc", 
+            "extra": "آموزش Metasploit و Netcat" 
+        },
+        { 
+            "id": 3,
+            "title": "Python For Hacker",
+            "tag": "Foundation",
+            "level": "متوسط",
+            "duration": "۶ هفته",
+            "excerpt": "نوشتن ابزارهای امنیتی، اسکریپت اسکنر، اتوماسیون حملات، سوکت‌نویسی، keylogger و reverse shell.",
+            "description": "نوشتن ابزارهای امنیتی، اسکنر پورت، brute force، keylogger و reverse shell. ساخت Vulnerability Scanner حرفه‌ای.",
+            "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop",
+            "syllabus": [
+                "سوکت و برنامه‌نویسی شبکه", "اسکنر آسیب‌پذیری", "reverse shell ساده",
+                "پردازش packet با Scapy", "API امنیتی", "ساخت Keylogger", "Brute Force Tool"
+            ], 
+            "videoUrl": "https://www.youtube.com/embed/Mf4fLnwEmjs", 
+            "extra": "پروژه ساخت Vulnerability Scanner کامل" 
+        },
+        { 
+            "id": 4,
+            "title": "CEHv13 | هکر اخلاقی",
+            "tag": "Professional",
+            "level": "پیشرفته",
+            "duration": "۳ ماه",
+            "excerpt": "گواهی هکر اخلاقی نسخه ۱۳ - Footprinting، اسکن، Enumeration، نفوذ به سیستم‌ها، وب اپلیکیشن.",
+            "description": "دوره CEHv13 یک دوره تخصصی و عملی در زمینه هک اخلاقی و تست نفوذ است که شما را با تکنیک‌ها، ابزارها و روش‌های واقعی هکرها آشنا می‌کند.",
+            "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=600&h=400&fit=crop",
+            "syllabus": [
+                "Introduction to Ethical Hacking", "Footprinting and Reconnaissance", "Scanning Networks",
+                "Enumeration", "Vulnerability Analysis", "System Hacking", "Malware Threats", "Sniffing",
+                "Social Engineering", "Denial-of-Service (DoS)", "Session Hijacking", "Evading IDS and Firewalls",
+                "Hacking Web Servers", "Hacking Web Applications", "SQL Injection", "Hacking Wireless Networks",
+                "Hacking Mobile Platforms", "IoT and OT Hacking", "Cloud Computing", "Cryptography"
+            ],
+            "videoUrl": "https://www.youtube.com/embed/3Kq1MIfTWCE", 
+            "extra": "ورود به دنیای حرفه‌ای سایبری" 
+        },
+        { 
+            "id": 5,
+            "title": "PWK (Pen-200) مسیر OSCP",
+            "tag": "Professional",
+            "level": "پیشرفته",
+            "duration": "۲ ماه",
+            "excerpt": "دوره تهاجمی OSCP - بهره‌برداری پیشرفته، اکتیو دایرکتوری، Buffer Overflow، پویشگرهای پیشرفته.",
+            "description": "دوره PWK یک دوره پیشرفته و عملی در زمینه تست نفوذ و هک اخلاقی است که بر مهارت‌های واقعی و تفکر تحلیلی تمرکز دارد. روش Try Harder آفنسک.",
+            "image": "https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?w=600&h=400&fit=crop",
+            "syllabus": [
+                "Vulnerability Scanning", "Web Application Attacks", "SQL Injection Attacks",
+                "Client-side Attacks", "Locating Public Exploits", "Fixing Exploits", "Antivirus Evasion",
+                "Password Attacks", "Windows Privilege Escalation", "Linux Privilege Escalation",
+                "Port Redirection and SSH Tunneling", "The Metasploit Framework",
+                "Active Directory Introduction and Enumeration", "Attacking Active Directory Authentication",
+                "Lateral Movement in Active Directory"
+            ],
+            "videoUrl": "https://www.youtube.com/embed/8HznGcBzG10", 
+            "extra": "امتحان ۲۴ ساعته OSCP - آمادگی کامل برای گواهی آفنسک",
+            "examInfo": "آزمون OSCP+ به مدت ۲۴ ساعت برگزار می‌شود و شامل ۳ دستگاه مستقل (۶۰٪ امتیاز) و ۱ مجموعه اکتیو دایرکتوری (۴۰٪ امتیاز) می‌باشد. برای قبولی نیاز به کسب حداقل ۷۰ امتیاز از ۱۰۰ امتیاز دارید."
+        }
     ];
 
     function openCourseModal(index) {
@@ -614,26 +677,63 @@
         const modal = document.getElementById('courseModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalBody = document.getElementById('modalBody');
-        modalTitle.innerHTML = `<i class="fas fa-graduation-cap"></i> ${data.title}`;
-        let syllabusHtml = '<ul class="syllabus-list">' + data.syllabus.map(item => `<li><i class="fas fa-check-circle"></i> ${item}</li>`).join('') + '</ul>';
+        
+        modalTitle.innerHTML = `<i class="fas fa-skull"></i> ${data.title}`;
+        
+        let syllabusHtml = '<ul class="syllabus-list">' + data.syllabus.map(item => `<li><i class="fas fa-bolt"></i> ${item}</li>`).join('') + '</ul>';
+        
+        let examHtml = '';
+        if (data.examInfo) {
+            examHtml = `
+                <div class="exam-info">
+                    <h4 style="color:#ff2a2a; margin-bottom:10px;"><i class="fas fa-clock"></i> اطلاعات آزمون</h4>
+                    <p>${data.examInfo}</p>
+                </div>
+            `;
+        }
+        
         modalBody.innerHTML = `
-            <p><i class="fas fa-info-circle"></i> ${data.description}</p>
-            <div class="video-sample"><iframe src="${data.videoUrl}" allowfullscreen></iframe></div>
-            <h4 style="color:#7affc9;"><i class="fas fa-list-ul"></i> عنوان های دوره </h4>
-            ${syllabusHtml}
-            <div style="margin-top:20px; background:#00f0ff10; padding:12px; border-radius:20px;">
-                <i class="fas fa-star-of-life"></i> <strong>ویژگی  :</strong> ${data.extra}
+            <img src="${data.image}" alt="${data.title}" class="modal-course-image">
+            <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                <span style="background:rgba(255,42,42,0.15); padding:4px 12px; border-radius:20px;"><i class="fas fa-signal"></i> سطح: ${data.level}</span>
+                <span style="background:rgba(255,42,42,0.15); padding:4px 12px; border-radius:20px;"><i class="far fa-clock"></i> مدت: ${data.duration}</span>
+                <span style="background:rgba(255,42,42,0.15); padding:4px 12px; border-radius:20px;"><i class="fas fa-tag"></i> دسته: ${data.tag}</span>
             </div>
-            <div class="card-badge" style="margin-top:16px;"><i class="fas fa-video"></i> فیلم‌های جلسات ضبط شده و پروژه‌های عملی</div>
+            <p><i class="fas fa-info-circle"></i> <strong>توضیحات دوره:</strong></p>
+            <p style="margin-bottom: 20px; line-height: 1.7;">${data.description}</p>
+            
+            <div style="margin-bottom: 25px;">
+                <h4 style="color:#ff2a2a; margin-bottom: 10px;"><i class="fas fa-video"></i> ویدئوی معرفی</h4>
+                <iframe src="${data.videoUrl}" allowfullscreen style="width:100%; aspect-ratio:16/9; border:none; border-radius:12px;"></iframe>
+            </div>
+            
+            <h4 style="color:#ff2a2a; margin-bottom: 15px;"><i class="fas fa-list-ul"></i> سرفصل‌های دوره</h4>
+            ${syllabusHtml}
+            
+            <div style="margin-top: 25px; background:rgba(255, 42, 42, 0.1); padding:15px; border-radius:12px; border-right:3px solid #ff2a2a;">
+                <i class="fas fa-gem"></i> <strong>ویژگی ویژه :</strong> ${data.extra}
+            </div>
+            
+            ${examHtml}
+            
+            <div style="margin-top: 20px; padding: 12px; background:rgba(255, 42, 42, 0.05); border-radius:12px; text-align:center; border:1px dashed rgba(255,42,42,0.3);">
+                <i class="fas fa-certificate"></i> گواهی معتبر | <i class="fas fa-flask"></i> لاب‌های عملی | <i class="fas fa-try"></i> #TryHarder
+            </div>
         `;
+        
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
+    
     function closeModal() {
         document.getElementById('courseModal').classList.remove('active');
         document.body.style.overflow = '';
     }
-    document.getElementById('courseModal').addEventListener('click', e => { if(e.target === e.currentTarget) closeModal(); });
+    
+    document.getElementById('courseModal').addEventListener('click', e => { 
+        if(e.target === e.currentTarget) closeModal(); 
+    });
+    
     document.addEventListener('DOMContentLoaded', () => {
         if (window.innerWidth >= 769) {
             const cards = document.querySelectorAll('.timeline-card');
@@ -643,6 +743,7 @@
                 points.forEach((p, i) => setTimeout(() => p.classList.add('animate'), i * 180 + 200));
             }, 300);
         }
+        
         const progressBar = document.getElementById('progressBar');
         window.addEventListener('scroll', () => {
             const scroll = window.pageYOffset;
@@ -650,6 +751,7 @@
             progressBar.style.width = (scroll / docH) * 100 + '%';
         });
     });
+    
     window.openCourseModal = openCourseModal;
     window.closeModal = closeModal;
 </script>

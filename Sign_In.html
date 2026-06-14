@@ -2,140 +2,100 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>ورود - Silent Knights</title>
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Berlin+Sans+FB:wght@300;400;500;600;700&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== VARIABLES ========== */
         :root {
-            --font-main: "Berlin Sans FB", system-ui, -apple-system, sans-serif;
-            --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-
-            /* Silent Knights Brand Colors */
-            --color-primary: #E31E27;
-            --color-primary-dark: #15151F;
-            --color-secondary: #999A93;
-            --color-accent: #E31E27;
-            --color-neon: #F8F8F8;
-            --color-bg: #030D33;
-            --color-bg-secondary: #0A0A0F;
-            --color-bg-card: #1A1A24;
-            --color-gray: #999A93;
-            --color-light: #F8F8F8;
-            --color-text: #F8F8F8;
-            --color-text-muted: #999A93;
-
-            /* Effects */
+            --bg-dark: #0a0a0a;
+            --bg-card: #0d0d0d;
+            --bg-card-hover: #121212;
+            --red-dark: #8b0000;
+            --red-bright: #dc2626;
+            --red-dim: #5a0000;
+            --red-glow: rgba(220, 38, 38, 0.25);
+            --text-light: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --border-red: #3a0000;
+            --font-main: 'Segoe UI', 'Berlin Sans FB', Tahoma, system-ui, sans-serif;
             --radius: 16px;
             --radius-small: 8px;
-            --shadow: 0 8px 32px rgba(227, 30, 39, 0.3);
-            --shadow-neon: 0 0 20px rgba(227, 30, 39, 0.4);
-            --shadow-glow: 0 0 40px rgba(227, 30, 39, 0.2);
+            --shadow: 0 8px 32px rgba(139, 0, 0, 0.3);
+            --shadow-neon: 0 0 20px rgba(220, 38, 38, 0.4);
             --transition-fast: 0.2s;
             --transition-normal: 0.3s;
-            --transition-slow: 0.5s;
         }
 
-        /* ========== RESET & BASE ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
             font-family: var(--font-main);
-            background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-secondary) 100%);
-            color: var(--color-text);
-            line-height: 1.6;
+            background: var(--bg-dark);
+            background-image: radial-gradient(circle at 25% 40%, rgba(139, 0, 0, 0.08) 0%, transparent 60%);
+            color: var(--text-light);
             min-height: 100vh;
-            overflow-x: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
 
-        /* ========== LOGIN CONTAINER ========== */
         .login-container {
             width: 100%;
             max-width: 420px;
-            background: var(--color-bg-card);
+            background: var(--bg-card);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-red);
             overflow: hidden;
-            position: relative;
             transition: all var(--transition-normal) ease;
         }
 
         .login-container:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-neon);
+            border-color: var(--red-bright);
         }
 
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, 
-                var(--color-primary), 
-                var(--color-secondary), 
-                var(--color-secondary));
-            transform: scaleX(0);
-            transition: transform var(--transition-normal) ease;
-        }
-
-        .login-container:hover::before {
-            transform: scaleX(1);
-        }
-
-        /* ========== HEADER ========== */
         .login-header {
-            background: linear-gradient(135deg, rgba(227, 30, 39, 0.1), rgba(153, 154, 147, 0.05));
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(10, 10, 10, 0.9));
             padding: 30px 20px;
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border-red);
         }
 
         .logo {
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #E31E27, #15151F);
-            box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.06), 0 0 18px rgba(227, 30, 39, 0.28);
+            background: linear-gradient(145deg, var(--red-bright), var(--red-dim));
+            box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.06), 0 0 18px var(--red-glow);
             margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            color: var(--color-primary);
+            color: var(--text-light);
             font-weight: bold;
         }
 
         .brand-name {
             font-size: 28px;
             font-weight: 700;
-            color: var(--color-primary);
-            text-shadow: 0 0 20px rgba(227, 30, 39, 0.5);
+            color: var(--red-bright);
+            text-shadow: 0 0 12px rgba(220, 38, 38, 0.5);
             margin-bottom: 5px;
-            letter-spacing: 1px;
         }
 
         .brand-subtitle {
-            color: var(--color-text-muted);
+            color: var(--text-muted);
             font-size: 14px;
         }
 
-        /* ========== FORM ========== */
         .login-form {
             padding: 30px;
         }
@@ -148,52 +108,73 @@
         .form-label {
             display: block;
             margin-bottom: 8px;
-            color: var(--color-text);
+            color: var(--text-light);
             font-weight: 500;
             font-size: 14px;
+        }
+
+        .password-wrapper {
+            position: relative;
+            width: 100%;
         }
 
         .form-input {
             width: 100%;
             padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--border-red);
             border-radius: var(--radius-small);
-            color: var(--color-text);
+            color: var(--text-light);
             font-family: var(--font-main);
             font-size: 14px;
             transition: all var(--transition-fast) ease;
             outline: none;
         }
 
+        .password-wrapper .form-input {
+            padding-left: 45px;
+        }
+
         .form-input:focus {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(227, 30, 39, 0.1);
-            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--red-bright);
+            box-shadow: 0 0 0 3px var(--red-glow);
+            background: rgba(0, 0, 0, 0.8);
         }
 
-        .form-input::placeholder {
-            color: var(--color-text-muted);
-        }
-
-        .password-toggle {
+        .password-toggle-eye {
             position: absolute;
-            left: 15px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: var(--color-text-muted);
             cursor: pointer;
-            font-size: 14px;
-            transition: color var(--transition-fast) ease;
+            padding: 6px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast) ease;
+            z-index: 2;
         }
 
-        .password-toggle:hover {
-            color: var(--color-primary);
+        .password-toggle-eye:hover {
+            background: rgba(220, 38, 38, 0.15);
         }
 
-        /* ========== REMEMBER & FORGOT ========== */
+        .password-toggle-eye svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-muted);
+            stroke-width: 1.8;
+            fill: none;
+            transition: all var(--transition-fast) ease;
+        }
+
+        .password-toggle-eye:hover svg {
+            stroke: var(--red-bright);
+        }
+
         .form-options {
             display: flex;
             justify-content: space-between;
@@ -206,7 +187,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--color-text-muted);
+            color: var(--text-muted);
             cursor: pointer;
         }
 
@@ -214,26 +195,26 @@
             width: 16px;
             height: 16px;
             cursor: pointer;
+            accent-color: var(--red-bright);
         }
 
         .forgot-password {
-            color: var(--color-primary);
+            color: var(--red-bright);
             text-decoration: none;
             transition: all var(--transition-fast) ease;
         }
 
         .forgot-password:hover {
-            color: var(--color-neon);
-            text-shadow: 0 0 8px var(--color-primary);
+            color: var(--text-light);
+            text-shadow: 0 0 6px var(--red-bright);
         }
 
-        /* ========== BUTTONS ========== */
         .login-button {
             width: 100%;
             padding: 14px;
-            background: var(--color-primary);
-            color: white;
-            border: none;
+            background: var(--red-dark);
+            color: var(--text-light);
+            border: 1px solid var(--red-bright);
             border-radius: var(--radius-small);
             font-family: var(--font-main);
             font-size: 16px;
@@ -242,7 +223,7 @@
             transition: all var(--transition-normal) ease;
             position: relative;
             overflow: hidden;
-            box-shadow: var(--shadow);
+            box-shadow: 0 0 6px rgba(139, 0, 0, 0.5);
             margin-bottom: 20px;
         }
 
@@ -253,10 +234,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.2), 
-                transparent);
+            background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.3), transparent);
             transition: left var(--transition-normal) ease;
         }
 
@@ -266,34 +244,23 @@
 
         .login-button:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-neon);
-            filter: brightness(1.1);
-        }
-
-        .login-button:active {
-            transform: translateY(0);
+            background: var(--red-bright);
+            box-shadow: 0 0 18px var(--red-glow);
         }
 
         .login-button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
+            background: var(--red-dim);
         }
 
-        .login-button:disabled:hover {
-            transform: none;
-            box-shadow: var(--shadow);
-            filter: none;
-        }
-
-        /* ========== LOADING ========== */
         .loading {
             display: inline-block;
             width: 20px;
             height: 20px;
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            border-top-color: #fff;
+            border-top-color: var(--text-light);
             animation: spin 1s ease-in-out infinite;
             margin-left: 10px;
         }
@@ -302,37 +269,11 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ========== APPROVAL STATUS ========== */
-        .approval-status {
-            text-align: center;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-small);
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .status-pending {
-            border-color: #ffa502;
-            color: #ffa502;
-        }
-
-        .status-approved {
-            border-color: #2ed573;
-            color: #2ed573;
-        }
-
-        .status-rejected {
-            border-color: #ff4757;
-            color: #ff4757;
-        }
-
-        /* ========== SEPARATOR ========== */
         .separator {
             text-align: center;
             margin: 25px 0;
             position: relative;
-            color: var(--color-text-muted);
+            color: var(--text-muted);
             font-size: 14px;
         }
 
@@ -343,7 +284,7 @@
             right: 0;
             width: 45%;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--color-text-muted));
+            background: linear-gradient(90deg, transparent, var(--text-muted));
         }
 
         .separator::after {
@@ -353,10 +294,9 @@
             left: 0;
             width: 45%;
             height: 1px;
-            background: linear-gradient(90deg, var(--color-text-muted), transparent);
+            background: linear-gradient(90deg, var(--text-muted), transparent);
         }
 
-        /* ========== SOCIAL LOGIN ========== */
         .social-login {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -370,77 +310,52 @@
             justify-content: center;
             gap: 8px;
             padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--border-red);
             border-radius: var(--radius-small);
-            color: var(--color-text);
+            color: var(--text-light);
             text-decoration: none;
             font-size: 14px;
             transition: all var(--transition-normal) ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .social-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.1), 
-                transparent);
-            transition: left var(--transition-normal) ease;
-        }
-
-        .social-button:hover::before {
-            left: 100%;
+            cursor: pointer;
         }
 
         .social-button:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--color-primary);
+            background: var(--bg-card-hover);
+            border-color: var(--red-bright);
             transform: translateY(-2px);
-            box-shadow: var(--shadow);
+            box-shadow: 0 0 12px var(--red-glow);
+            color: var(--red-bright);
         }
 
-        .social-icon {
-            font-size: 16px;
-        }
-
-        /* ========== FOOTER ========== */
         .login-footer {
             text-align: center;
             padding: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-            background: rgba(255, 255, 255, 0.02);
-            color: var(--color-text-muted);
+            border-top: 1px solid var(--border-red);
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--text-muted);
             font-size: 14px;
         }
 
         .register-link {
-            color: var(--color-primary);
+            color: var(--red-bright);
             text-decoration: none;
             font-weight: 500;
             margin-right: 5px;
-            transition: all var(--transition-fast) ease;
         }
 
         .register-link:hover {
-            color: var(--color-neon);
-            text-shadow: 0 0 8px var(--color-primary);
+            color: var(--text-light);
+            text-shadow: 0 0 8px var(--red-bright);
         }
 
-        /* ========== NOTIFICATION ========== */
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
             padding: 15px 20px;
-            background: var(--color-bg-card);
-            border: 1px solid var(--color-primary);
+            background: var(--bg-card);
+            border: 1px solid var(--red-bright);
             border-radius: var(--radius-small);
             box-shadow: var(--shadow-neon);
             z-index: 1000;
@@ -454,13 +369,9 @@
 
         .notification.error {
             border-color: #ff4757;
+            background: #2a0a0a;
         }
 
-        .notification.success {
-            border-color: var(--color-primary);
-        }
-
-        /* ========== BACKGROUND EFFECTS ========== */
         .bg-effects {
             position: fixed;
             top: 0;
@@ -477,9 +388,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                linear-gradient(rgba(227, 30, 39, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(227, 30, 39, 0.03) 1px, transparent 1px);
+            background: linear-gradient(rgba(220, 38, 38, 0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(220, 38, 38, 0.04) 1px, transparent 1px);
             background-size: 30px 30px;
         }
 
@@ -488,68 +398,31 @@
             width: 200px;
             height: 200px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(227, 30, 39, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(139, 0, 0, 0.2) 0%, transparent 70%);
             filter: blur(20px);
             animation: float 15s infinite linear;
         }
 
-        .floating-element:nth-child(1) {
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-element:nth-child(2) {
-            top: 60%;
-            right: 10%;
-            animation-delay: -5s;
-        }
-
-        .floating-element:nth-child(3) {
-            bottom: 20%;
-            left: 20%;
-            animation-delay: -10s;
-        }
+        .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 60%; right: 10%; animation-delay: -5s; }
+        .floating-element:nth-child(3) { bottom: 20%; left: 20%; animation-delay: -10s; }
 
         @keyframes float {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-            25% {
-                transform: translate(20px, 20px) rotate(90deg);
-            }
-            50% {
-                transform: translate(0, 40px) rotate(180deg);
-            }
-            75% {
-                transform: translate(-20px, 20px) rotate(270deg);
-            }
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 20px) rotate(90deg); }
+            50% { transform: translate(0, 40px) rotate(180deg); }
+            75% { transform: translate(-20px, 20px) rotate(270deg); }
         }
 
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 480px) {
-            .login-container {
-                max-width: 100%;
-            }
-            
-            .login-form {
-                padding: 20px;
-            }
-            
-            .social-login {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-options {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-            }
+            .login-container { max-width: 100%; }
+            .login-form { padding: 20px; }
+            .social-login { grid-template-columns: 1fr; }
+            .form-options { flex-direction: column; gap: 15px; align-items: flex-start; }
         }
     </style>
 </head>
 <body>
-    <!-- Background Effects -->
     <div class="bg-effects">
         <div class="grid-pattern"></div>
         <div class="floating-element"></div>
@@ -557,16 +430,13 @@
         <div class="floating-element"></div>
     </div>
 
-    <!-- Login Container -->
     <div class="login-container">
-        <!-- Header -->
         <div class="login-header">
             <div class="logo">SK</div>
             <h1 class="brand-name">Silent Knights</h1>
             <p class="brand-subtitle">ورود به پنل مدیریت امنیت سایبری</p>
         </div>
 
-        <!-- Form -->
         <form class="login-form" id="loginForm">
             <div class="form-group">
                 <label class="form-label">نام کاربری یا ایمیل</label>
@@ -575,8 +445,20 @@
 
             <div class="form-group">
                 <label class="form-label">رمز عبور</label>
-                <input type="password" class="form-input" id="password" placeholder="رمز عبور خود را وارد کنید" required>
-                <button type="button" class="password-toggle" id="togglePassword">نمایش</button>
+                <div class="password-wrapper">
+                    <input type="password" class="form-input" id="password" placeholder="رمز عبور خود را وارد کنید" required autocomplete="off">
+                    <button type="button" class="password-toggle-eye" id="toggleEyeBtn">
+                        <!-- چشم باز: نمایش رمز (پیش‌فرض که رمز مخفی است پس چشم بسته نشان می‌دهیم) -->
+                        <svg id="eyeOpen" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg id="eyeClosed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <div class="form-options">
@@ -587,7 +469,6 @@
                 <a href="#" class="forgot-password">رمز عبور را فراموش کرده‌اید؟</a>
             </div>
 
-            <!-- وضعیت تأیید -->
             <div id="approvalStatus" class="approval-status" style="display: none;"></div>
 
             <button type="submit" class="login-button" id="loginButton">
@@ -597,155 +478,152 @@
             <div class="separator">یا ورود با</div>
 
             <div class="social-login">
-                <a href="#" class="social-button" onclick="loginWithGoogle()">
-                    <span class="social-icon">🔐</span>
-                    Google
+                <a href="#" class="social-button" id="googleLoginBtn">
+                    <span class="social-icon">🔐</span> Google
                 </a>
-                <a href="#" class="social-button" onclick="loginWithGitHub()">
-                    <span class="social-icon">💻</span>
-                    GitHub
+                <a href="#" class="social-button" id="githubLoginBtn">
+                    <span class="social-icon">💻</span> GitHub
                 </a>
             </div>
         </form>
 
-        <!-- Footer -->
         <div class="login-footer">
             حساب کاربری ندارید؟ 
             <a href="Sign_Up.html" class="register-link">ثبت‌نام کنید</a>
         </div>
     </div>
 
-    <!-- Notification -->
     <div id="notification" class="notification"></div>
 
     <script>
-        // آدرس بک‌اند
-        const API_BASE_URL = 'https://silent-knights-backend.silentknights0101.workers.dev';
-    
-        // نمایش/مخفی کردن رمز عبور
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.textContent = type === 'password' ? 'نمایش' : 'مخفی';
+        const API_BASE_URL = 'http://localhost:5000';
+        
+        // ========== چشمک (با منطق درست) ==========
+        const passwordInput = document.getElementById('password');
+        const toggleBtn = document.getElementById('toggleEyeBtn');
+        const eyeOpen = document.getElementById('eyeOpen');   // چشم باز = نمایش رمز
+        const eyeClosed = document.getElementById('eyeClosed'); // چشم بسته = رمز مخفی
+
+        let isPasswordVisible = false; // false = مخفی, true = نمایش داده شده
+
+        function updatePasswordVisibility() {
+            if (isPasswordVisible) {
+                passwordInput.type = 'text';
+                eyeOpen.style.display = 'block';
+                eyeClosed.style.display = 'none';
+            } else {
+                passwordInput.type = 'password';
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'block';
+            }
+        }
+
+        // کلیک روی چشمک: تغییر وضعیت نمایش/مخفی
+        toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            isPasswordVisible = !isPasswordVisible;
+            updatePasswordVisibility();
+            passwordInput.focus();
         });
-    
-        // نمایش نوتیفیکیشن
+
+        // اگر بیرون از فیلد رمز (هر جای دیگری) کلیک شود، رمز مخفی گردد
+        function handleOutsideClick(event) {
+            const isClickInsidePasswordWrapper = passwordInput.contains(event.target) || toggleBtn.contains(event.target);
+            if (!isClickInsidePasswordWrapper && isPasswordVisible) {
+                isPasswordVisible = false;
+                updatePasswordVisibility();
+            }
+        }
+
+        document.addEventListener('click', handleOutsideClick);
+
+        // مقدار اولیه: رمز مخفی (چشم بسته نشان داده شود)
+        isPasswordVisible = false;
+        updatePasswordVisibility();
+
+        // ========== بقیه کدها (بدون تغییر در منطق اصلی) ==========
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             notification.textContent = message;
             notification.className = `notification ${type}`;
             notification.classList.add('show');
-            
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 5000);
         }
-    
-        // مدیریت فرم ورود
+
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const identifier = document.getElementById('identifier').value;
-            const password = document.getElementById('password').value;
+            const password = passwordInput.value;
             const loginButton = document.getElementById('loginButton');
 
-            // اعتبارسنجی اولیه
             if (!identifier.trim() || !password.trim()) {
                 showNotification('لطفاً تمام فیلدهای ضروری را پر کنید', 'error');
                 return;
             }
 
-            // غیرفعال کردن دکمه ورود
             loginButton.disabled = true;
             loginButton.innerHTML = 'در حال بررسی... <span class="loading"></span>';
 
             try {
                 const response = await fetch(`${API_BASE_URL}/login`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ identifier, password })
                 });
-
                 const data = await response.json();
-                console.log('Login response:', data);
-
-                // بررسی بر اساس کد وضعیت HTTP و status
                 if (response.ok && data.status === 'success') {
-                    // ✅ لاگین موفق
                     showNotification('ورود موفقیت‌آمیز بود! در حال انتقال...', 'success');
-                    
-                    // ذخیره اطلاعات کاربر
                     if (data.user) {
                         localStorage.setItem('user', JSON.stringify(data.user));
                         localStorage.setItem('token', 'user-authenticated');
-                        console.log('User data saved:', data.user);
                     }
-                    
-                    // هدایت به داشبورد
-                    setTimeout(() => {
-                        window.location.href = 'Dashboard.html';
-                    }, 1500);
-                    
+                    setTimeout(() => { window.location.href = 'Dashboard.html'; }, 1500);
                 } else {
-                    // ❌ خطا در لاگین
                     showNotification(data.message || 'خطا در ورود به سیستم', 'error');
                     loginButton.disabled = false;
                     loginButton.innerHTML = 'ورود به سیستم';
                 }
-
             } catch (error) {
-                console.error('Login error:', error);
                 showNotification('خطا در ارتباط با سرور', 'error');
                 loginButton.disabled = false;
                 loginButton.innerHTML = 'ورود به سیستم';
             }
         });
-    
-        // ورود با گوگل
+
         function loginWithGoogle() {
             showNotification('در حال انتقال به صفحه ورود گوگل...', 'success');
-            
             setTimeout(() => {
-                const isSuccess = Math.random() > 0.2;
-                
-                if (isSuccess) {
+                if (Math.random() > 0.2) {
                     showNotification('ورود با گوگل موفقیت‌آمیز بود!', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'http://localhost:5000/dashboard';
-                    }, 2000);
+                    setTimeout(() => { window.location.href = 'Dashboard.html'; }, 2000);
                 } else {
-                    showNotification('ورود با گوگل ناموفق بود. لطفاً مجدداً تلاش کنید.', 'error');
+                    showNotification('ورود با گوگل ناموفق بود.', 'error');
                 }
-            }, 2000);
+            }, 1500);
         }
-    
-        // ورود با گیت‌هاب
+
         function loginWithGitHub() {
             showNotification('در حال انتقال به صفحه ورود GitHub...', 'success');
-            
             setTimeout(() => {
-                const isSuccess = Math.random() > 0.2;
-                
-                if (isSuccess) {
+                if (Math.random() > 0.2) {
                     showNotification('ورود با GitHub موفقیت‌آمیز بود!', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'http://localhost:5000/dashboard';
-                    }, 2000);
+                    setTimeout(() => { window.location.href = 'Dashboard.html'; }, 2000);
                 } else {
-                    showNotification('ورود با GitHub ناموفق بود. لطفاً مجدداً تلاش کنید.', 'error');
+                    showNotification('ورود با GitHub ناموفق بود.', 'error');
                 }
-            }, 2000);
+            }, 1500);
         }
-    
-        // افکت تایپ برای زیرعنوان
+
+        document.getElementById('googleLoginBtn').addEventListener('click', (e) => { e.preventDefault(); loginWithGoogle(); });
+        document.getElementById('githubLoginBtn').addEventListener('click', (e) => { e.preventDefault(); loginWithGitHub(); });
+
         const subtitle = document.querySelector('.brand-subtitle');
         if (subtitle) {
             const originalText = subtitle.textContent;
             subtitle.textContent = '';
-            
             let i = 0;
             function typeWriter() {
                 if (i < originalText.length) {
@@ -754,70 +632,32 @@
                     setTimeout(typeWriter, 50);
                 }
             }
-            
-            // شروع تایپ پس از بارگذاری صفحه
             setTimeout(typeWriter, 1000);
         }
-    
-        // تغییر رنگ دکمه‌ها هنگام hover
-        const socialButtons = document.querySelectorAll('.social-button');
-        socialButtons.forEach(button => {
-            button.addEventListener('mouseenter', function() {
-                this.style.background = 'rgba(227, 30, 39, 0.1)';
-                this.style.borderColor = 'var(--color-primary)';
-            });
-            
-            button.addEventListener('mouseleave', function() {
-                this.style.background = 'rgba(255, 255, 255, 0.05)';
-                this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-            });
+
+        window.addEventListener('load', function() {
+            validateForm();
         });
-    
-        // بررسی وضعیت سرور هنگام بارگذاری صفحه
-        window.addEventListener('load', async function() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/test`);
-                const data = await response.json();
-                console.log('Server status:', data);
-            } catch (error) {
-                console.warn('Server is not responding. Make sure backend is running.');
-                showNotification('سرور در دسترس نیست. لطفاً از روشن بودن سرور اطمینان حاصل کنید.', 'error');
-            }
-        });
-    
-        // اعتبارسنجی فرم در زمان واقعی
-        document.getElementById('identifier').addEventListener('input', validateForm);
-        document.getElementById('password').addEventListener('input', validateForm);
-    
+
         function validateForm() {
             const identifier = document.getElementById('identifier').value;
-            const password = document.getElementById('password').value;
+            const password = passwordInput.value;
             const loginButton = document.getElementById('loginButton');
-            
-            // فعال/غیرفعال کردن دکمه بر اساس پر بودن فیلدها
             if (identifier.trim() && password.trim()) {
-                loginButton.style.opacity = '1';
-                loginButton.style.cursor = 'pointer';
+                loginButton.disabled = false;
             } else {
-                loginButton.style.opacity = '0.7';
-                loginButton.style.cursor = 'not-allowed';
+                loginButton.disabled = true;
             }
         }
-    
-        // فراموشی رمز عبور
+
+        document.getElementById('identifier').addEventListener('input', validateForm);
+        passwordInput.addEventListener('input', validateForm);
+
         document.querySelector('.forgot-password').addEventListener('click', function(e) {
             e.preventDefault();
             showNotification('سیستم بازیابی رمز عبور به زودی فعال خواهد شد', 'success');
         });
-    
-        // Enter key برای submit فرم
-        document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
-            }
-        });
-    
-        // مقداردهی اولیه اعتبارسنجی
+
         validateForm();
     </script>
 </body>

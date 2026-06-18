@@ -1,32 +1,40 @@
 <!DOCTYPE html>
-<html lang="prs" dir="rtl">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>امتحان دوره هکر صفر</title>
+    <meta name="theme-color" content="#0a0a0a">
+    <title>امتحان دوره هکر صفر | Silent Knights</title>
     <style>
-        /* ========== VARIABLES ========== */
+        /* ========== DESIGN SYSTEM ========== */
         :root {
-            --font-main: "Vazirmatn", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            --font-mono: "Fira Code", "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-            --color-primary: #E31E27;
-            --color-primary-dark: #15151F;
-            --color-secondary: #999A93;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", "Vazirmatn", sans-serif;
+            --font-mono: "Fira Code", "Cascadia Code", "Menlo", monospace;
+            
+            /* Color Palette */
+            --color-bg: #0a0a0a;
+            --color-bg-secondary: #121212;
+            --color-surface: #1a1a1a;
+            --color-border: #2a2a2a;
             --color-accent: #E31E27;
-            --color-neon: #F8F8F8;
-            --color-bg: #030d33;
-            --color-bg-secondary: #0A0A0F;
-            --color-bg-card: #1A1A24;
-            --color-gray: #999A93;
-            --color-light: #F8F8F8;
-            --color-text: #F8F8F8;
-            --color-text-muted: #999A93;
-            --radius: 16px;
-            --radius-small: 8px;
-            --shadow: 0 8px 32px rgba(227, 30, 39, 0.3);
-            --shadow-neon: 0 0 20px rgba(227, 30, 39, 0.4);
-            --shadow-glow: 0 0 40px rgba(227, 30, 39, 0.2);
-            --transition-normal: 0.3s;
+            --color-accent-light: rgba(227, 30, 39, 0.1);
+            --color-text: #f0f0f0;
+            --color-text-secondary: #888;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            
+            /* Spacing */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            
+            /* Radius */
+            --radius: 8px;
+            
+            /* Transition */
+            --transition: 0.2s ease;
         }
 
         * {
@@ -41,219 +49,339 @@
 
         body {
             font-family: var(--font-main);
-            background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-secondary) 100%);
+            background: var(--color-bg);
             color: var(--color-text);
-            line-height: 1.8;
+            line-height: 1.6;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: var(--spacing-lg);
         }
 
+        /* ========== HEADER ========== */
         header {
             text-align: center;
-            padding: 30px 0;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(153, 154, 147, 0.25);
-            position: relative;
-        }
-
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, var(--color-primary) 50%, transparent 100%);
+            padding: var(--spacing-xl) var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            border-bottom: 1px solid var(--color-border);
         }
 
         h1 {
             font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: var(--color-primary);
-            text-shadow: 0 0 20px rgba(227, 30, 39, 0.5);
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text);
+            letter-spacing: -0.02em;
         }
 
         .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.8;
-            margin-bottom: 20px;
-            color: var(--color-text-muted);
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
         }
 
+        .header-branding {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-accent);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ========== TIMER ========== */
         .timer-container {
-            background: var(--color-bg-card);
-            padding: 15px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
             border-radius: var(--radius);
-            margin: 20px auto;
-            max-width: 300px;
-            border: 1px solid rgba(227, 30, 39, 0.3);
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
+            padding: var(--spacing-lg) var(--spacing-xl);
+            margin: var(--spacing-xl) auto;
+            max-width: 280px;
+            text-align: center;
         }
 
-        .timer-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-            animation: scanline 3s linear infinite;
-        }
-
-        @keyframes scanline {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        .timer-label {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--spacing-sm);
         }
 
         #timer {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--color-primary);
-            text-shadow: 0 0 10px rgba(227, 30, 39, 0.5);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-text);
             font-family: var(--font-mono);
+            letter-spacing: 0.05em;
         }
 
+        #timer.warning {
+            color: var(--color-warning);
+            animation: none;
+        }
+
+        #timer.critical {
+            color: var(--color-accent);
+            animation: none;
+        }
+
+        /* ========== INSTRUCTIONS ========== */
         .instructions {
-            background: var(--color-bg-card);
-            padding: 25px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-right: 3px solid var(--color-accent);
             border-radius: var(--radius);
-            margin: 20px 0;
-            border-right: 4px solid var(--color-primary);
-            box-shadow: var(--shadow);
-            position: relative;
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+            display: none;
         }
 
         .instructions h2 {
-            margin-bottom: 15px;
-            color: var(--color-primary);
+            color: var(--color-text);
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
         }
 
         .instructions ul {
-            margin-right: 20px;
+            list-style: none;
+            padding-right: var(--spacing-md);
         }
 
         .instructions li {
-            margin-bottom: 10px;
+            padding: var(--spacing-sm) 0;
+            padding-right: var(--spacing-md);
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
             position: relative;
-            list-style: none;
+        }
+
+        .instructions li:last-child {
+            border-bottom: none;
         }
 
         .instructions li::before {
-            content: '▶';
-            color: var(--color-primary);
-            position: absolute;
-            right: -20px;
-            font-size: 0.8em;
+            content: "▪";
+            color: var(--color-accent);
+            margin-right: var(--spacing-md);
         }
 
-        .question-container {
-            background: var(--color-bg-card);
-            padding: 25px;
+        /* ========== FORMS ========== */
+        .user-form, .user-info {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-right: 3px solid var(--color-accent);
             border-radius: var(--radius);
-            margin: 20px 0;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: var(--spacing-xl);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .user-form h2 {
+            color: var(--color-text);
+            font-size: 1.3rem;
+            margin-bottom: var(--spacing-lg);
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-text);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-main);
+            font-size: 1rem;
+            text-align: right;
+            transition: all var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 2px var(--color-accent-light);
+        }
+
+        .user-info {
+            display: none;
+        }
+
+        .user-info p {
+            padding: var(--spacing-sm) 0;
+            color: var(--color-text-secondary);
+        }
+
+        .user-info strong {
+            color: var(--color-accent);
+        }
+
+        /* ========== QUESTIONS ========== */
+        .question-container {
+            display: none;
         }
 
         .question {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            transition: all var(--transition);
+        }
+
+        .question:hover {
+            border-color: var(--color-accent-light);
+        }
+
+        .question.unanswered {
+            border-left: 3px solid var(--color-warning);
+        }
+
+        .question.answered {
+            border-left: 3px solid var(--color-success);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-md);
+            gap: var(--spacing-md);
         }
 
         .question-number {
-            font-weight: bold;
-            color: var(--color-primary);
-            margin-bottom: 15px;
-            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .question-status {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius);
+        }
+
+        .question-status.answered {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+        }
+
+        .question-status.unanswered {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--color-warning);
         }
 
         .question-text {
-            margin-bottom: 20px;
+            margin-bottom: var(--spacing-md);
             line-height: 1.8;
             font-size: 1.05rem;
+            color: var(--color-text);
             text-align: right;
         }
 
         .answer-box {
             width: 100%;
-            min-height: 120px;
-            padding: 15px;
-            border-radius: var(--radius-small);
-            border: 1px solid rgba(153, 154, 147, 0.3);
-            background: rgba(30, 30, 40, 0.8);
+            min-height: 140px;
+            padding: var(--spacing-md);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            background: var(--color-bg);
             color: var(--color-text);
             font-family: var(--font-main);
             font-size: 1rem;
             line-height: 1.6;
             resize: vertical;
-            transition: all var(--transition-normal) ease;
+            transition: all var(--transition);
             text-align: right;
+            direction: rtl;
         }
 
         .answer-box:focus {
             outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(227, 30, 39, 0.2);
-            background: rgba(30, 30, 40, 0.9);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 2px var(--color-accent-light);
         }
 
+        .word-count {
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            margin-top: var(--spacing-sm);
+            text-align: left;
+        }
+
+        /* ========== BUTTONS ========== */
         .btn-container {
             display: flex;
             justify-content: center;
-            margin: 30px 0;
+            gap: var(--spacing-md);
+            margin: var(--spacing-xl) 0;
+            flex-wrap: wrap;
         }
 
         .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 15px 40px;
-            background: linear-gradient(135deg, var(--color-primary) 0%, #c21820 100%);
-            color: white;
+            padding: var(--spacing-md) var(--spacing-lg);
             border: none;
             border-radius: var(--radius);
             font-family: var(--font-main);
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all var(--transition-normal) ease;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
+            transition: all var(--transition);
+            text-transform: none;
+            letter-spacing: 0;
         }
 
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left var(--transition-normal) ease;
+        .btn-primary {
+            background: var(--color-accent);
+            color: white;
         }
 
-        .btn:hover::before {
-            left: 100%;
+        .btn-primary:hover {
+            background: #c21820;
+            transform: translateY(-1px);
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-neon);
-            filter: brightness(1.1);
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
         }
 
+        .btn-secondary:hover {
+            border-color: var(--color-accent);
+            background: var(--color-accent-light);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* ========== MODALS ========== */
         .modal {
             display: none;
             position: fixed;
@@ -261,438 +389,638 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 13, 51, 0.95);
-            z-index: 100;
+            background: rgba(10, 10, 10, 0.95);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
         }
 
         .modal-content {
-            background: linear-gradient(135deg, var(--color-bg-card) 0%, var(--color-primary-dark) 100%);
-            padding: 40px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            padding: var(--spacing-xl);
             border-radius: var(--radius);
-            max-width: 800px;
+            max-width: 600px;
             width: 90%;
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
             text-align: center;
-            box-shadow: var(--shadow-glow);
-            border: 1px solid rgba(227, 30, 39, 0.3);
         }
 
-        .modal h2 {
-            color: var(--color-primary);
-            margin-bottom: 20px;
-            font-size: 2rem;
-        }
-
-        .user-form, .user-info, .sending-email {
-            background: var(--color-bg-card);
-            padding: 30px;
-            border-radius: var(--radius);
-            margin: 20px 0;
-            border-right: 4px solid var(--color-primary);
-            box-shadow: var(--shadow);
-            text-align: right;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--color-primary);
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 15px;
-            border-radius: var(--radius-small);
-            border: 1px solid rgba(153, 154, 147, 0.3);
-            background: rgba(30, 30, 40, 0.8);
+        .modal-content h2 {
             color: var(--color-text);
-            font-size: 1rem;
-            font-family: var(--font-main);
-            text-align: right;
+            margin-bottom: var(--spacing-md);
+            font-size: 1.8rem;
+            font-weight: 700;
         }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(227, 30, 39, 0.2);
+        .modal-content p {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.8;
         }
 
-        .silent-knights-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: var(--color-bg-card);
-            border-radius: var(--radius);
-            border: 1px solid rgba(227, 30, 39, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .silent-knights-header h2 {
-            color: var(--color-primary);
-            font-size: 2rem;
-        }
-
+        /* ========== RESULTS ========== */
         .result-item {
-            margin-bottom: 25px;
-            padding: 20px;
-            border-radius: var(--radius-small);
-            background: rgba(30, 30, 40, 0.7);
-            border-right: 5px solid var(--color-primary);
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-right: 3px solid var(--color-accent);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            border-radius: var(--radius);
             text-align: right;
         }
 
         .result-question {
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: var(--color-primary);
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-md);
+            font-size: 1rem;
         }
 
         .result-answer {
-            padding: 15px;
-            border-radius: var(--radius-small);
-            background: rgba(40, 40, 50, 0.8);
-        }
-
-        .review-btn {
-            padding: 12px 24px;
-            border: none;
+            background: var(--color-surface);
+            padding: var(--spacing-md);
             border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: bold;
-            font-family: var(--font-main);
-        }
-
-        #close-results {
-            background: transparent;
             color: var(--color-text);
-            border: 1px solid var(--color-secondary);
+            line-height: 1.8;
+            text-align: right;
+            word-break: break-word;
         }
 
-        .word-count {
+        .result-answer.empty {
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        /* ========== STATUS INDICATORS ========== */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+            gap: var(--spacing-md);
+        }
+
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-label {
             font-size: 0.8rem;
-            color: var(--color-text-muted);
-            margin-top: 5px;
-            text-align: left;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--spacing-xs);
         }
 
-        .time-warning {
-            color: #ff5555;
-            animation: pulse 1s infinite;
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-accent);
         }
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
+        /* ========== FOOTER ========== */
         footer {
             text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--color-text-muted);
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
             font-size: 0.9rem;
+        }
+
+        /* ========== UTILITY ========== */
+        .sending-email {
+            display: none;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-right: 3px solid var(--color-accent);
+            border-radius: var(--radius);
+            padding: var(--spacing-xl);
+            text-align: center;
+            margin: var(--spacing-lg) 0;
+        }
+
+        .sending-email.active {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--color-border);
+            border-top-color: var(--color-accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== PRINT ========== */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .timer-container, .btn-container, .user-form, footer {
+                display: none;
+            }
+            .question-container {
+                display: block;
+            }
+            .question {
+                page-break-inside: avoid;
+                border: 1px solid #999;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 640px) {
+            .container {
+                padding: var(--spacing-md);
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            #timer {
+                font-size: 2.5rem;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+            }
+
+            .question {
+                padding: var(--spacing-md);
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* ========== ACCESSIBILITY ========== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-left: 3px solid var(--color-accent);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius);
+            color: var(--color-text);
+            z-index: 2000;
+            max-width: 400px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
     </style>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <div class="silent-knights-header">
-            <h2>Silent Knights</h2>
-            <p>تیم امنیت سایبری - دوره هکر صفر</p>
-        </div>
-
         <header>
+            <div class="header-branding">✦ Silent Knights ✦</div>
             <h1>امتحان هکر صفر</h1>
-            <div class="subtitle">ذهنیت خود را محک بزن | مسیر هکری را از اینجا شروع کن</div>
+            <p class="subtitle">ذهنیت خود را محک بزن | مسیر هکری را از اینجا شروع کن</p>
             <div class="timer-container">
+                <div class="timer-label">زمان باقی‌مانده</div>
                 <div id="timer">60:00</div>
             </div>
         </header>
 
-        <div class="user-info" id="user-info" style="display: none;">
-            <h3>اطلاعات شرکت کننده</h3>
-            <p>نام: <span id="user-name-display"></span></p>
-            <p>ایمیل: <span id="user-email-display"></span></p>
-        </div>
-
         <div class="user-form" id="user-form">
-            <h2>لطفاً اطلاعات خود را وارد کنید</h2>
+            <h2>اطلاعات شرکت‌کننده</h2>
             <div class="form-group">
                 <label for="first-name">نام</label>
                 <input type="text" id="first-name" placeholder="نام خود را وارد کنید" required>
             </div>
             <div class="form-group">
-                <label for="last-name">تخلص</label>
-                <input type="text" id="last-name" placeholder="تخلص خود را وارد کنید" required>
+                <label for="last-name">نام‌خانوادگی</label>
+                <input type="text" id="last-name" placeholder="نام‌خانوادگی خود را وارد کنید" required>
             </div>
             <div class="form-group">
                 <label for="email">آدرس ایمیل</label>
                 <input type="email" id="email" placeholder="آدرس ایمیل خود را وارد کنید" required>
             </div>
-            <button class="btn" id="user-submit">ادامه به امتحان</button>
+            <div class="btn-container">
+                <button class="btn btn-primary" id="user-submit">ادامه به امتحان</button>
+            </div>
         </div>
 
-        <div class="instructions" style="display: none;" id="instructions">
-            <h2>دستورالعمل امتحان</h2>
+        <div class="user-info" id="user-info">
+            <p><strong>نام:</strong> <span id="user-name-display"></span></p>
+            <p><strong>ایمیل:</strong> <span id="user-email-display"></span></p>
+        </div>
+
+        <div class="instructions" id="instructions">
+            <h2>دستورالعمل‌های امتحان</h2>
             <ul>
-                <li>مدت زمان امتحان 60 دقیقه می‌باشد</li>
-                <li>این امتحان شامل 15 سوال تشریحی است</li>
-                <li>به هر سوال با دقت فکر کنید و پاسخ کامل بنویسید</li>
-                <li>می‌توانید پاسخ‌ها را قبل از ارسال تغییر دهید</li>
-                <li>تایمر با کلیک روی "شروع امتحان" فعال می‌شود</li>
-                <li>پس از اتمام زمان، پاسخ‌ها به طور خودکار ارسال می‌شوند</li>
+                <li>مدت زمان امتحان 60 دقیقه است</li>
+                <li>این امتحان 15 سوال تشریحی شامل می‌شود</li>
+                <li>پاسخ‌های شما خودکار ذخیره می‌شوند</li>
+                <li>می‌توانید در هر لحظه پاسخ‌های خود را ویرایش کنید</li>
+                <li>تیمر با شروع امتحان فعال می‌شود</li>
+                <li>در پایان، پاسخ‌ها به طور خودکار ارسال می‌شوند</li>
             </ul>
         </div>
 
-        <div class="question-container" style="display: none;" id="question-container"></div>
+        <div class="stats-bar" id="stats-bar" style="display: none;">
+            <div class="stat">
+                <div class="stat-label">پاسخ‌داده‌شده</div>
+                <div class="stat-value"><span id="answered-count">0</span>/15</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">بی‌پاسخ</div>
+                <div class="stat-value"><span id="unanswered-count">15</span></div>
+            </div>
+        </div>
 
-        <div class="btn-container" style="display: none;" id="submit-btn-container">
-            <button class="btn" id="submit-btn">ارسال پاسخ‌ها</button>
+        <div class="question-container" id="question-container"></div>
+
+        <div class="btn-container" id="submit-btn-container" style="display: none;">
+            <button class="btn btn-primary" id="submit-btn">ارسال پاسخ‌ها</button>
+            <button class="btn btn-secondary" id="print-btn" title="نسخه قابل چاپ">چاپ</button>
         </div>
 
         <div class="sending-email" id="sending-email">
-            <h3>در حال ارسال پاسخ‌ها به استاد...</h3>
-            <p>لطفاً منتظر بمانید تا پاسخ‌های شما ارسال شود.</p>
+            <div class="spinner"></div>
+            <h3 style="margin-top: var(--spacing-md);">ارسال پاسخ‌های شما...</h3>
+            <p style="margin-top: var(--spacing-sm); color: var(--color-text-secondary);">لطفاً منتظر بمانید</p>
         </div>
 
         <footer>
-            <p>Silent Knights &copy; 2026 | امتحان دوره هکر صفر</p>
+            <p>✦ Silent Knights © 2026 | دوره هکر صفر</p>
         </footer>
     </div>
 
+    <!-- MODALS -->
     <div class="modal" id="start-modal">
         <div class="modal-content">
             <h2>آماده شروع هستی؟</h2>
-            <p>تو 60 دقیقه وقت داری تا به 15 سوال تشریحی پاسخ دهی. تایمر به محض کلیک روی "شروع امتحان" فعال می‌شود.</p>
-            <button class="btn" id="start-exam">شروع امتحان</button>
+            <p>60 دقیقه برای پاسخ‌دهی به 15 سوال تشریحی داری. تایمر فوری شروع می‌شود.</p>
+            <div class="btn-container">
+                <button class="btn btn-primary" id="start-exam">شروع امتحان</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('start-modal').classList.remove('active')">بازگشت</button>
+            </div>
         </div>
     </div>
 
     <div class="modal" id="finished-modal">
         <div class="modal-content">
-            <h2>امتحان تکمیل شد!</h2>
-            <p>پاسخ‌های شما با موفقیت ثبت و ارسال شد. استاد دوره به زودی آن‌ها را بررسی خواهد کرد.</p>
+            <h2>✓ امتحان تکمیل شد</h2>
+            <p>پاسخ‌های شما با موفقیت ثبت و ارسال شد. تیم اساتید به زودی آن‌ها را بررسی خواهد کرد.</p>
+            <p style="color: var(--color-text-secondary); font-size: 0.9rem;">از شرکت شما در دوره هکر صفر متشکریم.</p>
         </div>
     </div>
 
     <div class="modal" id="results-modal">
-        <div class="modal-content">
-            <h2>پاسخ‌های شما</h2>
-            <div id="results-container"></div>
-            <div class="review-buttons" style="margin-top: 20px;">
-                <button class="review-btn" id="close-results">بستن</button>
+        <div class="modal-content" style="max-width: 700px;">
+            <h2>خلاصه پاسخ‌های شما</h2>
+            <div id="results-container" style="margin-top: var(--spacing-lg); text-align: right;"></div>
+            <div class="btn-container" style="margin-top: var(--spacing-lg);">
+                <button class="btn btn-secondary" id="close-results" onclick="document.getElementById('results-modal').classList.remove('active')">بستن</button>
             </div>
         </div>
     </div>
 
+    <!-- SCRIPTS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-        // ********** سوالات نهایی – ۵ سوال فنی ساده + ۱۰ سوال ذهنیت (به زبان دری) **********
+        // ========== QUESTIONS DATA ==========
         const questions = [
-            // ===== بخش فنی (سوال 1 تا 5) =====
-            {
-                question: "فرض کن در یک شرکت کار می‌کنی. یک روز یک نفر زنگ می‌زند و می‌گوید: «من از قسمت پشتیبانی فنی هستم، رمز کاربریت را بده تا سیستمت را درست کنم». به نظر تو این حرف درست است یا دروغ؟ از کجا می‌فهمی؟ اگر خودت جای هکر بودی، چه حرفی می‌زدی تا طرف مقابل رمزت را بدهد؟"
-            },
-            {
-                question: "یکی از دوستانت می‌گوید: «من یک نرم‌افزار هک دانلود کردم، دیگر یک هکر حرفه‌ای هستم!» به نظر تو این فکر درست است؟ چرا؟ اگر کسی فقط ابزار یاد بگیرد ولی طرز فکر درست نداشته باشد، چه مشکلی پیدا می‌کند؟ یک مثال بزن."
-            },
-            {
-                question: "می‌خواهی امنیت یک شرکت را بررسی کنی. هیچ اطلاعاتی از آن نداری. اول چه کار می‌کنی؟ آیا مستقیم می‌روی سراغ هک کردن یا اول چیزهایی جمع‌آوری می‌کنی؟ چطور می‌توانی بدون اینکه کسی بفهمد، از راه دور اطلاعات بگیری؟"
-            },
-            {
-                question: "یک روز یک پیام به واتساپت می‌آید: «برای فعال کردن امنیت بیشتر، لطفاً این کد را برای ما بفرست». دوستت همین کار را می‌کند و بعد می‌بیند که از واتساپش بیرون شده است. به نظرت چه اتفاقی افتاد؟ اگر تو جای هکر بودی، چه پیامی می‌فرستادی تا کسی را فریب بدهی؟ اگر هم خودت هدف بودی، چطور می‌توانستی فریب نخوری؟"
-            },
-            {
-                question: "فرض کن در یک سایت فروشگاهی، در قسمت رمز عبور، عبارت `' or '1'='1` را وارد می‌کنی و بدون اینکه رمز را بدانی، وارد پنل مدیریت می‌شوی. به نظرت این چه نوع حمله‌ای است؟ اگر صاحب سایت بودی، چطور می‌توانستی جلوی این کار را بگیری؟"
-            },
-            // ===== بخش تحلیل ذهنیت شاگرد (سوال 6 تا 15) =====
-            {
-                question: "به جز پول، چه چیز دیگری تو را به یادگیری هک علاقه‌مند کرده است؟ یک اتفاق یا حس خاصی بود که تصمیم گرفتی وارد این راه بشوی؟ اگر هیچ محدودیتی نداشتی (نه زمان، نه هزینه، نه قانون)، دوست داشتی چه نوع هکری باشی؟"
-            },
-            {
-                question: "یک قفل را تصور کن که کلیدش را گم کرده‌ای. بدون اینکه قفل را بشکنی، چه راه‌هایی به ذهنت می‌رسد که آن را باز کنی؟ حالا همین فکر را برای پیدا کردن یک رمز عبور گم‌شده به کار ببر. روش فکر کردن تو چگونه است؟"
-            },
-            {
-                question: "تا حالا شده ساعتها پای یک مسئله بمانی و نتوانی آن را حل کنی، اما ولش نکنی؟ آن موقع چه حسی داشتی؟ چه چیزی باعث شد ادامه بدهی؟ اگر یک فایل رمزگذاری شده بدون هیچ ابزاری به تو بدهند، اول چه کاری می‌کنی و چه قدر حوصله داری؟"
-            },
-            {
-                question: "یک سناریو بساز: می‌خواهی یک نفر را بدون هیچ ابزار فنی، فقط با حرف زدن و رفتار، قانع کنی که شماره تلفنش را به تو بدهد. چه می‌گویی؟ چگونه از خلاقیت خودت استفاده می‌کنی؟"
-            },
-            {
-                question: "به نظر خودت قوی‌ترین و ضعیف‌ترین نقطه ذهنیت تو برای هکر شدن چیست؟ مثلاً زود خسته می‌شوی؟ یا می‌توانی خودت را جای طرف مقابل بگذاری؟ آیا به جزئیات توجه می‌کنی؟ یک مثال واقعی بزن."
-            },
-            {
-                question: "تصور کن داری یک تست نفوذ قانونی انجام می‌دهی، اما یک مرتبه سیستم شرکت از کار می‌افتد و همه فکر می‌کنند که این کار تو بوده است. اولین کاری که می‌کنی چیست؟ چگونه استرس خودت را کنترل می‌کنی؟"
-            },
-            {
-                question: "فرض کن به راحتی می‌توانی وارد ایمیل کسی بشوی که واقعاً از دستش عصبانی هستی. هیچکس هم نمی‌فهمد. چه کار می‌کنی؟ مرز اخلاقی تو کجاست؟ چه چیزی باعث می‌شود که یک هکر خوب (کلاه سفید) بمانی نه بد (کلاه سیاه)؟"
-            },
-            {
-                question: "وقتی یک کلمه یا مفهوم جدید در دنیای هک می‌بینی (مثل «مهندسی اجتماعی» یا «بک‌دور»)، اولین کاری که می‌کنی چیست؟ فقط یک نگاه سریع می‌اندازی یا عمیق می‌شوی؟ چه قدر دوست داری علت چیزها را بفهمی؟"
-            },
-            {
-                question: "قدم به قدم بگو وقتی با یک معمای پیچیده روبرو می‌شوی، ذهنت چگونه کار می‌کند؟ اول چه چیزی را چک می‌کنی؟ از کجا شروع می‌کنی؟ از تجربه‌های قبلی استفاده می‌کنی؟ ما دوست داریم «الگوریتم فکری» تو را بفهمیم."
-            },
-            {
-                question: "خودت را پنج سال دیگر تصور کن. دوست داری در کدام حوزه امنیت سایبری کار کنی؟ تست نفوذ؟ باگ بانتی؟ امنیت شبکه؟ هوش مصنوعی؟ یا چیز دیگر؟ برای رسیدن به آن هدف، چه برنامه‌ای در ذهن داری؟ اگر الان هیچ چیزی بلد نباشی، از کجا شروع می‌کنی؟"
-            }
+            { question: "فرض کن در یک شرکت کار می‌کنی. یک روز یک نفر زنگ می‌زند و می‌گوید: «من از قسمت پشتیبانی فنی هستم، رمز کاربریت را بده تا سیستمت را درست کنم». به نظر تو این حرف درست است یا دروغ؟ از کجا می‌فهمی؟ اگر خودت جای هکر بودی، چه حرفی می‌زدی تا طرف مقابل رمزت را بدهد؟" },
+            { question: "یکی از دوستانت می‌گوید: «من یک نرم‌افزار هک دانلود کردم، دیگر یک هکر حرفه‌ای هستم!» به نظر تو این فکر درست است؟ چرا؟ اگر کسی فقط ابزار یاد بگیرد ولی طرز فکر درست نداشته باشد، چه مشکلی پیدا می‌کند؟" },
+            { question: "می‌خواهی امنیت یک شرکت را بررسی کنی. هیچ اطلاعاتی از آن نداری. اول چه کار می‌کنی؟ آیا مستقیم می‌روی سراغ هک کردن یا اول چیزهایی جمع‌آوری می‌کنی؟" },
+            { question: "یک روز یک پیام به واتساپ می‌آید: «برای فعال کردن امنیت بیشتر، لطفاً این کد را برای ما بفرست». دوستت همین کار را می‌کند و بعد می‌بیند که از واتساپش بیرون شده است. به نظرت چه اتفاقی افتاد؟" },
+            { question: "فرض کن در یک سایت فروشگاهی، در قسمت رمز عبور، عبارت `' or '1'='1` را وارد می‌کنی و بدون اینکه رمز را بدانی، وارد پنل مدیریت می‌شوی. به نظرت این چه نوع حمله‌ای است؟" },
+            { question: "به جز پول، چه چیز دیگری تو را به یادگیری هک علاقه‌مند کرده است؟ یک اتفاق یا حس خاصی بود که تصمیم گرفتی وارد این راه بشوی؟" },
+            { question: "یک قفل را تصور کن که کلیدش را گم کرده‌ای. بدون اینکه قفل را بشکنی، چه راه‌هایی به ذهنت می‌رسد که آن را باز کنی؟" },
+            { question: "تا حالا شده ساعتها پای یک مسئله بمانی و نتوانی آن را حل کنی، اما ولش نکنی؟ آن موقع چه حسی داشتی؟ چه چیزی باعث شد ادامه بدهی؟" },
+            { question: "یک سناریو بساز: می‌خواهی یک نفر را بدون هیچ ابزار فنی، فقط با حرف زدن و رفتار، قانع کنی که شماره تلفنش را به تو بدهد. چه می‌گویی؟" },
+            { question: "به نظر خودت قوی‌ترین و ضعیف‌ترین نقطه ذهنیت تو برای هکر شدن چیست؟ یک مثال واقعی بزن." },
+            { question: "تصور کن داری یک تست نفوذ قانونی انجام می‌دهی، اما یک مرتبه سیستم شرکت از کار می‌افتد. اولین کاری که می‌کنی چیست؟" },
+            { question: "فرض کن به راحتی می‌توانی وارد ایمیل کسی بشوی که واقعاً از دستش عصبانی هستی. چه کار می‌کنی؟ مرز اخلاقی تو کجاست؟" },
+            { question: "وقتی یک کلمه یا مفهوم جدید در دنیای هک می‌بینی، اولین کاری که می‌کنی چیست؟ چه قدر دوست داری علت چیزها را بفهمی؟" },
+            { question: "قدم به قدم بگو وقتی با یک معمای پیچیده روبرو می‌شوی، ذهنت چگونه کار می‌کند؟ اول چه چیزی را چک می‌کنی؟" },
+            { question: "خودت را پنج سال دیگر تصور کن. دوست داری در کدام حوزه امنیت سایبری کار کنی؟ برای رسیدن به آن هدف، چه برنامه‌ای در ذهن داری؟" }
         ];
 
-        // DOM elements
-        const questionContainer = document.querySelector('.question-container');
-        const timerElement = document.getElementById('timer');
-        const startModal = document.getElementById('start-modal');
-        const finishedModal = document.getElementById('finished-modal');
-        const resultsModal = document.getElementById('results-modal');
-        const startExamBtn = document.getElementById('start-exam');
-        const submitBtn = document.getElementById('submit-btn');
-        const resultsContainer = document.getElementById('results-container');
-        const closeResultsBtn = document.getElementById('close-results');
-        const userForm = document.getElementById('user-form');
-        const userSubmitBtn = document.getElementById('user-submit');
-        const firstNameInput = document.getElementById('first-name');
-        const lastNameInput = document.getElementById('last-name');
-        const emailInput = document.getElementById('email');
-        const instructions = document.getElementById('instructions');
-        const submitBtnContainer = document.getElementById('submit-btn-container');
-        const userInfo = document.getElementById('user-info');
-        const userNameDisplay = document.getElementById('user-name-display');
-        const userEmailDisplay = document.getElementById('user-email-display');
-        const sendingEmail = document.getElementById('sending-email');
-
+        // ========== STATE MANAGEMENT ==========
         let userData = { firstName: '', lastName: '', email: '' };
         let timeLeft = 60 * 60;
-        let timerInterval;
-        let userAnswers = new Array(questions.length).fill('');
+        let timerInterval = null;
+        let examStarted = false;
+        let userAnswers = JSON.parse(localStorage.getItem('exam_answers')) || new Array(questions.length).fill('');
 
+        // ========== DOM ELEMENTS ==========
+        const els = {
+            userForm: document.getElementById('user-form'),
+            userSubmitBtn: document.getElementById('user-submit'),
+            firstNameInput: document.getElementById('first-name'),
+            lastNameInput: document.getElementById('last-name'),
+            emailInput: document.getElementById('email'),
+            userInfo: document.getElementById('user-info'),
+            userNameDisplay: document.getElementById('user-name-display'),
+            userEmailDisplay: document.getElementById('user-email-display'),
+            instructions: document.getElementById('instructions'),
+            timerElement: document.getElementById('timer'),
+            questionContainer: document.getElementById('question-container'),
+            statsBار: document.getElementById('stats-bar'),
+            submitBtn: document.getElementById('submit-btn'),
+            printBtn: document.getElementById('print-btn'),
+            submitBtnContainer: document.getElementById('submit-btn-container'),
+            sendingEmail: document.getElementById('sending-email'),
+            startModal: document.getElementById('start-modal'),
+            startExamBtn: document.getElementById('start-exam'),
+            finishedModal: document.getElementById('finished-modal'),
+            resultsModal: document.getElementById('results-modal'),
+            resultsContainer: document.getElementById('results-container')
+        };
+
+        // ========== INITIALIZATION ==========
         function initExam() {
-            questionContainer.innerHTML = '';
+            els.questionContainer.innerHTML = '';
             questions.forEach((q, index) => {
                 const questionEl = document.createElement('div');
-                questionEl.className = 'question';
+                questionEl.className = 'question ' + (userAnswers[index]?.trim() ? 'answered' : 'unanswered');
                 questionEl.innerHTML = `
-                    <div class="question-number">سوال ${index + 1} از ${questions.length}</div>
+                    <div class="question-header">
+                        <div>
+                            <span class="question-number">سوال ${index + 1}</span>
+                            <span class="question-status ${userAnswers[index]?.trim() ? 'answered' : 'unanswered'}">
+                                ${userAnswers[index]?.trim() ? '✓ پاسخ‌داده‌شده' : '⊘ بی‌پاسخ'}
+                            </span>
+                        </div>
+                    </div>
                     <div class="question-text">${q.question}</div>
-                    <textarea class="answer-box" placeholder="پاسخ خود را اینجا بنویس..." data-question="${index}" oninput="updateAnswer(${index}, this.value)"></textarea>
-                    <div class="word-count" id="word-count-${index}">0 کلمه</div>
+                    <textarea class="answer-box" placeholder="پاسخ خود را اینجا بنویسید..." data-question="${index}">${userAnswers[index] || ''}</textarea>
+                    <div class="word-count" id="word-count-${index}">${countWords(userAnswers[index])} کلمه</div>
                 `;
-                questionContainer.appendChild(questionEl);
+                els.questionContainer.appendChild(questionEl);
+            });
+            attachAnswerListeners();
+        }
+
+        function countWords(text) {
+            return text?.trim() ? text.trim().split(/\s+/).length : 0;
+        }
+
+        function attachAnswerListeners() {
+            document.querySelectorAll('.answer-box').forEach(box => {
+                box.addEventListener('input', (e) => {
+                    const index = parseInt(e.target.dataset.question);
+                    userAnswers[index] = e.target.value;
+                    localStorage.setItem('exam_answers', JSON.stringify(userAnswers));
+                    
+                    const wordCount = countWords(e.target.value);
+                    document.getElementById(`word-count-${index}`).textContent = `${wordCount} کلمه`;
+                    
+                    const question = e.target.closest('.question');
+                    const status = question.querySelector('.question-status');
+                    if (e.target.value.trim()) {
+                        question.classList.remove('unanswered');
+                        question.classList.add('answered');
+                        status.textContent = '✓ پاسخ‌داده‌شده';
+                        status.className = 'question-status answered';
+                    } else {
+                        question.classList.add('unanswered');
+                        question.classList.remove('answered');
+                        status.textContent = '⊘ بی‌پاسخ';
+                        status.className = 'question-status unanswered';
+                    }
+                    
+                    updateStats();
+                });
             });
         }
 
-        window.updateAnswer = function(index, value) {
-            userAnswers[index] = value;
-            const wordCount = value.trim() === '' ? 0 : value.trim().split(/\s+/).length;
-            const wc = document.getElementById(`word-count-${index}`);
-            if (wc) wc.textContent = `${wordCount} کلمه`;
-        };
+        function updateStats() {
+            const answered = userAnswers.filter(a => a?.trim()).length;
+            const unanswered = questions.length - answered;
+            document.getElementById('answered-count').textContent = answered;
+            document.getElementById('unanswered-count').textContent = unanswered;
+        }
 
         function isValidEmail(email) {
             return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email);
         }
 
-        userSubmitBtn.addEventListener('click', () => {
-            if (!firstNameInput.value.trim() || !lastNameInput.value.trim() || !emailInput.value.trim()) {
-                alert('لطفاً تمام فیلدها را پر کنید');
+        // ========== EVENT LISTENERS ==========
+        els.userSubmitBtn.addEventListener('click', () => {
+            if (!els.firstNameInput.value.trim() || !els.lastNameInput.value.trim() || !els.emailInput.value.trim()) {
+                showToast('لطفاً تمام فیلدها را پر کنید', 'error');
                 return;
             }
-            if (!isValidEmail(emailInput.value)) {
-                alert('لطفاً یک آدرس ایمیل معتبر وارد کنید');
+            if (!isValidEmail(els.emailInput.value)) {
+                showToast('آدرس ایمیل معتبر نیست', 'error');
                 return;
             }
-            userData.firstName = firstNameInput.value.trim();
-            userData.lastName = lastNameInput.value.trim();
-            userData.email = emailInput.value.trim();
 
-            userForm.style.display = 'none';
-            userInfo.style.display = 'block';
-            userNameDisplay.textContent = `${userData.firstName} ${userData.lastName}`;
-            userEmailDisplay.textContent = userData.email;
-            instructions.style.display = 'block';
-            startModal.style.display = 'flex';
+            userData.firstName = els.firstNameInput.value.trim();
+            userData.lastName = els.lastNameInput.value.trim();
+            userData.email = els.emailInput.value.trim();
+            localStorage.setItem('exam_user', JSON.stringify(userData));
+
+            els.userForm.style.display = 'none';
+            els.userInfo.style.display = 'block';
+            els.userNameDisplay.textContent = `${userData.firstName} ${userData.lastName}`;
+            els.userEmailDisplay.textContent = userData.email;
+            els.instructions.style.display = 'block';
+            els.startModal.classList.add('active');
         });
 
-        function startExam() {
-            startModal.style.display = 'none';
-            questionContainer.style.display = 'block';
-            submitBtnContainer.style.display = 'flex';
+        els.startExamBtn.addEventListener('click', () => {
+            els.startModal.classList.remove('active');
+            els.instructions.style.display = 'none';
+            els.statsBار.style.display = 'flex';
+            els.questionContainer.style.display = 'block';
+            els.submitBtnContainer.style.display = 'flex';
+            examStarted = true;
+            startTimer();
+            updateStats();
+            window.addEventListener('beforeunload', confirmLeave);
+        });
+
+        els.submitBtn.addEventListener('click', submitExam);
+
+        els.printBtn.addEventListener('click', () => {
+            window.print();
+        });
+
+        // ========== TIMER ==========
+        function startTimer() {
             timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
                     submitExam();
-                } else {
-                    timeLeft--;
-                    const minutes = Math.floor(timeLeft / 60);
-                    const seconds = timeLeft % 60;
-                    timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                    if (minutes < 5) timerElement.classList.add('time-warning');
                 }
             }, 1000);
         }
 
-        function sendEmailResults() {
-            let body = `نتایج امتحان هکر صفر\n`;
-            body += `نام: ${userData.firstName} ${userData.lastName}\n`;
-            body += `ایمیل: ${userData.email}\n`;
-            body += `تاریخ: ${new Date().toLocaleString('fa-IR')}\n\n`;
-            questions.forEach((q, i) => {
-                body += `سوال ${i+1}: ${q.question}\n`;
-                body += `پاسخ: ${userAnswers[i] || 'پاسخی داده نشده'}\n`;
-                body += `---\n\n`;
-            });
-            emailjs.send("service_b9r47cr", "template_sqx8wkj", {
-                to_email: "modasirhashimi0101@gmail.com",
-                from_name: "امتحان هکر صفر",
-                subject: `امتحان هکر صفر - ${userData.firstName} ${userData.lastName}`,
-                message: body
-            }).then(() => {
-                sendingEmail.innerHTML = "<h3>پاسخ‌ها با موفقیت ارسال شد!</h3><p>استاد دوره به زودی بررسی خواهد کرد.</p>";
-            }).catch(() => {
-                sendingEmail.innerHTML = "<h3>ارسال ایمیل با مشکل مواجه شد</h3><p>اما پاسخ‌های شما ذخیره شده است. لطفاً با استاد تماس بگیرید.</p>";
-            });
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            els.timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            els.timerElement.classList.remove('warning', 'critical');
+            if (minutes < 2) els.timerElement.classList.add('critical');
+            else if (minutes < 5) els.timerElement.classList.add('warning');
         }
 
-        function showResults() {
-            resultsContainer.innerHTML = '';
-            questions.forEach((q, i) => {
-                const div = document.createElement('div');
-                div.className = 'result-item';
-                div.innerHTML = `<div class="result-question">سوال ${i+1}: ${q.question}</div>
-                                 <div class="result-answer"><strong>پاسخ شما:</strong><br>${userAnswers[i] || '<em style="color:#999">پاسخی داده نشده</em>'}</div>`;
-                resultsContainer.appendChild(div);
-            });
-            resultsModal.style.display = 'flex';
-        }
-
+        // ========== SUBMIT & RESULTS ==========
         function submitExam() {
-            clearInterval(timerInterval);
-            sendingEmail.style.display = 'block';
+            if (timerInterval) clearInterval(timerInterval);
+            window.removeEventListener('beforeunload', confirmLeave);
+            
+            els.sendingEmail.classList.add('active');
+            els.questionContainer.style.display = 'none';
+            els.submitBtnContainer.style.display = 'none';
+            els.statsBار.style.display = 'none';
+
             sendEmailResults();
             showResults();
         }
 
-        startExamBtn.addEventListener('click', startExam);
-        submitBtn.addEventListener('click', submitExam);
-        closeResultsBtn.addEventListener('click', () => {
-            resultsModal.style.display = 'none';
-            finishedModal.style.display = 'flex';
+        function sendEmailResults() {
+            let body = `=== نتایج امتحان هکر صفر ===\n\n`;
+            body += `نام: ${userData.firstName} ${userData.lastName}\n`;
+            body += `ایمیل: ${userData.email}\n`;
+            body += `تاریخ: ${new Date().toLocaleString('fa-IR')}\n`;
+            body += `سوالات پاسخ‌داده شده: ${userAnswers.filter(a => a?.trim()).length}/15\n\n`;
+            body += `${'='.repeat(50)}\n\n`;
+
+            questions.forEach((q, i) => {
+                body += `📌 سوال ${i + 1}:\n${q.question}\n\n`;
+                body += `✎ پاسخ:\n${userAnswers[i] || '[پاسخی داده نشده]'}\n\n`;
+                body += `${'-'.repeat(50)}\n\n`;
+            });
+
+            emailjs.send("service_b9r47cr", "template_sqx8wkj", {
+                to_email: "modasirhashimi0101@gmail.com",
+                from_name: "امتحان هکر صفر",
+                subject: `📋 امتحان هکر صفر - ${userData.firstName} ${userData.lastName}`,
+                message: body
+            }).then(() => {
+                els.sendingEmail.innerHTML = "<h3 style='color: var(--color-success);'>✓ پاسخ‌های شما ارسال شد</h3>";
+                setTimeout(() => {
+                    els.sendingEmail.classList.remove('active');
+                    els.finishedModal.classList.add('active');
+                }, 1500);
+            }).catch(() => {
+                els.sendingEmail.innerHTML = "<h3>⚠ خرابی در ارسال</h3><p style='color: var(--color-text-secondary);'>پاسخ‌های شما ذخیره شده اند</p>";
+                setTimeout(() => {
+                    els.sendingEmail.classList.remove('active');
+                    els.finishedModal.classList.add('active');
+                }, 2000);
+            });
+        }
+
+        function showResults() {
+            els.resultsContainer.innerHTML = '';
+            questions.forEach((q, i) => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                const answerText = userAnswers[i]?.trim() || '[پاسخی داده نشده]';
+                const answerClass = userAnswers[i]?.trim() ? '' : 'empty';
+                div.innerHTML = `
+                    <div class="result-question">سوال ${i + 1}</div>
+                    <div class="result-answer ${answerClass}">${answerText}</div>
+                `;
+                els.resultsContainer.appendChild(div);
+            });
+        }
+
+        // ========== UTILITIES ==========
+        function confirmLeave(e) {
+            if (examStarted && !document.hidden) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ========== INIT ==========
+        window.addEventListener('load', () => {
+            initExam();
+            const savedUser = localStorage.getItem('exam_user');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                els.firstNameInput.value = user.firstName;
+                els.lastNameInput.value = user.lastName;
+                els.emailInput.value = user.email;
+            }
         });
 
-        window.addEventListener('load', initExam);
+        // Email.js init
         emailjs.init("zTlaq0rOCJbPFLB-t");
+
+        // ========== RESTORE ANSWERS ON PAGE LOAD ==========
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('exam_answers', JSON.stringify(userAnswers));
+        });
     </script>
 </body>
 </html>

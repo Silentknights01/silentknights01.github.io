@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بلاگ اخبار سایبری | Silent Knights</title>
+  <meta name="description" content="اخبار روز دنیای سایبری - Silent Knights">
+  <meta name="theme-color" content="#0a0a0a">
+  
+  <style>
+    /* ==================== RESET & VARIABLES ==================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #0d0d0d;
+      --bg-card-hover: #121212;
+      --red-dark: #8b0000;
+      --red-bright: #dc2626;
+      --red-dim: #5a0000;
+      --red-glow: rgba(220, 38, 38, 0.25);
+      --text-light: #f0f0f0;
+      --text-muted: #a0a0a0;
+      --border-red: #3a0000;
+      --font-main: 'Segoe UI', 'Berlin Sans FB', Tahoma, system-ui, sans-serif;
+      --font-mono: 'Fira Code', 'Courier New', monospace;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--red-bright);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--red-dark);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--red-bright);
+    }
+
+    h1, h2, h3 {
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      background: linear-gradient(135deg, #ffffff, var(--red-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red-bright), transparent);
+      margin: 12px auto 0;
+      border-radius: 3px;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 2.5rem auto;
+    }
+
+    /* ==================== HEADER & NAV (همانند سایت اصلی) ==================== */
+    .nav {
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-red);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.3rem;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--red-dark), var(--red-bright));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.3rem;
+      box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+    }
+
+    .menu {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .menu a {
+      color: var(--text-light);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .menu a:hover, .menu a.active {
+      color: var(--red-bright);
+    }
+
+    .register-button {
+      background: linear-gradient(135deg, var(--red-dark), var(--red-dim));
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      border: 1px solid var(--red-bright);
+    }
+
+    .register-button:hover {
+      background: linear-gradient(135deg, var(--red-bright), var(--red-dark));
+      transform: scale(1.02);
+      color: white !important;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-btn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: var(--bg-card);
+      min-width: 220px;
+      border: 1px solid var(--border-red);
+      border-radius: 12px;
+      z-index: 1000;
+      right: 0;
+      top: 100%;
+      margin-top: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+    }
+
+    .dropdown-content.show {
+      display: block;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border-red);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-content a:hover {
+      background: var(--red-dim);
+      color: white;
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+
+    .nav-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    .nav-drawer.open {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .nav-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 280px;
+      height: 100%;
+      background: var(--bg-card);
+      border-left: 3px solid var(--red-bright);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transform: translateX(100%);
+      transition: 0.3s ease;
+    }
+
+    .nav-drawer.open .nav-panel {
+      transform: translateX(0);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      align-self: flex-end;
+      cursor: pointer;
+    }
+
+    /* ==================== کارت‌ها (همانند سایت اصلی) ==================== */
+    .card {
+      background: linear-gradient(145deg, #1a0808, #0a0202);
+      border: 1px solid var(--red-dim);
+      border-radius: 24px;
+      padding: 1.8rem;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      transform-style: preserve-3d;
+      perspective: 1200px;
+      box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(145deg, #2a0a0a, #050101);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--red-bright), transparent);
+      transform: scaleX(0.6);
+      transition: transform 0.4s ease;
+      z-index: 2;
+      opacity: 0.7;
+    }
+
+    .card:hover::before {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(220,38,38,0.12), transparent);
+      opacity: 0.4;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .card:hover::after {
+      opacity: 0.8;
+    }
+
+    .card:hover {
+      transform: translateY(-12px) rotateX(3deg) rotateY(2deg) scale(1.01);
+      border-color: var(--red-bright);
+      box-shadow: 0 30px 45px -20px var(--red-glow), 0 0 0 1px rgba(220, 38, 38, 0.3);
+      background: linear-gradient(145deg, #3a1010, #0f0303);
+    }
+
+    .card:hover,
+    .card:hover * {
+      color: inherit;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+    /* ==================== بلاگ هیرو ==================== */
+    .blog-hero {
+      min-height: 40vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: radial-gradient(ellipse at 30% 40%, #180303, #010101 80%);
+      border-bottom: 1px solid var(--red-dim);
+      padding: 3rem 2rem;
+    }
+
+    .blog-hero .hero-badge {
+      background: rgba(220, 38, 38, 0.12);
+      backdrop-filter: blur(4px);
+      display: inline-block;
+      padding: 0.35rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      color: var(--red-bright);
+      margin-bottom: 1.5rem;
+    }
+
+    .blog-hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, var(--red-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.75rem;
+    }
+
+    .blog-hero p {
+      font-size: 1.2rem;
+      color: #cacaca;
+      max-width: 700px;
+      margin: 1.5rem auto 0;
+      line-height: 1.6;
+    }
+
+    /* ==================== فیلتر ==================== */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(220, 38, 38, 0.08);
+      background: rgba(10, 10, 10, 0.5);
+    }
+
+    .filter-btn {
+      padding: 0.4rem 1.2rem;
+      border: 1px solid var(--red-dim);
+      border-radius: 30px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .filter-btn:hover {
+      background: rgba(220, 38, 38, 0.08);
+      border-color: var(--red-bright);
+      color: var(--red-bright);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--red-dark), var(--red-dim));
+      border-color: var(--red-bright);
+      color: white;
+      box-shadow: 0 0 20px var(--red-glow);
+    }
+
+    /* ==================== کارت‌های خبری ==================== */
+    .news-card {
+      background: linear-gradient(145deg, #1a0808, #0a0202);
+      border: 1px solid var(--red-dim);
+      border-radius: 24px;
+      padding: 1.8rem;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      transform-style: preserve-3d;
+      perspective: 1200px;
+      box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(145deg, #2a0a0a, #050101);
+    }
+
+    .news-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--red-bright), transparent);
+      transform: scaleX(0.6);
+      transition: transform 0.4s ease;
+      z-index: 2;
+      opacity: 0.7;
+    }
+
+    .news-card:hover::before {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+
+    .news-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(220,38,38,0.12), transparent);
+      opacity: 0.4;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .news-card:hover::after {
+      opacity: 0.8;
+    }
+
+    .news-card:hover {
+      transform: translateY(-12px) rotateX(3deg) rotateY(2deg) scale(1.01);
+      border-color: var(--red-bright);
+      box-shadow: 0 30px 45px -20px var(--red-glow), 0 0 0 1px rgba(220, 38, 38, 0.3);
+      background: linear-gradient(145deg, #3a1010, #0f0303);
+    }
+
+    .news-card .category-tag {
+      display: inline-block;
+      padding: 0.2rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.8rem;
+      background: rgba(139,0,0,0.3);
+      border: 1px solid var(--red-dim);
+      color: var(--red-bright);
+    }
+
+    .news-card .category-tag.vulnerability {
+      background: rgba(255, 50, 50, 0.08);
+      color: #ff6b6b;
+      border-color: rgba(255, 50, 50, 0.2);
+    }
+
+    .news-card .category-tag.attack {
+      background: rgba(255, 165, 0, 0.08);
+      color: #ffa500;
+      border-color: rgba(255, 165, 0, 0.2);
+    }
+
+    .news-card .category-tag.malware {
+      background: rgba(123, 47, 252, 0.08);
+      color: #a855f7;
+      border-color: rgba(123, 47, 252, 0.2);
+    }
+
+    .news-card .category-tag.cybercrime {
+      background: rgba(255, 0, 100, 0.08);
+      color: #ff4d7a;
+      border-color: rgba(255, 0, 100, 0.2);
+    }
+
+    .news-card .category-tag.technology {
+      background: rgba(0, 150, 255, 0.08);
+      color: #4dabff;
+      border-color: rgba(0, 150, 255, 0.2);
+    }
+
+    .news-card .category-tag.general {
+      background: rgba(139,0,0,0.2);
+      color: var(--red-bright);
+      border-color: var(--red-dim);
+    }
+
+    .news-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      line-height: 1.4;
+      color: var(--text-light);
+    }
+
+    .news-card h3 a {
+      color: var(--text-light);
+      transition: color 0.3s ease;
+    }
+
+    .news-card h3 a:hover {
+      color: var(--red-bright);
+    }
+
+    .news-card .meta {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .news-card .meta .date {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .news-card .meta .source {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .news-card .meta .source a {
+      color: var(--text-muted);
+      transition: color 0.3s ease;
+    }
+
+    .news-card .meta .source a:hover {
+      color: var(--red-bright);
+    }
+
+    .news-card .summary {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
+    }
+
+    .news-card .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--red-bright);
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: gap 0.3s ease;
+    }
+
+    .news-card .read-more:hover {
+      gap: 0.8rem;
+    }
+
+    .news-card .read-more .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .news-card .read-more:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    /* ==================== لودینگ ==================== */
+    .loading-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 1rem;
+      border: 3px solid var(--red-dim);
+      border-top-color: var(--red-bright);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ==================== خالی ==================== */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state .icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    /* ==================== فوتر ==================== */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border-red);
+      margin-top: 2rem;
+      color: var(--text-muted);
+    }
+
+    /* ==================== ریسپانسیو ==================== */
+    @media (max-width: 900px) {
+      .menu {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .container {
+        padding: 2rem 1.5rem;
+      }
+      .blog-hero h1 {
+        font-size: 2.5rem;
+      }
+      .blog-hero {
+        min-height: 30vh;
+        padding: 2rem 1.5rem;
+      }
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .filter-bar {
+        gap: 0.5rem;
+        padding: 1rem;
+      }
+      .filter-btn {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.8rem;
+      }
+      .news-card {
+        padding: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-hero h1 {
+        font-size: 2rem;
+      }
+      .blog-hero p {
+        font-size: 1rem;
+      }
+      .news-card .meta {
+        gap: 0.8rem;
+        font-size: 0.7rem;
+      }
+    }
+
+    /* ==================== انیمیشن کارت‌ها ==================== */
+    .news-card {
+      animation: fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) backwards;
+    }
+    .news-card:nth-child(1) { animation-delay: 0.05s; }
+    .news-card:nth-child(2) { animation-delay: 0.1s; }
+    .news-card:nth-child(3) { animation-delay: 0.15s; }
+    .news-card:nth-child(4) { animation-delay: 0.2s; }
+    .news-card:nth-child(5) { animation-delay: 0.25s; }
+    .news-card:nth-child(6) { animation-delay: 0.3s; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==================== برچسب به‌روزرسانی ==================== */
+    .update-badge {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.2rem 1rem;
+      border: 1px solid var(--red-dim);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--red-bright);
+      background: rgba(139,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER (دقیقاً مثل سایت اصلی) ==================== -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-logo">SK</div>
+        <span>Silent Knights</span>
+      </div>
+
+      <nav class="menu">
+        <a href="/">خانه</a>
+        <a href="/#about">درباره</a>
+        <a href="/#services">خدمات</a>
+        <a href="/#projects">پروژه‌ها</a>
+        <a href="/blog.html" class="active">بلاگ</a>
+        <a href="/#team">تیم</a>
+        <a href="/#contact">ارتباط</a>
+        <a href="cybersecurity-roadmap.html">نقشه راه</a>
+        
+        <div class="dropdown" id="examDropdown">
+          <button class="dropdown-btn" id="dropdownBtn">امتحانات ▼</button>
+          <div class="dropdown-content" id="dropdownContent">
+            <a href="Zero_Hacker_exam.html">امتحان هکر صفر</a>
+            <a href="Network-4-Hacker-Exam.html">امتحان شبکه برای هکر ها</a>
+            <a href="#">امتحان لینوکس برای هکر ها</a>
+            <a href="#">امتحان پایتون برای هکر ها</a>
+            <a href="Hacking-test.html">امتحان تستی</a>
+          </div>
+        </div>
+        
+        <a href="Sign_In.html" class="register-button">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 10c4.418 0 8 1.79 8 4v2H0v-2c0-2.21 3.582-4 8-4z"/>
+          </svg>
+          حساب کاربری
+        </a>
+      </nav>
+
+      <button class="hamburger" id="hamburger">☰</button>
+    </div>
+  </header>
+
+  <!-- ==================== دراپ‌داون موبایل ==================== -->
+  <div id="nav-drawer" class="nav-drawer">
+    <div class="nav-panel">
+      <button class="close-btn" id="nav-close">✕</button>
+      <a href="/">خانه</a>
+      <a href="/#about">درباره</a>
+      <a href="/#services">خدمات</a>
+      <a href="/#projects">پروژه‌ها</a>
+      <a href="/blog.html" class="active">بلاگ</a>
+      <a href="/#team">تیم</a>
+      <a href="/#contact">ارتباط</a>
+      <a href="cybersecurity-roadmap.html">نقشه راه</a>
+      <div class="dropdown" style="width:100%">
+        <button class="dropdown-btn" style="width:100%; text-align:right;" id="mobileDropdownBtn">امتحانات ▼</button>
+        <div class="dropdown-content" style="position:static; margin-top:5px; display:none;" id="mobileDropdownContent">
+          <a href="Zero_Hacker_exam.html">امتحان هکر صفر</a>
+          <a href="Network-4-Hacker-Exam.html">امتحان شبکه</a>
+          <a href="#">لینوکس برای هکر ها</a>
+          <a href="#">پایتون برای هکر ها</a>
+          <a href="Hacking-test.html">امتحان تستی</a>
+        </div>
+      </div>
+      <a href="Sign_In.html" class="register-button" style="justify-content:center;">حساب کاربری</a>
+      <div style="margin-top:auto; color:var(--text-muted); font-size:13px;">© 2025 Silent Knights</div>
+    </div>
+  </div>
+
+  <!-- ==================== هیرو بلاگ ==================== -->
+  <section class="blog-hero">
+    <div>
+      <div class="hero-badge">✦ اخبار روز دنیای سایبری ✦</div>
+      <h1>📰 بلاگ Silent Knights</h1>
+      <p>آخرین تحولات امنیت سایبری، آسیب‌پذیری‌ها، حملات و فناوری‌های روز — به‌روزرسانی خودکار روزانه</p>
+      <span class="update-badge">⚡ به‌روزرسانی: امروز</span>
+    </div>
+  </section>
+
+  <!-- ==================== فیلتر دسته‌بندی ==================== -->
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-category="all">همه</button>
+    <button class="filter-btn" data-category="vulnerability">آسیب‌پذیری</button>
+    <button class="filter-btn" data-category="attack">حملات</button>
+    <button class="filter-btn" data-category="malware">بدافزار</button>
+    <button class="filter-btn" data-category="cybercrime">جرایم سایبری</button>
+    <button class="filter-btn" data-category="technology">فناوری</button>
+    <button class="filter-btn" data-category="general">عمومی</button>
+  </div>
+
+  <!-- ==================== گرید اخبار ==================== -->
+  <div class="container">
+    <div class="grid grid-3" id="newsGrid">
+      <!-- لودینگ -->
+      <div class="loading-state" id="loadingState">
+        <div class="spinner"></div>
+        <p>در حال بارگذاری اخبار...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== فوتر ==================== -->
+  <footer>
+    © 2025 Silent Knights — تمامی حقوق محفوظ است
+  </footer>
+
+  <!-- ==================== اسکریپت‌ها ==================== -->
+  <script>
+    // ===== منوی موبایل =====
+    const hamburger = document.getElementById('hamburger');
+    const drawer = document.getElementById('nav-drawer');
+    const closeBtn = document.getElementById('nav-close');
+
+    function openDrawer() {
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+
+    if (hamburger) hamburger.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    drawer?.addEventListener('click', (e) => {
+      if (e.target === drawer) closeDrawer();
+    });
+
+    // ===== دراپ‌داون دسکتاپ =====
+    const dropdownBtn = document.getElementById('dropdownBtn');
+    const dropdownContent = document.getElementById('dropdownContent');
+    
+    if (dropdownBtn && dropdownContent) {
+      dropdownBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropdownContent.classList.toggle('show');
+      });
+      
+      document.addEventListener('click', function(e) {
+        if (!dropdownBtn.contains(e.target) && !dropdownContent.contains(e.target)) {
+          dropdownContent.classList.remove('show');
+        }
+      });
+    }
+
+    // ===== دراپ‌داون موبایل =====
+    const mobileDropdownBtn = document.getElementById('mobileDropdownBtn');
+    const mobileDropdownContent = document.getElementById('mobileDropdownContent');
+    
+    if (mobileDropdownBtn && mobileDropdownContent) {
+      mobileDropdownBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (mobileDropdownContent.style.display === 'block') {
+          mobileDropdownContent.style.display = 'none';
+        } else {
+          mobileDropdownContent.style.display = 'block';
+        }
+      });
+      
+      document.addEventListener('click', function(e) {
+        if (mobileDropdownBtn && mobileDropdownContent) {
+          if (!mobileDropdownBtn.contains(e.target) && !mobileDropdownContent.contains(e.target)) {
+            mobileDropdownContent.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    // ===== بستن منو با کلیک روی لینک‌ها =====
+    document.querySelectorAll('.nav-panel a').forEach(link => {
+      link.addEventListener('click', closeDrawer);
+    });
+
+    // ============================================================
+    // ===== بخش اصلی: بارگذاری و نمایش اخبار =====
+    // ============================================================
+
+    const newsGrid = document.getElementById('newsGrid');
+    const loadingState = document.getElementById('loadingState');
+    const filterBar = document.getElementById('filterBar');
+    let allNews = [];
+    let currentCategory = 'all';
+
+    // ===== تبدیل تاریخ به شمسی =====
+    const persianMonths = [
+      'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+      'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+    ];
+
+    function toPersianDate(dateStr) {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return 'تاریخ نامشخص';
+      const year = d.getFullYear();
+      const month = d.getMonth();
+      const day = d.getDate();
+      return `${day} ${persianMonths[month]} ${year}`;
+    }
+
+    // ===== برچسب دسته‌بندی به فارسی =====
+    function getCategoryLabel(cat) {
+      const labels = {
+        'vulnerability': 'آسیب‌پذیری',
+        'attack': 'حمله',
+        'malware': 'بدافزار',
+        'cybercrime': 'جرایم سایبری',
+        'technology': 'فناوری',
+        'general': 'عمومی'
+      };
+      return labels[cat] || cat || 'عمومی';
+    }
+
+    // ===== ایمنی در برابر XSS =====
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ===== رندر کردن اخبار =====
+    function renderNews(newsItems) {
+      if (!newsItems || newsItems.length === 0) {
+        newsGrid.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">📭</div>
+            <h3>هیچ خبری یافت نشد</h3>
+            <p>در این دسته‌بندی خبری وجود ندارد. لطفاً بعداً مراجعه کنید.</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      for (const news of newsItems) {
+        const catClass = news.category || 'general';
+        const catLabel = getCategoryLabel(catClass);
+        const dateFa = toPersianDate(news.date);
+        const title = escapeHtml(news.title || 'بدون عنوان');
+        const summary = escapeHtml(news.summary || 'خلاصه‌ای موجود نیست.');
+        const source = escapeHtml(news.source || 'منبع');
+        const sourceLink = news.source_link || '#';
+        const newsUrl = news.url || '#';
+
+        html += `
+          <article class="news-card">
+            <span class="category-tag ${catClass}">${catLabel}</span>
+            <h3><a href="${newsUrl}" target="_blank">${title}</a></h3>
+            <div class="meta">
+              <span class="date">📅 ${dateFa}</span>
+              <span class="source">🔗 <a href="${sourceLink}" target="_blank">${source}</a></span>
+            </div>
+            <p class="summary">${summary}</p>
+            <a href="${newsUrl}" class="read-more" target="_blank">
+              ادامه مطلب <span class="arrow">→</span>
+            </a>
+          </article>
+        `;
+      }
+
+      newsGrid.innerHTML = html;
+    }
+
+    // ===== فیلتر کردن =====
+    function filterNews(category) {
+      currentCategory = category;
+      const filtered = category === 'all'
+        ? allNews
+        : allNews.filter(n => (n.category || 'general') === category);
+      renderNews(filtered);
+
+      // بروزرسانی دکمه‌های فعال
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === category);
+      });
+    }
+
+    // ===== داده‌های نمونه (در صورت نبودن فایل ایندکس) =====
+    function getSampleNews() {
+      return [
+        {
+          title: '۱۰ روش جلوگیری از فیشینگ در سازمان‌ها',
+          date: '2026-06-21',
+          category: 'cybercrime',
+          source: 'Silent Knights',
+          source_link: '#',
+          url: '#',
+          summary: 'اقدامات عملی و ساده برای کاهش ریسک حملات فیشینگ در تیم‌های کوچک و بزرگ.'
+        },
+        {
+          title: 'آسیب‌پذیری جدید در Windows RAT کشف شد',
+          date: '2026-06-20',
+          category: 'vulnerability',
+          source: 'Bleeping Computer',
+          source_link: '#',
+          url: '#',
+          summary: 'یک آسیب‌پذیری بحرانی در نسخه‌های قدیمی Windows RAT شناسایی شده که امکان اجرای کد از راه دور را فراهم می‌کند.'
+        },
+        {
+          title: 'حمله سایبری به زیرساخت‌های حیاتی اروپا',
+          date: '2026-06-19',
+          category: 'attack',
+          source: 'The Hacker News',
+          source_link: '#',
+          url: '#',
+          summary: 'گروهی ناشناس با حمله به سیستم‌های SCADA، چندین شبکه برق را در اروپا مختل کردند.'
+        },
+        {
+          title: 'نسل جدید بدافزارهای مبتنی بر هوش مصنوعی',
+          date: '2026-06-18',
+          category: 'malware',
+          source: 'Krebs on Security',
+          source_link: '#',
+          url: '#',
+          summary: 'محققان امنیتی نسل جدیدی از بدافزارها را شناسایی کرده‌اند که از هوش مصنوعی برای evade کردن آنتی‌ویروس‌ها استفاده می‌کنند.'
+        },
+        {
+          title: 'آموزش پیاده‌سازی Zero Trust در تیم‌های کوچک',
+          date: '2026-06-17',
+          category: 'technology',
+          source: 'Silent Knights',
+          source_link: '#',
+          url: '#',
+          summary: 'چگونه می‌توان معماری Zero Trust را با قدم‌های کوچک و عملی در تیم‌های کوچک پیاده‌سازی کرد؟'
+        },
+        {
+          title: 'تحلیل چالش CTF رمزنگاری',
+          date: '2026-06-16',
+          category: 'general',
+          source: 'Silent Knights',
+          source_link: '#',
+          url: '#',
+          summary: 'نکات و تکنیک‌های عملی برای حل چالش‌های رمزنگاری در مسابقات CTF.'
+        }
+      ];
+    }
+
+    // ===== بارگذاری اخبار از فایل =====
+    function loadNews() {
+      fetch('/_data/news_index.json')
+        .then(response => {
+          if (!response.ok) throw new Error('Index file not found');
+          return response.json();
+        })
+        .then(data => {
+          allNews = data;
+          loadingState.style.display = 'none';
+          filterNews(currentCategory);
+        })
+        .catch(() => {
+          console.warn('Using sample news data (index file not found)');
+          allNews = getSampleNews();
+          loadingState.style.display = 'none';
+          filterNews(currentCategory);
+        });
+    }
+
+    // ===== رویدادهای فیلتر =====
+    filterBar.addEventListener('click', function(e) {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      const category = btn.dataset.category;
+      if (category === currentCategory) return;
+      filterNews(category);
+    });
+
+    // ===== اجرا =====
+    loadNews();
+  </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+name: "🛡️ Silent Knights - Daily Cyber News"
+
+on:
+  schedule:
+    # هر روز ساعت ۸ صبح (به وقت UTC) = ۱۲:۳۰ ظهر به وقت افغانستان
+    - cron: "0 8 * * *"
+  # امکان اجرای دستی
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  fetch-and-publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: 📦 Install dependencies
+        run: |
+          pip install feedparser pyyaml
+          
+      - name: 📰 Fetch and generate news
+        run: |
+          python scripts/fetch_news.py
+          
+      - name: 📊 Generate news index
+        run: |
+          python scripts/generate_index.py
+          
+      - name: 📝 Check for changes
+        id: check_changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "📝 Changes detected"
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "✅ No changes to commit"
+          fi
+          
+      - name: 🔄 Commit and push changes
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add _posts/ _data/
+          git commit -m "📰 Add daily cyber news ($(date +'%Y-%m-%d'))"
+          git push
+          echo "✅ Changes committed and pushed"
+          
+      - name: ⏳ Wait for Pages build
+        if: steps.check_changes.outputs.changes == 'true'
+        run: sleep 10
+          
+      - name: 🚀 Trigger Pages rebuild
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/pages/builds
+          echo "✅ Pages rebuild triggered"

@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python for Hackers — VS Code Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.js"></script>
+    <style>
+        /* ===== همان استایل‌های قبلی (بدون تغییر) ===== */
+        :root {
+            --bg: #050510;
+            --terminal: #0a0f1a;
+            --panel: #0d1321;
+            --border: #1a2235;
+            --red: #ff2a2a;
+            --red-soft: rgba(255, 42, 42, 0.1);
+            --green: #00ff41;
+            --green-soft: rgba(0, 255, 65, 0.1);
+            --cyan: #00d9ff;
+            --dim: #7a8ba8;
+            --light: #e0e6f0;
+            --gold: #ffd700;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--light);
+            font-family: 'Vazirmatn', sans-serif;
+            line-height: 1.7;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: linear-gradient(rgba(255, 42, 42, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 42, 42, 0.025) 1px, transparent 1px),
+                radial-gradient(ellipse at 20% 0%, rgba(255, 42, 42, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(0, 217, 255, 0.06) 0%, transparent 50%),
+                linear-gradient(135deg, #020812 0%, #150505 100%);
+            background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
+            background-attachment: fixed;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(0deg,
+                    rgba(0,0,0,0) 0px,
+                    rgba(0,0,0,0) 2px,
+                    rgba(0,0,0,0.08) 3px,
+                    rgba(0,0,0,0) 4px);
+            pointer-events: none;
+            z-index: 1;
+            animation: scan 8s linear infinite;
+        }
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100px; }
+        }
+        .container { max-width: 1280px; margin: 0 auto; position: relative; z-index: 2; }
+
+        /* BANNER */
+        .banner-wrap {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(255, 42, 42, 0.2);
+            margin-bottom: 30px;
+            height: 280px;
+        }
+        .banner-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7) contrast(1.2);
+        }
+        .banner-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(5,5,16,0.4) 50%, var(--bg) 100%);
+        }
+        .banner-overlay {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            z-index: 3;
+            font-family: 'Fira Code', monospace;
+            color: var(--red);
+            font-size: 0.85rem;
+            text-shadow: 0 0 10px rgba(255, 42, 42, 0.8);
+            direction: ltr;
+        }
+        .banner-overlay span { color: var(--green); }
+
+        /* PROGRESS BAR */
+        .progress-bar-wrap {
+            background: var(--terminal);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .progress-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--dim);
+            direction: ltr;
+            white-space: nowrap;
+        }
+        .progress-track {
+            flex: 1;
+            height: 10px;
+            background: #020408;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--red) 0%, var(--gold) 50%, var(--green) 100%);
+            width: 0%;
+            transition: width 0.6s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+        .progress-count {
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            color: var(--green);
+            font-size: 1.1rem;
+            direction: ltr;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* AUTH PANEL */
+        .auth-panel {
+            background: var(--terminal);
+            border: 1px solid var(--red);
+            padding: 18px 22px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 0 30px rgba(255, 42, 42, 0.15), inset 0 0 30px rgba(255, 42, 42, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,42,42,0.05), transparent);
+            animation: sweep 4s infinite;
+        }
+        @keyframes sweep {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        .auth-panel .icon-box {
+            width: 42px; height: 42px;
+            background: var(--red-soft);
+            border: 1px solid var(--red);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--red);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .auth-panel input {
+            background: #020408;
+            border: 1px solid var(--border);
+            color: var(--light);
+            padding: 11px 15px;
+            border-radius: 5px;
+            font-family: 'Fira Code', monospace;
+            flex: 1;
+            min-width: 180px;
+            transition: 0.3s;
+            direction: ltr;
+        }
+        .auth-panel input:focus {
+            outline: none;
+            border-color: var(--red);
+            box-shadow: 0 0 12px rgba(255, 42, 42, 0.3);
+        }
+        .auth-panel input::placeholder { color: var(--dim); }
+        .auth-panel button {
+            background: var(--red);
+            color: #fff;
+            border: none;
+            padding: 11px 24px;
+            border-radius: 5px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 42, 42, 0.3);
+        }
+        .auth-panel button:hover {
+            background: #ff4040;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 42, 42, 0.5);
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+        header h1 {
+            font-family: 'Fira Code', monospace;
+            color: var(--red);
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-shadow: 0 0 30px rgba(255, 42, 42, 0.6), 0 0 60px rgba(255, 42, 42, 0.3);
+            margin-bottom: 12px;
+            direction: ltr;
+            letter-spacing: 2px;
+        }
+        header h1 .cursor {
+            display: inline-block;
+            width: 12px; height: 32px;
+            background: var(--red);
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        header p { color: var(--dim); font-size: 1.05rem; }
+        header .status-tag {
+            display: inline-block;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--green);
+            border: 1px solid var(--green);
+            padding: 2px 10px;
+            border-radius: 3px;
+            margin-top: 10px;
+            direction: ltr;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+            gap: 25px;
+        }
+
+        /* CARD */
+        .terminal-card {
+            background: var(--terminal);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .terminal-card:hover {
+            border-color: rgba(255, 42, 42, 0.5);
+            box-shadow: 0 10px 40px rgba(255, 42, 42, 0.15);
+            transform: translateY(-4px);
+        }
+        .terminal-card.bonus {
+            grid-column: 1 / -1;
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+        .terminal-card.bonus:hover {
+            border-color: var(--gold);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
+        }
+        .terminal-card.completed { border-color: var(--green); }
+        .terminal-card.completed::after {
+            content: '\f058';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 14px; left: 14px;
+            color: var(--green);
+            font-size: 22px;
+            z-index: 10;
+            text-shadow: 0 0 12px rgba(0, 255, 65, 0.6);
+        }
+        .terminal-card.rejected { border-color: var(--red); }
+        .terminal-card.pending { border-color: var(--gold); }
+
+        .card-header {
+            background: var(--panel);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+        .dots { display: flex; gap: 6px; }
+        .dot { width: 11px; height: 11px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        .card-title {
+            font-family: 'Fira Code', monospace;
+            color: var(--light);
+            font-size: 0.82rem;
+            direction: ltr;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .badge {
+            background: var(--red-soft);
+            color: var(--red);
+            padding: 1px 7px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            border: 1px solid rgba(255, 42, 42, 0.3);
+        }
+        .card-title .badge.gold {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--gold);
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+
+        .card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .task-desc {
+            margin-bottom: 14px;
+            color: var(--dim);
+            font-size: 0.92rem;
+        }
+        .task-desc strong { color: var(--red); font-weight: 700; }
+        .terminal-card.bonus .task-desc strong { color: var(--gold); }
+
+        .expected-output-label {
+            color: var(--dim);
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+            margin-top: 8px;
+            font-family: 'Fira Code', monospace;
+            direction: ltr;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .expected-output-label i { color: var(--green); }
+
+        .code-block {
+            background: #020408;
+            border: 1px solid #151d2e;
+            border-radius: 6px;
+            position: relative;
+            margin-bottom: 4px;
+        }
+        .code-block pre {
+            padding: 14px 16px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.82rem;
+            color: var(--green);
+            direction: ltr;
+            text-align: left;
+            white-space: pre;
+            overflow-x: auto;
+            text-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
+            line-height: 1.5;
+        }
+
+        /* VS CODE PANEL */
+        .vs-code-container {
+            margin-top: 16px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            display: flex;
+            flex-direction: column;
+            height: 240px;
+            background: #1e1e1e;
+        }
+        .terminal-card.bonus .vs-code-container { height: 300px; }
+        .vs-code-tab {
+            background: #252526;
+            padding: 7px 14px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.78rem;
+            color: #cccccc;
+            border-bottom: 1px solid #1e1e1e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 34px;
+            flex-shrink: 0;
+        }
+        .vs-code-tab i { color: #4584b6; }
+        .vs-code-tab .dot-mod {
+            width: 6px; height: 6px;
+            background: var(--green);
+            border-radius: 50%;
+            margin-right: auto;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .vs-code-tab .dot-mod.show { opacity: 1; }
+        .ace-editor {
+            flex-grow: 1;
+            width: 100%;
+            direction: ltr;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 14px;
+            padding: 12px;
+            background: transparent;
+            border: 1px dashed var(--dim);
+            color: var(--dim);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .submit-btn:hover:not(:disabled) {
+            border-color: var(--red);
+            border-style: solid;
+            color: var(--red);
+            background: var(--red-soft);
+            box-shadow: 0 0 15px rgba(255, 42, 42, 0.2);
+        }
+        .submit-btn:disabled {
+            border-style: solid;
+            cursor: default;
+            opacity: 0.7;
+        }
+        .submit-btn.approved {
+            border-color: var(--green) !important;
+            color: var(--green) !important;
+        }
+        .submit-btn.rejected {
+            border-color: var(--red) !important;
+            color: var(--red) !important;
+        }
+        .submit-btn.pending {
+            border-color: var(--gold) !important;
+            color: var(--gold) !important;
+        }
+
+        /* feedback message */
+        .feedback-msg {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--red);
+            background: var(--red-soft);
+            border-radius: 4px;
+            padding: 6px 12px;
+            border-right: 3px solid var(--red);
+            display: none;
+            direction: rtl;
+        }
+        .feedback-msg.show { display: block; }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 25px; left: 25px;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            pointer-events: none;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Vazirmatn', sans-serif;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .toast.success { background: var(--green); color: #000; }
+        .toast.error { background: var(--red); color: #fff; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+
+        /* LOGIN NOTICE OVERLAY */
+        .locked-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(5,5,16,0.85);
+            backdrop-filter: blur(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 5;
+            border-radius: 10px;
+            transition: 0.4s;
+        }
+        .locked-overlay i { font-size: 32px; color: var(--dim); }
+        .locked-overlay span {
+            font-family: 'Fira Code', monospace;
+            color: var(--dim);
+            font-size: 0.85rem;
+            direction: ltr;
+        }
+        .terminal-card.unlocked .locked-overlay { display: none; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            header h1 { font-size: 1.8rem; }
+            .banner-wrap { height: 180px; }
+            .vs-code-container { height: 200px; }
+            .auth-panel input { min-width: 100%; }
+            body { padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="toast"></div>
+
+    <div class="container">
+
+        <div class="banner-wrap">
+            <img src="https://z-cdn-media.chatglm.cn/files/8c36bc5d-8160-40cd-a7fd-ecfb5e3463f6.jpg?auth_key=1882655531-3f30d1e88d644f5483c8041e761bf2da-0-3ae370e60f1b7a8f2a951945c968f966" alt="Banner" />
+            <div class="banner-overlay">
+                > system.initialize() <span>OK</span><br />
+                > python.version: 3.11.x<br />
+                > access.level: <span>STUDENT</span>
+            </div>
+        </div>
+
+        <div class="auth-panel">
+            <div class="icon-box"><i class="fas fa-user-secret"></i></div>
+            <input type="text" id="studentName" placeholder="Name (e.g: Saeed)" required />
+            <input type="text" id="studentAlias" placeholder="Hacker Alias (e.g: Shadow)" required />
+            <button onclick="loginStudent()"><i class="fas fa-terminal"></i> ورود به پنل</button>
+            <button onclick="testConnection()" style="background:#555; box-shadow:none;"><i class="fas fa-plug"></i> تست اتصال</button>
+        </div>
+
+        <div class="progress-bar-wrap">
+            <div class="progress-label">MISSION PROGRESS</div>
+            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-count" id="progressCount">0 / 12</div>
+        </div>
+
+        <header>
+            <h1>&gt; PYTHON FOR HACKERS_<span class="cursor"></span></h1>
+            <p id="welcomeMsg">برای شروع ماموریت، نام و تخلص هکری خود را وارد کنید</p>
+            <div class="status-tag">// 12 challenges · python 3.x · beginner level</div>
+        </header>
+
+        <div class="grid" id="challengeGrid">
+
+            <!-- ===== CHALLENGE 001 ===== -->
+            <div class="terminal-card locked" data-challenge="001">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">001</span> Hacker Identity</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر <strong>Hacker Name</strong> و <strong>Favorite OS</strong> را بگیر و پروفایل را نمایش بده.</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>=========================
+ Hacker Profile Loaded
+=========================
+
+Hacker : Shadow
+OS      : Kali Linux
+
+Welcome to the lab.</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_001.py <div class="dot-mod"></div></div>
+                        <div id="editor-001" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-001"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'001')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== CHALLENGE 002 ===== -->
+            <div class="terminal-card locked" data-challenge="002">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">002</span> Target Information</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر <strong>Target IP</strong> و <strong>Target Port</strong> را بگیر.</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>Target Selected
+
+IP   : 192.168.1.15
+Port : 443</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_002.py <div class="dot-mod"></div></div>
+                        <div id="editor-002" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-002"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'002')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== CHALLENGE 003 ===== -->
+            <div class="terminal-card locked" data-challenge="003">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">003</span> Fake Login</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر <strong>Username</strong> و <strong>Password</strong> بگیر. فقط پیام‌های مشخص شده را چاپ کن. <strong>(بدون شرط)</strong></div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>Authenticating...
+Access Attempt Logged.</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_003.py <div class="dot-mod"></div></div>
+                        <div id="editor-003" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-003"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'003')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== CHALLENGE 004 ===== -->
+            <div class="terminal-card locked" data-challenge="004">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">004</span> Ping Counter</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر بپرس <strong>How many ping packets do you want to send?</strong> و تعداد را در جمله قرار بده.</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>Preparing 10 ping packets...</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_004.py <div class="dot-mod"></div></div>
+                        <div id="editor-004" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-004"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'004')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== CHALLENGE 005 ===== -->
+            <div class="terminal-card locked" data-challenge="005">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">005</span> Password Length</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر بپرس <strong>How many characters is your password?</strong> و طول را نمایش بده.</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>Your password length is 12 characters.</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_005.py <div class="dot-mod"></div></div>
+                        <div id="editor-005" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-005"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'005')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== CHALLENGE 006 ===== -->
+            <div class="terminal-card locked" data-challenge="006">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">006</span> Port Difference</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر دو <strong>Port</strong> بگیر (به صورت عدد) و اختلاف آنها را نمایش بده.</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>Difference between ports is 363</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_006.py <div class="dot-mod"></div></div>
+                        <div id="editor-006" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-006"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'006')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== CHALLENGE 007 ===== -->
+            <div class="terminal-card locked" data-challenge="007">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">007</span> IP Generator</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر <strong>چهار عدد</strong> بگیر و یک IP Address بساز.</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>Generated IP Address
+
+192.168.1.100</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_007.py <div class="dot-mod"></div></div>
+                        <div id="editor-007" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-007"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'007')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== CHALLENGE 008 ===== -->
+            <div class="terminal-card locked" data-challenge="008">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">008</span> Data Transfer</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر <strong>File Size (MB)</strong> و <strong>Transfer Speed (MB/s)</strong> بگیر و زمان انتقال را حساب کن.</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>Estimated Transfer Time
+
+10 seconds</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_008.py <div class="dot-mod"></div></div>
+                        <div id="editor-008" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-008"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'008')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== CHALLENGE 009 ===== -->
+            <div class="terminal-card locked" data-challenge="009">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">009</span> Password Strength Score</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر طول Password را بگیر و امتیاز را با فرمول <strong>Score = Length × 4</strong> حساب کن.</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>Password Strength Score
+
+64</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_009.py <div class="dot-mod"></div></div>
+                        <div id="editor-009" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-009"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'009')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== CHALLENGE 010 ===== -->
+            <div class="terminal-card locked" data-challenge="010">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">010</span> Hex Converter</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر یک عدد <strong>Decimal</strong> بگیر و معادل <strong>Hex</strong> آن را نمایش بده (با حروف بزرگ).</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>Decimal : 255
+
+Hex     : FF</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_010.py <div class="dot-mod"></div></div>
+                        <div id="editor-010" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-010"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'010')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== CHALLENGE 011 ===== -->
+            <div class="terminal-card locked" data-challenge="011">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge">011</span> Scan Duration</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر <strong>Number of Hosts</strong> و <strong>Seconds per Host</strong> را بگیر و زمان کل Scan را حساب کن.</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>Estimated Scan Time
+
+100 seconds</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_011.py <div class="dot-mod"></div></div>
+                        <div id="editor-011" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-011"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'011')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+            <!-- ===== BONUS CHALLENGE 012 ===== -->
+            <div class="terminal-card locked bonus" data-challenge="012">
+                <div class="locked-overlay"><i class="fas fa-lock"></i><span>// AUTH REQUIRED</span></div>
+                <div class="card-header">
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge gold"><i class="fas fa-star"></i> 012 BONUS</span> Hacker Profile Builder</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-desc">از کاربر این اطلاعات را بگیر: <strong>Name</strong>, <strong>Age</strong>, <strong>Favorite Linux</strong>, <strong>Favorite Hacking Tool</strong>, <strong>Experience (Years)</strong> و پروفایل کامل را بساز.</div>
+                    <div class="expected-output-label"><i class="fas fa-chevron-right"></i> Expected Output:</div>
+                    <div class="code-block"><pre>==============================
+      HACKER PROFILE
+==============================
+
+Name        : SMH
+Age         : 22
+Linux       : Kali Linux
+Tool        : Nmap
+Experience  : 3 Years
+
+Mission Ready.</pre></div>
+                    <div class="vs-code-container">
+                        <div class="vs-code-tab"><i class="fab fa-python"></i> challenge_012.py <div class="dot-mod"></div></div>
+                        <div id="editor-012" class="ace-editor"></div>
+                    </div>
+                    <div class="feedback-msg" id="feedback-012"></div>
+                    <button class="submit-btn" onclick="submitChallenge(this,'012')" disabled><i class="fas fa-paper-plane"></i> ارسال کد به استاد</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ========== تنظیمات ==========
+        const WORKER_URL = 'https://python-for-hackers.silentknights0101.workers.dev';
+
+        let studentData = JSON.parse(localStorage.getItem('hackerStudent')) || null;
+        let completedChallenges = JSON.parse(localStorage.getItem('completedChallenges')) || [];
+        const editors = {};
+
+        // ========== placeholders فقط با کامنت‌های راهنما ==========
+        const placeholders = {
+            '001': '# Challenge 001 — Hacker Identity\n# Get hacker name and favorite OS from user input\n# Print the profile in the format shown in expected output\n# Use input() and print() functions.',
+            
+            '002': '# Challenge 002 — Target Information\n# Get Target IP and Target Port from user\n# Print them in the format shown in expected output\n# Use input() and print().',
+            
+            '003': '# Challenge 003 — Fake Login\n# Get username and password from user\n# Print exactly these two lines:\n# Authenticating...\n# Access Attempt Logged.\n# (no if conditions)',
+            
+            '004': '# Challenge 004 — Ping Counter\n# Ask user: How many ping packets do you want to send?\n# Print: Preparing X ping packets...\n# (replace X with the number)',
+            
+            '005': '# Challenge 005 — Password Length\n# Ask user: How many characters is your password?\n# Print: Your password length is X characters.\n# (replace X with the number)',
+            
+            '006': '# Challenge 006 — Port Difference\n# Get two port numbers from user\n# Calculate the absolute difference\n# Print: Difference between ports is X\n# Use int() and abs()',
+            
+            '007': '# Challenge 007 — IP Generator\n# Get four numbers from user (one per line)\n# Build and print an IP address like: X.X.X.X\n# Example: 192.168.1.100',
+            
+            '008': '# Challenge 008 — Data Transfer\n# Get File Size (MB) and Transfer Speed (MB/s)\n# Calculate estimated time = size / speed\n# Print: Estimated Transfer Time\\n\\nX seconds\n# Use int() and integer division //',
+            
+            '009': '# Challenge 009 — Password Strength Score\n# Get password length from user\n# Calculate score = length * 4\n# Print: Password Strength Score\\n\\nX\n# (X is the score)',
+            
+            '010': '# Challenge 010 — Hex Converter\n# Get a decimal number from user\n# Convert to uppercase hexadecimal\n# Print: Decimal : X\\n\\nHex     : Y\n# Use hex() and .upper()',
+            
+            '011': '# Challenge 011 — Scan Duration\n# Get Number of Hosts and Seconds per Host\n# Calculate total = hosts * seconds\n# Print: Estimated Scan Time\\n\\nX seconds',
+            
+            '012': '# Challenge 012 (BONUS) — Hacker Profile Builder\n# Get: Name, Age, Favorite Linux, Favorite Hacking Tool, Experience (Years)\n# Print a full hacker profile in the format shown in expected output.'
+        };
+
+        // ========== INIT ==========
+        window.onload = () => {
+            // Init Ace editors
+            document.querySelectorAll('.ace-editor').forEach(editorDiv => {
+                const id = editorDiv.id;
+                const challengeNum = id.replace('editor-', '');
+                const editor = ace.edit(editorDiv, {
+                    theme: "ace/theme/monokai",
+                    mode: "ace/mode/python",
+                    autoScrollEditorIntoView: true,
+                    showPrintMargin: false,
+                    fontSize: "13.5px",
+                    fontFamily: "'Fira Code', monospace",
+                    wrap: true,
+                    showInvisibles: false,
+                    highlightActiveLine: true,
+                    tabSize: 4
+                });
+                editors[challengeNum] = editor;
+                if (placeholders[challengeNum]) {
+                    editor.setValue(placeholders[challengeNum], -1);
+                    editor.session.getUndoManager().reset();
+                }
+                editor.on('change', () => {
+                    const dot = editorDiv.parentElement.querySelector('.dot-mod');
+                    if (dot && !editor.session.getUndoManager().isClean()) {
+                        dot.classList.add('show');
+                    }
+                });
+            });
+
+            // Restore session
+            if (studentData) {
+                document.getElementById('studentName').value = studentData.name;
+                document.getElementById('studentAlias').value = studentData.alias;
+                unlockAllChallenges();
+                document.getElementById('welcomeMsg').innerText = `ماموریت شروع شد، ${studentData.alias}! آماده‌ای؟`;
+                fetchAndApplyStatus(studentData.alias);
+            }
+
+            // تایمر برای به‌روزرسانی خودکار
+            setInterval(() => {
+                if (studentData && studentData.alias) {
+                    fetchAndApplyStatus(studentData.alias);
+                }
+            }, 15000);
+        };
+
+        // ========== تست اتصال ==========
+        async function testConnection() {
+            try {
+                const resp = await fetch(WORKER_URL);
+                if (resp.ok) {
+                    const text = await resp.text();
+                    showToast(`✅ Worker در دسترس است! پاسخ: ${text.slice(0, 50)}...`, "success");
+                } else {
+                    showToast(`❌ Worker پاسخ داد اما با خطا: ${resp.status}`, "error");
+                }
+            } catch (err) {
+                showToast(`❌ اتصال به Worker برقرار نشد! (${err.message})`, "error");
+                console.error('Connection test error:', err);
+            }
+        }
+
+        // ========== LOGIN ==========
+        async function loginStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            const alias = document.getElementById('studentAlias').value.trim();
+
+            if (!name || !alias) {
+                return showToast("نام و تخلص هکری الزامی است!", "error");
+            }
+
+            try {
+                await fetch(`${WORKER_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, alias })
+                });
+            } catch (e) {
+                console.warn('Register failed but continuing:', e);
+            }
+
+            studentData = { name, alias };
+            localStorage.setItem('hackerStudent', JSON.stringify(studentData));
+
+            unlockAllChallenges();
+            document.getElementById('welcomeMsg').innerText = `ماموریت شروع شد، ${alias}! آماده‌ای؟`;
+            showToast(`خوش آمدی ${alias}! دسترسی فعال شد.`, "success");
+
+            await fetchAndApplyStatus(alias);
+        }
+
+        function unlockAllChallenges() {
+            document.querySelectorAll('.terminal-card.locked').forEach(card => {
+                card.classList.remove('locked');
+                card.classList.add('unlocked');
+            });
+            document.querySelectorAll('.submit-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('locked');
+            });
+        }
+
+        // ========== FETCH STATUS ==========
+        async function fetchStatus(alias) {
+            try {
+                const resp = await fetch(`${WORKER_URL}/status?alias=${encodeURIComponent(alias)}`);
+                if (!resp.ok) {
+                    const errText = await resp.text();
+                    throw new Error(`Server responded with ${resp.status}: ${errText}`);
+                }
+                const data = await resp.json();
+                return data;
+            } catch (error) {
+                console.error('Failed to fetch status:', error);
+                return {};
+            }
+        }
+
+        async function fetchAndApplyStatus(alias) {
+            const statusMap = await fetchStatus(alias);
+            applyStatusToUI(statusMap);
+        }
+
+        // ========== APPLY STATUS TO UI ==========
+        function applyStatusToUI(statusMap) {
+            let approvedCount = 0;
+            const total = 12;
+
+            for (const [challengeId, info] of Object.entries(statusMap)) {
+                const card = document.querySelector(`[data-challenge="${challengeId}"]`);
+                if (!card) continue;
+                const btn = card.querySelector('.submit-btn');
+                const editor = editors[challengeId];
+                const feedbackEl = document.getElementById(`feedback-${challengeId}`);
+
+                // Reset classes
+                card.classList.remove('completed', 'rejected', 'pending');
+                btn.classList.remove('approved', 'rejected', 'pending');
+
+                if (info.status === 'approved') {
+                    card.classList.add('completed');
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i> تأیید شد';
+                    btn.disabled = true;
+                    btn.classList.add('approved');
+                    if (editor) editor.setReadOnly(true);
+                    approvedCount++;
+                    if (feedbackEl) {
+                        feedbackEl.classList.remove('show');
+                        feedbackEl.textContent = '';
+                    }
+                } else if (info.status === 'rejected') {
+                    card.classList.add('rejected');
+                    btn.innerHTML = '<i class="fas fa-redo-alt"></i> ارسال مجدد';
+                    btn.disabled = false;
+                    btn.classList.add('rejected');
+                    if (editor) editor.setReadOnly(false);
+                    if (feedbackEl) {
+                        feedbackEl.textContent = info.feedback || 'بدون توضیح';
+                        feedbackEl.classList.add('show');
+                    }
+                } else if (info.status === 'pending') {
+                    card.classList.add('pending');
+                    btn.innerHTML = '<i class="fas fa-hourglass-half"></i> در انتظار تأیید';
+                    btn.disabled = true;
+                    btn.classList.add('pending');
+                    if (editor) editor.setReadOnly(true);
+                    if (feedbackEl) {
+                        feedbackEl.classList.remove('show');
+                        feedbackEl.textContent = '';
+                    }
+                } else {
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> ارسال کد به استاد';
+                    btn.disabled = false;
+                    btn.classList.remove('approved', 'rejected', 'pending');
+                    if (editor) editor.setReadOnly(false);
+                    if (feedbackEl) {
+                        feedbackEl.classList.remove('show');
+                        feedbackEl.textContent = '';
+                    }
+                }
+            }
+
+            // Progress bar
+            document.getElementById('progressFill').style.width = (approvedCount / total * 100) + '%';
+            document.getElementById('progressCount').innerText = `${approvedCount} / ${total}`;
+            completedChallenges = Object.keys(statusMap).filter(k => statusMap[k].status === 'approved');
+            localStorage.setItem('completedChallenges', JSON.stringify(completedChallenges));
+        }
+
+        // ========== SUBMIT ==========
+        async function submitChallenge(button, challengeId) {
+            if (!studentData) {
+                return showToast("ابتدا وارد شوید!", "error");
+            }
+
+            const editor = editors[challengeId];
+            let code = editor.getValue().trim();
+
+            if (!code || code.replace(/#.*/g, '').replace(/\s/g, '').length < 5) {
+                return showToast("کد شما خیلی کوتاه است! کامل بنویس.", "error");
+            }
+
+            const originalHtml = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال ارسال...';
+            button.disabled = true;
+
+            try {
+                const resp = await fetch(`${WORKER_URL}/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: studentData.name,
+                        alias: studentData.alias,
+                        challenge: challengeId,
+                        code: code
+                    })
+                });
+
+                if (!resp.ok) {
+                    let errorMsg = `خطای سرور (${resp.status})`;
+                    try {
+                        const errData = await resp.json();
+                        if (errData.error) errorMsg = errData.error;
+                    } catch (_) {
+                        const text = await resp.text();
+                        if (text) errorMsg = text;
+                    }
+                    throw new Error(errorMsg);
+                }
+
+                showToast(`چالش ${challengeId} با موفقیت ارسال شد!`, "success");
+                await fetchAndApplyStatus(studentData.alias);
+
+            } catch (error) {
+                console.error('Submit error:', error);
+                button.innerHTML = originalHtml;
+                button.disabled = false;
+                showToast(`❌ ارسال ناموفق: ${error.message}`, 'error');
+            }
+        }
+
+        // ========== HELPERS ==========
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-triangle"></i>';
+            toast.innerHTML = icon + ' ' + message;
+            toast.className = `toast ${type} show`;
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+    </script>
+</body>
+</html>

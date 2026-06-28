@@ -5,580 +5,261 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Silent Knights | تیم امنیت سایبری</title>
   <meta name="description" content="Silent Knights - تیم مستقل امنیت سایبری افغانستان">
-  <meta name="theme-color" content="#0a0a0a">
+  <meta name="theme-color" content="#050505">
+  <meta property="og:title" content="Silent Knights | تیم امنیت سایبری">
+  <meta property="og:description" content="جمعی از هکرهای مستقل افغانستان — آموزش، تست نفوذ و دفاع دیجیتال">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   
   <style>
-    /* ==================== RESET & VARIABLES ==================== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+        @font-face {
+      font-family: 'SDGlitchDemo';
+      /* این لینک یعنی: برو به پوشه fonts در کنار فایل index.html و فونت را از آنجا بخوان */
+      src: url('./fonts/SDGlitch_Demo.ttf') format('truetype');
+      font-display: swap;
     }
+  </style>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg-dark: #0a0a0a;
-      --bg-card: #0d0d0d;
-      --bg-card-hover: #121212;
+      --bg-dark: #050505;
+      --bg-card: #0a0a0a;
       --red-dark: #8b0000;
       --red-bright: #dc2626;
       --red-dim: #5a0000;
       --red-glow: rgba(220, 38, 38, 0.25);
       --text-light: #f0f0f0;
       --text-muted: #a0a0a0;
-      --border-red: #3a0000;
-      --font-main: 'Segoe UI', 'Berlin Sans FB', Tahoma, system-ui, sans-serif;
+      --border-red: #2a0000;
+      --font-main: 'Rajdhani', 'Segoe UI', Tahoma, sans-serif;
       --font-mono: 'Fira Code', 'Courier New', monospace;
     }
 
     body {
       background-color: var(--bg-dark);
+      background-image: 
+        linear-gradient(rgba(220, 38, 38, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(220, 38, 38, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
       color: var(--text-light);
       font-family: var(--font-main);
       line-height: 1.6;
       scroll-behavior: smooth;
+      font-weight: 500;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.2s ease;
+    a { text-decoration: none; color: inherit; transition: all 0.2s ease; }
+    a:hover { color: var(--red-bright); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--red-dark); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--red-bright); }
+
+    h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
+    h2 { font-size: 2rem; margin-bottom: 0.75rem; }
+
+    .text-muted { color: var(--text-muted); }
+    .mt-sm { margin-top: 15px; }
+    .mt-md { margin-top: 20px; }
+    .mt-lg { margin-top: 30px; }
+    .text-center { text-align: center; }
+    .d-inline-block { display: inline-block; }
+    .w-full { width: 100%; }
+    .jc-center { justify-content: center; }
+    .mt-auto { margin-top: auto; }
+    .footer-text { color: var(--text-muted); font-size: 13px; }
+
+    .section-title { text-align: center; margin-bottom: 0.5rem; position: relative; display: inline-block; width: 100%; }
+    .section-title::after { content: ''; display: block; width: 80px; height: 3px; background: linear-gradient(90deg, var(--red-bright), transparent); margin: 12px auto 0; border-radius: 3px; }
+    .section-sub { text-align: center; color: var(--text-muted); max-width: 700px; margin: 0 auto 2.5rem auto; }
+
+    .nav { background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border-red); position: sticky; top: 0; z-index: 1000; }
+    .nav-inner { max-width: 1400px; margin: 0 auto; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.3rem; }
+    .brand-logo { width: 42px; height: 42px; background: linear-gradient(135deg, var(--red-dark), var(--red-bright)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; box-shadow: 0 0 20px rgba(220, 38, 38, 0.4); font-family: var(--font-mono); }
+    .menu { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    .menu a { color: var(--text-light); font-weight: 600; font-size: 0.9rem; }
+    .menu a:hover, .menu a.active { color: var(--red-bright); }
+    
+    .nav-threat-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--red-bright) !important; font-family: var(--font-mono); font-size: 0.75rem !important; 
+      background: rgba(220, 38, 38, 0.1); border: 1px solid var(--red-dim); 
+      padding: 5px 12px; border-radius: 20px; transition: all 0.3s; position: relative; overflow: hidden;
+    }
+    .nav-threat-link:hover { background: rgba(220, 38, 38, 0.25); border-color: var(--red-bright); box-shadow: 0 0 15px var(--red-glow); transform: scale(1.05); color: #fff !important; }
+    
+    .pulse-dot {
+      width: 8px; height: 8px; background: #ff0000; border-radius: 50%; position: relative;
+      box-shadow: 0 0 6px #ff0000;
+    }
+    .pulse-dot::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%;
+      background: rgba(255, 0, 0, 0.4);
+      animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.5); opacity: 1; }
+      100% { transform: scale(2.5); opacity: 0; }
     }
 
-    a:hover {
-      color: var(--red-bright);
-    }
+    .register-button { background: linear-gradient(135deg, var(--red-dark), var(--red-dim)); padding: 0.5rem 1.2rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; border: 1px solid var(--red-bright); }
+    .register-button:hover { background: linear-gradient(135deg, var(--red-bright), var(--red-dark)); transform: scale(1.02); color: white !important; }
 
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--bg-dark);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--red-dark);
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--red-bright);
-    }
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-btn { background: none; border: none; color: var(--text-light); font-weight: 600; font-size: 0.9rem; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 5px; padding: 0; }
+    .dropdown-content { display: none; position: absolute; background: #111; min-width: 220px; border: 1px solid var(--border-red); border-radius: 12px; z-index: 1000; right: 0; top: 100%; margin-top: 8px; box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
+    .dropdown-content.show { display: block; }
+    .dropdown-content a { display: block; padding: 10px 18px; border-bottom: 1px solid var(--border-red); font-size: 0.85rem; white-space: nowrap; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background: var(--red-dim); color: white; }
 
-    h1, h2, h3 {
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
+    .hamburger { display: none; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
+    .nav-drawer { position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); z-index: 2000; visibility: hidden; opacity: 0; transition: 0.3s; }
+    .nav-drawer.open { visibility: visible; opacity: 1; }
+    .nav-panel { position: absolute; top: 0; right: 0; width: 280px; height: 100%; background: var(--bg-card); border-left: 3px solid var(--red-bright); padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; transform: translateX(100%); transition: 0.3s ease; }
+    .nav-drawer.open .nav-panel { transform: translateX(0); }
+    .close-btn { background: none; border: none; color: white; font-size: 1.5rem; align-self: flex-end; cursor: pointer; }
+    .dropdown-static { position: static !important; margin-top: 5px; display: none; box-shadow: none; background: rgba(0,0,0,0.3); }
 
-    h1 {
-      font-size: 3.5rem;
+    .hero { min-height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; background: radial-gradient(ellipse at 30% 40%, #180303, #050505 80%); border-bottom: 1px solid var(--border-red); position: relative; overflow: hidden; }
+    .hero-inner { max-width: 900px; padding: 2rem; position: relative; z-index: 2; }
+    .hero-badge { background: rgba(220, 38, 38, 0.12); backdrop-filter: blur(4px); display: inline-block; padding: 0.35rem 1.2rem; border-radius: 40px; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; border: 1px solid rgba(220, 38, 38, 0.3); color: var(--red-bright); margin-bottom: 1.5rem; font-family: var(--font-mono); }
+
+    .glitch-wrapper { position: relative; display: inline-block; }
+    .glitch {
+      font-size: 4.5rem; font-weight: 800; position: relative;
       background: linear-gradient(135deg, #ffffff, var(--red-bright));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      display: inline-block; transition: transform 0.1s, font-family 0.1s;
+      line-height: 1.2;
     }
 
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 0.75rem;
+    .glitch::before, .glitch::after {
+      content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: transparent; -webkit-background-clip: text; background-clip: text; color: transparent; z-index: -1;
+      opacity: 0.4;
+    }
+    .glitch::before { background-image: linear-gradient(135deg, #ff0000, #cc0000); -webkit-background-clip: text; animation: subtle-glitch-1 5s infinite linear alternate-reverse; }
+    .glitch::after { background-image: linear-gradient(135deg, #4a0000, #1a0000); -webkit-background-clip: text; animation: subtle-glitch-2 4s infinite linear alternate-reverse; }
+
+    @keyframes subtle-glitch-1 { 0% { clip-path: inset(40% 0 61% 0); transform: translate(-1px, 0); } 100% { clip-path: inset(10% 0 85% 0); transform: translate(1px, 0); } }
+    @keyframes subtle-glitch-2 { 0% { clip-path: inset(60% 0 20% 0); transform: translate(1px, 0); } 100% { clip-path: inset(5% 0 90% 0); transform: translate(-1px, 0); } }
+
+    .glitch.burst-mode { animation: intense-shake 0.05s steps(2) infinite; }
+    .glitch.burst-mode::before { opacity: 0.8; transform: translate(12px, -3px) skewX(15deg); animation: none; clip-path: inset(20% 0 30% 0); }
+    .glitch.burst-mode::after { opacity: 0.8; transform: translate(-12px, 3px) skewX(-15deg); animation: none; clip-path: inset(50% 0 10% 0); }
+
+    @keyframes intense-shake { 
+      0% { transform: translate(3px, 2px) skewX(-8deg); } 25% { transform: translate(-3px, -1px) skewX(5deg); } 
+      50% { transform: translate(2px, -2px) skewX(-3deg); } 75% { transform: translate(-2px, 1px) skewX(6deg); } 100% { transform: translate(3px, 0) skewX(-5deg); } 
     }
 
-    .section-title {
-      text-align: center;
-      margin-bottom: 0.5rem;
-      position: relative;
-      display: inline-block;
-      width: 100%;
+    .glitch-slice {
+      position: absolute; top: 0; left: -10%; width: 120%; height: 4px;
+      background: rgba(220, 38, 38, 0.8); box-shadow: 0 0 15px #ff0000;
+      opacity: 0; z-index: 10; pointer-events: none; display: none;
     }
+    .glitch-wrapper.active .glitch-slice { display: block; animation: slice-move 0.2s linear; }
+    @keyframes slice-move { 0% { top: 0%; opacity: 0.8; } 100% { top: 100%; opacity: 0; } }
 
-    .section-title::after {
-      content: '';
-      display: block;
-      width: 80px;
-      height: 3px;
-      background: linear-gradient(90deg, var(--red-bright), transparent);
-      margin: 12px auto 0;
-      border-radius: 3px;
+    .hero.glitch-flash::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle, rgba(220, 38, 38, 0.1), transparent 70%);
+      z-index: 1; animation: flash-fade 0.3s ease-out forwards; pointer-events: none;
     }
+    @keyframes flash-fade { from { opacity: 1; } to { opacity: 0; } }
 
-    .section-sub {
-      text-align: center;
-      color: var(--text-muted);
-      max-width: 700px;
-      margin: 0 auto 2.5rem auto;
-    }
-
-    /* ==================== HEADER & NAV ==================== */
-    .nav {
-      background: rgba(10, 10, 10, 0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-red);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .nav-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0.8rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-      font-size: 1.3rem;
-    }
-
-    .brand-logo {
-      width: 42px;
-      height: 42px;
-      background: linear-gradient(135deg, var(--red-dark), var(--red-bright));
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 1.3rem;
-      box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
-    }
-
-    .menu {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .menu a {
-      color: var(--text-light);
-      font-weight: 500;
-      font-size: 0.95rem;
-    }
-
-    .menu a:hover, .menu a.active {
-      color: var(--red-bright);
-    }
-
-    .register-button {
-      background: linear-gradient(135deg, var(--red-dark), var(--red-dim));
-      padding: 0.5rem 1.2rem;
-      border-radius: 40px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 600;
-      border: 1px solid var(--red-bright);
-    }
-
-    .register-button:hover {
-      background: linear-gradient(135deg, var(--red-bright), var(--red-dark));
-      transform: scale(1.02);
-      color: white !important;
-    }
-
-    /* دراپ‌داون با کلیک */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .dropdown-btn {
-      background: none;
-      border: none;
-      color: var(--text-light);
-      font-weight: 500;
-      font-size: 0.95rem;
-      cursor: pointer;
-      font-family: inherit;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 0;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background: var(--bg-card);
-      min-width: 220px;
-      border: 1px solid var(--border-red);
-      border-radius: 12px;
-      z-index: 1000;
-      right: 0;
-      top: 100%;
-      margin-top: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      backdrop-filter: blur(4px);
-    }
-
-    .dropdown-content.show {
-      display: block;
-    }
-
-    .dropdown-content a {
-      display: block;
-      padding: 10px 18px;
-      border-bottom: 1px solid var(--border-red);
-      font-size: 0.9rem;
-      white-space: nowrap;
-    }
-
-    .dropdown-content a:last-child {
-      border-bottom: none;
-    }
-
-    .dropdown-content a:hover {
-      background: var(--red-dim);
-      color: white;
-    }
-
-    .hamburger {
-      display: none;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.8rem;
-      cursor: pointer;
-    }
-
-    .nav-drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      backdrop-filter: blur(8px);
-      z-index: 2000;
-      visibility: hidden;
-      opacity: 0;
-      transition: 0.3s;
-    }
-
-    .nav-drawer.open {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .nav-panel {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 280px;
-      height: 100%;
-      background: var(--bg-card);
-      border-left: 3px solid var(--red-bright);
-      padding: 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      transform: translateX(100%);
-      transition: 0.3s ease;
-    }
-
-    .nav-drawer.open .nav-panel {
-      transform: translateX(0);
-    }
-
-    .close-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      align-self: flex-end;
-      cursor: pointer;
-    }
-
-    /* ==================== کارت‌ها - بدون هاور هم رنگ دارند، هاور فقط روشنتر ==================== */
-    .card {
-      background: linear-gradient(145deg, #1a0808, #0a0202);
-      border: 1px solid var(--red-dim);
-      border-radius: 24px;
-      padding: 1.8rem;
-      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-      transform-style: preserve-3d;
-      perspective: 1200px;
-      box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
+    .typewriter { 
+      font-family: var(--font-mono); 
+      font-size: 1.15rem; 
+      color: #b0b0b0; 
+      border-left: 3px solid var(--red-bright); 
+      display: inline-block; 
+      padding: 0.5rem 1rem; 
+      background: rgba(0,0,0,0.4); 
+      border-radius: 0 20px 20px 0; 
+      min-height: 2rem; 
       position: relative;
       overflow: hidden;
-      /* گرادیان پایه: از قرمز ملایم در بالا به سیاه در پایین */
-      background: linear-gradient(145deg, #2a0a0a, #050101);
+    }
+    .typewriter .cursor { 
+      display: inline-block; 
+      width: 2px; 
+      height: 1.4rem; 
+      background-color: var(--red-bright); 
+      margin-right: 2px; 
+      animation: cursor-blink 0.6s step-end infinite; 
+      vertical-align: middle; 
+      box-shadow: 0 0 8px var(--red-bright), 0 0 15px var(--red-glow);
+    }
+    @keyframes cursor-blink { 
+      0%, 100% { opacity: 1; } 
+      50% { opacity: 0; } 
     }
 
-    /* خط قرمز درخشان همیشه کمی قابل مشاهده */
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--red-bright), transparent);
-      transform: scaleX(0.6);
-      transition: transform 0.4s ease;
-      z-index: 2;
-      opacity: 0.7;
-    }
+    .hero-inner > p { font-size: 1.2rem; color: #cacaca; max-width: 700px; margin: 1.5rem auto; line-height: 1.8; }
+    .btn-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+    
+    .btn { display: inline-block; background: linear-gradient(135deg, var(--red-dark), #6b0000); color: white; padding: 0.75rem 1.8rem; border-radius: 50px; font-weight: 600; transition: all 0.25s ease; border: none; cursor: pointer; font-family: inherit; position: relative; overflow: hidden; font-size: 1rem; }
+    .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.4s ease; }
+    .btn:hover::before { left: 100%; }
+    .btn:hover { background: linear-gradient(135deg, var(--red-bright), #8b0000); transform: scale(1.02); box-shadow: 0 5px 20px var(--red-glow); color: #fff; }
+    .btn-outline { background: transparent; border: 2px solid var(--red-dark); color: var(--red-bright); }
+    .btn-outline::before { display: none; }
+    .btn-outline:hover { background: var(--red-dark); color: white; border-color: var(--red-bright); }
 
-    .card:hover::before {
-      transform: scaleX(1);
-      opacity: 1;
+    .card { 
+      background: linear-gradient(145deg, #1a0505, #050101); border: 1px solid var(--border-red); 
+      border-radius: 24px; padding: 2rem; 
+      transition: border-color 0.4s, box-shadow 0.4s, background 0.4s, opacity 0.6s ease, transform 0.6s ease; 
+      box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5); position: relative; overflow: hidden; 
+      opacity: 0; transform: translateY(50px) scale(0.95); will-change: transform;
     }
+    .card.visible { opacity: 1; transform: translateY(0) scale(1); }
+    
+    .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--red-bright), transparent); transform: scaleX(0.6); transition: transform 0.4s ease; z-index: 2; opacity: 0.7; }
+    .card:hover::before { transform: scaleX(1); opacity: 1; }
+    .card::after { content: ''; position: absolute; top: -50%; left: -60%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(220,38,38,0.15), transparent); opacity: 0; transition: opacity 0.5s ease; pointer-events: none; z-index: 1; }
+    .card:hover::after { opacity: 1; }
+    .card:hover { border-color: var(--red-bright); box-shadow: 0 30px 50px -20px var(--red-glow), 0 0 0 1px rgba(220, 38, 38, 0.3); background: linear-gradient(145deg, #2a0808, #0a0202); }
 
-    /* افکت براق */
-    .card::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -60%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(220,38,38,0.12), transparent);
-      opacity: 0.4;
-      transition: opacity 0.5s ease;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .card:hover::after {
-      opacity: 0.8;
-    }
-
-    /* حالت عادی کارت: گرادیان قرمز به سیاه (انتهای کارت سیاه، بالای آن قرمز) */
-    /* هاور: فقط روشنتر و درخشانتر می‌شود */
-    .card:hover {
-      transform: translateY(-12px) rotateX(3deg) rotateY(2deg) scale(1.01);
-      border-color: var(--red-bright);
-      box-shadow: 0 30px 45px -20px var(--red-glow), 0 0 0 1px rgba(220, 38, 38, 0.3);
-      background: linear-gradient(145deg, #3a1010, #0f0303);
-    }
-
-    .card:hover,
-    .card:hover * {
-      color: inherit;
-    }
-
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-
-    .grid {
-      display: grid;
-      gap: 2rem;
-      margin: 2rem 0;
-    }
-
+    .container { max-width: 1280px; margin: 0 auto; padding: 5rem 2rem; }
+    .grid { display: grid; gap: 2rem; margin-top: 2rem; }
     .grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
     .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
 
-    /* هیرو */
-    .hero {
-      min-height: 90vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      background: radial-gradient(ellipse at 30% 40%, #180303, #010101 80%);
-      border-bottom: 1px solid var(--red-dim);
-      position: relative;
-    }
-    .hero-inner {
-      max-width: 900px;
-      padding: 2rem;
-    }
-    .hero-badge {
-      background: rgba(220, 38, 38, 0.12);
-      backdrop-filter: blur(4px);
-      display: inline-block;
-      padding: 0.35rem 1.2rem;
-      border-radius: 40px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 1px;
-      border: 1px solid rgba(220, 38, 38, 0.3);
-      color: var(--red-bright);
-      margin-bottom: 1.5rem;
-    }
-    .hero-inner h1 {
-      font-size: 4.2rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffffff, var(--red-bright));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 0.75rem;
-    }
-    .hero-name {
-      font-size: 1.8rem;
-      font-weight: 500;
-      color: #b0b0b0;
-      margin-bottom: 1.2rem;
-      border-left: 3px solid var(--red-bright);
-      display: inline-block;
-      padding-left: 1rem;
-      background: rgba(0,0,0,0.4);
-      border-radius: 0 20px 20px 0;
-    }
-    .hero-inner p {
-      font-size: 1.2rem;
-      color: #cacaca;
-      max-width: 700px;
-      margin: 1.5rem auto;
-      line-height: 1.6;
-    }
-    .btn-group {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .btn {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--red-dark), #6b0000);
-      color: white;
-      padding: 0.75rem 1.8rem;
-      border-radius: 50px;
-      font-weight: 600;
-      transition: all 0.25s ease;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      position: relative;
-      overflow: hidden;
-    }
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.4s ease;
-    }
-    .btn:hover::before {
-      left: 100%;
-    }
-    .btn:hover {
-      background: linear-gradient(135deg, var(--red-bright), #8b0000);
-      transform: scale(1.02);
-      box-shadow: 0 5px 20px var(--red-glow);
-      color: #fff;
-    }
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--red-dark);
-      color: var(--red-bright);
-    }
-    .btn-outline::before {
-      display: none;
-    }
-    .btn-outline:hover {
-      background: var(--red-dark);
-      color: white;
-      border-color: var(--red-bright);
-    }
+    input, textarea, select { width: 100%; padding: 0.8rem 1rem; margin-top: 0.4rem; margin-bottom: 1.2rem; background: #111; border: 1px solid var(--border-red); border-radius: 12px; color: white; font-family: inherit; transition: 0.2s; font-size: 0.95rem; }
+    input:focus, textarea:focus { outline: none; border-color: var(--red-bright); box-shadow: 0 0 15px var(--red-glow); background: #1a1a1a; }
+    label { font-weight: 600; color: var(--text-muted); display: block; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tag { background: rgba(139,0,0,0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; color: var(--red-bright); border: 1px solid var(--red-dim); font-family: var(--font-mono); }
+    .avatar { width: 80px; height: 80px; background: linear-gradient(135deg, var(--red-dark), #2a0000); border-radius: 50%; margin-bottom: 1.2rem; border: 2px solid var(--red-bright); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+    .service-icon { font-size: 2.8rem; margin-bottom: 1rem; transition: transform 0.3s ease; display: inline-block; filter: drop-shadow(0 0 6px rgba(220,38,38,0.4)); }
+    .card:hover .service-icon { transform: scale(1.15) rotate(-5deg); }
 
-    input, textarea, select {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      margin-top: 0.4rem;
-      margin-bottom: 1.2rem;
-      background: #1a1a1a;
-      border: 1px solid var(--border-red);
-      border-radius: 12px;
-      color: white;
-      font-family: inherit;
-      transition: 0.2s;
-    }
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--red-bright);
-      box-shadow: 0 0 12px var(--red-glow);
-    }
-    label {
-      font-weight: 500;
-      color: var(--text-muted);
-    }
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .tag {
-      background: rgba(139,0,0,0.3);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      color: var(--red-bright);
-      border: 1px solid var(--red-dim);
-      transition: all 0.2s ease;
-    }
-    .avatar {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, var(--red-dark), #2a0000);
-      border-radius: 50%;
-      margin-bottom: 1.2rem;
-      border: 2px solid var(--red-bright);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.2rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    .service-icon {
-      font-size: 2.8rem;
-      margin-bottom: 1rem;
-      transition: transform 0.3s ease;
-      display: inline-block;
-      filter: drop-shadow(0 0 4px rgba(220,38,38,0.4));
-    }
-    footer {
-      text-align: center;
-      padding: 2rem;
-      border-top: 1px solid var(--border-red);
-      margin-top: 2rem;
-      color: var(--text-muted);
-    }
+    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border-red); margin-top: 2rem; color: var(--text-muted); font-family: var(--font-mono); font-size: 0.85rem; }
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: linear-gradient(135deg, #1a0808, #2a0a0a); color: #f0f0f0; padding: 1rem 2rem; border-radius: 12px; border: 1px solid var(--red-bright); box-shadow: 0 15px 40px rgba(220, 38, 38, 0.5); z-index: 9999; opacity: 0; transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1); font-family: var(--font-main); font-weight: 600; backdrop-filter: blur(10px); }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    #back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--red-dark); color: white; border: 1px solid var(--red-bright); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 998; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+    #back-to-top.visible { opacity: 1; visibility: visible; }
+    #back-to-top:hover { background: var(--red-bright); transform: translateY(-3px); }
+
     @media (max-width: 900px) {
-      .menu {
-        display: none;
-      }
-      .hamburger {
-        display: block;
-      }
-      .container {
-        padding: 2rem 1.5rem;
-      }
-      h1 { font-size: 2.2rem; }
+      .menu { display: none; }
+      .hamburger { display: block; }
+      .container { padding: 3rem 1.5rem; }
       h2 { font-size: 1.6rem; }
-      .hero-inner h1 { font-size: 2.8rem; }
-      .hero-name { font-size: 1.2rem; }
-      .grid-2, .grid-3 {
-        grid-template-columns: 1fr;
-      }
+      .glitch { font-size: 2.8rem; }
+      .typewriter { font-size: 1rem; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      #back-to-top { bottom: 20px; right: 20px; width: 40px; height: 40px; font-size: 1rem; }
     }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .card {
-      animation: fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) backwards;
-    }
-    .card:nth-child(1) { animation-delay: 0.05s; }
-    .card:nth-child(2) { animation-delay: 0.1s; }
-    .card:nth-child(3) { animation-delay: 0.15s; }
-    .card:nth-child(4) { animation-delay: 0.2s; }
-    .card:nth-child(5) { animation-delay: 0.25s; }
-    .card:nth-child(6) { animation-delay: 0.3s; }
   </style>
 </head>
 <body>
@@ -589,7 +270,6 @@
         <div class="brand-logo">SK</div>
         <span>Silent Knights</span>
       </div>
-
       <nav class="menu">
         <a href="#home" class="active">خانه</a>
         <a href="#about">درباره</a>
@@ -598,10 +278,9 @@
         <a href="blog.html">بلاگ</a>
         <a href="#team">تیم</a>
         <a href="#contact">ارتباط</a>
-        <a href="cybersecurity-roadmap.html">نقشه راه</a>
         
         <div class="dropdown" id="examDropdown">
-          <button class="dropdown-btn" id="dropdownBtn">امتحانات ▼</button>
+          <button class="dropdown-btn" id="dropdownBtn" aria-expanded="false" aria-haspopup="true">امتحانات ▼</button>
           <div class="dropdown-content" id="dropdownContent">
             <a href="Zero_Hacker_exam.html">امتحان هکر صفر</a>
             <a href="Network-4-Hacker-Exam.html">امتحان شبکه برای هکر ها</a>
@@ -611,32 +290,33 @@
           </div>
         </div>
         
+        <a href="cyber-threat-map.html" class="nav-threat-link">
+          <span class="pulse-dot"></span>
+          THREAT MAP
+        </a>
+
         <a href="Sign_In.html" class="register-button">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 0a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 10c4.418 0 8 1.79 8 4v2H0v-2c0-2.21 3.582-4 8-4z"/>
-          </svg>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 10c4.418 0 8 1.79 8 4v2H0v-2c0-2.21 3.582-4 8-4z"/></svg>
           حساب کاربری
         </a>
       </nav>
-
-      <button class="hamburger" id="hamburger">☰</button>
+      <button class="hamburger" id="hamburger" aria-label="باز کردن منو">☰</button>
     </div>
   </header>
 
-  <div id="nav-drawer" class="nav-drawer">
+  <div id="nav-drawer" class="nav-drawer" aria-hidden="true">
     <div class="nav-panel">
-      <button class="close-btn" id="nav-close">✕</button>
+      <button class="close-btn" id="nav-close" aria-label="بستن منو">✕</button>
       <a href="#home">خانه</a>
       <a href="#about">درباره</a>
       <a href="#services">خدمات</a>
       <a href="#projects">پروژه‌ها</a>
-      <a href="#blog">بلاگ</a>
+      <a href="blog.html">بلاگ</a>
       <a href="#team">تیم</a>
       <a href="#contact">ارتباط</a>
-      <a href="cybersecurity-roadmap.html">نقشه راه</a>
-      <div class="dropdown" style="width:100%">
-        <button class="dropdown-btn" style="width:100%; text-align:right;" id="mobileDropdownBtn">امتحانات ▼</button>
-        <div class="dropdown-content" style="position:static; margin-top:5px; display:none;" id="mobileDropdownContent">
+      <div class="dropdown w-full">
+        <button class="dropdown-btn w-full" style="text-align:right;" id="mobileDropdownBtn" aria-expanded="false">امتحانات ▼</button>
+        <div class="dropdown-content dropdown-static" id="mobileDropdownContent">
           <a href="Zero_Hacker_exam.html">امتحان هکر صفر</a>
           <a href="Network-4-Hacker-Exam.html">امتحان شبکه</a>
           <a href="#">لینوکس برای هکر ها</a>
@@ -644,231 +324,271 @@
           <a href="Hacking-test.html">امتحان تستی</a>
         </div>
       </div>
-      <a href="Sign_In.html" class="register-button" style="justify-content:center;">حساب کاربری</a>
-      <div style="margin-top:auto; color:var(--text-muted); font-size:13px;">© 2025 Silent Knights</div>
+      
+      <a href="cyber-threat-map.html" class="nav-threat-link" style="justify-content:center;">
+        <span class="pulse-dot"></span>
+        THREAT MAP
+      </a>
+
+      <a href="Sign_In.html" class="register-button jc-center">حساب کاربری</a>
+      <div class="mt-auto footer-text">© 2025 Silent Knights</div>
     </div>
   </div>
 
-  <section id="home" class="hero">
-    <div class="hero-inner">
-      <div class="hero-badge">✦ Independent Cyber Collective ✦</div>
-      <h1>Silent Knights</h1>
-      <div class="hero-name">Where Code Meets Digital Fortress</div>
-      <p>ما جمعی از هکرهای مستقل افغانستانیم — هدف‌مان رشد شخصی، تمرین حرفه‌ای و تبدیل شدن به بهترین‌های کشور است. کارهای ما آموزشی، اخلاقی و با محوریت دفاع دیجیتال است.</p>
-      <div class="btn-group">
-        <a href="#services" class="btn">مشاهده خدمات</a>
-        <a href="#contact" class="btn btn-outline">تماس با ما</a>
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-inner">
+        <div class="hero-badge">✦ کالکتیو مستقل سایبری ✦</div>
+        <div class="glitch-wrapper">
+          <div class="glitch-slice"></div>
+          <h1 class="glitch" id="glitch-text" data-text="Silent Knights">Silent Knights</h1>
+        </div>
+        <br>
+        <div class="typewriter">
+          <span id="typewriter-text"></span><span class="cursor"></span>
+        </div>
+        <p>ما جمعی از هکرهای مستقل افغانستانیم — هدف‌مان رشد شخصی، تمرین حرفه‌ای و تبدیل شدن به بهترین‌های کشور است. کارهای ما آموزشی، اخلاقی و با محوریت دفاع دیجیتال است.</p>
+        <div class="btn-group">
+          <a href="#services" class="btn">مشاهده خدمات</a>
+          <a href="#contact" class="btn btn-outline">تماس با ما</a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="about" class="container">
-    <h2 class="section-title">درباره Silent Knights</h2>
-    <p class="section-sub">ما جمعی از هکرهای مستقل هستیم که با تمرین و تلاش شخصی برای رسیدن به سطح برتر در کشور کار می‌کنیم.</p>
-    <div class="grid grid-2">
-      <div class="card">
-        <h3 style="font-weight:600;">ماموریت و چشم‌انداز</h3>
-        <p style="color:var(--text-muted); margin-top:10px;">ماموریت: کمک به رشد مهارت‌های فردی و تیمی تا هر یک از اعضا بتواند به عنوان یک هکر متخصص و قابل‌اعتماد در افغانستان شناخته شود. چشم‌انداز: تولید هکرهایی مستقل، حرفه‌ای و اخلاق‌محور.</p>
-        <h3 style="font-weight:600; margin-top:20px;">ارزش‌ها</h3>
-        <ul style="margin-right:20px; margin-top:8px; color:var(--text-muted);">
-          <li>تلاش مستمر برای پیشرفت شخصی</li>
-          <li>یادگیری و به‌اشتراک‌گذاری دانش</li>
-          <li>استقلال و کار بدون حمایت خارجی</li>
-          <li>هک اخلاقی و مسئولانه</li>
-        </ul>
+    <section id="about" class="container">
+      <h2 class="section-title">درباره Silent Knights</h2>
+      <p class="section-sub">ما جمعی از هکرهای مستقل هستیم که با تمرین و تلاش شخصی برای رسیدن به سطح برتر در کشور کار می‌کنیم.</p>
+      <div class="grid grid-2">
+        <article class="card">
+          <h3>ماموریت و چشم‌انداز</h3>
+          <p class="mt-sm text-muted">ماموریت: کمک به رشد مهارت‌های فردی و تیمی تا هر یک از اعضا بتواند به عنوان یک هکر متخصص و قابل‌اعتماد در افغانستان شناخته شود. چشم‌انداز: تولید هکرهایی مستقل، حرفه‌ای و اخلاق‌محور.</p>
+          <h3 class="mt-md">ارزش‌ها</h3>
+          <ul class="mt-sm text-muted" style="margin-right:20px;">
+            <li>تلاش مستمر برای پیشرفت شخصی</li>
+            <li>یادگیری و به‌اشتراک‌گذاری دانش</li>
+            <li>استقلال و کار بدون حمایت خارجی</li>
+            <li>هک اخلاقی و مسئولانه</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>نکات برجسته</h3>
+          <ul class="mt-md text-muted" style="margin-right:20px;">
+            <li>پوشش عملی در CTFها و پروژه‌های پژوهشی</li>
+            <li>متمرکز بر آموزش و انتشار write-upهای کاربردی</li>
+            <li>تعهد به افشای مسئولانه و رعایت اخلاق در پژوهش</li>
+          </ul>
+        </article>
       </div>
-      <div class="card">
-        <h3 style="font-weight:600;">نکات برجسته</h3>
-        <ul style="margin-right:20px; margin-top:15px; color:var(--text-muted);">
-          <li>پوشش عملی در CTFها و پروژه‌های پژوهشی</li>
-          <li>متمرکز بر آموزش و انتشار write-upهای کاربردی</li>
-          <li>تعهد به افشای مسئولانه و رعایت اخلاق در پژوهش</li>
-        </ul>
+    </section>
+
+    <section id="services" class="container">
+      <h2 class="section-title">خدمات ما</h2>
+      <p class="section-sub">خدمات ما به‌طور خاص برای آموزش، تست و تقویت توان دفاعی طراحی شده‌اند.</p>
+      <div class="grid grid-3">
+        <article class="card"><div class="service-icon">🎓</div><h3>آموزش و آگاهی</h3><p class="text-muted">دوره‌های ابتدایی و تخصصی با مجرب ترین اساتید.</p><div class="tags"><span class="tag">عملی</span><span class="tag">بروز</span></div></article>
+        <article class="card"><div class="service-icon">🔍</div><h3>تست نفوذ</h3><p class="text-muted">بررسی وب، API، موبایل، شبکه — همه تست‌ها با مجوز و اخلاقی.</p><div class="tags"><span class="tag">گزارش حرفه‌ای</span><span class="tag">اخلاقی</span></div></article>
+        <article class="card"><div class="service-icon">📋</div><h3>مشاور امنیتی</h3><p class="text-muted">تحلیل وضعیت امنیتی و ارائه راهبرد برای افزایش مقاومت.</p><div class="tags"><span class="tag">راهکار عملی</span></div></article>
+        <article class="card"><div class="service-icon">⚔️</div><h3>تیم سرخ (Red Team)</h3><p class="text-muted">شبیه‌سازی حملات کنترل‌شده برای سنجش دفاع.</p><div class="tags"><span class="tag">شبیه‌سازی</span><span class="tag">واقعی</span></div></article>
+        <article class="card"><div class="service-icon">🛡️</div><h3>تیم آبی (Blue Team)</h3><p class="text-muted">پایش، تشخیص و پاسخ به تهدیدات؛ تحلیل لاگ.</p><div class="tags"><span class="tag">دفاع مستمر</span></div></article>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="services" class="container">
-    <h2 class="section-title">خدمات ما</h2>
-    <p class="section-sub">خدمات ما به‌طور خاص برای آموزش، تست و تقویت توان دفاعی طراحی شده‌اند.</p>
-    <div class="grid grid-3">
-      <div class="card"><div class="service-icon">🎓</div><h3>آموزش و آگاهی</h3><p style="color:var(--text-muted);">دوره‌های ابتدایی و تخصصی با مجرب ترین اساتید.</p><div class="tags"><span class="tag">عملی</span><span class="tag">بروز</span></div></div>
-      <div class="card"><div class="service-icon">🔍</div><h3>تست نفوذ</h3><p style="color:var(--text-muted);">بررسی وب، API، موبایل، شبکه — همه تست‌ها با مجوز و اخلاقی.</p><div class="tags"><span class="tag">گزارش حرفه‌ای</span><span class="tag">اخلاقی</span></div></div>
-      <div class="card"><div class="service-icon">📋</div><h3>مشاور امنیتی</h3><p style="color:var(--text-muted);">تحلیل وضعیت امنیتی و ارائه راهبرد برای افزایش مقاومت.</p><div class="tags"><span class="tag">راهکار عملی</span></div></div>
-      <div class="card"><div class="service-icon">⚔️</div><h3>تیم سرخ (Red Team)</h3><p style="color:var(--text-muted);">شبیه‌سازی حملات کنترل‌شده برای سنجش دفاع.</p><div class="tags"><span class="tag">شبیه‌سازی</span><span class="tag">واقعی</span></div></div>
-      <div class="card"><div class="service-icon">🛡️</div><h3>تیم آبی (Blue Team)</h3><p style="color:var(--text-muted);">پایش، تشخیص و پاسخ به تهدیدات؛ تحلیل لاگ.</p><div class="tags"><span class="tag">دفاع مستمر</span></div></div>
-    </div>
-  </section>
-
-  <section id="projects" class="container">
-    <h2 class="section-title">پروژه‌ها</h2>
-    <p class="section-sub">پروژه‌های تحقیقاتی و آموزشی — همه برای اهداف پژوهشی و تست اخلاقی.</p>
-    <div class="grid grid-3">
-      <div class="card"><h3>📡 Wi-Fi Password Tool</h3><p style="color:var(--text-muted);">ابزاری آموزشی برای دریافت اطلاعات وای فای — فقط جنبه آموزشی دارد.</p><div class="tags"><span class="tag">وای فای</span><span class="tag">آموزشی</span></div></div>
-      <div class="card"><h3>🖥️ Windows RAT</h3><p style="color:var(--text-muted);">شبیه‌سازی حملات روی ویندوز به‌منظور آموزش دفاع.</p><div class="tags"><span class="tag">شبیه‌سازی</span><span class="tag">تحلیلی</span></div></div>
-      <div class="card"><h3>🤖 OSINT with AI</h3><p style="color:var(--text-muted);">ترکیب OSINT با هوش مصنوعی برای تحلیل داده‌های عمومی.</p><div class="tags"><span class="tag">OSINT</span><span class="tag">AI</span></div></div>
-      <div class="card"><h3>📝 Write-upهای آموزشی</h3><p style="color:var(--text-muted);">مستندسازی چالش‌های CTF و PoCها برای یادگیری عملی.</p><div class="tags"><span class="tag">CTF</span><span class="tag">PoC</span></div></div>
-    </div>
-  </section>
-
-  <section id="blog" class="container">
-    <h2 class="section-title">بلاگ و اخبار</h2>
-    <p class="section-sub">مطالب آموزشی، هشدارهای امنیتی و تجربیات تیم.</p>
-    <div class="grid grid-3">
-      <div class="card"><h3>۱۰ روش جلوگیری از فیشینگ</h3><p style="color:var(--text-muted);">اقدامات ساده برای کاهش ریسک فیشینگ در سازمان‌ها.</p><a href="#" class="btn btn-outline" style="margin-top:15px; display:inline-block;">مطالعه</a></div>
-      <div class="card"><h3>صفر اعتماد در تیم‌های کوچک</h3><p style="color:var(--text-muted);">پیاده‌سازی Zero Trust با قدم‌های کوچک.</p><a href="#" class="btn btn-outline" style="margin-top:15px;">مطالعه</a></div>
-      <div class="card"><h3>درس‌هایی از یک CTF</h3><p style="color:var(--text-muted);">تحلیل چالش رمزنگاری و نکات عملی.</p><a href="#" class="btn btn-outline" style="margin-top:15px;">مطالعه</a></div>
-    </div>
-  </section>
-
-  <section id="team" class="container">
-    <h2 class="section-title">هیت رهبری</h2>
-    <p class="section-sub">رهبران با تجربه که جهت‌گیری استراتژیک تیم را تعیین می‌کنند.</p>
-    <div class="grid grid-2">
-      <div class="card"><div class="avatar">👨‍💻</div><h3>سید مدثر هاشمی</h3><p style="color:var(--text-muted);">مدیر ارشد فناوری • بنیانگذار</p><p style="color:var(--text-muted); margin-top:8px;">با بیش از 8 سال تجربه در امنیت سایبری.</p><div class="tags"><span class="tag">رهبری</span><span class="tag">استراتژی</span></div></div>
-      <div class="card"><div class="avatar">👨‍💻</div><h3>حسام‌الدین حسینی</h3><p style="color:var(--text-muted);">مدیر عملیات • هم‌بنیان‌گذار</p><p style="color:var(--text-muted); margin-top:8px;">مدیریت پروژه‌ها و هماهنگی تیم.</p><div class="tags"><span class="tag">مدیریت</span><span class="tag">سخت‌افزار</span></div></div>
-    </div>
-    <div style="text-align:center; margin-top:30px;">
-      <a href="#" class="btn">مشاهده تمام اعضای تیم</a>
-    </div>
-  </section>
-
-  <section id="contact" class="container">
-    <h2 class="section-title">تماس با ما</h2>
-    <p class="section-sub">برای همکاری، آموزش یا تست امنیتی با ما در ارتباط باشید.</p>
-    <div class="grid grid-2">
-      <div class="card">
-        <form id="contact-form">
-          <label>نام</label><input type="text" placeholder="نام شما" required>
-          <label>ایمیل</label><input type="email" placeholder="you@example.com" required>
-          <label>پیام</label><textarea rows="4" placeholder="توضیحات..." required></textarea>
-          <button class="btn" type="submit">ارسال پیام</button>
-          <button class="btn btn-outline" type="button" onclick="document.getElementById('contact-form').reset();">پاک کردن</button>
-        </form>
+    <section id="projects" class="container">
+      <h2 class="section-title">پروژه‌ها</h2>
+      <p class="section-sub">پروژه‌های تحقیقاتی و آموزشی — همه برای اهداف پژوهشی و تست اخلاقی.</p>
+      <div class="grid grid-3">
+        <article class="card"><h3>📡 Wi-Fi Password Tool</h3><p class="text-muted">ابزاری آموزشی برای دریافت اطلاعات وای فای — فقط جنبه آموزشی دارد.</p><div class="tags"><span class="tag">وای فای</span><span class="tag">آموزشی</span></div></article>
+        <article class="card"><h3>🖥️ Windows RAT</h3><p class="text-muted">شبیه‌سازی حملات روی ویندوز به‌منظور آموزش دفاع.</p><div class="tags"><span class="tag">شبیه‌سازی</span><span class="tag">تحلیلی</span></div></article>
+        <article class="card"><h3>🤖 OSINT with AI</h3><p class="text-muted">ترکیب OSINT با هوش مصنوعی برای تحلیل داده‌های عمومی.</p><div class="tags"><span class="tag">OSINT</span><span class="tag">AI</span></div></article>
+        <article class="card"><h3>📝 Write-upهای آموزشی</h3><p class="text-muted">مستندسازی چالش‌های CTF و PoCها برای یادگیری عملی.</p><div class="tags"><span class="tag">CTF</span><span class="tag">PoC</span></div></article>
       </div>
-      <div class="card">
-        <h3>کانال‌های ارتباطی</h3>
-        <p style="color:var(--text-muted);">ایمیل: silentknights0101@gmail.com<br>GitHub </p>
-        <h3 style="margin-top:20px;">ثبت‌نام دوره‌ها</h3>
-        <p style="color:var(--text-muted);">برای ثبت‌نام در کارگاه‌ها عنوان دوره را بنویسید.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <footer>
-    © 2025 Silent Knights — تمامی حقوق محفوظ است
-  </footer>
+    <section id="blog" class="container">
+      <h2 class="section-title">بلاگ و اخبار</h2>
+      <p class="section-sub">مطالب آموزشی، هشدارهای امنیتی و تجربیات تیم.</p>
+      <div class="grid grid-3">
+        <article class="card"><h3>۱۰ روش جلوگیری از فیشینگ</h3><p class="text-muted">اقدامات ساده برای کاهش ریسک فیشینگ در سازمان‌ها.</p><a href="#" class="btn btn-outline mt-sm d-inline-block">مطالعه</a></article>
+        <article class="card"><h3>صفر اعتماد در تیم‌های کوچک</h3><p class="text-muted">پیاده‌سازی Zero Trust با قدم‌های کوچک.</p><a href="#" class="btn btn-outline mt-sm d-inline-block">مطالعه</a></article>
+        <article class="card"><h3>درس‌هایی از یک CTF</h3><p class="text-muted">تحلیل چالش رمزنگاری و نکات عملی.</p><a href="#" class="btn btn-outline mt-sm d-inline-block">مطالعه</a></article>
+      </div>
+    </section>
+
+    <section id="team" class="container">
+      <h2 class="section-title">هیت رهبری</h2>
+      <p class="section-sub">رهبران با تجربه که جهت‌گیری استراتژیک تیم را تعیین می‌کنند.</p>
+      <div class="grid grid-2">
+        <article class="card"><div class="avatar">👨‍💻</div><h3>سید مدثر هاشمی</h3><p class="text-muted">مدیر ارشد فناوری • بنیانگذار</p><p class="mt-sm text-muted">با بیش از 8 سال تجربه در امنیت سایبری.</p><div class="tags"><span class="tag">رهبری</span><span class="tag">استراتژی</span></div></article>
+        <article class="card"><div class="avatar">👨‍💻</div><h3>حسام‌الدین حسینی</h3><p class="text-muted">مدیر عملیات • هم‌بنیان‌گذار</p><p class="mt-sm text-muted">مدیریت پروژه‌ها و هماهنگی تیم.</p><div class="tags"><span class="tag">مدیریت</span><span class="tag">سخت‌افزار</span></div></article>
+      </div>
+      <div class="text-center mt-lg">
+        <a href="#" class="btn">مشاهده تمام اعضای تیم</a>
+      </div>
+    </section>
+
+    <section id="contact" class="container">
+      <h2 class="section-title">تماس با ما</h2>
+      <p class="section-sub">برای همکاری، آموزش یا تست امنیتی با ما در ارتباط باشید.</p>
+      <div class="grid grid-2">
+        <article class="card">
+          <form id="contact-form">
+            <label>نام</label><input type="text" placeholder="نام شما" required>
+            <label>ایمیل</label><input type="email" placeholder="you@example.com" required>
+            <label>پیام</label><textarea rows="4" placeholder="توضیحات..." required></textarea>
+            <button class="btn" type="submit">ارسال پیام</button>
+            <button class="btn btn-outline" type="button" id="resetBtn">پاک کردن</button>
+          </form>
+        </article>
+        <article class="card">
+          <h3>کانال‌های ارتباطی</h3>
+          <p class="text-muted">ایمیل: silentknights0101@gmail.com<br>GitHub: Silent-Knights</p>
+          <h3 class="mt-md">ثبت‌نام دوره‌ها</h3>
+          <p class="text-muted">برای ثبت‌نام در کارگاه‌ها عنوان دوره را در فرم بنویسید.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <button id="back-to-top" aria-label="بازگشت به بالا">↑</button>
+
+  <footer>© 2025 Silent Knights — تمامی حقوق محفوظ است | Designed with ⚔️</footer>
 
   <script>
-    // دراپ‌داون با کلیک (دسکتاپ)
-    const dropdownBtn = document.getElementById('dropdownBtn');
-    const dropdownContent = document.getElementById('dropdownContent');
-    
-    if (dropdownBtn && dropdownContent) {
-      dropdownBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        dropdownContent.classList.toggle('show');
-      });
-      
-      document.addEventListener('click', function(e) {
-        if (!dropdownBtn.contains(e.target) && !dropdownContent.contains(e.target)) {
-          dropdownContent.classList.remove('show');
-        }
-      });
+    const typeText = "جایی که کد، به قلعه‌ی دیجیتال تبدیل می‌شود";
+    const typeElement = document.getElementById("typewriter-text");
+    let charIndex = 0;
+    function typeWriter() {
+      if (charIndex < typeText.length) {
+        typeElement.textContent += typeText.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeWriter, 90);
+      }
     }
-    
-    // دراپ‌داون موبایل
-    const mobileDropdownBtn = document.getElementById('mobileDropdownBtn');
-    const mobileDropdownContent = document.getElementById('mobileDropdownContent');
-    
-    if (mobileDropdownBtn && mobileDropdownContent) {
-      mobileDropdownBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (mobileDropdownContent.style.display === 'block') {
-          mobileDropdownContent.style.display = 'none';
-        } else {
-          mobileDropdownContent.style.display = 'block';
+    setTimeout(typeWriter, 1500);
+
+    const glitchEl = document.getElementById('glitch-text');
+    const glitchWrapper = document.querySelector('.glitch-wrapper');
+    const heroSection = document.querySelector('.hero');
+    const originalText = glitchEl.innerText;
+    const glitchTokens = ['!@#$%^&*', '0x4F', '0xA1', '10110', 'ERR', 'NULL', '0xF4', '; drop', '1010'];
+
+    function triggerTextCorruption() {
+      let textArray = originalText.split('');
+      let frames = 2 + Math.floor(Math.random() * 3); 
+      let count = 0;
+
+      glitchEl.classList.add('burst-mode');
+      glitchWrapper.classList.add('active');
+      heroSection.classList.add('glitch-flash');
+      glitchEl.style.fontFamily = "'SDGlitchDemo', monospace";
+
+      const corruptionInterval = setInterval(() => {
+        let corruptedText = textArray.map((char) => {
+          if (char === ' ') return ' '; 
+          let rand = Math.random();
+          if (rand > 0.8) return glitchTokens[Math.floor(Math.random() * glitchTokens.length)].substring(0,2);
+          if (rand > 0.3) return glitchTokens[0].charAt(Math.floor(Math.random() * glitchTokens[0].length));
+          return char;
+        }).join('');
+
+        glitchEl.innerText = corruptedText;
+        glitchEl.setAttribute('data-text', corruptedText);
+        count++;
+
+        if (count >= frames) {
+          clearInterval(corruptionInterval);
+          glitchEl.innerText = originalText;
+          glitchEl.setAttribute('data-text', originalText);
+          
+          setTimeout(() => {
+            glitchEl.classList.remove('burst-mode');
+            glitchWrapper.classList.remove('active');
+            heroSection.classList.remove('glitch-flash');
+            glitchEl.style.fontFamily = "'Rajdhani', sans-serif";
+          }, 50);
         }
-      });
-      
-      document.addEventListener('click', function(e) {
-        if (mobileDropdownBtn && mobileDropdownContent) {
-          if (!mobileDropdownBtn.contains(e.target) && !mobileDropdownContent.contains(e.target)) {
-            mobileDropdownContent.style.display = 'none';
-          }
-        }
-      });
+      }, 60);
     }
 
-    // منوی موبایل
+    function scheduleGlitch() {
+      setTimeout(() => { triggerTextCorruption(); scheduleGlitch(); }, 2000 + Math.random() * 4000);
+    }
+    scheduleGlitch();
+
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        if (window.innerWidth < 900) return;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / 15;
+        const rotateY = (centerX - x) / 15;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+    document.querySelectorAll('.card').forEach(card => observer.observe(card));
+
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => { backToTop.classList.toggle('visible', window.scrollY > 600); });
+    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    const dropdownBtn = document.getElementById('dropdownBtn');
+    const dropdownContent = document.getElementById('dropdownContent');
+    if (dropdownBtn && dropdownContent) {
+      dropdownBtn.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); const isOpen = dropdownContent.classList.toggle('show'); dropdownBtn.setAttribute('aria-expanded', isOpen); });
+      document.addEventListener('click', function(e) { if (!dropdownBtn.contains(e.target) && !dropdownContent.contains(e.target)) { dropdownContent.classList.remove('show'); dropdownBtn.setAttribute('aria-expanded', 'false'); } });
+    }
+    const mobileDropdownBtn = document.getElementById('mobileDropdownBtn');
+    const mobileDropdownContent = document.getElementById('mobileDropdownContent');
+    if (mobileDropdownBtn && mobileDropdownContent) {
+      mobileDropdownBtn.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); const isOpen = mobileDropdownContent.style.display === 'block'; mobileDropdownContent.style.display = isOpen ? 'none' : 'block'; mobileDropdownBtn.setAttribute('aria-expanded', !isOpen); });
+    }
+
     const hamburger = document.getElementById('hamburger');
     const drawer = document.getElementById('nav-drawer');
     const closeBtn = document.getElementById('nav-close');
-
-    function openDrawer() {
-      drawer.classList.add('open');
-      drawer.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeDrawer() {
-      drawer.classList.remove('open');
-      drawer.setAttribute('aria-hidden', 'true');
-    }
-
+    function openDrawer() { drawer.classList.add('open'); drawer.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
+    function closeDrawer() { drawer.classList.remove('open'); drawer.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
     if (hamburger) hamburger.addEventListener('click', openDrawer);
     if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-    drawer?.addEventListener('click', (e) => {
-      if (e.target === drawer) closeDrawer();
-    });
+    if (drawer) drawer.addEventListener('click', (e) => { if (e.target === drawer) closeDrawer(); });
+
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) contactForm.addEventListener('submit', (e) => { e.preventDefault(); showToast('✅ پیام شما با موفقیت دریافت شد.'); contactForm.reset(); });
+    const resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) resetBtn.addEventListener('click', () => contactForm.reset());
 
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.menu a, .nav-panel a');
-
-    function updateActiveLink() {
+    window.addEventListener('scroll', () => {
       let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop - 120;
-        if (pageYOffset >= sectionTop) {
-          current = section.getAttribute('id');
-        }
-      });
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        const href = link.getAttribute('href');
-        if (href === `#${current}`) {
-          link.classList.add('active');
-        }
-      });
-    }
-
-    window.addEventListener('scroll', updateActiveLink);
-    window.addEventListener('load', updateActiveLink);
-
-    const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-      contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('✅ پیام شما با موفقیت دریافت شد. تیم ما در اسرع وقت پاسخ خواهد داد.');
-        contactForm.reset();
-      });
-    }
-
+      sections.forEach(section => { if (pageYOffset >= section.offsetTop - 150) current = section.getAttribute('id'); });
+      navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href') === `#${current}`) link.classList.add('active'); });
+    });
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        const target = document.querySelector(targetId);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
-          closeDrawer();
-        }
+        if (this.getAttribute('href') === '#') return;
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); closeDrawer(); }
       });
     });
-
-    console.log('⚔️ Silent Knights — آماده برای دفاع سایبری');
   </script>
 </body>
 </html>

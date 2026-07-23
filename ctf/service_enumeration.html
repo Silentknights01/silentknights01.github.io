@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Enumeration Cheat Sheet - Full Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #22d3ee; /* Cyan for Services */
+            --accent-color: #f472b6;  /* Pink accent */
+            --warn-color: #d29922;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(34, 211, 238, 0.1);
+            color: var(--primary-color);
+            border-right: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(34, 211, 238, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(244, 114, 182, 0.2); color: var(--accent-color); }
+        .tag-tip { background: rgba(210, 153, 34, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 600px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* Workflow Block */
+        .workflow-box {
+            background: rgba(244, 114, 182, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            line-height: 1.8;
+            color: var(--accent-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>⚙️ SERVICE ENUM</h1>
+            <p>Kali Tools - Full Edition</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی سرویس..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#ftp">1. FTP <span class="nav-badge">Port 21</span></a></li>
+            <li><a href="#ssh">2. SSH <span class="nav-badge">Port 22</span></a></li>
+            <li><a href="#smtp">3. SMTP <span class="nav-badge">Port 25</span></a></li>
+            <li><a href="#dns">4. DNS <span class="nav-badge">Port 53</span></a></li>
+            <li><a href="#smb">5. SMB <span class="nav-badge">Port 139/445</span></a></li>
+            <li><a href="#snmp">6. SNMP <span class="nav-badge">Port 161</span></a></li>
+            <li><a href="#ldap">7. LDAP <span class="nav-badge">Port 389</span></a></li>
+            <li><a href="#mysql">8. MySQL <span class="nav-badge">Port 3306</span></a></li>
+            <li><a href="#redis">9. Redis <span class="nav-badge">Port 6379</span></a></li>
+            <li><a href="#postgres">10. PostgreSQL <span class="nav-badge">Port 5432</span></a></li>
+            <li><a href="#script">11. اسکریپت یکپارچه <span class="nav-badge">Auto</span></a></li>
+            <li><a href="#workflow">12. Workflow CTF <span class="nav-badge">Summary</span></a></li>
+            <li><a href="#summary_tbl">13. جدول خلاصه <span class="nav-badge">Table</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>Cheat Sheet شمارش سرویس‌ها (Service Enum)</h1>
+            <p>نسخه کامل و بدون حذفیات - تمام دستورات، سناریوها و ترفندهای CTF</p>
+        </header>
+
+        <!-- Table of Tools -->
+        <section class="tool-section">
+            <h2 class="tool-title">📋 فهرست کامل ابزارهای Service Enumeration</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>سرویس</th>
+                            <th>پورت</th>
+                            <th>ابزارهای اصلی</th>
+                            <th>اولویت CTF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>FTP</td><td>21</td><td>nmap, ftp, hydra</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>2</td><td>SSH</td><td>22</td><td>nmap, ssh, hydra</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>3</td><td>SMTP</td><td>25</td><td>nmap, nc, telnet</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>4</td><td>DNS</td><td>53</td><td>dig, dnsrecon, dnsenum</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>5</td><td>HTTP/HTTPS</td><td>80/443</td><td>whatweb, gobuster, ffuf, curl</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>6</td><td>SMB</td><td>139/445</td><td>enum4linux, smbclient, smbmap</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>7</td><td>SNMP</td><td>161</td><td>snmpwalk, onesixtyone</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>8</td><td>LDAP</td><td>389</td><td>ldapsearch, nmap</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>9</td><td>MySQL</td><td>3306</td><td>mysql, nmap</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>10</td><td>PostgreSQL</td><td>5432</td><td>psql, nmap</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>11</td><td>Redis</td><td>6379</td><td>redis-cli, nmap</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>12</td><td>RDP</td><td>3389</td><td>nmap, xfreerdp</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>13</td><td>NFS</td><td>2049</td><td>nmap, showmount</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>14</td><td>Rsync</td><td>873</td><td>nmap, rsync</td><td>⭐⭐</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 1. FTP -->
+        <section id="ftp" class="tool-section">
+            <h2 class="tool-title">1️⃣ FTP Enumeration (Port 21)</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration سرویس FTP برای پیدا کردن اطلاعات، فایل‌ها و دسترسی‌ها</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Nmap Scripts ====================
+
+# اسکن FTP با Nmap
+nmap -sV -p21 --script=ftp-* TARGET
+
+# اسکن با تشخیص نسخه
+nmap -sV -p21 --script=ftp-anon,ftp-bounce,ftp-proftpd-backdoor TARGET
+
+# اسکن کامل FTP
+nmap -p21 --script=ftp-anon,ftp-bounce,ftp-brute,ftp-proftpd-backdoor,ftp-syst TARGET
+
+# ==================== Anonymous Login ====================
+
+# اتصال با Anonymous
+ftp TARGET
+> Username: anonymous
+> Password: anonymous
+
+# اتصال با ftp command
+ftp -n TARGET <<EOF
+user anonymous anonymous
+ls
+quit
+EOF
+
+# ==================== Brute Force ====================
+
+# Hydra FTP Brute Force
+hydra -l admin -P /usr/share/wordlists/rockyou.txt ftp://TARGET -t 4 -f
+
+# Hydra با لیست کاربران
+hydra -L users.txt -P /usr/share/wordlists/rockyou.txt ftp://TARGET -t 4</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. بررسی Anonymous
+ftp -n TARGET <<EOF
+user anonymous anonymous
+ls
+quit
+EOF
+
+# 2. دریافت لیست فایل‌ها
+ftp -n TARGET <<EOF
+user anonymous anonymous
+ls -la
+quit
+EOF
+
+# 3. دانلود فایل
+ftp -n TARGET <<EOF
+user anonymous anonymous
+get backup.zip
+quit
+EOF
+
+# 4. آپلود فایل
+ftp -n TARGET <<EOF
+user anonymous anonymous
+put payload.php
+quit
+EOF
+
+# 5. بررسی نسخه
+nmap -sV -p21 TARGET | grep ftp
+
+# 6. اسکن با hydra
+hydra -l admin -P /usr/share/wordlists/rockyou.txt ftp://TARGET -t 4 -vV
+
+# 7. اسکن با medusa
+medusa -h TARGET -u admin -P /usr/share/wordlists/rockyou.txt -M ftp -t 4
+
+# 8. دریافت بنر
+nc -nv TARGET 21
+
+# 9. بررسی ProFTPD
+nmap -p21 --script=ftp-proftpd-backdoor TARGET
+
+# 10. بررسی vsftpd
+nmap -p21 --script=ftp-vsftpd-backdoor TARGET</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. اسکن کامل FTP
+nmap -p21 --script=ftp-* -sV TARGET
+
+# 2. دانلود recursive
+wget -r ftp://anonymous:anonymous@TARGET/
+
+# 3. بررسی فایل‌های مخفی
+ftp -n TARGET <<EOF
+user anonymous anonymous
+ls -la
+find .
+quit
+EOF
+
+# 4. بررسی دسترسی نوشتن
+ftp -n TARGET <<EOF
+user anonymous anonymous
+put /etc/passwd test.txt
+quit
+EOF</code></pre>
+            </div>
+        </section>
+
+        <!-- 2. SSH -->
+        <section id="ssh" class="tool-section">
+            <h2 class="tool-title">2️⃣ SSH Enumeration (Port 22)</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration سرویس SSH برای پیدا کردن نسخه و کاربران</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Nmap Scripts ====================
+
+# اسکن SSH با Nmap
+nmap -sV -p22 --script=ssh-* TARGET
+
+# اسکن با تشخیص نسخه
+nmap -sV -p22 --script=ssh-hostkey,ssh-auth-methods TARGET
+
+# اسکن کامل SSH
+nmap -p22 --script=ssh-* -sV TARGET
+
+# ==================== Version & Banner ====================
+
+# دریافت نسخه
+nmap -sV -p22 TARGET | grep ssh
+
+# دریافت بنر
+nc -nv TARGET 22
+
+# ==================== Brute Force ====================
+
+# Hydra SSH Brute Force
+hydra -l root -P /usr/share/wordlists/rockyou.txt ssh://TARGET -t 4 -f
+
+# Hydra با لیست کاربران
+hydra -L users.txt -P /usr/share/wordlists/rockyou.txt ssh://TARGET -t 4</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. بررسی نسخه
+nmap -sV -p22 TARGET | grep -i "ssh"
+
+# 2. دریافت بنر
+nc -nv TARGET 22
+
+# 3. بررسی روش‌های احراز
+nmap -p22 --script=ssh-auth-methods TARGET
+
+# 4. بررسی کلیدهای میزبان
+nmap -p22 --script=ssh-hostkey TARGET
+
+# 5. بررسی SSHv1
+nmap -p22 --script=sshv1 TARGET
+
+# 6. بررسی با hydra
+hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://TARGET -t 4 -vV
+
+# 7. اتصال با ssh
+ssh -o StrictHostKeyChecking=no user@TARGET
+
+# 8. بررسی پورت های جایگزین
+nmap -p22,2222,22222 --script=ssh-* TARGET
+
+# 9. بررسی RSA key
+ssh -v user@TARGET 2>&1 | grep -i "key"
+
+# 10. بررسی با medusa
+medusa -h TARGET -u root -P /usr/share/wordlists/rockyou.txt -M ssh -t 4</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. اسکن کامل SSH
+nmap -p22 --script=ssh-* -sV -A TARGET
+
+# 2. بررسی CVE
+nmap -p22 --script=ssh-* --script-args=ssh.vulncheck=TARGET
+
+# 3. بررسی با SSH Weak Ciphers
+nmap -p22 --script=ssh2-enum-algos TARGET
+
+# 4. بررسی با SSH1
+nmap -p22 --script=sshv1 TARGET
+
+# 5. بررسی با hydra با کاربران مختلف
+hydra -L /usr/share/wordlists/metasploit/unix_users.txt -P /usr/share/wordlists/rockyou.txt ssh://TARGET -t 4</code></pre>
+            </div>
+        </section>
+
+        <!-- 3. SMTP -->
+        <section id="smtp" class="tool-section">
+            <h2 class="tool-title">3️⃣ SMTP Enumeration (Port 25)</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration سرویس SMTP برای پیدا کردن کاربران و اطلاعات</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Nmap Scripts ====================
+
+# اسکن SMTP با Nmap
+nmap -sV -p25 --script=smtp-* TARGET
+
+# اسکن با VRFY
+nmap -p25 --script=smtp-vrfy TARGET
+
+# اسکن کامل SMTP
+nmap -p25 --script=smtp-* -sV TARGET
+
+# ==================== VRFY Enumeration ====================
+
+# تست VRFY
+nc TARGET 25 <<EOF
+VRFY root
+VRFY admin
+VRFY test
+QUIT
+EOF</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. دریافت بنر
+nc -nv TARGET 25
+
+# 2. بررسی VRFY
+nc TARGET 25 <<EOF
+VRFY root
+VRFY admin
+VRFY postmaster
+VRFY test
+QUIT
+EOF
+
+# 3. بررسی EXPN
+nc TARGET 25 <<EOF
+EXPN root
+EXPN admin
+QUIT
+EOF
+
+# 4. بررسی با Nmap VRFY
+nmap -p25 --script=smtp-vrfy TARGET
+
+# 5. بررسی با Nmap Enum
+nmap -p25 --script=smtp-enum-users TARGET
+
+# 6. بررسی با telnet
+telnet TARGET 25
+VRFY root
+QUIT
+
+# 7. بررسی Open Relay
+nmap -p25 --script=smtp-open-relay TARGET
+
+# 8. بررسی با smtp-user-enum
+smtp-user-enum -M VRFY -U /usr/share/wordlists/metasploit/unix_users.txt -t TARGET
+
+# 9. بررسی با smtp-user-enum (RCPT)
+smtp-user-enum -M RCPT -U /usr/share/wordlists/metasploit/unix_users.txt -t TARGET
+
+# 10. بررسی کامل
+nmap -p25 --script=smtp-* -sV TARGET</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. بررسی با لیست کاربران
+for user in root admin postmaster test www ftp; do
+    echo "VRFY $user" | nc TARGET 25
+done
+
+# 2. بررسی با RCPT
+nc TARGET 25 <<EOF
+MAIL FROM: test@example.com
+RCPT TO: root
+RCPT TO: admin
+QUIT
+EOF
+
+# 3. بررسی با Nmap Enum
+nmap -p25 --script=smtp-enum-users --script-args=smtp-enum-users.methods={VRFY,EXPN,RCPT} TARGET
+
+# 4. بررسی با smtp-user-enum (EXPN)
+smtp-user-enum -M EXPN -U /usr/share/wordlists/metasploit/unix_users.txt -t TARGET</code></pre>
+            </div>
+        </section>
+
+        <!-- 4. DNS -->
+        <section id="dns" class="tool-section">
+            <h2 class="tool-title">4️⃣ DNS Enumeration (Port 53)</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration سرویس DNS برای پیدا کردن زیردامنه‌ها و اطلاعات</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Nmap Scripts ====================
+
+# اسکن DNS با Nmap
+nmap -sV -p53 --script=dns-* TARGET
+
+# اسکن با Zone Transfer
+nmap -p53 --script=dns-zone-transfer TARGET
+
+# ==================== Zone Transfer ====================
+
+# بررسی Zone Transfer
+dnsrecon -d example.com -t axfr
+
+# با dig
+dig @TARGET example.com AXFR
+
+# با host
+host -t AXFR example.com TARGET
+
+# ==================== Subdomain Enumeration ====================
+
+# با dnsrecon
+dnsrecon -d example.com -t std
+dnsrecon -d example.com -t brt
+dnsrecon -d example.com -t brt -D /usr/share/wordlists/dnsmap.txt
+
+# با dnsenum
+dnsenum example.com
+dnsenum -f /usr/share/wordlists/dnsmap.txt example.com
+
+# با dig
+for sub in www mail ftp ssh admin test dev api; do
+    dig $sub.example.com A +short
+done</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. Zone Transfer
+dnsrecon -d example.com -t axfr
+
+# 2. Zone Transfer با dig
+dig @TARGET example.com AXFR
+
+# 3. Zone Transfer با host
+host -t AXFR example.com TARGET
+
+# 4. Subdomain Enumeration
+dnsrecon -d example.com -t std
+
+# 5. Subdomain Brute Force
+dnsrecon -d example.com -t brt -D /usr/share/wordlists/dnsmap.txt
+
+# 6. با dnsenum
+dnsenum example.com -o dnsenum.txt
+
+# 7. با dnsrecon روی زیردامنه‌ها
+dnsrecon -d example.com -t brt -D /usr/share/wordlists/dirb/common.txt
+
+# 8. با Nmap Zone Transfer
+nmap -p53 --script=dns-zone-transfer TARGET
+
+# 9. با Nmap DNS Recursion
+nmap -p53 --script=dns-recursion TARGET
+
+# 10. با Nmap DNS NSEC
+nmap -p53 --script=dns-nsec-enum TARGET
+
+# 11. با Nmap DNS Service
+nmap -p53 --script=dns-service TARGET
+
+# 12. با dnsrecon روی همه موارد
+dnsrecon -d example.com -t all
+
+# 13. با dig روی زیردامنه‌ها
+for word in $(cat /usr/share/wordlists/dnsmap.txt); do
+    dig $word.example.com A +short
+done
+
+# 14. با fuzz
+ffuf -u http://example.com -H "Host: FUZZ.example.com" -w /usr/share/wordlists/dnsmap.txt
+
+# 15. بررسی کامل
+dnsrecon -d example.com -t all -o dns_output.txt</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. بررسی Wildcard
+dig *.example.com A +short
+
+# 2. بررسی DNSSEC
+dig example.com A +dnssec
+
+# 3. بررسی با dnsrecon روی NS
+dnsrecon -d example.com -t nsec
+
+# 4. بررسی با dnsrecon روی SRV
+dnsrecon -d example.com -t srv
+
+# 5. Reverse DNS
+dnsrecon -r 192.168.1.0/24
+
+# 6. بررسی با Nmap
+nmap -p53 --script=dns-* -sU TARGET
+
+# 7. بررسی با dig و لیست
+dig example.com +noall +answer +norecurse NS
+
+# 8. بررسی با dig و trace
+dig example.com +trace</code></pre>
+            </div>
+        </section>
+
+        <!-- 5. SMB -->
+        <section id="smb" class="tool-section">
+            <h2 class="tool-title">5️⃣ SMB Enumeration (Port 139/445) ⭐⭐⭐⭐⭐</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration سرویس SMB برای پیدا کردن Shares, Users, Permissions</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Nmap Scripts ====================
+
+# اسکن SMB با Nmap
+nmap -p139,445 --script=smb-* TARGET
+
+# اسکن با Enum Shares
+nmap -p139,445 --script=smb-enum-shares TARGET
+
+# اسکن با Enum Users
+nmap -p139,445 --script=smb-enum-users TARGET
+
+# اسکن کامل
+nmap -p139,445 --script=smb-* -sV TARGET
+
+# ==================== enum4linux ====================
+
+# Enumeration کامل
+enum4linux TARGET
+
+# Enumeration Users
+enum4linux -U TARGET
+
+# Enumeration Shares
+enum4linux -S TARGET
+
+# Enumeration OS
+enum4linux -o TARGET
+
+# ==================== smbclient ====================
+
+# لیست Shares
+smbclient -L //TARGET -N
+
+# اتصال به Share
+smbclient //TARGET/SHARE -N
+
+# اتصال با Credentials
+smbclient //TARGET/SHARE -U username
+
+# ==================== smbmap ====================
+
+# بررسی Shares
+smbmap -H TARGET
+
+# بررسی با Credentials
+smbmap -H TARGET -u username -p password</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. enum4linux کامل
+enum4linux TARGET > enum4linux.txt
+
+# 2. enum4linux Users
+enum4linux -U TARGET
+
+# 3. enum4linux Shares
+enum4linux -S TARGET
+
+# 4. enum4linux OS
+enum4linux -o TARGET
+
+# 5. smbclient لیست
+smbclient -L //TARGET -N
+
+# 6. smbclient اتصال
+smbclient //TARGET/Public -N
+
+# 7. smbclient با Credentials
+smbclient //TARGET/Backup -U admin%password
+
+# 8. smbmap
+smbmap -H TARGET
+
+# 9. smbmap با Credentials
+smbmap -H TARGET -u admin -p password
+
+# 10. Nmap SMB Enum
+nmap -p445 --script=smb-enum-shares TARGET
+
+# 11. Nmap SMB Users
+nmap -p445 --script=smb-enum-users TARGET
+
+# 12. Nmap SMB OS
+nmap -p445 --script=smb-os-discovery TARGET
+
+# 13. Nmap SMB Security
+nmap -p445 --script=smb-security-mode TARGET
+
+# 14. Nmap SMB Vuln
+nmap -p445 --script=smb-vuln-* TARGET
+
+# 15. بررسی با rpcclient
+rpcclient -U "" -N TARGET
+> srvinfo
+> enumdomusers
+> enumdomgroups
+> shares
+> quit
+
+# 16. دانلود از SMB
+smbclient //TARGET/Public -N -c "get file.txt"
+
+# 17. آپلود به SMB
+smbclient //TARGET/Public -N -c "put local.txt"
+
+# 18. بررسی با smbget
+smbget -R smb://TARGET/Public
+
+# 19. بررسی با smbtree
+smbtree -N
+
+# 20. بررسی کامل SMB
+nmap -p139,445 --script=smb-* -sV TARGET -oA smb_scan</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. بررسی SMB Signing
+nmap -p445 --script=smb-security-mode TARGET
+
+# 2. بررسی SMB1
+nmap -p445 --script=smb-protocols TARGET
+
+# 3. بررسی Null Session
+enum4linux -a TARGET | grep -i "null"
+
+# 4. بررسی با enum4linux روی SMB1
+enum4linux -a -u "" -p "" TARGET
+
+# 5. بررسی با smbclient روی همه Shares
+for share in $(smbclient -L //TARGET -N 2>/dev/null | grep -E "^[[:space:]]+\w+" | awk '{print $1}'); do
+    echo "Testing $share..."
+    smbclient //TARGET/$share -N -c "ls" 2>/dev/null
+done
+
+# 6. بررسی با Nmap SMB OS
+nmap -p445 --script=smb-os-discovery --script-args=smb-os-discovery.use-remote-os TARGET
+
+# 7. بررسی با Nmap SMB Vuln
+nmap -p445 --script=smb-vuln-* --script-args=unsafe=1 TARGET
+
+# 8. بررسی با Nmap SMB Enum
+nmap -p445 --script=smb-enum-shares,smb-enum-users TARGET
+
+# 9. بررسی با rpcclient
+echo "enumdomusers" | rpcclient -U "" -N TARGET
+
+# 10. بررسی با enum4linux تمام اطلاعات
+enum4linux -a TARGET 2>/dev/null | tee enum4linux_full.txt</code></pre>
+            </div>
+        </section>
+
+        <!-- 6. SNMP -->
+        <section id="snmp" class="tool-section">
+            <h2 class="tool-title">6️⃣ SNMP Enumeration (Port 161) ⭐⭐⭐⭐</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration سرویس SNMP برای پیدا کردن اطلاعات سیستم</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Nmap Scripts ====================
+
+# اسکن SNMP با Nmap
+nmap -sU -p161 --script=snmp-* TARGET
+
+# اسکن با Enum
+nmap -sU -p161 --script=snmp-* -sV TARGET
+
+# ==================== snmpwalk ====================
+
+# با Community Public
+snmpwalk -v2c -c public TARGET
+
+# با Community Private
+snmpwalk -v2c -c private TARGET
+
+# دریافت System Info
+snmpwalk -v2c -c public TARGET system
+
+# دریافت Interfaces
+snmpwalk -v2c -c public TARGET interfaces
+
+# دریافت Processes
+snmpwalk -v2c -c public TARGET processes
+
+# ==================== onesixtyone ====================
+
+# تست Community Strings
+onesixtyone -c /usr/share/wordlists/snmp.txt TARGET</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. snmpwalk با public
+snmpwalk -v2c -c public TARGET
+
+# 2. snmpwalk با private
+snmpwalk -v2c -c private TARGET
+
+# 3. snmpwalk System Info
+snmpwalk -v2c -c public TARGET system
+
+# 4. snmpwalk Interfaces
+snmpwalk -v2c -c public TARGET interfaces
+
+# 5. snmpwalk Processes
+snmpwalk -v2c -c public TARGET processes
+
+# 6. snmpwalk Users
+snmpwalk -v2c -c public TARGET .1.3.6.1.4.1.77.1.2.25
+
+# 7. snmpwalk Network
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.4
+
+# 8. snmpwalk Software
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.25.6.3.1.2
+
+# 9. onesixtyone
+onesixtyone -c /usr/share/wordlists/snmp.txt TARGET
+
+# 10. Nmap SNMP
+nmap -sU -p161 --script=snmp-* TARGET
+
+# 11. Nmap SNMP Info
+nmap -sU -p161 --script=snmp-info TARGET
+
+# 12. Nmap SNMP Enum
+nmap -sU -p161 --script=snmp-enum TARGET
+
+# 13. Nmap SNMP Win32
+nmap -sU -p161 --script=snmp-win32-* TARGET
+
+# 14. دریافت Hostname
+snmpwalk -v2c -c public TARGET system | grep -i "hostname"
+
+# 15. دریافت Location
+snmpwalk -v2c -c public TARGET system | grep -i "location"
+
+# 16. دریافت Contact
+snmpwalk -v2c -c public TARGET system | grep -i "contact"
+
+# 17. دریافت Processes کامل
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.25.4.2.1.2
+
+# 18. دریافت Services
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.25.4.2.1.4
+
+# 19. دریافت Users (Windows)
+snmpwalk -v2c -c public TARGET .1.3.6.1.4.1.77.1.2.25
+
+# 20. دریافت تمام اطلاعات
+snmpwalk -v2c -c public TARGET > snmp_full.txt</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. تست Community Strings
+for community in public private manager community; do
+    snmpwalk -v2c -c $community TARGET 2>/dev/null && echo "Found: $community"
+done
+
+# 2. دریافت اطلاعات کامل سیستم
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.1
+
+# 3. دریافت اطلاعات شبکه
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.4
+
+# 4. دریافت اطلاعات TCP
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.6
+
+# 5. دریافت اطلاعات UDP
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.7
+
+# 6. دریافت اطلاعات SNMP
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.11
+
+# 7. دریافت اطلاعات Routing
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.4.24.4.1
+
+# 8. دریافت ARP Table
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.4.22.1.2
+
+# 9. دریافت Sessions
+snmpwalk -v2c -c public TARGET .1.3.6.1.2.1.25.1.5.0
+
+# 10. دریافت با MIB
+snmpwalk -v2c -c public -m ALL TARGET system</code></pre>
+            </div>
+        </section>
+
+        <!-- 7. LDAP -->
+        <section id="ldap" class="tool-section">
+            <h2 class="tool-title">7️⃣ LDAP Enumeration (Port 389)</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration سرویس LDAP برای پیدا کردن اطلاعات دایرکتوری</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Nmap Scripts ====================
+
+# اسکن LDAP با Nmap
+nmap -p389 --script=ldap-* TARGET
+
+# ==================== ldapsearch ====================
+
+# جستجوی پایه
+ldapsearch -x -H ldap://TARGET -b ""
+
+# جستجوی Domain
+ldapsearch -x -H ldap://TARGET -b "dc=example,dc=com"
+
+# جستجوی Users
+ldapsearch -x -H ldap://TARGET -b "dc=example,dc=com" "(objectClass=user)"</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. ldapsearch پایه
+ldapsearch -x -H ldap://TARGET -b ""
+
+# 2. ldapsearch Domain
+ldapsearch -x -H ldap://TARGET -b "dc=example,dc=com"
+
+# 3. ldapsearch Users
+ldapsearch -x -H ldap://TARGET -b "dc=example,dc=com" "(objectClass=user)"
+
+# 4. ldapsearch Groups
+ldapsearch -x -H ldap://TARGET -b "dc=example,dc=com" "(objectClass=group)"
+
+# 5. ldapsearch Anonymous
+ldapsearch -x -H ldap://TARGET -b "dc=example,dc=com"
+
+# 6. ldapsearch با Credentials
+ldapsearch -x -H ldap://TARGET -D "cn=admin,dc=example,dc=com" -w password -b "dc=example,dc=com"
+
+# 7. Nmap LDAP
+nmap -p389 --script=ldap-* TARGET
+
+# 8. Nmap LDAP RootDSE
+nmap -p389 --script=ldap-rootdse TARGET
+
+# 9. Nmap LDAP Search
+nmap -p389 --script=ldap-search TARGET
+
+# 10. دریافت Domain
+ldapsearch -x -H ldap://TARGET -b "" | grep -i "domain"</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. دریافت Base DN
+ldapsearch -x -H ldap://TARGET -b "" -s base
+
+# 2. دریافت تمام اطلاعات
+ldapsearch -x -H ldap://TARGET -b "dc=example,dc=com" -s sub
+
+# 3. دریافت Users با password
+ldapsearch -x -H ldap://TARGET -b "dc=example,dc=com" "(objectClass=user)" userPassword
+
+# 4. دریافت Groups با members
+ldapsearch -x -H ldap://TARGET -b "dc=example,dc=com" "(objectClass=group)" member
+
+# 5. دریافت Organizational Units
+ldapsearch -x -H ldap://TARGET -b "dc=example,dc=com" "(objectClass=organizationalUnit)"</code></pre>
+            </div>
+        </section>
+
+        <!-- 8. MySQL -->
+        <section id="mysql" class="tool-section">
+            <h2 class="tool-title">8️⃣ MySQL Enumeration (Port 3306)</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration سرویس MySQL برای پیدا کردن نسخه و دیتابیس‌ها</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Nmap Scripts ====================
+
+# اسکن MySQL با Nmap
+nmap -p3306 --script=mysql-* TARGET
+
+# اسکن با Info
+nmap -p3306 --script=mysql-info TARGET
+
+# اسکن با Users
+nmap -p3306 --script=mysql-users TARGET
+
+# ==================== mysql client ====================
+
+# اتصال با root
+mysql -h TARGET -u root
+
+# اتصال با password
+mysql -h TARGET -u root -p</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. بررسی نسخه
+nmap -sV -p3306 TARGET | grep mysql
+
+# 2. mysql-info
+nmap -p3306 --script=mysql-info TARGET
+
+# 3. mysql-users
+nmap -p3306 --script=mysql-users TARGET
+
+# 4. mysql-empty-password
+nmap -p3306 --script=mysql-empty-password TARGET
+
+# 5. mysql-query با query خاص
+nmap -p3306 --script=mysql-query --script-args=mysql-query.query='SELECT VERSION();' TARGET
+
+# 6. mysql-databases
+nmap -p3306 --script=mysql-databases TARGET
+
+# 7. mysql-variables
+nmap -p3306 --script=mysql-variables TARGET
+
+# 8. اتصال با mysql
+mysql -h TARGET -u root --skip-ssl
+
+# 9. اتصال با password empty
+mysql -h TARGET -u root -p''
+
+# 10. اتصال با Credentials
+mysql -h TARGET -u admin -padmin
+
+# 11. اجرا با SQL
+mysql -h TARGET -u root -e 'SHOW DATABASES;'
+
+# 12. اجرا با SQL (بدون password)
+mysql -h TARGET -u root -e 'SHOW DATABASES;' --skip-ssl
+
+# 13. بررسی با hydra
+hydra -l root -P /usr/share/wordlists/rockyou.txt mysql://TARGET -t 4
+
+# 14. بررسی با medusa
+medusa -h TARGET -u root -P /usr/share/wordlists/rockyou.txt -M mysql -t 4
+
+# 15. بررسی با nmap کامل
+nmap -p3306 --script=mysql-* -sV TARGET</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. بررسی بدون password
+mysql -h TARGET -u root -e "SELECT VERSION();" 2>/dev/null
+
+# 2. بررسی با default credentials
+mysql -h TARGET -u root -p'' -e "SELECT VERSION();"
+
+# 3. بررسی Database Listing
+mysql -h TARGET -u root -e "SHOW DATABASES;" 2>/dev/null
+
+# 4. بررسی Tables
+mysql -h TARGET -u root -D mysql -e "SELECT user,host,authentication_string FROM user;" 2>/dev/null
+
+# 5. بررسی با nmap brute
+nmap -p3306 --script=mysql-* --script-args=mysql-brute.username=root,mysql-brute.password_list=/usr/share/wordlists/rockyou.txt TARGET</code></pre>
+            </div>
+        </section>
+
+        <!-- 9. Redis -->
+        <section id="redis" class="tool-section">
+            <h2 class="tool-title">9️⃣ Redis Enumeration (Port 6379)</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration سرویس Redis برای پیدا کردن کلیدها و اطلاعات</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Nmap Scripts ====================
+
+# اسکن Redis با Nmap
+nmap -p6379 --script=redis-* TARGET
+
+# ==================== redis-cli ====================
+
+# اتصال به Redis
+redis-cli -h TARGET -p 6379
+
+# دریافت اطلاعات
+redis-cli -h TARGET -p 6379 INFO
+
+# دریافت Keys
+redis-cli -h TARGET -p 6379 KEYS *</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. Nmap Redis
+nmap -p6379 --script=redis-* TARGET
+
+# 2. redis-cli INFO
+redis-cli -h TARGET -p 6379 INFO
+
+# 3. redis-cli KEYS
+redis-cli -h TARGET -p 6379 KEYS *
+
+# 4. redis-cli GET
+redis-cli -h TARGET -p 6379 GET key
+
+# 5. redis-cli SCAN
+redis-cli -h TARGET -p 6379 SCAN 0
+
+# 6. redis-cli CONFIG
+redis-cli -h TARGET -p 6379 CONFIG GET *
+
+# 7. redis-cli CLIENT
+redis-cli -h TARGET -p 6379 CLIENT LIST
+
+# 8. redis-cli DBSIZE
+redis-cli -h TARGET -p 6379 DBSIZE
+
+# 9. redis-cli FLUSHALL (احتیاط!)
+redis-cli -h TARGET -p 6379 FLUSHALL
+
+# 10. Nmap Redis Info
+nmap -p6379 --script=redis-info TARGET
+
+# 11. Nmap Redis Brute
+nmap -p6379 --script=redis-brute TARGET
+
+# 12. بررسی با nc
+echo "INFO" | nc TARGET 6379
+
+# 13. بررسی با telnet
+telnet TARGET 6379
+INFO
+QUIT
+
+# 14. دریافت keys با pattern
+redis-cli -h TARGET -p 6379 KEYS "admin:*"
+
+# 15. دریافت keys با scan
+redis-cli -h TARGET -p 6379 SCAN 0 MATCH "user:*" COUNT 100</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. اتصال بدون password
+redis-cli -h TARGET -p 6379 PING
+
+# 2. دریافت کلیدهای حساس
+redis-cli -h TARGET -p 6379 KEYS "*pass*"
+redis-cli -h TARGET -p 6379 KEYS "*user*"
+redis-cli -h TARGET -p 6379 KEYS "*admin*"
+redis-cli -h TARGET -p 6379 KEYS "*token*"
+
+# 3. دریافت اطلاعات کامل
+redis-cli -h TARGET -p 6379 INFO ALL
+
+# 4. دریافت Client List
+redis-cli -h TARGET -p 6379 CLIENT LIST
+
+# 5. دریافت Config
+redis-cli -h TARGET -p 6379 CONFIG GET maxmemory
+redis-cli -h TARGET -p 6379 CONFIG GET requirepass
+
+# 6. بررسی با nmap کامل
+nmap -p6379 --script=redis-* -sV TARGET</code></pre>
+            </div>
+        </section>
+
+        <!-- 10. PostgreSQL -->
+        <section id="postgres" class="tool-section">
+            <h2 class="tool-title">🔟 PostgreSQL Enumeration (Port 5432)</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration سرویس PostgreSQL</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Nmap Scripts ====================
+
+# اسکن PostgreSQL با Nmap
+nmap -p5432 --script=pgsql-* TARGET
+
+# ==================== psql ====================
+
+# اتصال با psql
+psql -h TARGET -U postgres
+
+# اجرا با SQL
+psql -h TARGET -U postgres -c "SELECT VERSION();"</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. Nmap PostgreSQL
+nmap -p5432 --script=pgsql-* TARGET
+
+# 2. Nmap PgSQL Info
+nmap -p5432 --script=pgsql-info TARGET
+
+# 3. psql با postgres
+psql -h TARGET -U postgres -c "SELECT VERSION();"
+
+# 4. psql بدون password
+psql -h TARGET -U postgres -c "SELECT VERSION();" --password
+
+# 5. psql با Credentials
+psql -h TARGET -U postgres -W -c "SELECT VERSION();"
+
+# 6. psql با Database
+psql -h TARGET -U postgres -d postgres -c "SELECT datname FROM pg_database;"
+
+# 7. psql با Users
+psql -h TARGET -U postgres -c "SELECT usename FROM pg_user;"
+
+# 8. Nmap Brute
+nmap -p5432 --script=pgsql-brute TARGET
+
+# 9. بررسی با hydra
+hydra -l postgres -P /usr/share/wordlists/rockyou.txt postgresql://TARGET -t 4
+
+# 10. بررسی کامل
+nmap -p5432 --script=pgsql-* -sV TARGET</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. اتصال با default
+psql -h TARGET -U postgres -c "SELECT VERSION();" 2>/dev/null
+
+# 2. دریافت Database List
+psql -h TARGET -U postgres -c "\l" 2>/dev/null
+
+# 3. دریافت Users
+psql -h TARGET -U postgres -c "\du" 2>/dev/null
+
+# 4. دریافت Tables
+psql -h TARGET -U postgres -d postgres -c "\dt" 2>/dev/null
+
+# 5. بررسی با nmap brute
+nmap -p5432 --script=pgsql-brute --script-args=pgsql-brute.username=postgres,pgsql-brute.password_list=/usr/share/wordlists/rockyou.txt TARGET</code></pre>
+            </div>
+        </section>
+
+        <!-- 11. AUTO SCRIPT -->
+        <section id="script" class="tool-section">
+            <h2 class="tool-title">📝 اسکریپت کامل Service Enumeration Auto</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اجرای خودکار همه ابزارها برای جمع‌آوری سریع اطلاعات</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">#!/bin/bash
+# service_cheatsheet.sh - اسکریپت کامل Service Enumeration
+
+TARGET=${1:-192.168.1.10}
+OUTPUT_DIR="service_enum_$(date +%Y%m%d_%H%M%S)"
+mkdir -p $OUTPUT_DIR
+
+echo "========================================="
+echo "  SERVICE ENUMERATION CHEAT SHEET"
+echo "========================================="
+
+# 1. Nmap NSE All
+echo "[1/12] Running Nmap NSE..."
+nmap -sC -sV $TARGET > $OUTPUT_DIR/01_nmap_nse.txt
+echo "✓ Nmap NSE saved"
+
+# 2. FTP
+echo "[2/12] Enumerating FTP..."
+nmap -p21 --script=ftp-* $TARGET > $OUTPUT_DIR/02_ftp.txt
+echo "✓ FTP saved"
+
+# 3. SSH
+echo "[3/12] Enumerating SSH..."
+nmap -p22 --script=ssh-* $TARGET > $OUTPUT_DIR/03_ssh.txt
+echo "✓ SSH saved"
+
+# 4. SMTP
+echo "[4/12] Enumerating SMTP..."
+nmap -p25 --script=smtp-* $TARGET > $OUTPUT_DIR/04_smtp.txt
+echo "✓ SMTP saved"
+
+# 5. DNS
+echo "[5/12] Enumerating DNS..."
+dnsrecon -d $TARGET -t all > $OUTPUT_DIR/05_dns.txt
+echo "✓ DNS saved"
+
+# 6. SMB
+echo "[6/12] Enumerating SMB..."
+nmap -p139,445 --script=smb-* $TARGET > $OUTPUT_DIR/06_smb.txt
+enum4linux $TARGET > $OUTPUT_DIR/06_enum4linux.txt
+smbclient -L //$TARGET -N > $OUTPUT_DIR/06_smbclient.txt 2>/dev/null
+echo "✓ SMB saved"
+
+# 7. SNMP
+echo "[7/12] Enumerating SNMP..."
+nmap -sU -p161 --script=snmp-* $TARGET > $OUTPUT_DIR/07_snmp.txt
+snmpwalk -v2c -c public $TARGET > $OUTPUT_DIR/07_snmpwalk.txt 2>/dev/null
+echo "✓ SNMP saved"
+
+# 8. LDAP
+echo "[8/12] Enumerating LDAP..."
+nmap -p389 --script=ldap-* $TARGET > $OUTPUT_DIR/08_ldap.txt
+echo "✓ LDAP saved"
+
+# 9. MySQL
+echo "[9/12] Enumerating MySQL..."
+nmap -p3306 --script=mysql-* $TARGET > $OUTPUT_DIR/09_mysql.txt
+echo "✓ MySQL saved"
+
+# 10. Redis
+echo "[10/12] Enumerating Redis..."
+nmap -p6379 --script=redis-* $TARGET > $OUTPUT_DIR/10_redis.txt
+echo "✓ Redis saved"
+
+# 11. PostgreSQL
+echo "[11/12] Enumerating PostgreSQL..."
+nmap -p5432 --script=pgsql-* $TARGET > $OUTPUT_DIR/11_postgresql.txt
+echo "✓ PostgreSQL saved"
+
+# 12. RDP
+echo "[12/12] Enumerating RDP..."
+nmap -p3389 --script=rdp-* $TARGET > $OUTPUT_DIR/12_rdp.txt
+echo "✓ RDP saved"
+
+echo ""
+echo "========================================="
+echo "  ✅ ENUMERATION COMPLETE"
+echo "========================================="
+echo "📁 Output: $OUTPUT_DIR"
+ls -la $OUTPUT_DIR</code></pre>
+            </div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Usage</span> نحوه استفاده</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. ذخیره اسکریپت
+nano service_cheatsheet.sh
+
+# 2. قابل اجرا کردن
+chmod +x service_cheatsheet.sh
+
+# 3. اجرا
+./service_cheatsheet.sh 192.168.1.10
+
+# 4. اجرا روی دامنه
+./service_cheatsheet.sh example.com</code></pre>
+            </div>
+        </section>
+
+        <!-- 12. WORKFLOW -->
+        <section id="workflow" class="tool-section">
+            <h2 class="tool-title">✅ خلاصه Workflow مسابقات CTF</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> ترتیب اجرای ابزارها در مسابقات CTF</div>
+            
+            <div class="workflow-box">
+                <p>1. Nmap NSE → همه سرویس‌ها</p>
+                <p>2. FTP → Anonymous, Version</p>
+                <p>3. SSH → Version, Banner</p>
+                <p>4. SMTP → VRFY, Users</p>
+                <p>5. DNS → Zone Transfer, Subdomains</p>
+                <p>6. SMB → Shares, Users, Permissions</p>
+                <p>7. SNMP → Community, System Info</p>
+                <p>8. LDAP → Directory Info</p>
+                <p>9. MySQL → Version, Database</p>
+                <p>10. Redis → Keys, Info</p>
+                <p>11. PostgreSQL → Version, Database</p>
+                <p>12. RDP → NLA, Info</p>
+            </div>
+        </section>
+
+        <!-- 13. SUMMARY TABLE -->
+        <section id="summary_tbl" class="tool-section">
+            <h2 class="tool-title">📊 جدول خلاصه سرویس‌ها</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>سرویس</th>
+                            <th>پورت</th>
+                            <th>ابزار اصلی</th>
+                            <th>دستور مهم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>FTP</td><td>21</td><td>nmap</td><td><code>nmap -p21 --script=ftp-* TARGET</code></td></tr>
+                        <tr><td>SSH</td><td>22</td><td>nmap</td><td><code>nmap -p22 --script=ssh-* TARGET</code></td></tr>
+                        <tr><td>SMTP</td><td>25</td><td>nc</td><td><code>nc TARGET 25</code></td></tr>
+                        <tr><td>DNS</td><td>53</td><td>dnsrecon</td><td><code>dnsrecon -d TARGET -t all</code></td></tr>
+                        <tr><td>HTTP</td><td>80/443</td><td>whatweb</td><td><code>whatweb -a 3 TARGET</code></td></tr>
+                        <tr><td>SMB</td><td>139/445</td><td>enum4linux</td><td><code>enum4linux TARGET</code></td></tr>
+                        <tr><td>SNMP</td><td>161</td><td>snmpwalk</td><td><code>snmpwalk -v2c -c public TARGET</code></td></tr>
+                        <tr><td>LDAP</td><td>389</td><td>ldapsearch</td><td><code>ldapsearch -x -H ldap://TARGET</code></td></tr>
+                        <tr><td>MySQL</td><td>3306</td><td>mysql</td><td><code>mysql -h TARGET -u root</code></td></tr>
+                        <tr><td>PostgreSQL</td><td>5432</td><td>psql</td><td><code>psql -h TARGET -U postgres</code></td></tr>
+                        <tr><td>Redis</td><td>6379</td><td>redis-cli</td><td><code>redis-cli -h TARGET INFO</code></td></tr>
+                        <tr><td>RDP</td><td>3389</td><td>nmap</td><td><code>nmap -p3389 --script=rdp-* TARGET</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#22d3ee';
+            btn.style.color = '#000';
+            btn.style.borderColor = '#22d3ee';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

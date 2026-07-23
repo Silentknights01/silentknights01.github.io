@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Recon Cheat Sheet - Full Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #58a6ff; /* Blue for Web */
+            --accent-color: #bc8cff; /* Purple accent */
+            --warn-color: #d29922;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(188, 140, 255, 0.1);
+            color: var(--accent-color);
+            border-right: 3px solid var(--accent-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(88, 166, 255, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(188, 140, 255, 0.2); color: var(--accent-color); }
+        .tag-tip { background: rgba(210, 153, 34, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 600px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* Workflow Block */
+        .workflow-box {
+            background: rgba(188, 140, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            line-height: 1.8;
+            color: var(--accent-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>🌐 WEB RECON</h1>
+            <p>Kali Tools - Full Edition</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی ابزار..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#whatweb">1. WHATWEB <span class="nav-badge">Tech</span></a></li>
+            <li><a href="#wafw00f">2. WAFW00F <span class="nav-badge">WAF</span></a></li>
+            <li><a href="#nikto">3. NIKTO <span class="nav-badge">Scanner</span></a></li>
+            <li><a href="#gobuster">4. GOBUSTER <span class="nav-badge">Dir Enum</span></a></li>
+            <li><a href="#ffuf">5. FFUF <span class="nav-badge">Fuzzer</span></a></li>
+            <li><a href="#dirb">6. DIRB <span class="nav-badge">Dir Enum</span></a></li>
+            <li><a href="#dirsearch">7. DIRSEARCH <span class="nav-badge">Dir Enum</span></a></li>
+            <li><a href="#curl">8. CURL <span class="nav-badge">HTTP</span></a></li>
+            <li><a href="#wget">9. WGET <span class="nav-badge">Download</span></a></li>
+            <li><a href="#httpie">10. HTTPIE <span class="nav-badge">HTTP</span></a></li>
+            <li><a href="#script">11. اسکریپت یکپارچه <span class="nav-badge">Auto</span></a></li>
+            <li><a href="#workflow">12. Workflow CTF <span class="nav-badge">Summary</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>Cheat Sheet بازنشانی وب (Web Recon)</h1>
+            <p>نسخه کامل و بدون حذفیات - تمام دستورات، سناریوها و ترفندهای CTF</p>
+        </header>
+
+        <!-- Table of Tools -->
+        <section class="tool-section">
+            <h2 class="tool-title">📋 فهرست کامل ابزارهای Web Recon</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>ابزار</th>
+                            <th>کاربرد اصلی</th>
+                            <th>اولویت CTF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>whatweb</td><td>شناسایی تکنولوژی</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>2</td><td>wafw00f</td><td>تشخیص WAF</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>3</td><td>nikto</td><td>اسکن وب‌سرور</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>4</td><td>gobuster</td><td>Directory/File Enumeration</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>5</td><td>ffuf</td><td>Web Fuzzing</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>6</td><td>dirb</td><td>Directory Enumeration</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>7</td><td>dirsearch</td><td>Directory/File Enumeration</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>8</td><td>curl</td><td>HTTP Headers & Files</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>9</td><td>wget</td><td>دانلود فایل</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>10</td><td>httpie</td><td>HTTP Client</td><td>⭐⭐⭐</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 1. WHATWEB -->
+        <section id="whatweb" class="tool-section">
+            <h2 class="tool-title">1️⃣ WHATWEB - Technology Fingerprinting</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> شناسایی تکنولوژی‌های استفاده شده در وب‌سایت</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اسکن ساده
+whatweb example.com
+
+# اسکن با سطح 3 (کامل‌تر)
+whatweb -a 3 example.com
+
+# اسکن با سطح 4 (همه چیز)
+whatweb -a 4 example.com
+
+# اسکن با نمایش همه چیز
+whatweb -v example.com
+
+# اسکن با خروجی JSON
+whatweb -a 3 -j example.com
+
+# اسکن با خروجی XML
+whatweb -a 3 -x example.com</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-base">Combined</span> دستورات ترکیبی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اسکن با User-Agent خاص
+whatweb -a 3 -U "Mozilla/5.0" example.com
+
+# اسکن با Cookie
+whatweb -a 3 -C "PHPSESSID=value" example.com
+
+# اسکن با Proxy
+whatweb -a 3 -P "http://127.0.0.1:8080" example.com
+
+# اسکن با Header خاص
+whatweb -a 3 -H "X-Forwarded-For: 127.0.0.1" example.com
+
+# اسکن با Timeout
+whatweb -a 3 -t 10 example.com
+
+# اسکن با تعداد Thread
+whatweb -a 3 -T 10 example.com</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. دریافت تکنولوژی‌های اصلی
+whatweb -a 3 example.com | grep -oE "(WordPress|Apache|PHP|Nginx|jQuery|Bootstrap)"
+
+# 2. دریافت CMS
+whatweb -a 3 example.com | grep -i "wordpress\|joomla\|drupal\|magento"
+
+# 3. دریافت Web Server
+whatweb -a 3 example.com | grep -i "apache\|nginx\|iis\|lighttpd"
+
+# 4. دریافت Framework
+whatweb -a 3 example.com | grep -i "laravel\|django\|rails\|spring"
+
+# 5. دریافت JS Libraries
+whatweb -a 3 example.com | grep -i "jquery\|react\|angular\|vue"
+
+# 6. دریافت نسخه‌ها
+whatweb -a 3 example.com | grep -oE "[0-9]+\.[0-9]+(?:\.[0-9]+)?"
+
+# 7. دریافت همه اطلاعات در JSON
+whatweb -a 3 -j example.com | jq '.'
+
+# 8. اسکن چندین دامنه
+for domain in example.com test.com target.org; do
+    whatweb -a 3 $domain >> results.txt
+done
+
+# 9. اسکن با نمایش فقط تکنولوژی
+whatweb -a 3 -q example.com
+
+# 10. اسکن با نمایش بنر
+whatweb -a 3 -b example.com
+
+# 11. دریافت IP و تکنولوژی
+whatweb -a 3 example.com | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'
+
+# 12. اسکن با استفاده از HTTPS
+whatweb -a 3 https://example.com</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. تشخیص دقیق CMS
+whatweb -a 3 example.com | grep -iE "wordpress|joomla|drupal|magento|shopify|wix"
+
+# 2. تشخیص CDN
+whatweb -a 3 example.com | grep -iE "cloudflare|akamai|fastly|cloudfront"
+
+# 3. تشخیص WAF
+whatweb -a 3 example.com | grep -iE "cloudflare|sucuri|modsecurity|aws"
+
+# 4. تشخیص زبان برنامه‌نویسی
+whatweb -a 3 example.com | grep -iE "php|python|ruby|java|asp"
+
+# 5. تشخیص دیتابیس
+whatweb -a 3 example.com | grep -iE "mysql|postgresql|mongodb|mariadb"
+
+# 6. تشخیص Analytics
+whatweb -a 3 example.com | grep -iE "google-analytics|gtag|ga.js"
+
+# 7. تشخیص Fonts
+whatweb -a 3 example.com | grep -iE "google-fonts|font-awesome"
+
+# 8. اسکن با سرعت بالا
+whatweb -a 3 -T 20 example.com
+
+# 9. اسکن با اجتناب از WAF
+whatweb -a 3 --random-ua example.com
+
+# 10. اسکن با فیلتر کردن
+whatweb -a 3 example.com | grep -v "HTTP"</code></pre>
+            </div>
+        </section>
+
+        <!-- 2. WAFW00F -->
+        <section id="wafw00f" class="tool-section">
+            <h2 class="tool-title">2️⃣ WAFW00F - WAF Detection</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> تشخیص وجود Web Application Firewall</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه و ترکیبی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# تشخیص WAF
+wafw00f example.com
+
+# تشخیص با خروجی JSON
+wafw00f -j example.com
+
+# تشخیص با خروجی XML
+wafw00f -x example.com
+
+# تشخیص با گزارش
+wafw00f -r report.html example.com
+
+# ==================== دستورات ترکیبی ====================
+
+# تشخیص با User-Agent خاص
+wafw00f -H "User-Agent: Mozilla/5.0" example.com
+
+# تشخیص با Proxy
+wafw00f -p http://127.0.0.1:8080 example.com
+
+# تشخیص چندین دامنه
+for domain in example.com test.com; do
+    wafw00f $domain
+done</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. تشخیص WAF (نمایش خلاصه)
+wafw00f example.com | grep -i "detected\|cloudflare\|sucuri"
+
+# 2. تشخیص دقیق WAF
+wafw00f example.com | grep -B 2 -A 2 "WAF"
+
+# 3. تشخیص با خروجی JSON
+wafw00f -j example.com | jq '.'
+
+# 4. تشخیص با خروجی XML
+wafw00f -x example.com | grep -i "waf"
+
+# 5. تشخیص چندین WAF
+wafw00f example.com | grep -i "Cloudflare\|AWS\|Sucuri\|ModSecurity"
+
+# 6. تشخیص با نمایش دلیل
+wafw00f -v example.com
+
+# 7. تشخیص با تست کامل
+wafw00f -o waf_results.txt example.com
+
+# 8. تشخیص با timeout
+wafw00f -t 10 example.com
+
+# 9. تشخیص با همه روش‌ها
+wafw00f -a example.com
+
+# 10. تشخیص با فهرست WAFها
+wafw00f -l</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. تشخیص با نمایش همه WAFهای احتمالی
+wafw00f example.com | grep -i "detected"
+
+# 2. تشخیص با فایل گزارش
+wafw00f -r waf_report.html example.com
+
+# 3. تشخیص با تست‌های خاص
+wafw00f -T 3 example.com
+
+# 4. تشخیص با proxy
+wafw00f -p http://127.0.0.1:8080 example.com
+
+# 5. تشخیص با User-Agent
+wafw00f -H "User-Agent: Mozilla/5.0" example.com
+
+# 6. تشخیص با فایل ورودی
+echo "example.com" > targets.txt
+wafw00f -f targets.txt
+
+# 7. تشخیص با نمایش خلاصه
+wafw00f example.com | tail -5
+
+# 8. تشخیص با نمایش فقط نتیجه
+wafw00f -q example.com</code></pre>
+            </div>
+        </section>
+
+        <!-- 3. NIKTO -->
+        <section id="nikto" class="tool-section">
+            <h2 class="tool-title">3️⃣ NIKTO - Web Server Scanner</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اسکن وب‌سرور برای پیدا کردن misconfiguration و فایل‌های حساس</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه و ترکیبی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# اسکن ساده
+nikto -h example.com
+
+# اسکن با SSL
+nikto -h https://example.com -ssl
+
+# اسکن با پورت خاص
+nikto -h example.com -p 8080
+
+# اسکن با خروجی HTML
+nikto -h example.com -o report.html
+
+# اسکن با خروجی XML
+nikto -h example.com -o report.xml
+
+# ==================== دستورات ترکیبی ====================
+
+# اسکن با User-Agent خاص
+nikto -h example.com -useragent "Mozilla/5.0"
+
+# اسکن با Proxy
+nikto -h example.com -useproxy http://127.0.0.1:8080
+
+# اسکن با Timeout
+nikto -h example.com -timeout 10
+
+# اسکن با تنظیمات
+nikto -h example.com -Tuning 12345</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. اسکن پایه
+nikto -h example.com
+
+# 2. اسکن با SSL
+nikto -h https://example.com -ssl
+
+# 3. اسکن با پورت 443
+nikto -h example.com -p 443 -ssl
+
+# 4. اسکن با نمایش همه چیز
+nikto -h example.com -Display V
+
+# 5. اسکن با خروجی HTML
+nikto -h example.com -o nikto_report.html
+
+# 6. اسکن با فایل تنظیمات
+nikto -h example.com -config nikto.conf
+
+# 7. اسکن با لیست پورت‌ها
+nikto -h example.com -p 80,443,8080,8443
+
+# 8. اسکن با تونینگ خاص
+nikto -h example.com -Tuning 4
+
+# 9. اسکن با آپدیت دیتابیس
+nikto -update
+
+# 10. اسکن با فیلتر کردن
+nikto -h example.com | grep -i "interesting\|vulnerable\|exposed"
+
+# 11. اسکن با نمایش فقط آسیب‌پذیری‌ها
+nikto -h example.com | grep -i "vulnerability"
+
+# 12. اسکن با نمایش فایل‌های حساس
+nikto -h example.com | grep -i "config\|backup\|.sql\|.log"
+
+# 13. اسکن با نمایش هدرها
+nikto -h example.com | grep -i "server\|x-powered\|x-frame"
+
+# 14. اسکن با نمایش Directory Listing
+nikto -h example.com | grep -i "directory listing"
+
+# 15. اسکن با نمایش Default Files
+nikto -h example.com | grep -i "default\|index"</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. اسکن با اجتناب از WAF
+nikto -h example.com -nossl -no404
+
+# 2. اسکن با نمایش Detailed
+nikto -h example.com -Display D
+
+# 3. اسکن با نمایش Debug
+nikto -h example.com -Display V -vhost
+
+# 4. اسکن با تونینگ
+nikto -h example.com -Tuning 123456789
+
+# 5. اسکن با فایل‌های خاص
+nikto -h example.com -mutate 1
+
+# 6. اسکن با فایل‌های ورودی
+nikto -h example.com -mutate 2
+
+# 7. اسکن با فایل‌های اضافی
+nikto -h example.com -mutate 3
+
+# 8. اسکن با اجتناب از 404
+nikto -h example.com -no404
+
+# 9. اسکن با آپدیت
+nikto -update
+
+# 10. اسکن با فایل تنظیمات
+nikto -h example.com -config /etc/nikto/nikto.conf</code></pre>
+            </div>
+        </section>
+
+        <!-- 4. GOBUSTER -->
+        <section id="gobuster" class="tool-section">
+            <h2 class="tool-title">4️⃣ GOBUSTER - Directory/File Enumeration ⭐⭐⭐⭐⭐</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> پیدا کردن دایرکتوری‌ها و فایل‌های مخفی</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه و ترکیبی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# Directory Enumeration
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt
+
+# File Enumeration با پسوند
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt -x php,txt,html
+
+# با تعداد Thread بالا
+gobuster dir -u http://example.com -w wordlist.txt -t 50
+
+# با نمایش Status Code
+gobuster dir -u http://example.com -w wordlist.txt -s 200,204,301,302,307,403
+
+# با خروجی JSON
+gobuster dir -u http://example.com -w wordlist.txt -o gobuster.json -j
+
+# ==================== دستورات ترکیبی ====================
+
+# با خروجی TXT
+gobuster dir -u http://example.com -w wordlist.txt -o gobuster.txt
+
+# با خروجی CSV
+gobuster dir -u http://example.com -w wordlist.txt -o gobuster.csv
+
+# با خروجی JSON
+gobuster dir -u http://example.com -w wordlist.txt -o gobuster.json -j
+
+# با نمایش فقط دایرکتوری‌ها
+gobuster dir -u http://example.com -w wordlist.txt | grep -i "directory"</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. اسکن دایرکتوری‌های رایج
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt -t 50
+
+# 2. اسکن با پسوند php
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt -x php -t 50
+
+# 3. اسکن با پسوند‌های مختلف
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt -x php,txt,html,js -t 50
+
+# 4. اسکن با فایل‌های big
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 50
+
+# 5. اسکن با نمایش Status Code
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt -t 50 -s 200,204,301,302,307,403
+
+# 6. اسکن با Cookie
+gobuster dir -u http://example.com -w wordlist.txt -c "PHPSESSID=value"
+
+# 7. اسکن با User-Agent خاص
+gobuster dir -u http://example.com -w wordlist.txt -a "Mozilla/5.0"
+
+# 8. اسکن با Proxy
+gobuster dir -u http://example.com -w wordlist.txt -p http://127.0.0.1:8080
+
+# 9. اسکن با زمان‌بندی
+gobuster dir -u http://example.com -w wordlist.txt -t 50 -q
+
+# 10. اسکن با فیلتر کردن
+gobuster dir -u http://example.com -w wordlist.txt -t 50 | grep -v "404"
+
+# 11. اسکن با نمایش اندازه
+gobuster dir -u http://example.com -w wordlist.txt -t 50 -l
+
+# 12. اسکن با فایل‌های خاص
+gobuster dir -u http://example.com -w /usr/share/wordlists/rockyou.txt -x php,txt
+
+# 13. اسکن با فایل‌های administrative
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt -t 50 | grep -i "admin\|login\|config"
+
+# 14. اسکن با فایل‌های backup
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt -t 50 | grep -i "backup\|.bak\|.old"
+
+# 15. اسکن با فایل‌های sensitive
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt -t 50 | grep -i ".sql\|.log\|.conf\|.ini"</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. اسکن با فایل‌های فارسی
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt -t 50
+
+# 2. اسکن با استفاده از چند Wordlist
+for wordlist in /usr/share/wordlists/dirb/common.txt /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt; do
+    gobuster dir -u http://example.com -w $wordlist -t 50
+done
+
+# 3. اسکن با فیلتر Status Code
+gobuster dir -u http://example.com -w wordlist.txt -t 50 -s 200,301,302
+
+# 4. اسکن با نمایش فقط 200
+gobuster dir -u http://example.com -w wordlist.txt -t 50 | grep "Status: 200"
+
+# 5. اسکن با خروجی قابل استفاده
+gobuster dir -u http://example.com -w wordlist.txt -t 50 -o gobuster.txt
+
+# 6. اسکن با DNS
+gobuster dns -d example.com -w /usr/share/wordlists/dirb/common.txt
+
+# 7. اسکن با VHOST
+gobuster vhost -u example.com -w /usr/share/wordlists/dirb/common.txt
+
+# 8. اسکن با فایل‌های fuzz
+gobuster fuzz -u http://example.com/FUZZ -w wordlist.txt</code></pre>
+            </div>
+        </section>
+
+        <!-- 5. FFUF -->
+        <section id="ffuf" class="tool-section">
+            <h2 class="tool-title">5️⃣ FFUF - Web Fuzzing ⭐⭐⭐⭐⭐</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Fuzzing پیشرفته برای پیدا کردن دایرکتوری، فایل، پارامتر و VHOST</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه و ترکیبی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# Directory Fuzzing
+ffuf -u http://example.com/FUZZ -w /usr/share/wordlists/dirb/common.txt
+
+# File Fuzzing با پسوند
+ffuf -u http://example.com/FUZZ -w /usr/share/wordlists/dirb/common.txt -e .php,.txt,.html
+
+# با فیلتر Status Code
+ffuf -u http://example.com/FUZZ -w wordlist.txt -fc 404,403
+
+# با نمایش Status Code
+ffuf -u http://example.com/FUZZ -w wordlist.txt -mc 200,204,301,302
+
+# با خروجی JSON
+ffuf -u http://example.com/FUZZ -w wordlist.txt -o ffuf.json -json
+
+# ==================== دستورات ترکیبی ====================
+
+# با تعداد Thread بالا
+ffuf -u http://example.com/FUZZ -w wordlist.txt -t 50
+
+# با خروجی CSV
+ffuf -u http://example.com/FUZZ -w wordlist.txt -o ffuf.csv -of csv
+
+# با Delay
+ffuf -u http://example.com/FUZZ -w wordlist.txt -p 0.1
+
+# با Timeout
+ffuf -u http://example.com/FUZZ -w wordlist.txt -timeout 5</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. Directory Fuzzing
+ffuf -u http://example.com/FUZZ -w /usr/share/wordlists/dirb/common.txt -fc 404,403
+
+# 2. File Fuzzing با پسوند
+ffuf -u http://example.com/FUZZ -w /usr/share/wordlists/dirb/common.txt -e .php,.txt,.html -fc 404,403
+
+# 3. File Fuzzing با پسوندهای مختلف
+ffuf -u http://example.com/FUZZ -w /usr/share/wordlists/dirb/common.txt -e .php,.txt,.html,.js,.json,.xml -fc 404,403
+
+# 4. Parameter Fuzzing
+ffuf -u http://example.com/index.php?FUZZ=test -w /usr/share/wordlists/dirb/common.txt -fc 404,403
+
+# 5. Parameter Value Fuzzing
+ffuf -u http://example.com/index.php?id=FUZZ -w /usr/share/wordlists/dirb/common.txt -fc 404,403
+
+# 6. VHOST Fuzzing
+ffuf -u http://example.com -w /usr/share/wordlists/dirb/common.txt -H "Host: FUZZ.example.com"
+
+# 7. Header Fuzzing
+ffuf -u http://example.com -w /usr/share/wordlists/dirb/common.txt -H "X-Forwarded-For: FUZZ"
+
+# 8. POST Data Fuzzing
+ffuf -u http://example.com/login.php -w /usr/share/wordlists/dirb/common.txt -X POST -d "username=FUZZ&password=test"
+
+# 9. Cookie Fuzzing
+ffuf -u http://example.com -w /usr/share/wordlists/dirb/common.txt -H "Cookie: PHPSESSID=FUZZ"
+
+# 10. Filter by Size
+ffuf -u http://example.com/FUZZ -w wordlist.txt -fc 404,403 -fs 0
+
+# 11. Filter by Word Count
+ffuf -u http://example.com/FUZZ -w wordlist.txt -fc 404,403 -fw 1
+
+# 12. Filter by Line Count
+ffuf -u http://example.com/FUZZ -w wordlist.txt -fc 404,403 -fl 0
+
+# 13. نمایش فقط 200
+ffuf -u http://example.com/FUZZ -w wordlist.txt -mc 200
+
+# 14. نمایش 200 و 301
+ffuf -u http://example.com/FUZZ -w wordlist.txt -mc 200,301
+
+# 15. با چندین Wordlist
+ffuf -u http://example.com/FUZZ -w /usr/share/wordlists/dirb/common.txt:/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+
+# 16. با خروجی JSON
+ffuf -u http://example.com/FUZZ -w wordlist.txt -o ffuf.json -json
+
+# 17. با خروجی CSV
+ffuf -u http://example.com/FUZZ -w wordlist.txt -o ffuf.csv -of csv
+
+# 18. با خروجی HTML
+ffuf -u http://example.com/FUZZ -w wordlist.txt -o ffuf.html -of html
+
+# 19. با نمایش کامل
+ffuf -u http://example.com/FUZZ -w wordlist.txt -v
+
+# 20. با verbose
+ffuf -u http://example.com/FUZZ -w wordlist.txt -v -c</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. Fuzzing با فایل‌های خاص
+ffuf -u http://example.com/FUZZ -w /usr/share/wordlists/rockyou.txt -e .php,.txt
+
+# 2. Fuzzing با فیلتر کردن اندازه
+ffuf -u http://example.com/FUZZ -w wordlist.txt -fc 404,403 -fs 0
+
+# 3. Fuzzing با Matching
+ffuf -u http://example.com/FUZZ -w wordlist.txt -mc 200 -ms 100-200
+
+# 4. Fuzzing با Proxy
+ffuf -u http://example.com/FUZZ -w wordlist.txt -x http://127.0.0.1:8080
+
+# 5. Fuzzing با User-Agent
+ffuf -u http://example.com/FUZZ -w wordlist.txt -H "User-Agent: Mozilla/5.0"
+
+# 6. Fuzzing با Cookie
+ffuf -u http://example.com/FUZZ -w wordlist.txt -H "Cookie: PHPSESSID=value"
+
+# 7. Fuzzing با Delay
+ffuf -u http://example.com/FUZZ -w wordlist.txt -p 0.1
+
+# 8. Fuzzing با Timeout
+ffuf -u http://example.com/FUZZ -w wordlist.txt -timeout 5
+
+# 9. Fuzzing با Find
+ffuf -u http://example.com/FUZZ -w wordlist.txt -fr "error"
+
+# 10. Fuzzing با Find Word
+ffuf -u http://example.com/FUZZ -w wordlist.txt -fw "404"
+
+# 11. Fuzzing با ملف
+ffuf -u http://example.com/FUZZ -w wordlist.txt -config ffuf.conf
+
+# 12. Fuzzing با محدودیت
+ffuf -u http://example.com/FUZZ -w wordlist.txt -t 100 -rate 1000
+
+# 13. Fuzzing با replay
+ffuf -u http://example.com/FUZZ -w wordlist.txt -replay
+
+# 14. Fuzzing با output
+ffuf -u http://example.com/FUZZ -w wordlist.txt -o results.txt
+
+# 15. Fuzzing با progress bar
+ffuf -u http://example.com/FUZZ -w wordlist.txt -p 0.1 -c</code></pre>
+            </div>
+        </section>
+
+        <!-- 6. DIRB -->
+        <section id="dirb" class="tool-section">
+            <h2 class="tool-title">6️⃣ DIRB - Directory Enumeration</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> پیدا کردن دایرکتوری‌ها با Brute Force</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# اسکن ساده
+dirb http://example.com
+
+# با Wordlist خاص
+dirb http://example.com /usr/share/wordlists/dirb/common.txt
+
+# با پسوند
+dirb http://example.com -X .php,.txt,.html
+
+# با خروجی
+dirb http://example.com -o dirb.txt
+
+# ==================== دستورات ترکیبی ====================
+
+# با User-Agent
+dirb http://example.com -a "Mozilla/5.0"
+
+# با Cookie
+dirb http://example.com -c "PHPSESSID=value"
+
+# با Proxy
+dirb http://example.com -p http://127.0.0.1:8080
+
+# ==================== سناریوهای CTF ====================
+
+# 1. اسکن ساده
+dirb http://example.com
+
+# 2. اسکن با Wordlist خاص
+dirb http://example.com /usr/share/wordlists/dirb/common.txt
+
+# 3. اسکن با پسوند php
+dirb http://example.com -X .php
+
+# 4. اسکن با پسوند‌های مختلف
+dirb http://example.com -X .php,.txt,.html,.js
+
+# 5. اسکن با خروجی
+dirb http://example.com -o dirb.txt
+
+# 6. اسکن با User-Agent
+dirb http://example.com -a "Mozilla/5.0"
+
+# 7. اسکن با Cookie
+dirb http://example.com -c "PHPSESSID=value"
+
+# 8. اسکن با Proxy
+dirb http://example.com -p http://127.0.0.1:8080
+
+# 9. اسکن با فیلتر
+dirb http://example.com -z 10
+
+# 10. اسکن با display
+dirb http://example.com -r
+
+# 11. اسکن با S
+dirb http://example.com -S
+
+# 12. اسکن با verbose
+dirb http://example.com -v
+
+# 13. اسکن با فایل‌های خاص
+dirb http://example.com /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+
+# 14. اسکن با عدم نمایش 404
+dirb http://example.com -N 404
+
+# 15. اسکن با فقط 200
+dirb http://example.com -w</code></pre>
+            </div>
+        </section>
+
+        <!-- 7. DIRSEARCH -->
+        <section id="dirsearch" class="tool-section">
+            <h2 class="tool-title">7️⃣ DIRSEARCH - Directory/File Enumeration</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> پیدا کردن دایرکتوری‌ها و فایل‌ها با روش‌های مختلف</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# اسکن ساده
+dirsearch -u http://example.com
+
+# با پسوند
+dirsearch -u http://example.com -e php,txt,html
+
+# با Wordlist
+dirsearch -u http://example.com -w /usr/share/wordlists/dirb/common.txt
+
+# با خروجی
+dirsearch -u http://example.com -o dirsearch.txt
+
+# ==================== دستورات ترکیبی ====================
+
+# با تعداد Thread
+dirsearch -u http://example.com -t 50
+
+# با Timeout
+dirsearch -u http://example.com -t 30
+
+# با Delay
+dirsearch -u http://example.com -d 0.1
+
+# ==================== سناریوهای CTF ====================
+
+# 1. اسکن ساده
+dirsearch -u http://example.com
+
+# 2. اسکن با پسوند php
+dirsearch -u http://example.com -e php
+
+# 3. اسکن با پسوند‌های مختلف
+dirsearch -u http://example.com -e php,txt,html,js,json,xml
+
+# 4. اسکن با Wordlist
+dirsearch -u http://example.com -w /usr/share/wordlists/dirb/common.txt
+
+# 5. اسکن با خروجی
+dirsearch -u http://example.com -o dirsearch.txt
+
+# 6. اسکن با تعداد Thread
+dirsearch -u http://example.com -t 50
+
+# 7. اسکن با Timeout
+dirsearch -u http://example.com -t 30
+
+# 8. اسکن با Delay
+dirsearch -u http://example.com -d 0.1
+
+# 9. اسکن با فیلتر
+dirsearch -u http://example.com -x 404,403
+
+# 10. اسکن با نمایش فقط 200
+dirsearch -u http://example.com -x 404,403,301,302
+
+# 11. اسکن با فایل‌های خاص
+dirsearch -u http://example.com -e php,txt -w /usr/share/wordlists/dirb/common.txt
+
+# 12. اسکن با خروجی JSON
+dirsearch -u http://example.com -o dirsearch.json --format=json
+
+# 13. اسکن با خروجی CSV
+dirsearch -u http://example.com -o dirsearch.csv --format=csv
+
+# 14. اسکن با Proxy
+dirsearch -u http://example.com -p http://127.0.0.1:8080
+
+# 15. اسکن با User-Agent
+dirsearch -u http://example.com -a "Mozilla/5.0"
+
+# 16. اسکن با Cookie
+dirsearch -u http://example.com -c "PHPSESSID=value"
+
+# 17. اسکن با header
+dirsearch -u http://example.com -H "X-Forwarded-For: 127.0.0.1"
+
+# 18. اسکن با recursive
+dirsearch -u http://example.com -r
+
+# 19. اسکن با recursive depth
+dirsearch -u http://example.com -r -R 3
+
+# 20. اسکن با فایل‌های .git
+dirsearch -u http://example.com -e .git</code></pre>
+            </div>
+        </section>
+
+        <!-- 8. CURL -->
+        <section id="curl" class="tool-section">
+            <h2 class="tool-title">8️⃣ CURL - HTTP Client</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> بررسی وب‌سایت، دریافت هدرها و فایل‌ها</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# دریافت صفحه
+curl http://example.com
+
+# دریافت هدرها
+curl -I http://example.com
+
+# دریافت هدرهای کامل
+curl -i http://example.com
+
+# دنبال کردن ریدایرکت
+curl -L http://example.com
+
+# ==================== دستورات ترکیبی ====================
+
+# با User-Agent خاص
+curl -A "Mozilla/5.0" http://example.com
+
+# با Cookie
+curl -b "cookie=value" http://example.com
+
+# با Proxy
+curl -x http://127.0.0.1:8080 http://example.com
+
+# با verbose
+curl -v http://example.com
+
+# ==================== سناریوهای CTF ====================
+
+# 1. دریافت صفحه
+curl http://example.com
+
+# 2. دریافت هدرها
+curl -I http://example.com
+
+# 3. دریافت هدرهای کامل
+curl -i http://example.com
+
+# 4. دنبال کردن ریدایرکت
+curl -L http://example.com
+
+# 5. دریافت با User-Agent
+curl -A "Mozilla/5.0" http://example.com
+
+# 6. دریافت با Cookie
+curl -b "PHPSESSID=value" http://example.com
+
+# 7. دریافت با Proxy
+curl -x http://127.0.0.1:8080 http://example.com
+
+# 8. دریافت با timeout
+curl --max-time 5 http://example.com
+
+# 9. دریافت با verbose
+curl -v http://example.com
+
+# 10. دریافت robots.txt
+curl http://example.com/robots.txt
+
+# 11. دریافت sitemap.xml
+curl http://example.com/sitemap.xml
+
+# 12. دریافت status code
+curl -s -o /dev/null -w "%{http_code}\n" http://example.com
+
+# 13. دریافت با header خاص
+curl -H "X-Forwarded-For: 127.0.0.1" http://example.com
+
+# 14. دریافت با POST
+curl -X POST -d "username=admin&password=test" http://example.com/login.php
+
+# 15. دریافت با JSON
+curl -H "Content-Type: application/json" -X POST -d '{"username":"admin"}' http://example.com/api/login
+
+# 16. دریافت با حفظ Cookie
+curl -c cookies.txt http://example.com/login.php
+curl -b cookies.txt http://example.com/dashboard.php
+
+# 17. دریافت با ذخیره فایل
+curl -o page.html http://example.com
+
+# 18. دریافت با resume
+curl -C - -o file.zip http://example.com/file.zip
+
+# 19. دریافت با multiple URLs
+curl -O http://example.com/file1.txt -O http://example.com/file2.txt
+
+# 20. دریافت با limit rate
+curl --limit-rate 100K http://example.com/file.zip</code></pre>
+            </div>
+        </section>
+
+        <!-- 9. WGET -->
+        <section id="wget" class="tool-section">
+            <h2 class="tool-title">9️⃣ WGET - Download Tool</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> دانلود فایل‌ها از وب‌سایت</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# دانلود فایل
+wget http://example.com/file.pdf
+
+# دانلود با نام خاص
+wget -O custom_name.pdf http://example.com/file.pdf
+
+# دانلود recursive
+wget -r http://example.com
+
+# ==================== دستورات ترکیبی ====================
+
+# با User-Agent
+wget -U "Mozilla/5.0" http://example.com/file.pdf
+
+# با Cookie
+wget --header="Cookie: PHPSESSID=value" http://example.com/file.pdf
+
+# با Proxy
+wget -e use_proxy=yes -e http_proxy=127.0.0.1:8080 http://example.com/file.pdf
+
+# ==================== سناریوهای CTF ====================
+
+# 1. دانلود فایل
+wget http://example.com/file.pdf
+
+# 2. دانلود با نام خاص
+wget -O custom.pdf http://example.com/file.pdf
+
+# 3. دانلود recursive
+wget -r -l 1 http://example.com
+
+# 4. دانلود با User-Agent
+wget -U "Mozilla/5.0" http://example.com/file.pdf
+
+# 5. دانلود با Cookie
+wget --header="Cookie: PHPSESSID=value" http://example.com/file.pdf
+
+# 6. دانلود با Proxy
+wget -e use_proxy=yes -e http_proxy=127.0.0.1:8080 http://example.com/file.pdf
+
+# 7. دانلود با resume
+wget -c http://example.com/large_file.zip
+
+# 8. دانلود با limit rate
+wget --limit-rate=100K http://example.com/large_file.zip
+
+# 9. دانلود با timeout
+wget --timeout=10 http://example.com/file.pdf
+
+# 10. دانلود با recursive محدود
+wget -r -l 1 -A .pdf http://example.com
+
+# 11. دانلود با ignoring robots
+wget -e robots=off http://example.com
+
+# 12. دانلود با directory prefix
+wget -P ./downloads http://example.com/file.pdf
+
+# 13. دانلود با mirror
+wget -m http://example.com
+
+# 14. دانلود با accept
+wget -A .pdf,.txt http://example.com
+
+# 15. دانلود با reject
+wget -R .jpg,.png http://example.com</code></pre>
+            </div>
+        </section>
+
+        <!-- 10. HTTPIE -->
+        <section id="httpie" class="tool-section">
+            <h2 class="tool-title">🔟 HTTPIE - HTTP Client (Modern)</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> HTTP Client مدرن و ساده</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# GET Request
+http http://example.com
+
+# GET with headers
+http -v http://example.com
+
+# POST Request
+http POST http://example.com/login username=admin password=test
+
+# ==================== سناریوهای CTF ====================
+
+# 1. GET Request
+http http://example.com
+
+# 2. GET with verbose
+http -v http://example.com
+
+# 3. GET with headers
+http -v http://example.com
+
+# 4. GET with Cookie
+http -v --session=cookie http://example.com
+
+# 5. POST Request
+http POST http://example.com/login username=admin password=test
+
+# 6. POST with JSON
+http POST http://example.com/api/login username=admin password=test
+
+# 7. POST with file
+http POST http://example.com/upload file@image.jpg
+
+# 8. PUT Request
+http PUT http://example.com/api/user/1 name=John
+
+# 9. DELETE Request
+http DELETE http://example.com/api/user/1
+
+# 10. با User-Agent
+http -v --headers User-Agent:Mozilla/5.0 http://example.com
+
+# 11. با Proxy
+http -v --proxy http://127.0.0.1:8080 http://example.com
+
+# 12. با timeout
+http -v --timeout 5 http://example.com</code></pre>
+            </div>
+        </section>
+
+        <!-- 11. AUTO SCRIPT -->
+        <section id="script" class="tool-section">
+            <h2 class="tool-title">📝 اسکریپت کامل Web Recon Auto</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اجرای خودکار همه ابزارها برای جمع‌آوری سریع اطلاعات</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">#!/bin/bash
+# web_cheatsheet.sh - اسکریپت کامل Web Recon
+
+TARGET=${1:-example.com}
+OUTPUT_DIR="web_recon_$(date +%Y%m%d_%H%M%S)"
+mkdir -p $OUTPUT_DIR
+
+echo "========================================="
+echo "  WEB RECON CHEAT SHEET AUTO-RUN"
+echo "========================================="
+
+# 1. WhatWeb
+echo "[1/8] Running WhatWeb..."
+whatweb -a 3 $TARGET > $OUTPUT_DIR/01_whatweb.txt
+echo "✓ WhatWeb saved"
+
+# 2. Wafw00f
+echo "[2/8] Running Wafw00f..."
+wafw00f $TARGET > $OUTPUT_DIR/02_wafw00f.txt
+echo "✓ Wafw00f saved"
+
+# 3. Nikto
+echo "[3/8] Running Nikto..."
+nikto -h $TARGET -ssl > $OUTPUT_DIR/03_nikto.txt
+echo "✓ Nikto saved"
+
+# 4. Gobuster
+echo "[4/8] Running Gobuster..."
+gobuster dir -u http://$TARGET -w /usr/share/wordlists/dirb/common.txt -t 50 > $OUTPUT_DIR/04_gobuster.txt
+gobuster dir -u http://$TARGET -w /usr/share/wordlists/dirb/common.txt -x php,txt,html -t 50 > $OUTPUT_DIR/04_gobuster_files.txt
+echo "✓ Gobuster saved"
+
+# 5. FFUF
+echo "[5/8] Running FFUF..."
+ffuf -u http://$TARGET/FUZZ -w /usr/share/wordlists/dirb/common.txt -fc 404,403 -t 50 > $OUTPUT_DIR/05_ffuf.txt
+ffuf -u http://$TARGET/FUZZ -w /usr/share/wordlists/dirb/common.txt -e .php,.txt,.html -fc 404,403 -t 50 > $OUTPUT_DIR/05_ffuf_files.txt
+echo "✓ FFUF saved"
+
+# 6. DIRB
+echo "[6/8] Running DIRB..."
+dirb http://$TARGET -o $OUTPUT_DIR/06_dirb.txt
+echo "✓ DIRB saved"
+
+# 7. Dirsearch
+echo "[7/8] Running Dirsearch..."
+dirsearch -u http://$TARGET -e php,txt,html -o $OUTPUT_DIR/07_dirsearch.txt
+echo "✓ Dirsearch saved"
+
+# 8. CURL
+echo "[8/8] Running CURL..."
+curl -I -L $TARGET > $OUTPUT_DIR/08_headers.txt
+curl $TARGET/robots.txt > $OUTPUT_DIR/08_robots.txt 2>/dev/null
+curl $TARGET/sitemap.xml > $OUTPUT_DIR/08_sitemap.xml 2>/dev/null
+echo "✓ CURL saved"
+
+echo ""
+echo "========================================="
+echo "  ✅ RECON COMPLETE"
+echo "========================================="
+echo "📁 Output: $OUTPUT_DIR"
+ls -la $OUTPUT_DIR</code></pre>
+            </div>
+        </section>
+
+        <!-- 12. WORKFLOW -->
+        <section id="workflow" class="tool-section">
+            <h2 class="tool-title">✅ خلاصه Workflow مسابقات CTF</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> ترتیب اجرای ابزارها در مسابقات CTF</div>
+            
+            <div class="workflow-box">
+                <p>1. WhatWeb → Technology Detection</p>
+                <p>2. Wafw00f → WAF Detection</p>
+                <p>3. Nikto → Web Server Scan</p>
+                <p>4. Gobuster → Directory/File Enumeration</p>
+                <p>5. FFUF → Advanced Fuzzing</p>
+                <p>6. DIRB → Directory Enumeration</p>
+                <p>7. Dirsearch → Directory/File Enumeration</p>
+                <p>8. CURL → HTTP Headers & Files</p>
+                <p>9. WGET → Download Files</p>
+                <p>10. HTTPie → HTTP Requests</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#3fb950';
+            btn.style.color = '#fff';
+            btn.style.borderColor = '#3fb950';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

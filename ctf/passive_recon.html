@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passive Recon Cheat Sheet - CTF Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #58a6ff;
+            --accent-color: #3fb950;
+            --warn-color: #d29922;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--accent-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(88, 166, 255, 0.1);
+            color: var(--primary-color);
+            border-right: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--accent-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(63, 185, 80, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(63, 185, 80, 0.1);
+            border: 1px solid rgba(63, 185, 80, 0.2);
+            border-right: 4px solid var(--accent-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--accent-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(88, 166, 255, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(248, 81, 73, 0.2); color: var(--danger-color); }
+        .tag-tip { background: rgba(210, 153, 34, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 500px; /* Limit height for long scripts */
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>🗡️ CTF RECON</h1>
+            <p>Passive Reconnaissance v2.0</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی ابزار..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#whois">1. WHOIS <span class="nav-badge">دامنه</span></a></li>
+            <li><a href="#dig">2. DIG <span class="nav-badge">DNS</span></a></li>
+            <li><a href="#nslookup">3. NSLOOKUP <span class="nav-badge">DNS</span></a></li>
+            <li><a href="#host">4. HOST <span class="nav-badge">DNS</span></a></li>
+            <li><a href="#sublist3r">5. SUBLIST3R <span class="nav-badge">ساب‌دامنه</span></a></li>
+            <li><a href="#amass">6. AMASS <span class="nav-badge">ساب‌دامنه</span></a></li>
+            <li><a href="#dnsrecon">7. DNSRECON <span class="nav-badge">DNS</span></a></li>
+            <li><a href="#theharvester">8. THEHARVESTER <span class="nav-badge">ایمیل</span></a></li>
+            <li><a href="#shodan">9. SHODAN <span class="nav-badge">IoT</span></a></li>
+            <li><a href="#nmap">10. NMAP <span class="nav-badge">اسکن</span></a></li>
+            <li><a href="#spiderfoot">11. SPIDERFOOT <span class="nav-badge">OSINT</span></a></li>
+            <li><a href="#googledorks">12. GOOGLE DORKS <span class="nav-badge">جستجو</span></a></li>
+            <li><a href="#curl">13. CURL <span class="nav-badge">وب</span></a></li>
+            <li><a href="#wget">14. WGET <span class="nav-badge">دانلود</span></a></li>
+            <li><a href="#metagoogl">15. METAGOOGL <span class="nav-badge">متادیتا</span></a></li>
+            <li><a href="#script">16. اسکریپت یکپارچه <span class="nav-badge">Auto</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>Cheat Sheet کامل بازنشانی غیرفعال</h1>
+            <p>راهنمای جامع و سریع ابزارهای Kali Linux برای مسابقات CTF</p>
+        </header>
+
+        <!-- Table of Tools -->
+        <section class="tool-section">
+            <h2 class="tool-title">📋 فهرست کامل ابزارها</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>ابزار</th>
+                            <th>کاربرد اصلی</th>
+                            <th>اولویت در CTF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>WHOIS</td><td>اطلاعات ثبت دامنه</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>2</td><td>DIG</td><td>رکوردهای DNS</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>3</td><td>NSLOOKUP</td><td>جستجوی DNS</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>4</td><td>HOST</td><td>جستجوی DNS ساده</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>5</td><td>SUBLIST3R</td><td>پیدا کردن زیردامنه</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>6</td><td>AMASS</td><td>زیردامنه پیشرفته</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>7</td><td>DNSRECON</td><td>Enumeration DNS</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>8</td><td>THEHARVESTER</td><td>جمع‌آوری ایمیل</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>9</td><td>SHODAN</td><td>جستجوی دستگاه‌ها</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>10</td><td>NMAP</td><td>اسکن پورت</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>11</td><td>SPIDERFOOT</td><td>OSINT Automation</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>12</td><td>GOOGLE DORKS</td><td>جستجوی پیشرفته</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>13</td><td>CURL</td><td>بررسی وب‌سایت</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>14</td><td>WGET</td><td>دانلود فایل‌ها</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>15</td><td>METAGOOGL</td><td>جمع‌آوری اطلاعات</td><td>⭐⭐⭐</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 1. WHOIS -->
+        <section id="whois" class="tool-section">
+            <h2 class="tool-title">1️⃣ WHOIS - اطلاعات ثبت دامنه</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> دریافت اطلاعات کامل ثبت دامنه شامل ثبت‌کننده، تاریخ‌ها، Name Servers و سازمان</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اطلاعات کامل دامنه
+whois example.com
+
+# فقط اطلاعات خاص با grep
+whois example.com | grep -i "registrar"
+whois example.com | grep -i "creation date"
+whois example.com | grep -i "expiry date"
+whois example.com | grep -i "name server"
+whois example.com | grep -i "orgname\|organization"
+
+# ذخیره در فایل
+whois example.com > whois_output.txt</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. پیدا کردن تاریخ ثبت دامنه (سوالات CTF)
+whois example.com | grep -i "creation date" | awk -F': ' '{print $2}' | cut -d' ' -f1
+
+# 2. پیدا کردن Name Server اصلی
+whois example.com | grep -i "name server" | head -1 | awk '{print $NF}'
+
+# 3. بررسی Privacy Protection
+if whois example.com | grep -qi "redacted\|privacy\|whoisguard"; then
+    echo "[!] WHOIS Privacy is enabled"
+else
+    echo "[+] WHOIS information is visible"
+fi
+
+# 4. پیدا کردن ایمیل از WHOIS
+whois example.com | grep -i "email\|@"
+
+# 5. بررسی وضعیت دامنه
+whois example.com | grep -i "status" | grep -v "N/A"</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> ترفندهای پیشرفته</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># استخراج خودکار همه فیلدهای مهم
+whois example.com | awk -F': ' '
+/Registrar/ {print "Registrar: " $2}
+/Creation Date/ {print "Creation: " $2}
+/Expiry Date/ {print "Expiry: " $2}
+/Name Server/ {print "NS: " $2}
+/OrgName/ {print "Org: " $2}
+'
+
+# مقایسه دو دامنه
+diff <(whois example1.com) <(whois example2.com)</code></pre>
+            </div>
+        </section>
+
+        <!-- 2. DIG -->
+        <section id="dig" class="tool-section">
+            <h2 class="tool-title">2️⃣ DIG - جستجوی پیشرفته DNS</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> دریافت دقیق و کامل رکوردهای DNS با جزئیات بیشتر</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># رکورد A - آدرس IPv4
+dig example.com A +short
+
+# رکورد AAAA - آدرس IPv6
+dig example.com AAAA +short
+
+# رکورد MX - سرورهای ایمیل
+dig example.com MX +short
+
+# رکورد NS - سرورهای نام
+dig example.com NS +short
+
+# رکورد TXT - متون (SPF, DKIM, DMARC)
+dig example.com TXT +short
+
+# رکورد CNAME - نام‌های مستعار
+dig example.com CNAME +short
+
+# رکورد PTR - Reverse DNS
+dig -x 8.8.8.8 +short
+
+# همه رکوردها
+dig example.com ANY</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. پیدا کردن IP وب‌سایت
+dig example.com A +short | head -1
+
+# 2. پیدا کردن سرورهای ایمیل
+dig example.com MX +short | awk '{print $2}' | head -3
+
+# 3. پیدا کردن SPF Record
+dig example.com TXT +short | grep -i "v=spf1"
+
+# 4. پیدا کردن DKIM Record
+dig default._domainkey.example.com TXT +short
+
+# 5. پیدا کردن DMARC Record
+dig _dmarc.example.com TXT +short
+
+# 6. تست Zone Transfer (اگر باز باشد اطلاعات کاملی می‌دهد)
+dig example.com AXFR @ns1.example.com</code></pre>
+            </div>
+            
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> ترفندهای پیشرفته</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># پیدا کردن زیردامنه‌ها از طریق DNS (Brute Force)
+for sub in www mail ftp ssh admin test dev api; do
+    dig $sub.example.com A +short | while read ip; do
+        if [ ! -z "$ip" ]; then
+            echo "[+] $sub.example.com -> $ip"
+        fi
+    done
+done
+
+# مقایسه پاسخ از DNS مختلف
+for dns in 8.8.8.8 1.1.1.1 9.9.9.9; do
+    echo "=== $dns ==="
+    dig @$dns example.com A +short
+done</code></pre>
+            </div>
+        </section>
+
+        <!-- 3. NSLOOKUP -->
+        <section id="nslookup" class="tool-section">
+            <h2 class="tool-title">3️⃣ NSLOOKUP - جستجوی DNS</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> جستجوی تعاملی و غیرتعاملی DNS</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== حالت غیرتعاملی ====================
+
+# جستجوی ساده
+nslookup example.com
+
+# جستجوی نوع خاص
+nslookup -type=MX example.com
+nslookup -type=NS example.com
+nslookup -type=TXT example.com
+nslookup -type=ANY example.com
+
+# استفاده از سرور DNS خاص
+nslookup example.com 8.8.8.8
+
+# Reverse DNS
+nslookup 8.8.8.8</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. پیدا کردن سرورهای ایمیل
+nslookup -type=MX example.com | grep "mail exchanger"
+
+# 2. پیدا کردن Name Servers
+nslookup -type=NS example.com | grep "nameserver"
+
+# 3. پیدا کردن SPF
+nslookup -type=TXT example.com | grep -i "spf"</code></pre>
+            </div>
+        </section>
+
+        <!-- 4. HOST -->
+        <section id="host" class="tool-section">
+            <h2 class="tool-title">4️⃣ HOST - جستجوی DNS ساده</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> جستجوی سریع و ساده DNS</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># جستجوی A Record
+host example.com
+
+# جستجوی نوع خاص
+host -t MX example.com
+host -t NS example.com
+host -t TXT example.com
+
+# Reverse DNS
+host 8.8.8.8
+
+# پیدا کردن همه IPها
+host example.com | grep "has address" | awk '{print $4}' | sort -u
+
+# ==================== سناریوهای CTF ====================
+
+# 1. پیدا کردن MX
+host -t MX example.com | grep "mail" | awk '{print $NF}'
+
+# 2. پیدا کردن TXT
+host -t TXT example.com | grep -i "spf\|dkim"</code></pre>
+            </div>
+        </section>
+
+        <!-- 5. SUBLIST3R -->
+        <section id="sublist3r" class="tool-section">
+            <h2 class="tool-title">5️⃣ SUBLIST3R - پیدا کردن زیردامنه</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> پیدا کردن زیردامنه‌ها با استفاده از موتورهای جستجو</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اسکن ساده
+sublist3r -d example.com
+
+# ذخیره در فایل
+sublist3r -d example.com -o subdomains.txt
+
+# استفاده از همه موتورها
+sublist3r -d example.com -b all
+
+# اسکن پورت‌های خاص
+sublist3r -d example.com -p 80,443,8080</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. پیدا کردن زیردامنه‌های ادمین
+sublist3r -d example.com | grep -i "admin\|panel\|login\|portal\|dashboard"
+
+# 2. پیدا کردن زیردامنه‌های تست
+sublist3r -d example.com | grep -i "test\|dev\|staging\|uat\|qa"
+
+# 3. پیدا کردن زیردامنه‌های API
+sublist3r -d example.com | grep -i "api\|rest\|graphql"
+
+# 4. ترکیب با theHarvester
+sublist3r -d example.com | while read sub; do
+    theHarvester -d $sub -b google 2>/dev/null | grep "@"
+done</code></pre>
+            </div>
+        </section>
+
+        <!-- 6. AMASS -->
+        <section id="amass" class="tool-section">
+            <h2 class="tool-title">6️⃣ AMASS - زیردامنه پیشرفته</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> پیدا کردن زیردامنه‌ها با استفاده از منابع متعدد و تکنیک‌های پیشرفته</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اسکن Passive
+amass enum -passive -d example.com
+
+# اسکن Active
+amass enum -active -d example.com
+
+# ذخیره در فایل
+amass enum -d example.com -o amass_output.txt
+
+# ==================== سناریوهای CTF ====================
+
+# 1. پیدا کردن زیردامنه‌های Cloud
+amass enum -passive -d example.com | grep -i "cloud\|aws\|azure\|gcp"
+
+# 2. پیدا کردن زیردامنه‌های تست
+amass enum -passive -d example.com | grep -i "test\|dev\|staging\|uat"
+
+# 3. ترکیب با Shodan
+amass enum -passive -d example.com | head -10 | while read sub; do
+    ip=$(dig $sub A +short | head -1)
+    if [ -n "$ip" ]; then
+        shodan host $ip 2>/dev/null | head -5
+    fi
+done</code></pre>
+            </div>
+        </section>
+
+        <!-- 7. DNSRECON -->
+        <section id="dnsrecon" class="tool-section">
+            <h2 class="tool-title">7️⃣ DNSRECON - Enumeration کامل DNS</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> Enumeration کامل و پیشرفته DNS با تکنیک‌های مختلف</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اسکن استاندارد
+dnsrecon -d example.com -t std
+
+# Zone Transfer
+dnsrecon -d example.com -t axfr
+
+# Brute Force
+dnsrecon -d example.com -t brt -D /usr/share/wordlists/dnsmap.txt
+
+# ==================== سناریوهای CTF ====================
+
+# 1. پیدا کردن همه IPها
+dnsrecon -d example.com -t std | grep "A " | awk '{print $3}'
+
+# 2. بررسی Zone Transfer
+if dnsrecon -d example.com -t axfr | grep -q "A "; then
+    echo "[!] Zone Transfer is possible!"
+else
+    echo "[+] Zone Transfer is secure"
+fi</code></pre>
+            </div>
+        </section>
+
+        <!-- 8. THEHARVESTER -->
+        <section id="theharvester" class="tool-section">
+            <h2 class="tool-title">8️⃣ THEHARVESTER - جمع‌آوری ایمیل و زیردامنه</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> جمع‌آوری ایمیل‌ها، زیردامنه‌ها و اطلاعات از موتورهای جستجو</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># جستجو در همه منابع
+theHarvester -d example.com -b all
+
+# ذخیره در فایل HTML
+theHarvester -d example.com -b google -f output.html
+
+# ==================== سناریوهای CTF ====================
+
+# 1. پیدا کردن ایمیل‌های مهم
+theHarvester -d example.com -b all | grep -i "admin\|ceo\|cto\|founder\|info\|support"
+
+# 2. پیدا کردن زیردامنه‌ها
+theHarvester -d example.com -b all | grep -o "[a-zA-Z0-9.-]*\.example.com" | sort -u
+
+# 3. استخراج فقط ایمیل‌ها
+theHarvester -d example.com -b google | grep "@example.com" | sort -u > emails.txt</code></pre>
+            </div>
+        </section>
+
+        <!-- 9. SHODAN -->
+        <section id="shodan" class="tool-section">
+            <h2 class="tool-title">9️⃣ SHODAN - جستجوی دستگاه‌های متصل</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> جستجوی دستگاه‌ها و سرویس‌های متصل به اینترنت</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اطلاعات یک IP
+shodan host 8.8.8.8
+
+# جستجوی دامنه
+shodan search domain:example.com
+
+# ==================== سناریوهای CTF ====================
+
+# 1. پیدا کردن اطلاعات SSL
+shodan search "ssl.cert.subject.CN:example.com"
+
+# 2. پیدا کردن آسیب‌پذیری‌ها (مثلا Log4j)
+shodan search "vuln:CVE-2021-44228"
+
+# 3. پیدا کردن دستگاه‌های IoT
+shodan search "MikroTik"
+
+# 4. پیدا کردن سرویس‌های SSH
+shodan search "port:22 product:OpenSSH"
+
+# 5. پیدا کردن دیتابیس‌ها
+shodan search "port:3306 product:MySQL"</code></pre>
+            </div>
+        </section>
+
+        <!-- 10. NMAP -->
+        <section id="nmap" class="tool-section">
+            <h2 class="tool-title">🔟 NMAP - اسکن پورت و سرویس</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اسکن پورت‌ها، کشف سرویس‌ها و Enumeration</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اسکن سریع (100 پورت)
+nmap -T4 -F target.com
+
+# اسکن کامل (همه پورت‌ها)
+nmap -T4 -p- target.com
+
+# تشخیص سرویس
+nmap -sV -p 80,443 target.com
+
+# تشخیص OS
+nmap -O target.com
+
+# اسکن با اسکریپت‌ها
+nmap -sC target.com
+
+# اسکن UDP
+nmap -sU -p 53,161 target.com</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. اسکن کامل برای CTF
+nmap -sC -sV -O -p- -T4 target.com -oA full_scan
+
+# 2. پیدا کردن سرویس‌های خاص
+nmap -sV target.com | grep -i "http\|https\|ssh\|ftp\|mysql"
+
+# 3. اسکن سرورهای وب
+nmap --script=http-headers target.com
+nmap --script=http-enum target.com
+
+# 4. اسکن با اسکریپت‌های آسیب‌پذیری
+nmap --script=vuln target.com
+
+# 5. پیدا کردن هاست‌های زنده در شبکه
+nmap -sn 192.168.1.0/24 | grep "up"</code></pre>
+            </div>
+        </section>
+
+        <!-- 11. SPIDERFOOT -->
+        <section id="spiderfoot" class="tool-section">
+            <h2 class="tool-title">1️⃣1️⃣ SPIDERFOOT - OSINT Automation</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اتوماسیون کامل OSINT با ماژول‌های مختلف</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اسکن ساده
+spiderfoot -s example.com
+
+# اسکن با ذخیره JSON
+spiderfoot -s example.com -o json > spiderfoot.json
+
+# ==================== سناریوهای CTF ====================
+
+# 1. اسکن کامل DNS و WHOIS
+spiderfoot -s example.com -m sfp_dnsresolve,sfp_whois,sfp_subdomain
+
+# 2. اسکن اطلاعات شخصی
+spiderfoot -s example.com -m sfp_email,sfp_social
+
+# 3. استخراج IP از خروجی
+cat target.json | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | sort -u</code></pre>
+            </div>
+        </section>
+
+        <!-- 12. GOOGLE DORKS -->
+        <section id="googledorks" class="tool-section">
+            <h2 class="tool-title">1️⃣2️⃣ GOOGLE DORKS - جستجوی پیشرفته</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> پیدا کردن اطلاعات حساس و صفحات پنهان با عملگرهای گوگل</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== Dorks مهم ====================
+
+# پیدا کردن صفحات ادمین
+site:example.com intitle:admin
+site:example.com inurl:login
+site:example.com intitle:"Control Panel"
+
+# پیدا کردن فایل‌های حساس
+site:example.com filetype:pdf
+site:example.com filetype:sql
+site:example.com filetype:log
+site:example.com filetype:conf
+
+# پیدا کردن اطلاعات پیکربندی
+site:example.com "wp-config.php"
+site:example.com ".env"
+
+# پیدا کردن سورس‌کد
+site:example.com intitle:"Index of" .git
+site:example.com intitle:"Index of" backup
+
+# ==================== ترفندهای پیشرفته ====================
+
+# 1. پیدا کردن زیردامنه‌ها
+site:*.example.com -www
+
+# 2. پیدا کردن API Keys
+site:example.com "API_KEY" | "API_SECRET" | "api_key"
+
+# 3. پیدا کردن توکن‌ها
+site:example.com "token" | "access_token"
+
+# 4. پیدا کردن سایت‌های مشابه
+related:example.com</code></pre>
+            </div>
+        </section>
+
+        <!-- 13. CURL -->
+        <section id="curl" class="tool-section">
+            <h2 class="tool-title">1️⃣3️⃣ CURL - بررسی وب‌سایت</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> دریافت اطلاعات از وب‌سایت‌ها</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># دریافت هدرها
+curl -I http://example.com
+
+# دنبال کردن ریدایرکت
+curl -L http://example.com
+
+# ==================== سناریوهای CTF ====================
+
+# 1. بررسی هدرها
+curl -I http://example.com | grep -i "server\|x-powered-by\|x-aspnet"
+
+# 2. دریافت robots.txt
+curl http://example.com/robots.txt
+
+# 3. بررسی پاسخ
+curl -s -o /dev/null -w "%{http_code}\n" http://example.com
+
+# 4. دریافت با هدر خاص (Bypass)
+curl -H "X-Forwarded-For: 127.0.0.1" http://example.com</code></pre>
+            </div>
+        </section>
+
+        <!-- 14. WGET -->
+        <section id="wget" class="tool-section">
+            <h2 class="tool-title">1️⃣4️⃣ WGET - دانلود فایل‌ها</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> دانلود فایل‌ها از وب‌سایت‌ها</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># دانلود فایل
+wget http://example.com/file.pdf
+
+# دانلود با نام خاص
+wget -O custom_name.pdf http://example.com/file.pdf
+
+# دانلود همه فایل‌های PDF
+wget -r -l1 -A.pdf http://example.com</code></pre>
+            </div>
+        </section>
+
+        <!-- 15. METAGOOGL -->
+        <section id="metagoogl" class="tool-section">
+            <h2 class="tool-title">1️⃣5️⃣ METAGOOGL - جمع‌آوری اطلاعات</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> جمع‌آوری اطلاعات از متادیتای فایل‌ها</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># جستجو در Google
+metagoogl -d example.com
+
+# جستجو در همه
+metagoogl -d example.com -b all
+
+# ==================== سناریوهای CTF ====================
+
+# 1. پیدا کردن فایل‌های PDF
+metagoogl -d example.com filetype:pdf
+
+# 2. استخراج متادیتا
+metagoogl -d example.com -b google | grep -i "author\|creator\|last modified"</code></pre>
+            </div>
+        </section>
+
+        <!-- 16. AUTO SCRIPT -->
+        <section id="script" class="tool-section">
+            <h2 class="tool-title">📝 اسکریپت کامل اتوماسیون (Auto Recon)</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اجرای خودکار همه ابزارها برای جمع‌آوری سریع اطلاعات در CTF</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">#!/bin/bash
+# ctf_complete_recon.sh
+
+TARGET=${1:-example.com}
+OUTPUT_DIR="recon_${TARGET}_$(date +%Y%m%d_%H%M%S)"
+mkdir -p $OUTPUT_DIR
+
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
+
+echo -e "${CYAN}=========================================${NC}"
+echo -e "${YELLOW}   CTF COMPLETE RECON TOOL${NC}"
+echo -e "${CYAN}=========================================${NC}"
+echo -e "${GREEN}Target: ${TARGET}${NC}"
+
+# 1. WHOIS
+echo -e "${YELLOW}[1/10] Running WHOIS...${NC}"
+whois $TARGET > $OUTPUT_DIR/01_whois.txt 2>/dev/null
+
+# 2. DIG
+echo -e "${YELLOW}[2/10] Running DIG...${NC}"
+for type in A AAAA MX NS TXT CNAME SOA; do
+    dig $TARGET $type +short > $OUTPUT_DIR/02_dns_${type}.txt 2>/dev/null
+done
+
+# 3. Sublist3r
+echo -e "${YELLOW}[3/10] Running Sublist3r...${NC}"
+sublist3r -d $TARGET -o $OUTPUT_DIR/03_sublist3r.txt &>/dev/null
+
+# 4. Amass
+echo -e "${YELLOW}[4/10] Running Amass...${NC}"
+amass enum -passive -d $TARGET -o $OUTPUT_DIR/04_amass.txt &>/dev/null
+
+# 5. DNSRecon
+echo -e "${YELLOW}[5/10] Running DNSRecon...${NC}"
+dnsrecon -d $TARGET -t std > $OUTPUT_DIR/05_dnsrecon.txt 2>/dev/null
+
+# 6. theHarvester
+echo -e "${YELLOW}[6/10] Running theHarvester...${NC}"
+theHarvester -d $TARGET -b all > $OUTPUT_DIR/06_harvester.txt 2>/dev/null
+
+# 7. Shodan
+echo -e "${YELLOW}[7/10] Running Shodan...${NC}"
+dig $TARGET A +short | head -3 | while read ip; do
+    shodan host $ip > $OUTPUT_DIR/07_shodan_${ip}.txt 2>/dev/null
+done
+
+# 8. Nmap
+echo -e "${YELLOW}[8/10] Running Nmap...${NC}"
+dig $TARGET A +short | head -1 | while read ip; do
+    nmap -T4 -F $ip > $OUTPUT_DIR/08_nmap_${ip}.txt 2>/dev/null
+done
+
+# 9. Google Dorks File
+echo -e "${YELLOW}[9/10] Generating Google Dorks...${NC}"
+cat > $OUTPUT_DIR/09_google_dorks.txt << EOF
+site:$TARGET intitle:admin
+site:$TARGET filetype:pdf
+site:$TARGET "password"
+EOF
+
+# 10. CURL
+echo -e "${YELLOW}[10/10] Running CURL...${NC}"
+curl -I -L -s $TARGET > $OUTPUT_DIR/10_headers.txt 2>/dev/null
+
+echo -e "${GREEN}✅ RECON COMPLETE${NC}"
+echo -e "${CYAN}Output: $OUTPUT_DIR${NC}"
+echo -e "Subdomains: $(cat $OUTPUT_DIR/03_sublist3r.txt 2>/dev/null | wc -l)"
+echo -e "Emails: $(grep -c '@' $OUTPUT_DIR/06_harvester.txt 2>/dev/null)"</code></pre>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#3fb950';
+            btn.style.color = '#fff';
+            btn.style.borderColor = '#3fb950';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

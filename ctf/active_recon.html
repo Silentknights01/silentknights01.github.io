@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Recon Cheat Sheet - Full Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #58a6ff;
+            --accent-color: #3fb950;
+            --warn-color: #d29922;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--danger-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(248, 81, 73, 0.1);
+            color: var(--danger-color);
+            border-right: 3px solid var(--danger-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--danger-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(248, 81, 73, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+        
+        .sub-tool-title {
+            color: var(--warn-color);
+            font-size: 1.4rem;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248, 81, 73, 0.2);
+            border-right: 4px solid var(--danger-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--danger-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(88, 166, 255, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(248, 81, 73, 0.2); color: var(--danger-color); }
+        .tag-tip { background: rgba(210, 153, 34, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 600px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* Workflow Block */
+        .workflow-box {
+            background: rgba(88, 166, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            line-height: 1.8;
+            color: var(--accent-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--danger-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>🔥 ACTIVE RECON</h1>
+            <p>Kali Tools - Full Edition</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی ابزار..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#ping">1. PING <span class="nav-badge">Discovery</span></a></li>
+            <li><a href="#host">2. HOST <span class="nav-badge">DNS</span></a></li>
+            <li><a href="#nslookup">3. NSLOOKUP <span class="nav-badge">DNS</span></a></li>
+            <li><a href="#dig">4. DIG <span class="nav-badge">DNS</span></a></li>
+            <li><a href="#traceroute">5. TRACEROUTE <span class="nav-badge">Routing</span></a></li>
+            <li><a href="#nmap">6. NMAP <span class="nav-badge">Scanner</span></a></li>
+            <li><a href="#masscan">7. MASSCAN <span class="nav-badge">Fast Scan</span></a></li>
+            <li><a href="#nc">8. NC (Netcat) <span class="nav-badge">Banner</span></a></li>
+            <li><a href="#telnet">9. TELNET <span class="nav-badge">Connect</span></a></li>
+            <li><a href="#curl">10. CURL <span class="nav-badge">HTTP</span></a></li>
+            <li><a href="#arpscan">11. ARP-SCAN <span class="nav-badge">LAN</span></a></li>
+            <li><a href="#script">12. اسکریپت یکپارچه <span class="nav-badge">Auto</span></a></li>
+            <li><a href="#workflow">13. Workflow CTF <span class="nav-badge">Summary</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>Cheat Sheet بازنشانی فعال (Active Recon)</h1>
+            <p>نسخه کامل و بدون حذفیات - تمام دستورات، سناریوها و ترفندهای CTF</p>
+        </header>
+
+        <!-- Table of Tools -->
+        <section class="tool-section">
+            <h2 class="tool-title">📋 فهرست کامل ابزارهای Active Recon</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>ابزار</th>
+                            <th>کاربرد اصلی</th>
+                            <th>اولویت CTF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>ping</td><td>Host Discovery</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>2</td><td>host</td><td>DNS Lookup ساده</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>3</td><td>nslookup</td><td>DNS Lookup تعاملی</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>4</td><td>dig</td><td>DNS پیشرفته</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>5</td><td>traceroute</td><td>مسیریابی شبکه</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>6</td><td>nmap</td><td>اسکن پورت و Enumeration</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>7</td><td>masscan</td><td>اسکن سریع پورت</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>8</td><td>nc (Netcat)</td><td>اتصال به سرویس‌ها</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>9</td><td>telnet</td><td>اتصال به سرویس‌ها</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>10</td><td>curl</td><td>بررسی HTTP</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>11</td><td>wget</td><td>دانلود فایل</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>12</td><td>arp-scan</td><td>کشف دستگاه‌های شبکه</td><td>⭐⭐⭐</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 1. PING -->
+        <section id="ping" class="tool-section">
+            <h2 class="tool-title">1️⃣ PING - Host Discovery</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> بررسی زنده بودن هاست و دریافت اطلاعات اولیه</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Ping ساده (4 بار)
+ping example.com
+
+# Ping با تعداد مشخص
+ping -c 10 example.com
+
+# Ping با فاصله زمانی مشخص (ثانیه)
+ping -i 0.5 example.com
+
+# Ping با اندازه بسته مشخص
+ping -s 1024 example.com
+
+# Ping به آی‌پی
+ping 192.168.1.10
+
+# Ping بی‌نهایت (Ctrl+C برای متوقف کردن)
+ping -t example.com</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-base">Combined</span> دستورات ترکیبی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Ping با TTL مشخص
+ping -t 64 example.com
+
+# Ping با Don't Fragment
+ping -M do example.com
+
+# Ping با Flood (نیاز به root)
+sudo ping -f example.com
+
+# Ping با رکورد مسیر
+ping -R example.com
+
+# Ping با Timestamp
+ping -T example.com</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. دریافت IP هدف
+ping -c 1 example.com | grep -oP '\([0-9.]+\)' | tr -d '()'
+
+# 2. بررسی TTL (تشخیص OS)
+ping -c 1 example.com | grep -o 'ttl=[0-9]*'
+
+# 3. بررسی Packet Loss
+ping -c 10 example.com | grep -o '[0-9]*% packet loss'
+
+# 4. دریافت Average Time
+ping -c 5 example.com | grep -o 'avg/[0-9.]*' | cut -d'/' -f2
+
+# 5. Ping به همه دستگاه‌های شبکه
+for i in {1..254}; do ping -c 1 -W 1 192.168.1.$i | grep "64 bytes" & done
+
+# 6. Ping با آرام‌تر (کمتر تهاجمی)
+ping -c 4 -i 2 example.com
+
+# 7. تشخیص OS از TTL
+ttl=$(ping -c 1 example.com | grep -o 'ttl=[0-9]*' | cut -d'=' -f2)
+if [ $ttl -le 64 ]; then echo "Linux/Unix"; elif [ $ttl -le 128 ]; then echo "Windows"; else echo "Unknown"; fi</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. Ping Sweep (پیدا کردن همه هاست‌های زنده)
+nmap -sn 192.168.1.0/24
+
+# 2. Ping با پروتکل TCP (اگر ICMP blocked باشد)
+sudo hping3 -S -p 80 example.com
+
+# 3. Ping با پروتکل UDP
+sudo hping3 -2 -p 53 example.com
+
+# 4. Ping با استفاده از ARP (در LAN)
+arping -c 3 192.168.1.10
+
+# 5. Ping با استفاده از HTTP (اگر ICMP blocked باشد)
+curl -s -o /dev/null -w "%{http_code}\n" example.com
+
+# 6. Ping همه هاست‌ها با fping
+fping -a -g 192.168.1.0/24
+
+# 7. Ping با IP Spoofing
+sudo hping3 -S -p 80 example.com -a 192.168.1.100</code></pre>
+            </div>
+        </section>
+
+        <!-- 2. HOST -->
+        <section id="host" class="tool-section">
+            <h2 class="tool-title">2️⃣ HOST - DNS Lookup</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> جستجوی ساده DNS</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه و ترکیبی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># A Record (IPv4)
+host example.com
+
+# AAAA Record (IPv6)
+host -t AAAA example.com
+
+# MX Record (Mail)
+host -t MX example.com
+
+# NS Record (Name Server)
+host -t NS example.com
+
+# TXT Record
+host -t TXT example.com
+
+# همه رکوردها
+host -t ANY example.com
+
+# استفاده از سرور DNS خاص
+host example.com 8.8.8.8
+
+# Reverse DNS
+host 8.8.8.8
+
+# با جزئیات بیشتر
+host -v example.com</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. دریافت IP
+host example.com | grep "has address" | awk '{print $4}'
+
+# 2. دریافت همه IPها
+host example.com | grep "has address" | awk '{print $4}' | sort -u
+
+# 3. دریافت MX
+host -t MX example.com | awk '{print $NF}'
+
+# 4. دریافت NS
+host -t NS example.com | awk '{print $NF}'
+
+# 5. دریافت SPF از TXT
+host -t TXT example.com | grep -i "v=spf1"
+
+# 6. پیدا کردن CNAME
+host -t CNAME www.example.com
+
+# 7. Reverse DNS روی IP
+host 192.168.1.10
+
+# 8. دریافت همه MX
+host -t MX example.com | grep "mail" | awk '{print $NF}'
+
+# 9. دریافت TXT کامل
+host -t TXT example.com | sed 's/.*"\(.*\)"/\1/'
+
+# 10. ترکیب با dig برای دریافت جزئیات
+host -t MX example.com | while read mx; do
+    domain=$(echo $mx | awk '{print $NF}')
+    host $domain
+done</code></pre>
+            </div>
+        </section>
+
+        <!-- 3. NSLOOKUP -->
+        <section id="nslookup" class="tool-section">
+            <h2 class="tool-title">3️⃣ NSLOOKUP - DNS Lookup تعاملی</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> جستجوی DNS با قابلیت تعاملی</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> حالت غیرتعاملی و تعاملی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== حالت غیرتعاملی ====================
+
+# جستجوی ساده
+nslookup example.com
+
+# جستجوی نوع خاص
+nslookup -type=MX example.com
+nslookup -type=NS example.com
+nslookup -type=TXT example.com
+nslookup -type=CNAME example.com
+nslookup -type=SOA example.com
+nslookup -type=ANY example.com
+
+# استفاده از سرور DNS خاص
+nslookup example.com 8.8.8.8
+
+# Reverse DNS
+nslookup 8.8.8.8
+
+# ==================== حالت تعاملی ====================
+
+# ورود به حالت تعاملی
+nslookup
+
+# دستورات داخل محیط تعاملی
+> set type=MX
+> example.com
+> set type=NS
+> example.com
+> set type=TXT
+> example.com
+> set type=ANY
+> example.com
+> server 8.8.8.8
+> example.com
+> set debug
+> example.com
+> exit</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. دریافت IP
+nslookup example.com | grep "Address" | tail -1 | awk '{print $2}'
+
+# 2. دریافت MX
+nslookup -type=MX example.com | grep "mail exchanger" | awk '{print $6}'
+
+# 3. دریافت NS
+nslookup -type=NS example.com | grep "nameserver" | awk '{print $NF}'
+
+# 4. دریافت TXT
+nslookup -type=TXT example.com | grep "text" | sed 's/.*"\(.*\)"/\1/'
+
+# 5. دریافت CNAME
+nslookup -type=CNAME www.example.com | grep "canonical name" | awk '{print $NF}'
+
+# 6. تشخیص SPF
+nslookup -type=TXT example.com | grep -i "v=spf1"
+
+# 7. دریافت SOA
+nslookup -type=SOA example.com | grep "origin" | awk '{print $3}'
+
+# 8. دریافت همه MX با اولویت
+nslookup -type=MX example.com | grep "mail exchanger" | while read line; do
+    priority=$(echo $line | awk '{print $5}')
+    server=$(echo $line | awk '{print $6}')
+    echo "$priority $server"
+done
+
+# 9. استفاده از سرور DNS مختلف
+nslookup example.com 1.1.1.1
+
+# 10. دریافت اطلاعات کامل
+nslookup -type=ANY example.com | grep -v "Non-authoritative"</code></pre>
+            </div>
+        </section>
+
+        <!-- 4. DIG -->
+        <section id="dig" class="tool-section">
+            <h2 class="tool-title">4️⃣ DIG - Advanced DNS</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> جستجوی پیشرفته و کامل DNS</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه و ترکیبی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># جستجوی کامل
+dig example.com
+
+# فقط پاسخ کوتاه
+dig example.com +short
+
+# A Record
+dig example.com A +short
+
+# AAAA Record
+dig example.com AAAA +short
+
+# MX Record
+dig example.com MX +short
+
+# NS Record
+dig example.com NS +short
+
+# TXT Record
+dig example.com TXT +short
+
+# همه رکوردها
+dig example.com ANY
+
+# با نمایش TTL
+dig example.com +ttlid
+
+# با جزئیات کامل
+dig example.com +trace
+
+# استفاده از سرور DNS خاص
+dig @8.8.8.8 example.com
+
+# فقط پاسخ
+dig example.com +noall +answer
+
+# فقط AUTHORITY
+dig example.com +noall +authority
+
+# فقط ADDITIONAL
+dig example.com +noall +additional</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. دریافت IP کوتاه
+dig example.com +short
+
+# 2. دریافت همه IPها
+dig example.com A +short | sort -u
+
+# 3. دریافت MX با اولویت
+dig example.com MX +short | awk '{print $1, $2}'
+
+# 4. دریافت NS
+dig example.com NS +short
+
+# 5. دریافت SPF از TXT
+dig example.com TXT +short | grep -i "v=spf1"
+
+# 6. دریافت DKIM
+dig default._domainkey.example.com TXT +short
+
+# 7. دریافت DMARC
+dig _dmarc.example.com TXT +short
+
+# 8. دریافت CNAME
+dig www.example.com CNAME +short
+
+# 9. Reverse DNS
+dig -x 8.8.8.8 +short
+
+# 10. Zone Transfer (اگر باز باشد)
+dig example.com AXFR @ns1.example.com
+
+# 11. دریافت TTL
+dig example.com A +noall +answer | awk '{print $2}'
+
+# 12. دریافت همه MX با dig
+dig example.com MX +short | while read line; do
+    priority=$(echo $line | awk '{print $1}')
+    server=$(echo $line | awk '{print $2}')
+    ip=$(dig $server A +short | head -1)
+    echo "$priority $server -> $ip"
+done
+
+# 13. دریافت همه اطلاعات
+dig example.com +noall +answer +authority +additional
+
+# 14. دریافت SOA
+dig example.com SOA +short | awk '{print $1}'
+
+# 15. دریافت SRV
+dig _sip._tcp.example.com SRV +short</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-tip">Tip</span> نکات مهم CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. Bruteforce زیردامنه
+for sub in www mail ftp ssh admin test dev api; do
+    dig $sub.example.com A +short | while read ip; do
+        if [ ! -z "$ip" ]; then
+            echo "[+] $sub.example.com -> $ip"
+        fi
+    done
+done
+
+# 2. دریافت همه رکوردها با فیلتر
+dig example.com ANY | grep -E "A|MX|NS|TXT|CNAME|SOA"
+
+# 3. مقایسه DNS مختلف
+for dns in 8.8.8.8 1.1.1.1 9.9.9.9; do
+    echo "=== $dns ==="
+    dig @$dns example.com A +short
+done
+
+# 4. دریافت DNSSEC
+dig example.com A +dnssec
+
+# 5. دریافت با حداقل پاسخ
+dig example.com +nocomments +noquestion +noauthority +noadditional +nostats
+
+# 6. دریافت CDN تشخیص
+dig example.com A +short | while read ip; do
+    whois $ip | grep -i "cloudflare\|akamai\|fastly\|cloudfront"
+done
+
+# 7. دریافت همه MX با IP
+dig example.com MX +short | awk '{print $2}' | while read mx; do
+    echo "$mx -> $(dig $mx A +short | head -1)"
+done
+
+# 8. دریافت اطلاعات کامل در یک فایل
+dig example.com +trace > dns_trace.txt</code></pre>
+            </div>
+        </section>
+
+        <!-- 5. TRACEROUTE -->
+        <section id="traceroute" class="tool-section">
+            <h2 class="tool-title">5️⃣ TRACEROUTE - مسیریابی شبکه</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> مشاهده مسیر رسیدن به Target</div>
+            
+            <h3 class="sub-title"><span class="tag tag-base">Base</span> دستورات پایه و ترکیبی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Traceroute ساده
+traceroute example.com
+
+# Traceroute با ICMP
+traceroute -I example.com
+
+# Traceroute با TCP
+traceroute -T example.com
+
+# با نمایش IP فقط
+traceroute -n example.com
+
+# با تنظیم TTL اولیه
+traceroute -f 5 example.com
+
+# با تنظیم حداکثر TTL
+traceroute -m 20 example.com
+
+# با زمان انتظار کمتر
+traceroute -w 1 example.com
+
+# با UDP
+traceroute -U example.com
+
+# با مشخص کردن پورت
+traceroute -p 80 example.com
+
+# با نمایش AS شماره
+traceroute -A example.com</code></pre>
+            </div>
+
+            <h3 class="sub-title"><span class="tag tag-ctf">CTF</span> سناریوهای CTF</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. دریافت مسیر
+traceroute example.com | grep -v "\\*"
+
+# 2. دریافت فقط IPها
+traceroute -n example.com | grep -v "\\*" | awk '{print $2}'
+
+# 3. دریافت تعداد هاپ‌ها
+traceroute -n example.com | wc -l
+
+# 4. دریافت IP نهایی
+traceroute -n example.com | tail -1 | awk '{print $2}'
+
+# 5. Traceroute با ICMP
+traceroute -I example.com
+
+# 6. دریافت مسیر با TCP
+traceroute -T -p 80 example.com
+
+# 7. دریافت مسیر با UDP
+traceroute -U -p 53 example.com
+
+# 8. دریافت با 64 بیت
+traceroute -q 3 example.com
+
+# 9. دریافت با حداقل زمان
+traceroute -w 1 -q 1 example.com
+
+# 10. دریافت AS اطلاعات
+traceroute -A example.com | grep -o "AS[0-9]*"</code></pre>
+            </div>
+        </section>
+
+        <!-- 6. NMAP -->
+        <section id="nmap" class="tool-section">
+            <h2 class="tool-title">6️⃣ NMAP - مهم‌ترین ابزار Active Recon ⭐⭐⭐⭐⭐</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اسکن پورت و Enumeration</div>
+            
+            <h3 class="sub-tool-title">6.1 Host Discovery</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Ping Sweep (ICMP)
+nmap -sn 192.168.1.0/24
+
+# Ping Sweep با TCP SYN
+nmap -sn -PS 80 192.168.1.0/24
+
+# Ping Sweep با TCP ACK
+nmap -sn -PA 80 192.168.1.0/24
+
+# Ping Sweep با UDP
+nmap -sn -PU 53 192.168.1.0/24
+
+# Ping Sweep با ARP (LAN)
+nmap -sn -PR 192.168.1.0/24
+
+# استفاده از چند روش
+nmap -sn -PS 80 -PA 22 -PU 53 192.168.1.0/24
+
+# بدون Ping (فرض کن زنده است)
+nmap -Pn 192.168.1.10
+
+# فقط هاست‌های زنده
+nmap -sn 192.168.1.0/24 | grep "Nmap scan" | awk '{print $5}'
+
+# بررسی یک هاست
+nmap -sn 192.168.1.10
+
+# 1. پیدا کردن همه هاست‌های زنده
+nmap -sn 192.168.1.0/24 | grep -B 2 "Host is up" | grep "Nmap scan" | awk '{print $5}'
+
+# 2. پیدا کردن IP یک دامنه
+nmap -sn example.com
+
+# 3. پیدا کردن هاست‌های با پورت خاص
+nmap -sn -PS 22 192.168.1.0/24
+
+# 4. پیدا کردن همه هاست‌های با پاسخ
+nmap -sn -PR 192.168.1.0/24 | grep "Host is up" -B 2 | grep "Nmap scan"
+
+# 5. پیدا کردن هاست‌های با IP خاص
+nmap -sn 192.168.1.1-50</code></pre>
+            </div>
+
+            <h3 class="sub-tool-title">6.2 Port Scanning</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== تکنیک‌های اسکن ====================
+
+# SYN Scan (نیمه‌باز - سریع)
+nmap -sS 192.168.1.10
+
+# TCP Connect Scan (کامل)
+nmap -sT 192.168.1.10
+
+# UDP Scan
+nmap -sU 192.168.1.10
+
+# FIN Scan (Stealth)
+nmap -sF 192.168.1.10
+
+# NULL Scan
+nmap -sN 192.168.1.10
+
+# XMAS Scan
+nmap -sX 192.168.1.10
+
+# ACK Scan (Firewall Detection)
+nmap -sA 192.168.1.10
+
+# Window Scan
+nmap -sW 192.168.1.10
+
+# Maimon Scan
+nmap -sM 192.168.1.10
+
+# ==================== دستورات ترکیبی ====================
+
+# اسکن سریع (پورت‌های Top 100)
+nmap -T4 -F 192.168.1.10
+
+# اسکن پورت‌های خاص
+nmap -p 22,80,443 192.168.1.10
+
+# اسکن رنج پورت
+nmap -p 1-1000 192.168.1.10
+
+# اسکن همه پورت‌ها
+nmap -p- 192.168.1.10
+
+# اسکن با محدودیت زمان
+nmap -T5 -p- --max-rtt-timeout 1000ms 192.168.1.10
+
+# ==================== سناریوهای CTF ====================
+
+# 1. اسکن سریع پورت‌های رایج
+nmap -T4 -F 192.168.1.10
+
+# 2. اسکن همه پورت‌ها
+nmap -p- -T4 192.168.1.10
+
+# 3. اسکن پورت‌های خاص
+nmap -p 21,22,25,53,80,110,111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 192.168.1.10
+
+# 4. اسکن با مشخص کردن پورت‌ها از فایل
+nmap -p $(cat ports.txt | tr '\n' ',') 192.168.1.10
+
+# 5. اسکن فقط پورت‌های باز
+nmap -p- --open 192.168.1.10
+
+# 6. اسکن با تحمل خطا
+nmap -p- --max-retries 2 192.168.1.10
+
+# 7. اسکن با تاخیر
+nmap -p- --min-rate 1000 192.168.1.10
+
+# 8. اسکن UDP روی پورت‌های رایج
+nmap -sU -p 53,161,137,138,139 192.168.1.10
+
+# 9. اسکن با پورت‌های تصادفی
+nmap -p 80 --randomize-hosts 192.168.1.10
+
+# 10. اسکن با پورت‌های Top 1000
+nmap --top-ports 1000 192.168.1.10</code></pre>
+            </div>
+
+            <h3 class="sub-tool-title">6.3 Service & Version Detection</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># تشخیص سرویس
+nmap -sV 192.168.1.10
+
+# تشخیص سرویس با شدت بالا
+nmap -sV --version-intensity 9 192.168.1.10
+
+# تشخیص سرویس با نسخه
+nmap -sV --version-all 192.168.1.10
+
+# تشخیص سرویس روی پورت خاص
+nmap -sV -p 80 192.168.1.10
+
+# تشخیص سرویس و اسکن همه پورت‌ها
+nmap -sV -p- 192.168.1.10
+
+# تشخیص سرویس با اسکریپت‌ها
+nmap -sV -sC 192.168.1.10
+
+# تشخیص سرویس با نسخه و OS
+nmap -sV -O 192.168.1.10
+
+# 1. تشخیص سرویس روی پورت‌های باز
+nmap -sV -p 22,80,443 192.168.1.10
+
+# 2. تشخیص سرویس با شدت کم
+nmap -sV --version-intensity 0 192.168.1.10
+
+# 3. تشخیص سرویس با شدت بالا
+nmap -sV --version-intensity 9 --version-all 192.168.1.10
+
+# 4. تشخیص سرویس و ذخیره خروجی
+nmap -sV -oN service_scan.txt 192.168.1.10
+
+# 5. تشخیص سرویس با XML خروجی
+nmap -sV -oX service_scan.xml 192.168.1.10
+
+# 6. تشخیص سرویس فقط روی TCP
+nmap -sV -sT 192.168.1.10
+
+# 7. تشخیص سرویس با timeout بیشتر
+nmap -sV --host-timeout 5m 192.168.1.10
+
+# 8. تشخیص سرویس با max-retries
+nmap -sV --max-retries 5 192.168.1.10</code></pre>
+            </div>
+
+            <h3 class="sub-tool-title">6.4 OS Detection</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># تشخیص OS
+nmap -O 192.168.1.10
+
+# تشخیص OS با حدس دقیق
+nmap -O --osscan-guess 192.168.1.10
+
+# تشخیص OS با نشان دادن احتمالات
+nmap -O --osscan-limit 192.168.1.10
+
+# تشخیص OS و سرویس
+nmap -O -sV 192.168.1.10
+
+# تشخیص OS با اسکن همه پورت‌ها
+nmap -O -p- 192.168.1.10
+
+# 1. تشخیص OS
+nmap -O 192.168.1.10 | grep "OS details"
+
+# 2. تشخیص OS با دقت بالا
+nmap -O --osscan-guess --fuzzy 192.168.1.10
+
+# 3. تشخیص OS با اسکن پورت‌های رایج
+nmap -O -F 192.168.1.10
+
+# 4. تشخیص OS با نشان دادن همه احتمالات
+nmap -O --osscan-limit --osscan-guess 192.168.1.10
+
+# 5. تشخیص OS و ذخیره خروجی
+nmap -O -oN os_scan.txt 192.168.1.10
+
+# 6. تشخیص OS از روی TTL
+ping -c 1 192.168.1.10 | grep -o "ttl=[0-9]*" | cut -d'=' -f2
+# 64 = Linux, 128 = Windows</code></pre>
+            </div>
+
+            <h3 class="sub-tool-title">6.5 NSE Scripts</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اسکریپت‌های پیش‌فرض
+nmap -sC 192.168.1.10
+
+# اسکریپت‌های خاص
+nmap --script=http-title 192.168.1.10
+
+# همه اسکریپت‌ها
+nmap --script=all 192.168.1.10
+
+# ==================== اسکریپت‌های مهم ====================
+
+# HTTP
+nmap --script=http-headers 192.168.1.10
+nmap --script=http-title 192.168.1.10
+nmap --script=http-enum 192.168.1.10
+nmap --script=http-methods 192.168.1.10
+nmap --script=http-robots.txt 192.168.1.10
+
+# SSL
+nmap --script=ssl-enum-ciphers -p 443 192.168.1.10
+
+# SMB
+nmap --script=smb-enum-shares -p 445 192.168.1.10
+nmap --script=smb-os-discovery -p 445 192.168.1.10
+
+# SNMP
+nmap --script=snmp-info -sU -p 161 192.168.1.10
+
+# DNS
+nmap --script=dns-zone-transfer -p 53 192.168.1.10
+
+# FTP
+nmap --script=ftp-anon -p 21 192.168.1.10
+
+# SSH
+nmap --script=ssh-hostkey -p 22 192.168.1.10
+
+# MySQL
+nmap --script=mysql-info -p 3306 192.168.1.10
+
+# ==================== سناریوهای CTF ====================
+
+# 1. اسکریپت‌های پیش‌فرض
+nmap -sC -sV 192.168.1.10
+
+# 2. اسکریپت‌های HTTP
+nmap --script=http* -p 80,443 192.168.1.10
+
+# 3. اسکریپت‌های آسیب‌پذیری
+nmap --script=vuln* 192.168.1.10
+
+# 4. اسکریپت‌های کشف
+nmap --script=discovery* 192.168.1.10
+
+# 5. اسکریپت‌های خاص روی پورت
+nmap --script=http-headers -p 80 192.168.1.10
+
+# 6. اجرای اسکریپت با آرگومان
+nmap --script=http-headers --script-args http-headers.raw=1 192.168.1.10
+
+# 7. اسکریپت‌های با timeout
+nmap --script=http-enum --script-timeout 5s 192.168.1.10
+
+# 8. اسکریپت‌های با trace
+nmap --script-trace --script=http-title 192.168.1.10
+
+# 9. اسکریپت‌های با verbose
+nmap -v --script=http-title 192.168.1.10
+
+# 10. اسکریپت‌های با خروجی کامل
+nmap -d --script=http-title 192.168.1.10</code></pre>
+            </div>
+
+            <h3 class="sub-tool-title">6.6 Nmap ترکیبی کامل</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== بهترین ترکیب‌ها ====================
+
+# اسکن کامل و سریع
+nmap -T4 -sC -sV -p- 192.168.1.10
+
+# اسکن کامل با تشخیص OS
+nmap -T4 -sC -sV -O -p- 192.168.1.10
+
+# اسکن تهاجمی
+nmap -T4 -A 192.168.1.10
+
+# اسکن با خروجی همه فرمت‌ها
+nmap -T4 -sC -sV -O -p- -oA full_scan 192.168.1.10
+
+# اسکن با خروجی XML
+nmap -sC -sV -oX scan.xml 192.168.1.10
+
+# ==================== سناریوهای CTF ====================
+
+# 1. اسکن سریع اولیه
+nmap -T4 -F 192.168.1.10
+
+# 2. اسکن همه پورت‌ها
+nmap -p- -T4 192.168.1.10
+
+# 3. اسکن سرویس‌ها
+nmap -sV -p 22,80,443,3306 192.168.1.10
+
+# 4. اسکن کامل
+nmap -sC -sV -p- -T4 192.168.1.10
+
+# 5. اسکن تهاجمی
+nmap -A -T4 192.168.1.10
+
+# 6. اسکن با تشخیص OS
+nmap -O -T4 192.168.1.10
+
+# 7. اسکن با اسکریپت‌های HTTP
+nmap --script=http* -p 80,443 192.168.1.10
+
+# 8. اسکن با اسکریپت‌های آسیب‌پذیری
+nmap --script=vuln* -p 22,80,443 192.168.1.10
+
+# 9. اسکن با زمان‌بندی تهاجمی
+nmap -T5 -p- --min-rate 10000 192.168.1.10
+
+# 10. اسکن با خروجی قابل جستجو
+nmap -oG output.txt 192.168.1.10</code></pre>
+            </div>
+        </section>
+
+        <!-- 7. MASSCAN -->
+        <section id="masscan" class="tool-section">
+            <h2 class="tool-title">7️⃣ MASSCAN - Fast Port Scanner</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اسکن بسیار سریع پورت‌ها</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# اسکن همه پورت‌ها
+masscan -p1-65535 192.168.1.10
+
+# اسکن با rate مشخص
+masscan -p1-65535 192.168.1.10 --rate=1000
+
+# اسکن پورت‌های خاص
+masscan -p22,80,443 192.168.1.10
+
+# اسکن رنج پورت
+masscan -p1-1000 192.168.1.10
+
+# ==================== دستورات ترکیبی ====================
+
+# اسکن با خروجی
+masscan -p1-65535 192.168.1.10 -oG masscan.txt
+
+# اسکن با خروجی JSON
+masscan -p1-65535 192.168.1.10 -oJ masscan.json
+
+# اسکن با خروجی قابل خواندن
+masscan -p1-65535 192.168.1.10 -oL masscan.list
+
+# ==================== سناریوهای CTF ====================
+
+# 1. اسکن سریع پورت‌های رایج
+masscan -p1-1000 192.168.1.10 --rate=10000
+
+# 2. اسکن همه پورت‌ها با rate بالا
+masscan -p1-65535 192.168.1.10 --rate=10000
+
+# 3. اسکن شبکه
+masscan -p80 192.168.1.0/24 --rate=10000
+
+# 4. اسکن با timeout
+masscan -p1-65535 192.168.1.10 --rate=1000 --timeout 1000
+
+# 5. اسکن با خروجی JSON
+masscan -p1-65535 192.168.1.10 -oJ scan.json
+
+# 6. اسکن با filter
+masscan -p1-65535 192.168.1.10 --rate=10000 --open-only
+
+# 7. اسکن با IP range
+masscan -p80 192.168.1.1-254 --rate=10000
+
+# 8. اسکن با ports از فایل
+masscan -p$(cat ports.txt | tr '\n' ',') 192.168.1.10 --rate=10000
+
+# 9. اسکن با source port
+masscan -p1-65535 192.168.1.10 --source-port 10000
+
+# 10. اسکن با outgoing interface
+masscan -p1-65535 192.168.1.10 -e eth0</code></pre>
+            </div>
+        </section>
+
+        <!-- 8. NC -->
+        <section id="nc" class="tool-section">
+            <h2 class="tool-title">8️⃣ NC (Netcat) - Connection Tool</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اتصال به سرویس‌ها و دریافت بنر</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# اتصال به پورت
+nc 192.168.1.10 80
+
+# اتصال با timeout
+nc -w 5 192.168.1.10 80
+
+# دریافت بنر
+echo "HEAD / HTTP/1.0\r\n\r\n" | nc 192.168.1.10 80
+
+# ==================== دستورات ترکیبی ====================
+
+# دریافت SSH بنر
+nc 192.168.1.10 22
+
+# دریافت HTTP بنر
+echo "HEAD / HTTP/1.0\r\n\r\n" | nc 192.168.1.10 80
+
+# دریافت SMTP بنر
+nc 192.168.1.10 25
+
+# دریافت FTP بنر
+nc 192.168.1.10 21
+
+# دریافت POP3 بنر
+nc 192.168.1.10 110
+
+# ==================== سناریوهای CTF ====================
+
+# 1. دریافت بنر SSH
+nc 192.168.1.10 22 | head -1
+
+# 2. دریافت بنر HTTP
+echo -e "HEAD / HTTP/1.0\n\n" | nc 192.168.1.10 80 | head -1
+
+# 3. دریافت بنر SMTP
+nc 192.168.1.10 25 | head -1
+
+# 4. دریافت بنر FTP
+nc 192.168.1.10 21 | head -1
+
+# 5. دریافت بنر POP3
+nc 192.168.1.10 110 | head -1
+
+# 6. دریافت بنر MySQL
+nc 192.168.1.10 3306 | head -1
+
+# 7. دریافت بنر PostgreSQL
+nc 192.168.1.10 5432 | head -1
+
+# 8. دریافت بنر Redis
+echo "PING" | nc 192.168.1.10 6379
+
+# 9. دریافت بنر Memcached
+echo "stats" | nc 192.168.1.10 11211
+
+# 10. دریافت بنر MongoDB
+echo "ismaster" | nc 192.168.1.10 27017</code></pre>
+            </div>
+        </section>
+
+        <!-- 9. TELNET -->
+        <section id="telnet" class="tool-section">
+            <h2 class="tool-title">9️⃣ TELNET - Connection Tool</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اتصال به سرویس‌ها</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# اتصال به پورت
+telnet 192.168.1.10 80
+
+# ==================== سناریوهای CTF ====================
+
+# 1. دریافت HTTP بنر
+telnet 192.168.1.10 80
+> HEAD / HTTP/1.0
+
+# 2. دریافت SMTP بنر
+telnet 192.168.1.10 25
+
+# 3. دریافت POP3 بنر
+telnet 192.168.1.10 110
+
+# 4. دریافت FTP بنر
+telnet 192.168.1.10 21</code></pre>
+            </div>
+        </section>
+
+        <!-- 10. CURL -->
+        <section id="curl" class="tool-section">
+            <h2 class="tool-title">🔟 CURL - HTTP Tool</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> بررسی وب‌سایت‌ها</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# دریافت صفحه
+curl http://example.com
+
+# دریافت هدرها
+curl -I http://example.com
+
+# دریافت هدرهای کامل
+curl -i http://example.com
+
+# دنبال کردن ریدایرکت
+curl -L http://example.com
+
+# ==================== دستورات ترکیبی ====================
+
+# دریافت با User-Agent خاص
+curl -A "Mozilla/5.0" http://example.com
+
+# دریافت با Cookie
+curl -b "cookie=value" http://example.com
+
+# دریافت با Proxy
+curl -x http://127.0.0.1:8080 http://example.com
+
+# ==================== سناریوهای CTF ====================
+
+# 1. دریافت هدرها
+curl -I http://example.com | grep -i "server\|x-powered-by"
+
+# 2. دنبال کردن ریدایرکت
+curl -L -I http://example.com
+
+# 3. دریافت robots.txt
+curl http://example.com/robots.txt
+
+# 4. دریافت sitemap.xml
+curl http://example.com/sitemap.xml
+
+# 5. دریافت status code
+curl -s -o /dev/null -w "%{http_code}\n" http://example.com
+
+# 6. دریافت با User-Agent
+curl -A "Mozilla/5.0" http://example.com
+
+# 7. دریافت با Cookie
+curl -b "PHPSESSID=value" http://example.com
+
+# 8. دریافت با Proxy
+curl -x http://127.0.0.1:8080 http://example.com
+
+# 9. دریافت با timeout
+curl --max-time 5 http://example.com
+
+# 10. دریافت با verbose
+curl -v http://example.com</code></pre>
+            </div>
+        </section>
+
+        <!-- 11. ARP-SCAN -->
+        <section id="arpscan" class="tool-section">
+            <h2 class="tool-title">1️⃣1️⃣ ARP-SCAN - Network Discovery</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> کشف دستگاه‌های در LAN</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ==================== دستورات اصلی ====================
+
+# اسکن شبکه
+arp-scan 192.168.1.0/24
+
+# اسکن با interface
+arp-scan -I eth0 192.168.1.0/24
+
+# ==================== سناریوهای CTF ====================
+
+# 1. کشف همه دستگاه‌ها
+arp-scan 192.168.1.0/24 | grep -v "Interface" | grep -v "packets"
+
+# 2. کشف با interface
+arp-scan -I eth0 192.168.1.0/24
+
+# 3. کشف با timeout
+arp-scan -t 1000 192.168.1.0/24
+
+# 4. کشف با نشان دادن MAC
+arp-scan -l 192.168.1.0/24</code></pre>
+            </div>
+        </section>
+
+        <!-- 12. AUTO SCRIPT -->
+        <section id="script" class="tool-section">
+            <h2 class="tool-title">📝 اسکریپت کامل Active Recon Auto</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> اجرای خودکار همه ابزارها برای جمع‌آوری سریع اطلاعات</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">#!/bin/bash
+# active_cheatsheet.sh - اسکریپت کامل Active Recon
+
+TARGET=${1:-192.168.1.10}
+OUTPUT_DIR="active_recon_$(date +%Y%m%d_%H%M%S)"
+mkdir -p $OUTPUT_DIR
+
+echo "========================================="
+echo "  ACTIVE RECON CHEAT SHEET AUTO-RUN"
+echo "========================================="
+
+# 1. Ping
+echo "[1/12] Running Ping..."
+ping -c 4 $TARGET > $OUTPUT_DIR/01_ping.txt
+echo "✓ Ping saved"
+
+# 2. Host
+echo "[2/12] Running Host..."
+host $TARGET > $OUTPUT_DIR/02_host.txt
+host -t MX $TARGET >> $OUTPUT_DIR/02_host.txt
+host -t NS $TARGET >> $OUTPUT_DIR/02_host.txt
+host -t TXT $TARGET >> $OUTPUT_DIR/02_host.txt
+echo "✓ Host saved"
+
+# 3. nslookup
+echo "[3/12] Running nslookup..."
+nslookup $TARGET > $OUTPUT_DIR/03_nslookup.txt
+nslookup -type=MX $TARGET >> $OUTPUT_DIR/03_nslookup.txt
+nslookup -type=NS $TARGET >> $OUTPUT_DIR/03_nslookup.txt
+nslookup -type=TXT $TARGET >> $OUTPUT_DIR/03_nslookup.txt
+echo "✓ nslookup saved"
+
+# 4. dig
+echo "[4/12] Running dig..."
+for type in A AAAA MX NS TXT CNAME SOA; do
+    dig $TARGET $type +short > $OUTPUT_DIR/04_dig_$type.txt
+done
+echo "✓ dig saved"
+
+# 5. traceroute
+echo "[5/12] Running traceroute..."
+traceroute -n $TARGET > $OUTPUT_DIR/05_traceroute.txt
+echo "✓ traceroute saved"
+
+# 6. Nmap Basic
+echo "[6/12] Running Nmap Basic..."
+nmap -T4 -F $TARGET > $OUTPUT_DIR/06_nmap_basic.txt
+echo "✓ Nmap Basic saved"
+
+# 7. Nmap Full Ports
+echo "[7/12] Running Nmap Full Ports..."
+nmap -p- -T4 $TARGET > $OUTPUT_DIR/07_nmap_full.txt
+echo "✓ Nmap Full saved"
+
+# 8. Nmap Services
+echo "[8/12] Running Nmap Services..."
+nmap -sV -p 22,25,53,80,110,111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 $TARGET > $OUTPUT_DIR/08_nmap_services.txt
+echo "✓ Nmap Services saved"
+
+# 9. Nmap OS
+echo "[9/12] Running Nmap OS..."
+nmap -O $TARGET > $OUTPUT_DIR/09_nmap_os.txt
+echo "✓ Nmap OS saved"
+
+# 10. Nmap Scripts
+echo "[10/12] Running Nmap Scripts..."
+nmap -sC -p 22,80,443 $TARGET > $OUTPUT_DIR/10_nmap_scripts.txt
+echo "✓ Nmap Scripts saved"
+
+# 11. Nmap Aggressive
+echo "[11/12] Running Nmap Aggressive..."
+nmap -A -T4 $TARGET > $OUTPUT_DIR/11_nmap_aggressive.txt
+echo "✓ Nmap Aggressive saved"
+
+# 12. Masscan
+echo "[12/12] Running Masscan..."
+if command -v masscan &> /dev/null; then
+    masscan -p1-65535 $TARGET --rate=1000 > $OUTPUT_DIR/12_masscan.txt
+    echo "✓ Masscan saved"
+else
+    echo "✗ Masscan not installed"
+fi
+
+echo ""
+echo "========================================="
+echo "  ✅ RECON COMPLETE"
+echo "========================================="
+echo "📁 Output: $OUTPUT_DIR"
+ls -la $OUTPUT_DIR</code></pre>
+            </div>
+        </section>
+
+        <!-- 13. WORKFLOW -->
+        <section id="workflow" class="tool-section">
+            <h2 class="tool-title">✅ خلاصه Workflow مسابقات CTF</h2>
+            <div class="goal-box"><strong>📌 هدف:</strong> ترتیب اجرای ابزارها در مسابقات CTF</div>
+            
+            <div class="workflow-box">
+                <p>1. Ping → Host is alive?</p>
+                <p>2. host/nslookup/dig → DNS information</p>
+                <p>3. traceroute → Network path</p>
+                <p>4. nmap -F → Quick port scan</p>
+                <p>5. nmap -p- → All ports</p>
+                <p>6. nmap -sV → Services & versions</p>
+                <p>7. nmap -O → OS detection</p>
+                <p>8. nmap -sC → Default scripts</p>
+                <p>9. nmap -A → Aggressive scan</p>
+                <p>10. masscan → Fast scan (optional)</p>
+                <p>11. nc → Banner grabbing</p>
+                <p>12. curl → HTTP checks</p>
+                <p>13. arp-scan → LAN discovery</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#3fb950';
+            btn.style.color = '#fff';
+            btn.style.borderColor = '#3fb950';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

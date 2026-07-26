@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Security Files</title>
+    <style>
+        /* وارد کردن فونت‌های مناسب برای کدنویسی و متن فارکی */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Vazirmatn:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #0d1117; /* پس زمینه خیلی تیره */
+            color: #c9d1d9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(#161b22 1px, transparent 1px);
+            background-size: 20px 20px; /* یک شبکه بندی ظریف در پس زمینه */
+        }
+
+        .container {
+            background-color: #161b22;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: #58a6ff;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 15px;
+        }
+
+        .terminal-line {
+            font-family: 'Fira Code', monospace;
+            color: #00ff41; /* رنگ سبز ترمینال */
+            margin-bottom: 25px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .section-title {
+            color: #8b949e;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            padding-right: 5px;
+            border-right: 3px solid #f78166;
+            padding-right: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #c9d1d9;
+            font-family: 'Fira Code', monospace; /* فونت کدنویسی برای نام فایل‌ها */
+            font-size: 14px;
+            padding: 10px 15px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        a:hover {
+            background-color: #161b22;
+            border-color: #58a6ff;
+            color: #58a6ff;
+            box-shadow: 0 0 15px rgba(88, 166, 255, 0.2);
+            transform: translateY(-2px); /* کمی بالا آمدن هنگام هاور شدن */
+        }
+
+        .icon {
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        /* رنگ‌بندی پسوند فایل‌ها برای زیبایی بیشتر */
+        .ext-html { color: #e34c26; margin-right: 5px; }
+        .ext-htm { color: #e34c26; margin-right: 5px; }
+        .ext-py { color: #3572A5; margin-right: 5px; }
+        .ext-folder { color: #f1c40f; margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>سیستم مدیریت امنیت</h1>
+        <div class="terminal-line">root@cyber:~/files# ls -la</div>
+
+        <div class="section-title">صفحات آموزشی و گزارش‌ها (HTML)</div>
+        <ul>
+            <li><a href="/ctf/app.html"><span class="icon">🌐</span>app<span class="ext-html">.html</span></a></li>
+            <li><a href="/ctf/degital_forensic.html"><span class="icon">🕵️</span>degital_forensic<span class="ext-html">.html</span></a></li>
+            <li><a href="/ctf/incedent_responce.html"><span class="icon">🚨</span>incedent_responce<span class="ext-html">.html</span></a></li>
+            <li><a href="/ctf/linux_security.htm"><span class="icon">🐧</span>linux_security<span class="ext-htm">.htm</span></a></li>
+            <li><a href="/ctf/network_security.html"><span class="icon">🔗</span>network_security<span class="ext-html">.html</span></a></li>
+            <li><a href="/ctf/web_security.htm"><span class="icon">🛡️</span>web_security<span class="ext-htm">.htm</span></a></li>
+            <li><a href="/ctf/windows_AD.htm"><span class="icon">🪟</span>windows_AD<span class="ext-htm">.htm</span></a></li>
+        </ul>
+
+        <div class="section-title">ابزارها و اسکریپت‌ها (Python)</div>
+        <ul>
+            <li><a href="/ctf/active.py"><span class="icon">🐍</span>active<span class="ext-py">.py</span></a></li>
+            <li><a href="/ctf/exploitation.py"><span class="icon">⚔️</span>exploitation<span class="ext-py">.py</span></a></li>
+            <li><a href="/ctf/reporting.py"><span class="icon">📝</span>reporting<span class="ext-py">.py</span></a></li>
+            <li><a href="/ctf/WebRecon.py"><span class="icon">🔭</span>WebRecon<span class="ext-py">.py</span></a></li>
+        </ul>
+
+        <div class="section-title">پوشه‌ها (Folders)</div>
+        <ul>
+            <li><a href="attacks/"><span class="icon">📁</span>attacks<span class="ext-folder">/</span></a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

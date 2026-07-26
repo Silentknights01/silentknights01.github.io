@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cyber Security Files</title>
     <style>
-        /* وارد کردن فونت‌های مناسب برای کدنویسی و متن فارکی */
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Vazirmatn:wght@400;700&display=swap');
 
         body {
             font-family: 'Vazirmatn', sans-serif;
-            background-color: #0d1117; /* پس زمینه خیلی تیره */
+            background-color: #0d1117;
             color: #c9d1d9;
             display: flex;
             justify-content: center;
@@ -19,7 +18,7 @@
             margin: 0;
             padding: 20px;
             background-image: radial-gradient(#161b22 1px, transparent 1px);
-            background-size: 20px 20px; /* یک شبکه بندی ظریف در پس زمینه */
+            background-size: 20px 20px;
         }
 
         .container {
@@ -28,7 +27,7 @@
             border-radius: 10px;
             border: 1px solid #30363d;
             width: 100%;
-            max-width: 600px;
+            max-width: 800px;
             box-shadow: 0 0 30px rgba(0, 255, 65, 0.05);
         }
 
@@ -44,10 +43,11 @@
 
         .terminal-line {
             font-family: 'Fira Code', monospace;
-            color: #00ff41; /* رنگ سبز ترمینال */
+            color: #00ff41;
             margin-bottom: 25px;
             font-size: 14px;
             opacity: 0.8;
+            text-align: center;
         }
 
         .section-title {
@@ -60,6 +60,12 @@
             padding-right: 5px;
             border-right: 3px solid #f78166;
             padding-right: 10px;
+        }
+
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
         }
 
         ul {
@@ -77,9 +83,9 @@
             align-items: center;
             text-decoration: none;
             color: #c9d1d9;
-            font-family: 'Fira Code', monospace; /* فونت کدنویسی برای نام فایل‌ها */
-            font-size: 14px;
-            padding: 10px 15px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            padding: 8px 12px;
             background-color: #0d1117;
             border: 1px solid #30363d;
             border-radius: 6px;
@@ -91,50 +97,91 @@
             border-color: #58a6ff;
             color: #58a6ff;
             box-shadow: 0 0 15px rgba(88, 166, 255, 0.2);
-            transform: translateY(-2px); /* کمی بالا آمدن هنگام هاور شدن */
+            transform: translateY(-2px);
         }
 
         .icon {
-            margin-left: 10px;
-            font-size: 16px;
+            margin-left: 8px;
+            font-size: 14px;
         }
 
-        /* رنگ‌بندی پسوند فایل‌ها برای زیبایی بیشتر */
-        .ext-html { color: #e34c26; margin-right: 5px; }
-        .ext-htm { color: #e34c26; margin-right: 5px; }
-        .ext-py { color: #3572A5; margin-right: 5px; }
-        .ext-folder { color: #f1c40f; margin-right: 5px; }
+        .ext-html { color: #e34c26; margin-right: 4px; }
+        .ext-py { color: #3572A5; margin-right: 4px; }
+        .ext-txt { color: #6a737d; margin-right: 4px; }
+
+        .badge {
+            background-color: #21262d;
+            color: #8b949e;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-right: auto;
+        }
+
+        .file-count {
+            text-align: center;
+            color: #8b949e;
+            font-size: 13px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #30363d;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>سیستم مدیریت امنیت</h1>
-        <div class="terminal-line">root@cyber:~/files# ls -la</div>
+        <h1>🔐 سیستم مدیریت امنیت</h1>
+        <div class="terminal-line">root@cyber:~/ctf# ls -la | wc -l</div>
 
-        <div class="section-title">صفحات آموزشی و گزارش‌ها (HTML)</div>
-        <ul>
-            <li><a href="/ctf/app.html"><span class="icon">🌐</span>app<span class="ext-html">.html</span></a></li>
-            <li><a href="/ctf/degital_forensic.html"><span class="icon">🕵️</span>degital_forensic<span class="ext-html">.html</span></a></li>
-            <li><a href="/ctf/incedent_responce.html"><span class="icon">🚨</span>incedent_responce<span class="ext-html">.html</span></a></li>
-            <li><a href="/ctf/linux_security.htm"><span class="icon">🐧</span>linux_security<span class="ext-htm">.htm</span></a></li>
-            <li><a href="/ctf/network_security.html"><span class="icon">🔗</span>network_security<span class="ext-html">.html</span></a></li>
-            <li><a href="/ctf/web_security.htm"><span class="icon">🛡️</span>web_security<span class="ext-htm">.htm</span></a></li>
-            <li><a href="/ctf/windows_AD.htm"><span class="icon">🪟</span>windows_AD<span class="ext-htm">.htm</span></a></li>
-        </ul>
+        <!-- فایل‌های Python -->
+        <div class="section-title">🐍 ابزارها و اسکریپت‌ها (Python)</div>
+        <div class="file-grid">
+            <ul>
+                <li><a href="https://silentknights01.github.io/ctf/active.py"><span class="icon">⚡</span>active<span class="ext-py">.py</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/exploitation.py"><span class="icon">⚔️</span>exploitation<span class="ext-py">.py</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/passive.py"><span class="icon">👀</span>passive<span class="ext-py">.py</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/post_exploitation.py"><span class="icon">🎯</span>post_exploitation<span class="ext-py">.py</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/reporting.py"><span class="icon">📊</span>reporting<span class="ext-py">.py</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/scan_vuln.py"><span class="icon">🔍</span>scan_vuln<span class="ext-py">.py</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/service_enumeration.py"><span class="icon">🔎</span>service_enumeration<span class="ext-py">.py</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/WebRecon.py"><span class="icon">🌐</span>WebRecon<span class="ext-py">.py</span></a></li>
+            </ul>
+        </div>
 
-        <div class="section-title">ابزارها و اسکریپت‌ها (Python)</div>
-        <ul>
-            <li><a href="/ctf/active.py"><span class="icon">🐍</span>active<span class="ext-py">.py</span></a></li>
-            <li><a href="/ctf/exploitation.py"><span class="icon">⚔️</span>exploitation<span class="ext-py">.py</span></a></li>
-            <li><a href="/ctf/reporting.py"><span class="icon">📝</span>reporting<span class="ext-py">.py</span></a></li>
-            <li><a href="/ctf/WebRecon.py"><span class="icon">🔭</span>WebRecon<span class="ext-py">.py</span></a></li>
-        </ul>
+        <!-- فایل‌های HTML - بخش اول -->
+        <div class="section-title">📄 صفحات وب و گزارش‌ها (HTML)</div>
+        <div class="file-grid">
+            <ul>
+                <li><a href="https://silentknights01.github.io/ctf/active_recon.html"><span class="icon">🕵️</span>active_recon<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/app.html"><span class="icon">📱</span>app<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/degradation_recon.html"><span class="icon">📉</span>degradation_recon<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/exploitation.html"><span class="icon">💥</span>exploitation<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/incident_response.html"><span class="icon">🚨</span>incident_response<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/linux_security.html"><span class="icon">🐧</span>linux_security<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/network_security.html"><span class="icon">🔗</span>network_security<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/passive_recon.html"><span class="icon">👁️</span>passive_recon<span class="ext-html">.html</span></a></li>
+            </ul>
+        </div>
 
-        <div class="section-title">پوشه‌ها (Folders)</div>
-        <ul>
-            <li><a href="attacks/"><span class="icon">📁</span>attacks<span class="ext-folder">/</span></a></li>
-        </ul>
+        <!-- فایل‌های HTML - بخش دوم -->
+        <div class="section-title">📄 ادامه صفحات وب و گزارش‌ها (HTML)</div>
+        <div class="file-grid">
+            <ul>
+                <li><a href="https://silentknights01.github.io/ctf/post_exploitation.html"><span class="icon">🎯</span>post_exploitation<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/report.html"><span class="icon">📋</span>report<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/reporting.html"><span class="icon">📊</span>reporting<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/scan_vuln.html"><span class="icon">🔍</span>scan_vuln<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/service_enumeration.html"><span class="icon">🔎</span>service_enumeration<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/web_recon.html"><span class="icon">🌐</span>web_recon<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/web_security.html"><span class="icon">🛡️</span>web_security<span class="ext-html">.html</span></a></li>
+                <li><a href="https://silentknights01.github.io/ctf/windows_AD.html"><span class="icon">🪟</span>windows_AD<span class="ext-html">.html</span></a></li>
+            </ul>
+        </div>
+
+        <div class="file-count">
+            📁 مجموع فایل‌ها: <strong>24</strong> فایل (8 فایل Python + 16 فایل HTML)
+        </div>
     </div>
 
 </body>

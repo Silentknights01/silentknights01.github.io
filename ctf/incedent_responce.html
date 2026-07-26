@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Response Ultimate CTF Guide - Final Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #58a6ff; /* Blue Team Blue */
+            --accent-color: #79c0ff;  /* Light Blue accent */
+            --warn-color: #e3b341;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(88, 166, 255, 0.1);
+            color: var(--primary-color);
+            border-right: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(88, 166, 255, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(121, 192, 255, 0.2); color: var(--accent-color); }
+        .tag-tip { background: rgba(227, 179, 65, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 600px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* Checklist & Special Blocks */
+        .checklist-box {
+            background: rgba(121, 192, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .checklist-box ul {
+            list-style: none;
+        }
+        .checklist-box li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .checklist-box li::before {
+            content: "☐";
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+
+        .tip-box {
+            background: rgba(227, 179, 65, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .tip-box ol {
+            padding-right: 20px;
+        }
+        .tip-box li {
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>🛡️ INCIDENT RESPONSE</h1>
+            <p>Ultimate CTF Guide - Final</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی فاز..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#intro">🎯 هدف نهایی <span class="nav-badge">Goal</span></a></li>
+            <li><a href="#phase0">فاز ۰: آماده‌سازی <span class="nav-badge">Setup</span></a></li>
+            <li><a href="#phase1">فاز ۱: Log Analysis <span class="nav-badge">Logs</span></a></li>
+            <li><a href="#phase2">فاز ۲: IOCs <span class="nav-badge">Hunt</span></a></li>
+            <li><a href="#phase3">فاز ۳: Timeline <span class="nav-badge">Reconstruct</span></a></li>
+            <li><a href="#phase4">فاز ۴: Malware Triage <span class="nav-badge">Triage</span></a></li>
+            <li><a href="#phase5">فاز ۵: Reporting <span class="nav-badge">Report</span></a></li>
+            <li><a href="#checklist">چک‌لیست نهایی <span class="nav-badge">100%</span></a></li>
+            <li><a href="#tips">نکات طلایی <span class="nav-badge">Pro</span></a></li>
+            <li><a href="#scenarios">سناریوهای عملی <span class="nav-badge">CTF</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>چیت‌شیت فوق‌جامع واکنش به رخداد (IR)</h1>
+            <p>نسخه نهایی و ایمن برای مسابقات حرفه‌ای CTF - نمایش کدها بدون اجرا</p>
+        </header>
+
+        <!-- Intro -->
+        <section id="intro" class="tool-section">
+            <h2 class="tool-title">🎯 هدف نهایی</h2>
+            <div class="goal-box">
+                تسلط کامل بر تحلیل سیستم‌های آلوده، شناسایی زنجیره حمله، شاخص‌های آلودگی، و بازسازی کامل مسیر نفوذ مهاجم برای مسابقات CTF و سناریوهای واقعی Incident Response.
+            </div>
+        </section>
+
+        <!-- Phase 0 -->
+        <section id="phase0" class="tool-section">
+            <h2 class="tool-title">📋 فاز ۰: آماده‌سازی محیط و ابزارها</h2>
+            
+            <h3 class="sub-title">۱. ابزارهای ضروری</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ابزارهای تحلیل لاگ
+apt-get install logwatch logcheck rsyslog
+apt-get install syslog-ng
+apt-get install lnav  # Log file navigator
+
+# ابزارهای تحلیل سیستم
+apt-get install htop iotop iftop nethogs
+apt-get install lynis chkrootkit rkhunter
+apt-get install auditd audispd-plugins
+
+# ابزارهای تحلیل ویندوز
+# Sysinternals Suite (ProcMon, Process Explorer, Autoruns)
+# Event Viewer, PowerShell
+
+# ابزارهای تحلیل شبکه
+apt-get install tcpdump wireshark tshark
+apt-get install ngrep tcpflow
+apt-get install bro/zeek
+
+# ابزارهای تحلیل بدافزار
+apt-get install radare2 ghidra
+apt-get install pefile python3-pefile
+apt-get install upx-utils
+pip3 install capstone lief</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. آماده‌سازی محیط تحلیل</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ایجاد دایرکتوری کار
+mkdir -p ~/ir/{logs,pcaps,memory,malware,reports,timeline}
+cd ~/ir
+
+# کپی کردن فایل‌های لاگ
+cp /var/log/* ~/ir/logs/
+cp /var/log/apache2/* ~/ir/logs/apache/
+cp /var/log/nginx/* ~/ir/logs/nginx/</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 1 -->
+        <section id="phase1" class="tool-section">
+            <h2 class="tool-title">📊 فاز ۱: تحلیل گزارش‌ها (Log Analysis)</h2>
+            
+            <h3 class="sub-title">۱. تحلیل لاگ‌های لینوکس (auth.log)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># لاگ‌های SSH
+cat /var/log/auth.log | grep sshd
+cat /var/log/auth.log | grep "Failed password"
+cat /var/log/auth.log | grep "Accepted password"
+cat /var/log/auth.log | grep "Invalid user"
+
+# Brute Force Detection
+grep "Failed password" /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -nr
+grep "Failed password" /var/log/auth.log | awk -F'from ' '{print $2}' | awk '{print $1}' | sort | uniq -c | sort -nr
+
+# Successful logins بعد از failures
+grep "Accepted password" /var/log/auth.log | awk '{print $1,$2,$3,$9,$11}'
+
+# SSH key login
+grep "Accepted publickey" /var/log/auth.log
+
+# دستورات sudo اجرا شده
+grep "sudo" /var/log/auth.log
+grep "COMMAND" /var/log/auth.log
+
+# کاربران جدید و تغییرات پسورد
+grep "new user" /var/log/auth.log
+grep "useradd" /var/log/auth.log
+grep "password changed" /var/log/auth.log</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. تحلیل لاگ‌های وب‌سرور (Apache/Nginx)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Apache access log
+cat /var/log/apache2/access.log | grep -E "POST|PUT|DELETE"
+cat /var/log/apache2/access.log | awk '{print $1}' | sort | uniq -c | sort -nr  # IP ها
+
+# پیدا کردن Web Shell
+cat /var/log/apache2/access.log | grep -E "\.php|\.asp|\.aspx|\.jsp"
+cat /var/log/apache2/access.log | grep -E "(cmd|exec|system|shell|eval)"
+cat /var/log/apache2/access.log | grep -E "(whoami|id|cat /etc/passwd)"
+
+# پیدا کردن فایل‌های آپلود شده
+cat /var/log/apache2/access.log | grep -E "(\.jpg|\.png|\.gif|\.php|\.asp)" | grep "POST"
+
+# Nginx
+cat /var/log/nginx/access.log
+cat /var/log/nginx/error.log</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. تحلیل لاگ‌های سیستم و سرویس‌ها</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># آخرین ورودها و شکست‌ها
+last
+lastlog
+lastb
+
+# سیستم لاگ و کرنل
+cat /var/log/syslog
+cat /var/log/messages
+dmesg | grep -i "segfault"
+
+# سرویس‌ها با journalctl
+journalctl -xe
+journalctl -u sshd
+journalctl -u apache2
+journalctl --since "2024-01-01" --until "2024-01-02"
+journalctl | grep -i error | tail -100</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. تحلیل لاگ‌های ویندوز (Event IDs)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event ID</th>
+                            <th>توضیحات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>4624</td><td>Successful logon</td></tr>
+                        <tr><td>4625</td><td>Failed logon</td></tr>
+                        <tr><td>4648</td><td>Logon with explicit credentials</td></tr>
+                        <tr><td>4672</td><td>Special privileges assigned (Admin logon)</td></tr>
+                        <tr><td>4720</td><td>User account created</td></tr>
+                        <tr><td>4724</td><td>User account password reset</td></tr>
+                        <tr><td>4732</td><td>User added to local group</td></tr>
+                        <tr><td>4688</td><td>Process created</td></tr>
+                        <tr><td>7045</td><td>Service installed</td></tr>
+                        <tr><td>4104</td><td>PowerShell script block</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">powershell</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-powershell"># Get security events
+Get-EventLog -LogName Security -InstanceId 4624,4625,4672
+Get-WinEvent -LogName Security -MaxEvents 50
+
+# Filter by time
+ $StartDate = (Get-Date).AddDays(-7)
+Get-WinEvent -LogName Security -MaxEvents 100 | Where-Object {$_.TimeCreated -gt $StartDate}
+
+# PowerShell logs
+Get-WinEvent -LogName "Microsoft-Windows-PowerShell/Operational" -MaxEvents 50
+
+# با wevtutil
+wevtutil qe Security /c:50 /rd:true /f:text</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 2 -->
+        <section id="phase2" class="tool-section">
+            <h2 class="tool-title">🕵️ فاز ۲: شناسایی شاخص‌های آلودگی (IOCs)</h2>
+            
+            <h3 class="sub-title">۱. فرآیندهای عجیب و اتصالات شبکه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># لیست فرآیندهای مخفی (لینوکس)
+ps aux | grep -E "(nc|netcat|telnet|ssh|bash -i|python -c|perl -e|php -r)"
+ps auxf
+pstree -p
+
+# فرآیندهای با اتصال شبکه
+lsof -i
+netstat -tulpn | grep LISTEN
+ss -tulpn
+
+# اتصالات خارجی
+netstat -antp | grep ESTABLISHED
+ss -antp | grep ESTABLISHED
+
+# IP های مخرب شناخته شده
+netstat -antp | grep -E "(evil|malware|1337|4444|31337)"
+
+# نظارت بر اتصالات
+iftop -i eth0
+nethogs eth0</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. وظایف زمان‌بندی شده (Cron/Scheduled Tasks)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># بررسی cron (لینوکس)
+cat /etc/crontab
+cat /etc/cron.d/*
+crontab -l
+crontab -l -u root
+
+# پیدا کردن cron های جدید
+find /etc -name "*cron*" -type f -mtime -7 2&gt;/dev/null
+
+# بررسی systemd timers
+systemctl list-timers --all</code></pre>
+            </div>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">powershell</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-powershell"># بررسی Scheduled Tasks (ویندوز)
+schtasks /query /fo LIST /v
+Get-ScheduledTask | Where-Object {$_.State -eq "Running"}
+
+# پیدا کردن tasks جدید
+Get-ScheduledTask | Where-Object {$_.Date -gt (Get-Date).AddDays(-7)}</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. فایل‌های مخرب و Web Shell ها</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># فایل‌های جدید (لینوکس)
+find / -type f -mtime -7 2&gt;/dev/null | grep -v "/proc\|/sys"
+find / -type f -mmin -60 2&gt;/dev/null
+
+# فایل‌های با مجوز SUID جدید
+find / -type f -perm -4000 -mtime -30 2&gt;/dev/null
+
+# Web Shell ها
+find /var/www -name "*.php" -mtime -7 2&gt;/dev/null
+grep -r "system(" /var/www 2&gt;/dev/null
+grep -r "eval(" /var/www 2&gt;/dev/null
+grep -r "shell_exec(" /var/www 2&gt;/dev/null
+
+# فایل‌های SSH
+ls -la ~/.ssh/
+cat ~/.ssh/authorized_keys</code></pre>
+            </div>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">powershell</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-powershell"># فایل‌های اجرایی جدید (ویندوز)
+Get-ChildItem -Path C:\ -Recurse -Include *.exe,*.dll,*.ps1,*.bat,*.cmd -File -ErrorAction SilentlyContinue | Where-Object {$_.CreationTime -gt (Get-Date).AddDays(-7)}
+
+# فایل‌های مخفی
+Get-ChildItem -Path C:\ -Recurse -Force -File -ErrorAction SilentlyContinue | Where-Object {$_.Attributes -match "Hidden"}
+
+# Startup folders
+Get-ChildItem "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp"
+Get-ChildItem "C:\Users\$env:USERNAME\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 3 -->
+        <section id="phase3" class="tool-section">
+            <h2 class="tool-title">📅 فاز ۳: بازسازی خط زمانی (Timeline Analysis)</h2>
+            
+            <h3 class="sub-title">۱. ایجاد خط زمانی لینوکس</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># جمع‌آوری تمام رویدادها در یک فایل
+echo "=== Timeline Analysis ===" &gt; timeline.txt
+
+echo "=== System Logs ===" &gt;&gt; timeline.txt
+cat /var/log/syslog &gt;&gt; timeline.txt
+
+echo "=== Authentication Logs ===" &gt;&gt; timeline.txt
+cat /var/log/auth.log &gt;&gt; timeline.txt
+
+echo "=== Web Access Logs ===" &gt;&gt; timeline.txt
+cat /var/log/apache2/access.log &gt;&gt; timeline.txt
+
+echo "=== New Files ===" &gt;&gt; timeline.txt
+find / -type f -mtime -30 2&gt;/dev/null &gt;&gt; timeline.txt
+
+# مرتب‌سازی بر اساس زمان
+sort -k1 timeline.txt &gt; sorted_timeline.txt
+
+# پیدا کردن نقاط عطف
+grep -E "(Accepted password|sudo|useradd|new user|service started)" timeline.txt
+
+# یافتن اولین دسترسی
+grep "Accepted password" timeline.txt | head -1
+grep "Failed password" timeline.txt | head -5</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. بازسازی زنجیره حمله</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">echo "=== Attack Chain Reconstruction ===" &gt; attack_chain.txt
+echo "1. Initial Access:" &gt;&gt; attack_chain.txt
+grep "Accepted password" timeline.txt | head -1 &gt;&gt; attack_chain.txt
+
+echo "2. Privilege Escalation:" &gt;&gt; attack_chain.txt
+grep "sudo" timeline.txt | head -5 &gt;&gt; attack_chain.txt
+
+echo "3. Persistence:" &gt;&gt; attack_chain.txt
+grep -E "cron|service|useradd" timeline.txt | head -5 &gt;&gt; attack_chain.txt
+
+echo "4. Lateral Movement:" &gt;&gt; attack_chain.txt
+grep -E "ssh.*from|scp|rsync" timeline.txt | head -5 &gt;&gt; attack_chain.txt
+
+echo "5. Data Exfiltration:" &gt;&gt; attack_chain.txt
+grep -E "ftp|scp|curl.*POST" timeline.txt | head -5 &gt;&gt; attack_chain.txt</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 4 -->
+        <section id="phase4" class="tool-section">
+            <h2 class="tool-title">🦠 فاز ۴: تحلیل بدافزار (Malware Triage)</h2>
+            
+            <h3 class="sub-title">۱. تحلیل استاتیک پایه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اطلاعات پایه و هش
+file malware.bin
+md5sum malware.bin
+sha256sum malware.bin
+
+# Strings
+strings malware.bin | head -100
+strings malware.bin | grep -E "(http|https|cmd|powershell|bash|python)"
+strings -n 10 malware.bin &gt; strings.txt
+
+# بخش‌ها (ELF)
+readelf -h malware.bin
+readelf -S malware.bin
+
+# با objdump و nm
+objdump -d malware.bin | head -100
+nm malware.bin
+ldd malware.bin</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. تحلیل با Radare2 و Auditd</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># تحلیل با Radare2
+r2 malware.bin
+&gt; aaa  # تحلیل پیشرفته
+&gt; izz  # جستجوی رشته‌ها
+&gt; ii   # بررسی import/export
+&gt; pdf @ main  # دیساسمبلی
+
+# با strace (اجرا و مانیتورینگ)
+strace -e trace=file,network,process malware.bin
+strace -o trace.log malware.bin
+
+# با auditd (لینوکس)
+ausearch -ts today
+ausearch -i -p 1234</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. تحلیل PowerShell Scripts</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">powershell</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-powershell"># بررسی اسکریپت
+Get-Content malware.ps1
+
+# جستجوی دستورات مخرب
+Select-String -Path malware.ps1 -Pattern "Invoke-Expression|IEX|DownloadFile|Invoke-WebRequest|Start-Process"
+
+# اجرای با محدودیت
+powershell -ExecutionPolicy Bypass -File malware.ps1 -WhatIf</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 5 -->
+        <section id="phase5" class="tool-section">
+            <h2 class="tool-title">📝 فاز ۵: تهیه گزارش (Reporting)</h2>
+            
+            <h3 class="sub-title">ساختار گزارش واکنش به رخداد</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">markdown</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-markdown"># گزارش واکنش به رخداد
+## تاریخ: [Date]
+## تحلیلگر: [Name]
+
+## 1. خلاصه اجرایی
+- تاریخ وقوع: ...
+- سیستم‌های درگیر: ...
+- نوع حمله: ...
+- وضعیت: ...
+
+## 2. جزئیات فنی
+### 2.1. Initial Access (دسترسی اولیه)
+- چگونه: ...
+- زمان: ...
+- IP منبع: ...
+
+### 2.2. Persistence (ماندگاری)
+- چه تغییراتی: ...
+- چه فایل‌هایی: ...
+
+### 2.3. Privilege Escalation (ارتقای دسترسی)
+- چه روشی: ...
+- چه کاربرانی: ...
+
+### 2.4. Lateral Movement (حرکت جانبی)
+- به کجا: ...
+- چطور: ...
+
+### 2.5. Data Exfiltration (خروج داده)
+- چه داده‌هایی: ...
+- به کجا: ...
+
+## 3. شاخص‌های آلودگی (IOCs)
+### 3.1. File Hashes
+- [MD5/SHA256]
+
+### 3.2. Network Indicators
+- IP Addresses
+- Domain Names
+- URLs
+
+## 4. اقدامات اصلاحی
+- [x] قطع اتصال
+- [x] حذف فایل‌های مخرب
+- [x] تغییر رمزها
+- [x] به‌روزرسانی سیستم</code></pre>
+            </div>
+        </section>
+
+        <!-- Checklist -->
+        <section id="checklist" class="tool-section">
+            <h2 class="tool-title">✅ چک‌لیست نهایی CTF IR</h2>
+            
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 1: Collection (جمع‌آوری)</h3>
+                <ul>
+                    <li>لاگ‌های سیستم (<code>auth.log</code>, <code>syslog</code>)</li>
+                    <li>لاگ‌های وب‌سرور (<code>access.log</code>, <code>error.log</code>)</li>
+                    <li>فرآیندهای در حال اجرا (<code>ps aux</code>)</li>
+                    <li>اتصالات شبکه (<code>netstat -tulpn</code>)</li>
+                    <li>کاربران و گروه‌ها (<code>/etc/passwd</code>)</li>
+                    <li>Cron jobs (<code>/etc/crontab</code>)</li>
+                    <li>فایل‌های جدید (<code>find / -mtime -7</code>)</li>
+                    <li>PCAP (<code>tcpdump</code>)</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 2: Analysis (تحلیل)</h3>
+                <ul>
+                    <li>یافتن اولین دسترسی (Initial Access)</li>
+                    <li>شناسایی ماندگاری (Persistence)</li>
+                    <li>شناسایی ارتقای دسترسی</li>
+                    <li>شناسایی حرکت جانبی</li>
+                    <li>شناسایی خروج داده</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 3: Indicators (شاخص‌ها)</h3>
+                <ul>
+                    <li>فرآیندهای عجیب</li>
+                    <li>اتصالات مشکوک</li>
+                    <li>فایل‌های مخرب</li>
+                    <li>Cron/Scheduled Tasks جدید</li>
+                    <li>کاربران جدید</li>
+                    <li>SSH keys جدید</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 4: Timeline (خط زمانی)</h3>
+                <ul>
+                    <li>مرتب‌سازی رویدادها</li>
+                    <li>شناسایی نقاط عطف</li>
+                    <li>بازسازی زنجیره حمله</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 5: Malware Triage</h3>
+                <ul>
+                    <li><code>strings</code>, <code>file</code></li>
+                    <li>Hash (MD5/SHA256)</li>
+                    <li>Static Analysis</li>
+                    <li>Dynamic Analysis</li>
+                    <li>شناسایی نوع بدافزار</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Tips -->
+        <section id="tips" class="tool-section">
+            <h2 class="tool-title">💡 نکات طلایی پیشرفته برای CTF</h2>
+            
+            <div class="tip-box">
+                <ol>
+                    <li><strong>اولین نقطه نفوذ را پیدا کنید:</strong> جایی که اولین <code>Accepted password</code> بعد از <code>Failed password</code> است</li>
+                    <li><strong>Persistence را پیدا کنید:</strong> SSH keys, Cron jobs, Services</li>
+                    <li><strong>حرکت جانبی را دنبال کنید:</strong> لاگ‌های ماشین‌های دیگر را چک کنید</li>
+                    <li><strong>خروج داده را پیدا کنید:</strong> ترافیک خروجی به IP های مخرب</li>
+                    <li><strong>خط زمانی دقیق بسازید:</strong> همه چیز را بر اساس زمان مرتب کنید</li>
+                    <li><strong>Web Shell ها را پیدا کنید:</strong> فایل‌های PHP با <code>eval</code>, <code>system</code>, <code>shell_exec</code></li>
+                    <li><strong>SSH Keys را چک کنید:</strong> کلیدهای عمومی جدید در <code>authorized_keys</code></li>
+                    <li><strong>کاربران جدید را چک کنید:</strong> کاربران با UID 0 در لینوکس</li>
+                    <li><strong>Scheduled Tasks را چک کنید:</strong> کارهای زمان‌بندی شده جدید</li>
+                    <li><strong>لاگ‌های PowerShell را چک کنید:</strong> اسکریپت‌های مخرب</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Scenarios -->
+        <section id="scenarios" class="tool-section">
+            <h2 class="tool-title">🏆 سناریوهای عملی CTF</h2>
+            
+            <h3 class="sub-title">سناریو ۱: یافتن اولین نقطه نفوذ</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. پیدا کردن brute force
+grep "Failed password" /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -nr | head -5
+
+# 2. پیدا کردن موفقیت بعد از حمله
+grep -A 5 "Failed password" /var/log/auth.log | grep "Accepted password"
+
+# 3. بررسی زمان و IP
+# IP مهاجم: ...
+# زمان: ...
+# کاربر: ...</code></pre>
+            </div>
+
+            <h3 class="sub-title">سناریو ۲: شناسایی Web Shell</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. پیدا کردن فایل‌های جدید PHP
+find /var/www -name "*.php" -mtime -7 2&gt;/dev/null
+
+# 2. پیدا کردن string های مخرب
+grep -r "system(" /var/www 2&gt;/dev/null
+grep -r "eval(" /var/www 2&gt;/dev/null
+grep -r "shell_exec(" /var/www 2&gt;/dev/null
+
+# 3. پیدا کردن دسترسی‌های Web Shell
+grep "GET.*\.php" /var/log/apache2/access.log | grep -E "(cmd|exec|id|whoami)"</code></pre>
+            </div>
+
+            <h3 class="sub-title">سناریو ۳: بازسازی زنجیره حمله کامل</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">text</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-text"># 1. Initial Access: Brute Force -> SSH
+# 2. Persistence: اضافه کردن SSH key
+# 3. Privilege Escalation: SUID exploit
+# 4. Lateral Movement: SSH به ماشین دیگر
+# 5. Data Exfiltration: ترافیک خروجی
+# 6. Cleanup: پاک کردن لاگ‌ها</code></pre>
+            </div>
+            
+            <div class="goal-box" style="text-align: center; margin-top: 20px;">
+                <strong>"در Incident Response، هر لاگ یک شاهد است. هر بایت یک سرنخ."</strong><br>
+                این چیت‌شیت تمام تکنیک‌های واکنش به رخداد را پوشش می‌دهد.<br>
+                <strong>موفق باشید و پاسخ به رخداد لذت‌بخشی داشته باشید! 🚨🔍🛡️</strong>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function (Safely decodes HTML entities back to original code for copying)
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText; 
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#58a6ff';
+            btn.style.color = '#000';
+            btn.style.borderColor = '#58a6ff';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

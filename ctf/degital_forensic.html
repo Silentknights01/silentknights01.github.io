@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Forensics Ultimate CTF Guide - Final Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #bc8cff; /* Violet/Amethyst for Forensics */
+            --accent-color: #d2a8ff;  /* Light Violet accent */
+            --warn-color: #e3b341;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(188, 140, 255, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(188, 140, 255, 0.1);
+            color: var(--primary-color);
+            border-right: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(188, 140, 255, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(188, 140, 255, 0.1);
+            border: 1px solid rgba(188, 140, 255, 0.2);
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(188, 140, 255, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(210, 168, 255, 0.2); color: var(--accent-color); }
+        .tag-tip { background: rgba(227, 179, 65, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 600px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* Checklist & Special Blocks */
+        .checklist-box {
+            background: rgba(210, 168, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .checklist-box ul {
+            list-style: none;
+        }
+        .checklist-box li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .checklist-box li::before {
+            content: "☐";
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+
+        .tip-box {
+            background: rgba(227, 179, 65, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .tip-box ol {
+            padding-right: 20px;
+        }
+        .tip-box li {
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>🕵️ DIGITAL FORENSICS</h1>
+            <p>Ultimate CTF Guide - Final</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی فاز..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#intro">🎯 هدف نهایی <span class="nav-badge">Goal</span></a></li>
+            <li><a href="#phase0">فاز ۰: آماده‌سازی <span class="nav-badge">Setup</span></a></li>
+            <li><a href="#phase1">فاز ۱: File Analysis <span class="nav-badge">File</span></a></li>
+            <li><a href="#phase2">فاز ۲: Memory Analysis <span class="nav-badge">RAM</span></a></li>
+            <li><a href="#phase3">فاز ۳: PCAP Analysis <span class="nav-badge">Network</span></a></li>
+            <li><a href="#phase4">فاز ۴: Steganography <span class="nav-badge">Hidden</span></a></li>
+            <li><a href="#phase5">فاز ۵: Crypto <span class="nav-badge">Decode</span></a></li>
+            <li><a href="#phase6">فاز ۶: Browser <span class="nav-badge">Web</span></a></li>
+            <li><a href="#phase7">فاز ۷: Disk Forensics <span class="nav-badge">Disk</span></a></li>
+            <li><a href="#checklist">چک‌لیست نهایی <span class="nav-badge">100%</span></a></li>
+            <li><a href="#tips">نکات طلایی <span class="nav-badge">Pro</span></a></li>
+            <li><a href="#scenarios">سناریوهای عملی <span class="nav-badge">CTF</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>چیت‌شیت فوق‌جامع جرم‌یابی دیجیتال</h1>
+            <p>نسخه نهایی و ایمن برای مسابقات حرفه‌ای CTF - نمایش کدها بدون اجرا</p>
+        </header>
+
+        <!-- Intro -->
+        <section id="intro" class="tool-section">
+            <h2 class="tool-title">🎯 هدف نهایی</h2>
+            <div class="goal-box">
+                تسلط کامل بر تحلیل فایل‌ها، حافظه، ترافیک شبکه، استگانوگرافی و کدگذاری‌ها برای یافتن ردپای مهاجم و بازیابی اطلاعات در مسابقات CTF و تست‌نفوذ واقعی.
+            </div>
+        </section>
+
+        <!-- Phase 0 -->
+        <section id="phase0" class="tool-section">
+            <h2 class="tool-title">📋 فاز ۰: آماده‌سازی محیط و ابزارها</h2>
+            
+            <h3 class="sub-title">۱. نصب ابزارهای ضروری</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ابزارهای پایه
+apt-get install foremost scalpel testdisk photorec magicrescue
+apt-get install steghide stegsolve zsteg exiftool binwalk
+apt-get install volatility3 wireshark tshark tcpflow
+apt-get install sonic-visualiser audacity
+apt-get install hashcat john hydra
+apt-get install python3-pip
+
+# ابزارهای اضافی
+pip3 install pycryptodome pycryptography
+pip3 install stegano opencv-python
+pip3 install pylzma pyelftools
+
+# ابزارهای مخصوص
+git clone https://github.com/ReFirmLabs/binwalk.git
+git clone https://github.com/volatilityfoundation/volatility3.git
+git clone https://github.com/carmaa/inception.git</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. دیکشنری‌ها و کلمه‌نامه‌ها</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># دیکشنری‌های ضروری
+/usr/share/wordlists/rockyou.txt
+/usr/share/wordlists/wordlist.txt
+/usr/share/wordlists/fasttrack.txt
+/usr/share/seclists/Passwords/</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 1 -->
+        <section id="phase1" class="tool-section">
+            <h2 class="tool-title">📁 فاز ۱: تحلیل فایل (File Analysis)</h2>
+            
+            <h3 class="sub-title">۱. شناسایی نوع فایل</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با دستور file
+file file.bin
+file -i file.bin  # MIME type
+file -k file.bin  # توضیحات کامل
+file -z file.bin  # فایل‌های فشرده
+
+# بررسی Magic Bytes (هگزادسیمال)
+xxd file.bin | head -n 20
+hexdump -C file.bin | head -n 20
+hd file.bin | head -n 20
+
+# Magic Bytes معروف:
+# JPEG: FF D8 FF E0
+# PNG: 89 50 4E 47
+# PDF: 25 50 44 46
+# ZIP: 50 4B 03 04
+# ELF: 7F 45 4C 46
+# PE: 4D 5A 90 00
+# GIF: 47 49 46 38
+# MP4: 00 00 00 18 66 74 79 70
+
+# تبدیل Magic Bytes به ASCII
+printf "\x89\x50\x4E\x47" # PNG
+printf "\x25\x50\x44\x46" # PDF
+
+# با binwalk (تحلیل فایل‌های جاسازی شده)
+binwalk file.bin
+binwalk -e file.bin  # استخراج فایل‌های جاسازی شده
+binwalk -Me file.bin  # استخراج بازگشتی
+binwalk -dd=".*" file.bin  # استخراج همه چیز
+
+# آنالیز عمیق
+binwalk -A file.bin  # آنالیز سیگنچر
+binwalk -W file.bin  # آنالیز هگز مقایسه‌ای</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. استخراج داده‌ها</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با strings
+strings file.bin
+strings -n 8 file.bin  # حداقل طول 8
+strings -t x file.bin  # نمایش offset هگز
+strings -e l file.bin  # Unicode
+
+# جستجوی خاص
+strings file.bin | grep "flag"
+strings file.bin | grep -i "password"
+strings file.bin | grep -E "flag|key|secret"
+
+# با foremost (کاراویی)
+foremost -i file.bin
+foremost -i file.bin -o output_dir
+foremost -t jpeg,png,pdf -i file.bin
+
+# با scalpel
+scalpel -c scalpel.conf -o output file.bin
+
+# با testdisk (بازیابی پارتیشن)
+testdisk disk.img
+testdisk /dev/sdb
+testdisk -l  # لیست دیسک‌ها</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. متادیتا (Metadata)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با exiftool (تصاویر و اسناد)
+exiftool image.jpg
+exiftool -a -u image.jpg  # همه اطلاعات
+exiftool -g image.jpg     # گروه‌بندی
+exiftool -j image.jpg     # خروجی JSON
+
+# تغییر متادیتا
+exiftool -Artist="Hacker" image.jpg
+exiftool -Copyright="2024" image.jpg
+
+# متادیتا در اسناد PDF
+pdfinfo document.pdf
+pdfimages -list document.pdf  # استخراج تصاویر
+
+# Office (docx, xlsx, pptx) - این فایل‌ها ZIP هستند
+unzip document.docx
+cat word/document.xml | grep -i "flag"
+cat docProps/core.xml</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 2 -->
+        <section id="phase2" class="tool-section">
+            <h2 class="tool-title">🔍 فاز ۲: تحلیل حافظه (Memory Analysis)</h2>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># نصب Volatility3
+git clone https://github.com/volatilityfoundation/volatility3.git
+cd volatility3
+python3 vol.py --help
+
+# شناسایی profile و OS
+python3 vol.py -f memory.dmp windows.info
+python3 vol.py -f memory.dmp windows.pstree
+python3 vol.py -f memory.dmp windows.osinfo
+
+# آنالیز فرآیندها
+python3 vol.py -f memory.dmp windows.pslist
+python3 vol.py -f memory.dmp windows.psscan  # اسکن همه
+python3 vol.py -f memory.dmp windows.pstree  # درخت فرآیندها
+python3 vol.py -f memory.dmp windows.cmdline   # دستورات اجرا شده
+
+# اتصالات شبکه
+python3 vol.py -f memory.dmp windows.netstat
+python3 vol.py -f memory.dmp windows.netscan
+python3 vol.py -f memory.dmp windows.dnscache
+
+# دستورات و تاریخچه
+python3 vol.py -f memory.dmp windows.consoles
+python3 vol.py -f memory.dmp windows.powershell
+python3 vol.py -f memory.dmp windows.pshistory
+python3 vol.py -f memory.dmp windows.userassist
+python3 vol.py -f memory.dmp windows.recentfiles
+
+# دامپ کردن فایل‌ها
+python3 vol.py -f memory.dmp windows.dumpfiles --pid 1234 -D output/
+python3 vol.py -f memory.dmp windows.memdump --pid 1234 -D output/
+
+# استخراج هش‌ها و رمزهای عبور
+python3 vol.py -f memory.dmp windows.hashdump
+python3 vol.py -f memory.dmp windows.lsadump
+python3 vol.py -f memory.dmp windows.mimikatz
+python3 vol.py -f memory.dmp windows.lsassdump -D output/
+
+# تحلیل فایل‌های حافظه لینوکس
+python3 vol.py -f linux.dump linux.pslist
+python3 vol.py -f linux.dump linux.bash
+python3 vol.py -f linux.dump linux.netstat</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 3 -->
+        <section id="phase3" class="tool-section">
+            <h2 class="tool-title">📡 فاز ۳: تحلیل ترافیک شبکه (PCAP Analysis)</h2>
+            
+            <h3 class="sub-title">۱. فیلترهای پیشرفته Wireshark</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># HTTP
+http
+http.request.method == "GET"
+http.request.method == "POST"
+http.request.uri contains "login"
+http.host == "target.com"
+http.cookie contains "session"
+http.response.code == 200
+
+# DNS
+dns
+dns.qry.name contains "target"
+dns.resp.addr == 192.168.1.10
+dns.flags.response == 0
+
+# TCP/UDP
+tcp.port == 80
+udp.port == 53
+tcp.flags.syn == 1
+tcp.flags.reset == 1
+
+# SMB
+smb
+smb.cmd == 1
+smb2.cmd == 1
+
+# FTP
+ftp
+ftp.request.command == "USER"
+ftp.request.command == "PASS"
+
+# Telnet
+telnet
+
+# IP
+ip.addr == 192.168.1.100
+ip.src == 192.168.1.100
+ip.dst == 192.168.1.100
+ip.ttl &lt; 64
+
+# ترکیبی
+http &amp;&amp; ip.addr == 192.168.1.100
+tcp.port == 80 &amp;&amp; http.request.method == "POST"</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. دنبال کردن جریان و استخراج فایل‌ها</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># دنبال کردن جریان TCP
+tshark -r capture.pcap -Y "tcp.stream eq 0" -T fields -e data
+tshark -r capture.pcap -q -z follow,tcp,hex,0
+
+# استخراج جریان‌ها
+tcpflow -r capture.pcap
+tcpflow -r capture.pcap -o output/
+
+# استخراج فایل‌ها از HTTP
+tshark -r capture.pcap -Y "http.request.method == GET" -T fields -e http.request.uri &gt; urls.txt
+tshark -r capture.pcap --export-objects "http,output/"
+
+# با tcpxtract
+tcpxtract -f capture.pcap -o extracted/
+
+# با foremost روی PCAP
+foremost -i capture.pcap
+
+# استخراج تصاویر
+driftnet -p capture.pcap</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. تحلیل پروتکل‌های خاص</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># HTTP پارامترها
+tshark -r capture.pcap -Y "http.request.method == POST" -T fields -e http.request.uri -e http.file_data
+
+# DNS Tunneling
+tshark -r capture.pcap -Y "dns.qry.name matches .*\..*" -T fields -e dns.qry.name
+
+# FTP احراز هویت
+tshark -r capture.pcap -Y "ftp.request.command == USER" -T fields -e ftp.request.arg
+tshark -r capture.pcap -Y "ftp.request.command == PASS" -T fields -e ftp.request.arg
+
+# SMB NTLM authentication
+tshark -r capture.pcap -Y "ntlmssp" -T fields -e ntlmssp.domain -e ntlmssp.user
+
+# SSL/TLS شناسایی نسخه‌ها
+tshark -r capture.pcap -Y "ssl.handshake.type == 1" -T fields -e ssl.handshake.version</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 4 -->
+        <section id="phase4" class="tool-section">
+            <h2 class="tool-title">🎨 فاز ۴: استگانوگرافی (Steganography)</h2>
+            
+            <h3 class="sub-title">۱. استگانوگرافی در تصاویر</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با steghide
+steghide embed -cf image.jpg -ef secret.txt -p password
+steghide extract -sf image.jpg -p password
+steghide info image.jpg
+
+# با zsteg (LSB steganography)
+zsteg image.png
+zsteg -a image.png  # همه روش‌ها
+zsteg -E "b1,rgb,lsb,xy" image.png &gt; output.txt
+
+# با stegsolve (GUI)
+stegsolve image.jpg
+# گزینه‌ها: Analyze -&gt; File Format, Frame Browser, Image Combiner, Extract LSB</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. استگانوگرافی با Python</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">python</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-python">from stegano import lsb
+
+# مخفی کردن
+secret = lsb.hide("image.png", "secret message")
+secret.save("stego.png")
+
+# استخراج
+message = lsb.reveal("stego.png")
+print(message)</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. استگانوگرافی در صدا و ویدئو</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با Sonic Visualiser (طیف‌سنجی صدا)
+sonic-visualiser audio.wav
+# بررسی: Spectrogram view, Plot -&gt; Show Spectrogram
+
+# با Audacity
+audacity audio.wav
+# تکنیک‌ها: Spectrogram view, Amplify, Reverse, تغییر سرعت
+
+# استخراج فریم‌های ویدئو
+ffmpeg -i video.mp4 -vf "fps=1" frame_%04d.png
+
+# تحلیل تک‌تک فریم‌ها
+for file in frame_*.png; do
+    steghide info $file
+    zsteg $file
+done</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 5 -->
+        <section id="phase5" class="tool-section">
+            <h2 class="tool-title">🔐 فاز ۵: کدگذاری و رمز (Encoding & Crypto)</h2>
+            
+            <h3 class="sub-title">۱. تشخیص کدگذاری‌ها</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Base64 (کاراکترهای A-Z, a-z, 0-9, +, /, =)
+echo "SGVsbG8gV29ybGQ=" | base64 -d
+base64 -d encoded.txt &gt; decoded.bin
+
+# Hex (0-9, A-F)
+echo "48656c6c6f20576f726c64" | xxd -r -p
+xxd -r -p encoded.txt decoded.bin
+
+# ROT13
+echo "Uryyb Jbeyq" | tr 'A-Za-z' 'N-ZA-Mn-za-m'
+
+# URL Encoding
+echo "Hello%20World%21" | python3 -c "import sys,urllib.parse; print(urllib.parse.unquote(sys.stdin.read()))"
+
+# HTML Entities
+echo "&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;" | python3 -c "import html; print(html.unescape(input()))"</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. هش‌ها و کرک کردن</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># شناسایی نوع هش
+hashid hash.txt
+hashcat --identify hash.txt
+
+# کرک کردن با hashcat
+hashcat -m 0 hash.txt rockyou.txt        # MD5
+hashcat -m 100 hash.txt rockyou.txt      # SHA1
+hashcat -m 1400 hash.txt rockyou.txt     # SHA256
+hashcat -m 1700 hash.txt rockyou.txt     # SHA512
+hashcat -m 1000 hash.txt rockyou.txt     # NTLM
+hashcat -m 7500 hash.txt rockyou.txt     # Kerberos TGT
+hashcat -m 13100 hash.txt rockyou.txt    # Kerberos TGS
+
+# کرک کردن با john
+john --format=md5 hash.txt
+john --format=sha1 hash.txt</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. رمزهای کلاسیک (Caesar, Vigenere, XOR)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">python</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-python"># Caesar Cipher
+def caesar(text, shift):
+    result = ""
+    for char in text:
+        if char.isalpha():
+            ascii_offset = 65 if char.isupper() else 97
+            result += chr((ord(char) - ascii_offset + shift) % 26 + ascii_offset)
+        else:
+            result += char
+    return result
+
+# جستجوی all shifts
+for i in range(26):
+    print(f"Shift {i}: {caesar(text, i)}")
+
+# XOR single-byte
+def xor_single_byte(data, key):
+    return bytes([b ^ key for b in data])
+
+# جستجوی کلید
+for key in range(256):
+    decrypted = xor_single_byte(data, key)
+    if all(32 &lt;= c &lt;= 126 for c in decrypted):
+        print(f"Key: {key}, Result: {decrypted}")</code></pre>
+            </div>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با xortool
+xortool -x -c 20 file.bin
+xortool -x -l 10 -c 20 file.bin
+
+# AES با openssl
+openssl enc -aes-256-cbc -d -in encrypted.bin -out decrypted.txt -k password
+
+# GPG/PGP
+gpg --decrypt encrypted.gpg
+gpg --decrypt --passphrase password encrypted.gpg</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 6 -->
+        <section id="phase6" class="tool-section">
+            <h2 class="tool-title">🔄 فاز ۶: تحلیل مرورگر (Browser Forensics)</h2>
+            
+            <h3 class="sub-title">۱. مرورگر کروم/Edge (Chromium-based)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># لینوکس
+~/.config/google-chrome/
+~/.config/chromium/
+
+# ویندوز
+C:\Users\%username%\AppData\Local\Google\Chrome\
+C:\Users\%username%\AppData\Local\Microsoft\Edge\
+
+# کوکی‌ها
+sqlite3 Cookies "SELECT host_key, name, value FROM cookies;"
+
+# تاریخچه
+sqlite3 History "SELECT url, title, last_visit_time FROM urls;"
+
+# دانلودها
+sqlite3 History "SELECT tab_url, target_path, start_time FROM downloads;"
+
+# کلمات عبور
+sqlite3 "Login Data" "SELECT origin_url, username_value, password_value FROM logins;"
+
+# Bookmark ها
+sqlite3 Bookmarks "SELECT url, title FROM bookmarks;"</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. مرورگر فایرفاکس</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># لینوکس
+~/.mozilla/firefox/*.default/
+
+# ویندوز
+C:\Users\%username%\AppData\Roaming\Mozilla\Firefox\Profiles\
+
+# کوکی‌ها
+sqlite3 cookies.sqlite "SELECT host, name, value FROM moz_cookies;"
+
+# تاریخچه
+sqlite3 places.sqlite "SELECT url, title FROM moz_places;"
+sqlite3 places.sqlite "SELECT url, last_visit_date FROM moz_places;"
+
+# کلمات عبور (با ابزار)
+python3 firefox_decrypt.py ~/.mozilla/firefox/*.default/
+# دستی: logins.json + key3.db</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 7 -->
+        <section id="phase7" class="tool-section">
+            <h2 class="tool-title">🗄️ فاز ۷: تحلیل دیسک (Disk Forensics)</h2>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># تحلیل پارتیشن‌ها
+fdisk -l disk.img
+gdisk -l disk.img
+parted disk.img print
+blkid disk.img
+file -s disk.img
+
+# مانت کردن دیسک
+mount -o loop,ro disk.img /mnt
+mount -o loop,offset=1048576 disk.img /mnt  # با offset
+
+# بازیابی فایل‌های حذف شده
+testdisk disk.img
+photorec disk.img
+foremost -i disk.img -o output/
+scalpel -c scalpel.conf -o output disk.img
+
+# استخراج slack space
+dd if=disk.img of=slack.bin bs=512 skip=1000 count=10
+
+# با extundelete (برای ext3/4)
+extundelete disk.img --restore-all
+extundelete disk.img --restore-file path/to/file
+
+# تحلیل Shadow Copies (ویندوز)
+vssadmin list shadows</code></pre>
+            </div>
+        </section>
+
+        <!-- Checklist -->
+        <section id="checklist" class="tool-section">
+            <h2 class="tool-title">✅ چک‌لیست نهایی CTF فورنزیک</h2>
+            
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 1: File Analysis</h3>
+                <ul>
+                    <li><code>file file.bin</code></li>
+                    <li><code>xxd file.bin | head</code></li>
+                    <li><code>binwalk -e file.bin</code></li>
+                    <li><code>strings file.bin | grep -i "flag"</code></li>
+                    <li><code>exiftool file.jpg</code></li>
+                    <li><code>foremost -i file.bin</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 2: Memory Analysis</h3>
+                <ul>
+                    <li><code>python3 vol.py -f memory.dmp windows.info</code></li>
+                    <li><code>python3 vol.py -f memory.dmp windows.pslist</code></li>
+                    <li><code>python3 vol.py -f memory.dmp windows.netstat</code></li>
+                    <li><code>python3 vol.py -f memory.dmp windows.cmdline</code></li>
+                    <li><code>python3 vol.py -f memory.dmp windows.hashdump</code></li>
+                    <li><code>python3 vol.py -f memory.dmp windows.dumpfiles</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 3: PCAP Analysis</h3>
+                <ul>
+                    <li><code>wireshark capture.pcap</code></li>
+                    <li>فیلترهای <code>http</code>, <code>dns</code>, <code>ftp</code></li>
+                    <li>دنبال کردن TCP Stream</li>
+                    <li><code>tcpflow -r capture.pcap</code></li>
+                    <li>استخراج فایل‌ها با <code>tshark --export-objects</code></li>
+                    <li><code>strings capture.pcap | grep -i "flag"</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 4: Steganography</h3>
+                <ul>
+                    <li><code>steghide info image.jpg</code></li>
+                    <li><code>zsteg -a image.png</code></li>
+                    <li>استخراج LSB</li>
+                    <li>Spectrogram analysis (Audacity/Sonic Visualiser)</li>
+                    <li><code>binwalk -e image.jpg</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 5: Encoding & Crypto</h3>
+                <ul>
+                    <li>تشخیص Base64/Hex/ROT13</li>
+                    <li><code>hashid hash.txt</code></li>
+                    <li><code>hashcat -m X hash.txt rockyou.txt</code></li>
+                    <li>تحلیل XOR</li>
+                    <li>Vigenere/Caesar</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 6: Browser Forensics</h3>
+                <ul>
+                    <li>استخراج کوکی‌ها (sqlite3)</li>
+                    <li>استخراج تاریخچه (sqlite3)</li>
+                    <li>استخراج کلمات عبور</li>
+                    <li>استخراج بوکمارک‌ها</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 7: Disk Forensics</h3>
+                <ul>
+                    <li><code>fdisk -l disk.img</code></li>
+                    <li><code>mount -o loop,ro disk.img /mnt</code></li>
+                    <li><code>testdisk disk.img</code></li>
+                    <li><code>foremost -i disk.img</code></li>
+                    <li>تحلیل Slack space</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Tips -->
+        <section id="tips" class="tool-section">
+            <h2 class="tool-title">💡 نکات طلایی پیشرفته برای CTF</h2>
+            
+            <div class="tip-box">
+                <ol>
+                    <li><strong>همیشه از <code>strings</code> شروع کنید:</strong> ساده اما مؤثر</li>
+                    <li><strong>بیت‌ها و بایت‌ها را دستکاری کنید:</strong> گاهی flag در LSB پنهان است</li>
+                    <li><strong>متادیتا را جدی بگیرید:</strong> تصاویر و اسناد حاوی اطلاعات مخفی</li>
+                    <li><strong>PCAPها طلا هستند:</strong> هر بسته ممکن است حاوی اطلاعات باشد</li>
+                    <li><strong>حافظه را جدی بگیرید:</strong> فرآیندهای مخفی و دستورات اجرا شده</li>
+                    <li><strong>استگانوگرافی را جدی بگیرید:</strong> عکس‌ها و صداها حاوی پیام‌های مخفی</li>
+                    <li><strong>کدگذاری‌ها را تشخیص دهید:</strong> Base64, Hex, ROT13, URL encode</li>
+                    <li><strong>هش‌ها را بشناسید:</strong> نوع هش را تشخیص دهید و کرک کنید</li>
+                    <li><strong>Slack space را چک کنید:</strong> داده‌های حذف شده در آنجا هستند</li>
+                    <li><strong>مرورگرها گنجینه هستند:</strong> کوکی‌ها، تاریخچه، کلمات عبور</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Scenarios -->
+        <section id="scenarios" class="tool-section">
+            <h2 class="tool-title">🏆 سناریوهای عملی CTF</h2>
+            
+            <h3 class="sub-title">سناریو ۱: یافتن flag در یک تصویر</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. بررسی متادیتا
+exiftool image.jpg
+
+# 2. بررسی steghide
+steghide info image.jpg
+steghide extract -sf image.jpg
+
+# 3. بررسی LSB
+zsteg -a image.jpg
+
+# 4. بررسی binwalk
+binwalk -e image.jpg
+
+# 5. بررسی strings
+strings image.jpg | grep -i "flag"</code></pre>
+            </div>
+
+            <h3 class="sub-title">سناریو ۲: تحلیل یک PCAP برای یافتن فایل</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. پیدا کردن جریان‌های HTTP
+tshark -r capture.pcap -Y "http" -T fields -e http.request.uri
+
+# 2. دنبال کردن جریان
+tcpflow -r capture.pcap
+
+# 3. استخراج فایل‌ها
+tshark -r capture.pcap --export-objects "http,output/"
+
+# 4. تحلیل فایل‌های استخراج شده
+file output/*
+
+# 5. جستجوی flag
+strings output/* | grep -i "flag"</code></pre>
+            </div>
+
+            <h3 class="sub-title">سناریو ۳: تحلیل حافظه برای یافتن فرآیند مخفی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. لیست فرآیندها
+python3 vol.py -f memory.dmp windows.pslist
+
+# 2. پیدا کردن فرآیندهای مخفی
+python3 vol.py -f memory.dmp windows.psscan
+
+# 3. بررسی دستورات
+python3 vol.py -f memory.dmp windows.cmdline
+
+# 4. دامپ کردن فرآیند مشکوک
+python3 vol.py -f memory.dmp windows.memdump --pid 1234 -D output/
+
+# 5. تحلیل فایل دامپ شده
+strings output/1234.dmp | grep -i "flag"</code></pre>
+            </div>
+            
+            <div class="goal-box" style="text-align: center; margin-top: 20px;">
+                <strong>"هر بایت یک داستان دارد. شما فقط باید بدانید چگونه آن را بخوانید."</strong><br>
+                این چیت‌شیت تمام تکنیک‌های فورنزیک دیجیتال را پوشش می‌دهد.<br>
+                <strong>موفق باشید و فورنزیک لذت‌بخشی داشته باشید! 🔍🖥️🔐</strong>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function (Safely decodes HTML entities back to original code for copying)
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText; 
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#bc8cff';
+            btn.style.color = '#000';
+            btn.style.borderColor = '#bc8cff';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

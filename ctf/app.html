@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ CTF Report Engine - Ultimate Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header .badge {
+            background: rgba(0, 210, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid #00d2ff;
+            color: #00d2ff;
+            font-size: 12px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 1200px) {
+            .grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #00d2ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #a0a0a0;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00d2ff;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 50px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 210, 255, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(90deg, #11998e, #38ef7d);
+            color: white;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(56, 239, 125, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(90deg, #f7971e, #ffd200);
+            color: #1a1a1a;
+        }
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 210, 0, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+        }
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 65, 108, 0.3);
+        }
+
+        .btn-purple {
+            background: linear-gradient(90deg, #7c3aed, #4f46e5);
+            color: white;
+        }
+        .btn-purple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 12px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .entries-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .entries-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .entries-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .entries-list::-webkit-scrollbar-thumb {
+            background: #00d2ff;
+            border-radius: 10px;
+        }
+
+        .entry-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-right: 3px solid #00d2ff;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .entry-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(-5px);
+        }
+
+        .entry-item .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .entry-item .entry-id {
+            font-weight: bold;
+            color: #00d2ff;
+            font-size: 12px;
+        }
+
+        .entry-item .entry-category {
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .category-reconnaissance { background: #4a90d9; color: white; }
+        .category-enumeration { background: #50c878; color: white; }
+        .category-vulnerability { background: #ff6b6b; color: white; }
+        .category-exploitation { background: #ff6b35; color: white; }
+        .category-flag { background: #ffd700; color: #1a1a1a; }
+        .category-unknown { background: #808080; color: white; }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .delete-btn:hover { transform: scale(1.2); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-box .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00d2ff;
+        }
+        .stat-box .stat-label {
+            font-size: 10px;
+            color: #808080;
+            margin-top: 3px;
+        }
+        .stat-box.success .stat-number { color: #38ef7d; }
+        .stat-box.warning .stat-number { color: #ffd700; }
+        .stat-box.danger .stat-number { color: #ff6b6b; }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-bar .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .alert {
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+
+        .alert-warning { background: rgba(255, 210, 0, 0.15); border: 1px solid rgba(255, 210, 0, 0.3); color: #ffd700; }
+        .alert-danger { background: rgba(255, 107, 107, 0.15); border: 1px solid rgba(255, 107, 107, 0.3); color: #ff6b6b; }
+        .alert-success { background: rgba(56, 239, 125, 0.15); border: 1px solid rgba(56, 239, 125, 0.3); color: #38ef7d; }
+        .alert-info { background: rgba(0, 210, 255, 0.15); border: 1px solid rgba(0, 210, 255, 0.3); color: #00d2ff; }
+
+        .report-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            color: #a0a0a0;
+        }
+
+        .report-preview::-webkit-scrollbar {
+            width: 6px;
+        }
+        .report-preview::-webkit-scrollbar-thumb {
+            background: #00d2ff;
+            border-radius: 10px;
+        }
+
+        .analysis-result {
+            background: rgba(0, 210, 255, 0.05);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .analysis-result .scenario {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .analysis-result .path {
+            font-size: 13px;
+            color: #a0a0a0;
+            margin: 10px 0;
+        }
+
+        .analysis-result .path-arrow {
+            color: #00d2ff;
+            margin: 0 5px;
+        }
+
+        .analysis-result .confidence {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            background: rgba(56, 239, 125, 0.2);
+            color: #38ef7d;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin: 2px;
+            background: rgba(0, 210, 255, 0.15);
+            color: #00d2ff;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 1000;
+            animation: slideIn 0.5s ease;
+            max-width: 450px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .toast-success { background: #11998e; color: white; }
+        .toast-error { background: #ff416c; color: white; }
+        .toast-warning { background: #f7971e; color: #1a1a1a; }
+        .toast-info { background: #00d2ff; color: #1a1a1a; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+            float: right;
+        }
+
+        .mt-10 { margin-top: 10px; }
+        .mb-10 { margin-bottom: 10px; }
+
+        .search-box {
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #00d2ff;
+        }
+
+        .badge-count {
+            background: rgba(0, 210, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: #00d2ff;
+        }
+
+        .challenge-name-input input {
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 13px;
+        }
+
+        .challenge-name-input input:focus {
+            outline: none;
+            border-color: #00d2ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>🛡️ CTF Report Engine - Ultimate Pro</h1>
+                <span style="font-size: 12px; color: #808080;">Smart Scenario Detection • Rule-Based • No AI • Multi-Category</span>
+            </div>
+            <div class="badge">
+                ⚡ v4.0 - Ultimate Final
+            </div>
+        </div>
+
+        <!-- Grid 3: Input, Stats, Analysis -->
+        <div class="grid-3">
+            <!-- Column 1: Add Entry -->
+            <div class="card">
+                <h2>➕ Add Finding</h2>
+                <form id="entryForm">
+                    <div class="form-group">
+                        <label>🔧 Tool / Method</label>
+                        <select id="tool" required>
+                            <option value="nmap">Nmap</option>
+                            <option value="gobuster">Gobuster</option>
+                            <option value="ffuf">FFUF</option>
+                            <option value="sqlmap">SQLMap</option>
+                            <option value="nikto">Nikto</option>
+                            <option value="metasploit">Metasploit</option>
+                            <option value="burp">Burp Suite</option>
+                            <option value="python">Python</option>
+                            <option value="wireshark">Wireshark</option>
+                            <option value="autopsy">Autopsy</option>
+                            <option value="manual">Manual</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📝 Description</label>
+                        <textarea id="data" required placeholder="Describe your finding..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>📍 Target</label>
+                            <input type="text" id="target" placeholder="IP or URL">
+                        </div>
+                        <div class="form-group">
+                            <label>📎 Evidence</label>
+                            <input type="text" id="evidence" placeholder="screenshot.png or log">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🏷️ Tags (comma separated)</label>
+                        <input type="text" id="tags" placeholder="web, sqli, privesc, root">
+                    </div>
+
+                    <div class="form-group">
+                        <label>📁 Category</label>
+                        <select id="categorySelect">
+                            <option value="">Auto-Detect</option>
+                            <option value="web">🌐 Web Security</option>
+                            <option value="linux">🐧 Linux</option>
+                            <option value="windows">🪟 Windows / AD</option>
+                            <option value="forensics">🔎 Forensics</option>
+                            <option value="network">🌍 Network</option>
+                            <option value="ir">🚨 Incident Response</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">➕ Add Finding</button>
+                </form>
+            </div>
+
+            <!-- Column 2: Stats & Dashboard -->
+            <div class="card">
+                <h2>📊 Dashboard</h2>
+
+                <div class="challenge-name-input">
+                    <input type="text" id="challengeName" placeholder="Challenge Name..." value="CTF Challenge">
+                </div>
+
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-box">
+                        <div class="stat-number" id="totalEntries">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-box success">
+                        <div class="stat-number" id="flagCount">0</div>
+                        <div class="stat-label">🏁 Flags</div>
+                    </div>
+                    <div class="stat-box warning">
+                        <div class="stat-number" id="gapCount">0</div>
+                        <div class="stat-label">⚠️ Gaps</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="categoryCount">0</div>
+                        <div class="stat-label">📁 Categories</div>
+                    </div>
+                </div>
+
+                <div id="progressContainer">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: #808080;">
+                        <span>Progress</span>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;">0%</div>
+                    </div>
+                </div>
+
+                <div id="alertsContainer"></div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success btn-sm" onclick="analyzeScenario()">🧠 Analyze Scenario</button>
+                    <button class="btn btn-purple btn-sm" onclick="buildReport()">📄 Build Report</button>
+                    <button class="btn btn-warning btn-sm" onclick="exportJSON()">💾 Export</button>
+                    <button class="btn btn-primary btn-sm" onclick="importJSON()">📂 Import</button>
+                    <button class="btn btn-danger btn-sm" onclick="clearAll()">🗑️ Clear</button>
+                </div>
+            </div>
+
+            <!-- Column 3: Analysis Result -->
+            <div class="card">
+                <h2>🧠 Scenario Analysis</h2>
+                <div id="analysisContainer">
+                    <div style="text-align: center; color: #808080; padding: 30px; font-size: 13px;">
+                        🔍 Add findings and click<br>
+                        <strong>"Analyze Scenario"</strong><br>
+                        to detect attack path and select report type
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid 2: Entries and Report -->
+        <div class="grid-2">
+            <!-- Entries List -->
+            <div class="card">
+                <h2>
+                    📋 Findings
+                    <span class="badge-count" id="entryCount">0</span>
+                </h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Search findings..." oninput="filterEntries()">
+                </div>
+                <div class="entries-list" id="entriesList"></div>
+            </div>
+
+            <!-- Report Preview -->
+            <div class="card">
+                <h2>📄 Report Preview</h2>
+                <div style="margin-bottom: 10px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <span style="font-size: 12px; color: #808080;">Report Type:</span>
+                    <span id="reportTypeDisplay" style="color: #ffd700; font-weight: bold;">-</span>
+                    <span id="confidenceDisplay" class="confidence" style="display: none;">High</span>
+                </div>
+                <div class="report-preview" id="reportPreview">No report generated yet. Click "Analyze Scenario" to get started.</div>
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-sm" onclick="copyReport()">📋 Copy to Clipboard</button>
+                    <button class="btn btn-success btn-sm" onclick="downloadReport()">⬇️ Download .md</button>
+                    <button class="btn btn-warning btn-sm" onclick="downloadAllFormats()">📦 All Formats</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input -->
+    <input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleImport(event)">
+
+    <script>
+        // ============================================
+        // MASTER DATA STRUCTURES
+        // ============================================
+        const MASTER_STRUCTURES = {
+            web: {
+                name: 'Web Security',
+                icon: '🌐',
+                sections: [
+                    'Target Information',
+                    'Reconnaissance',
+                    'Web Enumeration',
+                    'Authentication Analysis',
+                    'Vulnerability Assessment',
+                    'Exploitation Details',
+                    'Evidence & Requests',
+                    'Flag Acquisition',
+                    'Timeline'
+                ]
+            },
+            linux: {
+                name: 'Linux Security',
+                icon: '🐧',
+                sections: [
+                    'Target Information',
+                    'Port Scanning',
+                    'Service Enumeration',
+                    'User Enumeration',
+                    'File System Analysis',
+                    'SUID/Sudo Analysis',
+                    'Privilege Escalation',
+                    'Root Access',
+                    'Flag Acquisition',
+                    'Evidence & Logs'
+                ]
+            },
+            windows: {
+                name: 'Windows / AD Security',
+                icon: '🪟',
+                sections: [
+                    'Domain Information',
+                    'Host Discovery',
+                    'SMB/LDAP Enumeration',
+                    'User/Group Enumeration',
+                    'Kerberos Analysis',
+                    'Credentials & Hashes',
+                    'Initial Access',
+                    'Lateral Movement',
+                    'Privilege Escalation',
+                    'Domain Admin Access',
+                    'Flag Acquisition'
+                ]
+            },
+            forensics: {
+                name: 'Digital Forensics',
+                icon: '🔎',
+                sections: [
+                    'Evidence Acquisition',
+                    'File System Analysis',
+                    'Memory Analysis',
+                    'Network Forensics',
+                    'Timeline Analysis',
+                    'Artifacts Discovery',
+                    'IOC Extraction',
+                    'Findings & Evidence',
+                    'Flag Acquisition'
+                ]
+            },
+            network: {
+                name: 'Network Security',
+                icon: '🌍',
+                sections: [
+                    'Network Topology',
+                    'Host Discovery',
+                    'Service Analysis',
+                    'Traffic Analysis',
+                    'Attack Identification',
+                    'MITM Analysis',
+                    'Evidence & PCAP',
+                    'Flag Acquisition'
+                ]
+            },
+            ir: {
+                name: 'Incident Response',
+                icon: '🚨',
+                sections: [
+                    'Initial Alert',
+                    'Evidence Collection',
+                    'Timeline Analysis',
+                    'Attack Vector Identification',
+                    'Initial Access',
+                    'Persistence Analysis',
+                    'Lateral Movement',
+                    'IOC Discovery',
+                    'Containment Steps',
+                    'Root Cause Analysis',
+                    'Flag Acquisition'
+                ]
+            }
+        };
+
+        // ============================================
+        // SCENARIO DETECTION RULES
+        // ============================================
+        const SCENARIO_RULES = {
+            web: {
+                patterns: [{
+                    name: 'Direct Web Exploitation',
+                    indicators: ['port 80', 'port 443', 'http', 'https', 'directory', 'endpoint', 'parameter'],
+                    required: ['port', 'directory_or_endpoint', 'vulnerability', 'flag'],
+                    sections: [
+                        'Reconnaissance',
+                        'Web Enumeration',
+                        'Vulnerability Assessment',
+                        'Exploitation',
+                        'Evidence',
+                        'Flag'
+                    ],
+                    confidence: 85
+                }, {
+                    name: 'Authentication Bypass / IDOR',
+                    indicators: ['login', 'cookie', 'session', 'token', 'id', 'parameter'],
+                    required: ['authentication', 'authorization', 'access', 'flag'],
+                    sections: [
+                        'Authentication Analysis',
+                        'Session Analysis',
+                        'Authorization Testing',
+                        'IDOR Exploitation',
+                        'Data Access',
+                        'Evidence',
+                        'Flag'
+                    ],
+                    confidence: 80
+                }, {
+                    name: 'Web-to-System Attack Chain',
+                    indicators: ['upload', 'shell', 'www-data', 'web shell', 'command', 'system'],
+                    required: ['upload_or_shell', 'initial_access', 'privesc', 'root', 'flag'],
+                    sections: [
+                        'Web Reconnaissance',
+                        'Web Enumeration',
+                        'File Upload / Shell Access',
+                        'Initial Access',
+                        'System Enumeration',
+                        'Privilege Escalation',
+                        'Root Access',
+                        'Flag Acquisition',
+                        'Evidence & Timeline'
+                    ],
+                    confidence: 90
+                }, {
+                    name: 'API Exploitation',
+                    indicators: ['api', 'graphql', 'rest', 'json', 'jwt', 'token'],
+                    required: ['api_endpoint', 'vulnerability', 'data_access', 'flag'],
+                    sections: [
+                        'API Discovery',
+                        'API Endpoint Analysis',
+                        'Authentication Analysis',
+                        'Authorization Testing',
+                        'API Exploitation',
+                        'Data Exfiltration',
+                        'Evidence',
+                        'Flag'
+                    ],
+                    confidence: 80
+                }, {
+                    name: 'Complex Multi-Stage Web Attack',
+                    indicators: ['web', 'upload', 'shell', 'enumeration', 'privesc', 'root'],
+                    required: ['web_access', 'upload_or_shell', 'enumeration', 'privesc', 'root', 'flag'],
+                    sections: [
+                        'Initial Reconnaissance',
+                        'Web Enumeration',
+                        'File Upload Finding',
+                        'Initial Access',
+                        'System Enumeration',
+                        'Privilege Escalation',
+                        'Root Access',
+                        'Flag Acquisition',
+                        'Evidence',
+                        'Timeline',
+                        'Takeaways'
+                    ],
+                    confidence: 95
+                }]
+            },
+            linux: {
+                patterns: [{
+                    name: 'Simple Port-to-Shell Attack',
+                    indicators: ['ssh', 'ftp', 'telnet', 'port', 'service'],
+                    required: ['service_access', 'user_shell', 'flag'],
+                    sections: [
+                        'Port Discovery',
+                        'Service Enumeration',
+                        'Access Credentials',
+                        'User Shell',
+                        'Flag Acquisition',
+                        'Evidence'
+                    ],
+                    confidence: 75
+                }, {
+                    name: 'Web-to-Linux Attack Chain',
+                    indicators: ['apache', 'nginx', 'web shell', 'www-data'],
+                    required: ['web_access', 'shell', 'privesc', 'root', 'flag'],
+                    sections: [
+                        'Web Reconnaissance',
+                        'Web Enumeration',
+                        'Web Shell Access',
+                        'Linux Enumeration',
+                        'Privilege Escalation',
+                        'Root Access',
+                        'Flag Acquisition',
+                        'Evidence & Logs'
+                    ],
+                    confidence: 88
+                }, {
+                    name: 'Multi-Stage Boot-to-Root',
+                    indicators: ['ftp', 'anonymous', 'ssh', 'password', 'suid', 'sudo'],
+                    required: ['initial_access', 'user_access', 'privesc', 'root', 'flag'],
+                    sections: [
+                        'Initial Access Vector',
+                        'User Access',
+                        'System Enumeration',
+                        'Privilege Escalation',
+                        'Root Access',
+                        'Flag Acquisition',
+                        'Evidence & Timeline'
+                    ],
+                    confidence: 85
+                }, {
+                    name: 'Service Exploitation Chain',
+                    indicators: ['service', 'exploit', 'cve', 'vulnerability', 'privesc'],
+                    required: ['vulnerability', 'exploit', 'access', 'root', 'flag'],
+                    sections: [
+                        'Service Discovery',
+                        'Vulnerability Assessment',
+                        'Exploitation',
+                        'Access Gained',
+                        'Privilege Escalation',
+                        'Root Access',
+                        'Flag Acquisition',
+                        'Evidence'
+                    ],
+                    confidence: 82
+                }]
+            },
+            windows: {
+                patterns: [{
+                    name: 'Simple Windows Compromise',
+                    indicators: ['smb', 'windows', 'share', 'user', 'password'],
+                    required: ['smb_access', 'user_access', 'flag'],
+                    sections: [
+                        'SMB Discovery',
+                        'Share Enumeration',
+                        'Access Credentials',
+                        'User Access',
+                        'Flag Acquisition',
+                        'Evidence'
+                    ],
+                    confidence: 75
+                }, {
+                    name: 'Active Directory Attack Path',
+                    indicators: ['domain', 'ad', 'ldap', 'kerberos', 'dc', 'domain admin'],
+                    required: ['domain_access', 'user_access', 'lateral_movement', 'domain_admin', 'flag'],
+                    sections: [
+                        'Domain Discovery',
+                        'Domain Enumeration',
+                        'User/Group Enumeration',
+                        'Credential Discovery',
+                        'Initial Access',
+                        'Lateral Movement',
+                        'Privilege Escalation',
+                        'Domain-Level Access',
+                        'Flag Acquisition',
+                        'Evidence & Timeline'
+                    ],
+                    confidence: 92
+                }, {
+                    name: 'Windows Privilege Escalation Chain',
+                    indicators: ['windows', 'privesc', 'system', 'admin', 'scheduled task'],
+                    required: ['initial_access', 'privesc', 'system_level', 'flag'],
+                    sections: [
+                        'Initial Access',
+                        'System Enumeration',
+                        'Privilege Escalation',
+                        'System Level Access',
+                        'Flag Acquisition',
+                        'Evidence'
+                    ],
+                    confidence: 85
+                }]
+            },
+            forensics: {
+                patterns: [{
+                    name: 'Network Forensics Analysis',
+                    indicators: ['pcap', 'wireshark', 'tcpdump', 'network', 'traffic'],
+                    required: ['pcap_traffic', 'analysis', 'flag'],
+                    sections: [
+                        'Evidence Acquisition',
+                        'Network Traffic Analysis',
+                        'Protocol Analysis',
+                        'Suspicious Activity',
+                        'IOC Extraction',
+                        'Flag Acquisition',
+                        'Findings Summary'
+                    ],
+                    confidence: 88
+                }, {
+                    name: 'Disk Forensics Investigation',
+                    indicators: ['image', 'disk', 'dd', 'file system', 'sector', 'deleted'],
+                    required: ['disk_image', 'analysis', 'flag'],
+                    sections: [
+                        'Evidence Acquisition',
+                        'File System Analysis',
+                        'Deleted Files Recovery',
+                        'Artifacts Discovery',
+                        'Timeline Analysis',
+                        'Flag Acquisition',
+                        'Findings Summary'
+                    ],
+                    confidence: 85
+                }, {
+                    name: 'Memory Forensics Analysis',
+                    indicators: ['memory', 'dump', 'ram', 'volatility', 'process'],
+                    required: ['memory_dump', 'analysis', 'flag'],
+                    sections: [
+                        'Memory Acquisition',
+                        'Process Analysis',
+                        'Network Connections',
+                        'Suspicious Processes',
+                        'Malware Detection',
+                        'Flag Acquisition',
+                        'Findings Summary'
+                    ],
+                    confidence: 82
+                }, {
+                    name: 'File/Image Forensics',
+                    indicators: ['image', 'jpeg', 'png', 'metadata', 'exif', 'hidden'],
+                    required: ['file', 'analysis', 'flag'],
+                    sections: [
+                        'File Analysis',
+                        'Metadata Extraction',
+                        'Hidden Data Discovery',
+                        'Steganography Analysis',
+                        'Flag Acquisition',
+                        'Findings Summary'
+                    ],
+                    confidence: 80
+                }]
+            },
+            network: {
+                patterns: [{
+                    name: 'MITM Attack Analysis',
+                    indicators: ['arp', 'ettercap', 'mitm', 'spoof', 'victim'],
+                    required: ['arp_spoof', 'traffic_capture', 'credentials', 'flag'],
+                    sections: [
+                        'Network Discovery',
+                        'ARP Spoofing Analysis',
+                        'Traffic Capture',
+                        'Credential Extraction',
+                        'Data Analysis',
+                        'Flag Acquisition',
+                        'Evidence'
+                    ],
+                    confidence: 85
+                }, {
+                    name: 'DNS Spoofing Attack',
+                    indicators: ['dns', 'spoof', 'redirect', 'hosts', 'cache'],
+                    required: ['dns_spoof', 'redirect', 'flag'],
+                    sections: [
+                        'DNS Analysis',
+                        'Spoofing Detection',
+                        'Traffic Analysis',
+                        'Flag Acquisition',
+                        'Evidence'
+                    ],
+                    confidence: 80
+                }, {
+                    name: 'Network Traffic Investigation',
+                    indicators: ['pcap', 'traffic', 'http', 'credentials', 'payload'],
+                    required: ['traffic_capture', 'analysis', 'flag'],
+                    sections: [
+                        'Traffic Capture',
+                        'Protocol Analysis',
+                        'HTTP Traffic Analysis',
+                        'Credential Discovery',
+                        'Suspicious Activity',
+                        'Flag Acquisition',
+                        'Evidence'
+                    ],
+                    confidence: 85
+                }]
+            },
+            ir: {
+                patterns: [{
+                    name: 'Incident Timeline Analysis',
+                    indicators: ['log', 'authentication', 'event', 'timeline', 'ioc'],
+                    required: ['logs', 'suspicious_activity', 'timeline', 'flag'],
+                    sections: [
+                        'Initial Evidence',
+                        'Log Analysis',
+                        'Initial Access',
+                        'Attacker Activity',
+                        'Persistence',
+                        'Lateral Movement',
+                        'IOC Discovery',
+                        'Timeline',
+                        'Root Cause',
+                        'Flag Acquisition',
+                        'Findings Summary'
+                    ],
+                    confidence: 90
+                }, {
+                    name: 'Web Application Incident Response',
+                    indicators: ['web', 'log', 'attack', 'access', 'command', 'ioc'],
+                    required: ['web_logs', 'suspicious_access', 'flag'],
+                    sections: [
+                        'Web Log Analysis',
+                        'Suspicious Access Patterns',
+                        'Command Execution',
+                        'File Modifications',
+                        'Persistence',
+                        'IOC Discovery',
+                        'Timeline',
+                        'Flag Acquisition',
+                        'Findings Summary'
+                    ],
+                    confidence: 85
+                }, {
+                    name: 'Advanced Persistent Threat (APT) Analysis',
+                    indicators: ['apt', 'persistent', 'advanced', 'stealth', 'lateral', 'exfil'],
+                    required: ['persistence', 'lateral_movement', 'data_exfil', 'flag'],
+                    sections: [
+                        'Initial Compromise',
+                        'Persistence Mechanisms',
+                        'Lateral Movement',
+                        'Data Exfiltration',
+                        'IOC Discovery',
+                        'Timeline Analysis',
+                        'Flag Acquisition',
+                        'Findings Summary'
+                    ],
+                    confidence: 88
+                }]
+            }
+        };
+
+        // ============================================
+        // DATA LAYER
+        // ============================================
+        let entries = [];
+        let currentReport = '';
+        let currentScenario = null;
+        let filteredEntries = [];
+
+        // ============================================
+        // CLASSIFICATION FUNCTIONS
+        // ============================================
+        const CATEGORY_RULES = {
+            reconnaissance: {
+                tools: ['nmap', 'masscan', 'rustscan', 'zmap', 'netdiscover', 'arp-scan'],
+                keywords: ['port', 'tcp', 'udp', 'scan', 'open', 'filtered', 'host', 'service', 'discovery']
+            },
+            enumeration: {
+                tools: ['gobuster', 'dirb', 'ffuf', 'enum4linux', 'hydra', 'wpscan', 'dnsenum', 'smap'],
+                keywords: ['directory', 'status', 'page', 'subdomain', 'vhost', 'user', 'share', 'enumeration']
+            },
+            vulnerability: {
+                tools: ['nikto', 'sqlmap', 'nuclei', 'nessus', 'openvas', 'zap', 'wpscan'],
+                keywords: ['injection', 'sqli', 'xss', 'rce', 'lfi', 'rfi', 'vulnerable', 'cve', 'exploit', 'payload']
+            },
+            exploitation: {
+                tools: ['metasploit', 'burp', 'nc', 'python', 'perl', 'ruby', 'grep'],
+                keywords: ['reverse shell', 'shell', 'executed', 'exploit', 'payload', 'pwn', 'access', 'compromised']
+            },
+            flag: {
+                tools: ['grep', 'manual', 'cat', 'strings'],
+                keywords: ['flag{', 'ctf{', 'FLAG{', '<flag>']
+            }
+        };
+
+        function classifyEntry(tool, data) {
+            const text = (tool + ' ' + data).toLowerCase();
+            for (const [category, rules] of Object.entries(CATEGORY_RULES)) {
+                if (rules.tools.some(t => text.includes(t.toLowerCase()))) return category;
+                if (rules.keywords.some(k => text.includes(k.toLowerCase()))) return category;
+            }
+            return 'unknown';
+        }
+
+        function detectCategory(tool, data, tags) {
+            const text = (tool + ' ' + data + ' ' + (tags || '').join(' ')).toLowerCase();
+
+            const categoryIndicators = {
+                web: ['web', 'http', 'https', 'html', 'css', 'js', 'javascript', 'php', 'asp', 'jsp', 'upload', 'injection', 'xss', 'sqli', 'api', 'graphql'],
+                linux: ['linux', 'ubuntu', 'debian', 'centos', 'redhat', 'fedora', 'bash', 'sh', 'root', 'suid', 'sudo', 'cron', 'ssh', 'ftp'],
+                windows: ['windows', 'win', 'domain', 'ad', 'ldap', 'kerberos', 'smb', 'ntlm', 'hash', 'admin', 'dc', 'powershell'],
+                forensics: ['forensic', 'memory', 'disk', 'pcap', 'wireshark', 'autopsy', 'volatility', 'image', 'dump', 'sector'],
+                network: ['network', 'arp', 'dns', 'sniff', 'spoof', 'mitm', 'router', 'switch', 'firewall', 'ip', 'mac'],
+                ir: ['incident', 'ir', 'response', 'log', 'event', 'attack', 'compromise', 'breach', 'alert']
+            };
+
+            let scores = {};
+            for (const [cat, indicators] of Object.entries(categoryIndicators)) {
+                scores[cat] = 0;
+                indicators.forEach(ind => {
+                    if (text.includes(ind)) scores[cat]++;
+                });
+            }
+
+            let best = 'web';
+            let maxScore = 0;
+            for (const [cat, score] of Object.entries(scores)) {
+                if (score > maxScore) {
+                    maxScore = score;
+                    best = cat;
+                }
+            }
+
+            return maxScore > 0 ? best : 'web';
+        }
+
+        function extractFlags(text) {
+            const patterns = [
+                /(flag|ctf|FLAG)\{[^\}]+\}/g,
+                /<flag>[^<]+<\/flag>/g,
+                /FLAG[:\s]+[A-Z0-9]+/gi
+            ];
+            let flags = [];
+            patterns.forEach(p => {
+                const matches = text.match(p);
+                if (matches) flags = flags.concat(matches);
+            });
+            return flags;
+        }
+
+        function generateId() {
+            return 'F-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+        }
+
+        // ============================================
+        // SCENARIO ANALYZER
+        // ============================================
+        function analyzeScenario() {
+            if (entries.length === 0) {
+                showToast('❌ Please add some findings first!', 'error');
+                return;
+            }
+
+            showToast('🧠 Analyzing scenario... Please wait', 'info');
+
+            const data = prepareAnalysisData();
+            const category = detectMainCategory(data);
+            const scenario = findScenario(category, data);
+            const reportStructure = buildReportStructure(scenario, data);
+
+            displayScenarioResult(scenario, category, data);
+
+            const report = generateReport(scenario, data, reportStructure);
+            currentReport = report;
+            currentScenario = scenario;
+
+            document.getElementById('reportPreview').textContent = report;
+            document.getElementById('reportTypeDisplay').textContent = scenario.name;
+            document.getElementById('confidenceDisplay').textContent = `${scenario.confidence || 85}% Confidence`;
+            document.getElementById('confidenceDisplay').style.display = 'inline-block';
+
+            showToast(`✅ Scenario detected: ${scenario.name}`, 'success');
+        }
+
+        function prepareAnalysisData() {
+            const grouped = {};
+            const categories = ['reconnaissance', 'enumeration', 'vulnerability', 'exploitation', 'flag'];
+            categories.forEach(c => grouped[c] = []);
+
+            const flags = [];
+            const tools = new Set();
+            const targets = new Set();
+            const endpoints = new Set();
+
+            entries.forEach(e => {
+                if (grouped[e.category]) grouped[e.category].push(e);
+                if (e.category === 'flag') {
+                    const f = extractFlags(e.data);
+                    if (f.length > 0) flags.push(...f);
+                }
+                if (e.tool) tools.add(e.tool);
+                if (e.target) targets.add(e.target);
+                if (e.endpoint) endpoints.add(e.endpoint);
+            });
+
+            const byCategory = {};
+            categories.forEach(c => byCategory[c] = (grouped[c] || []).length);
+
+            const indicators = {
+                web: ['http', 'https', 'web', 'upload', 'injection', 'xss', 'sqli'],
+                linux: ['linux', 'root', 'suid', 'sudo', 'bash', 'shell'],
+                windows: ['windows', 'domain', 'ad', 'kerberos', 'smb', 'ntlm'],
+                forensics: ['forensic', 'pcap', 'memory', 'disk', 'image'],
+                network: ['arp', 'dns', 'spoof', 'mitm'],
+                ir: ['incident', 'log', 'event', 'compromise']
+            };
+
+            const detectedIndicators = {};
+            for (const [cat, inds] of Object.entries(indicators)) {
+                detectedIndicators[cat] = [];
+                entries.forEach(e => {
+                    const text = (e.data + ' ' + e.tags.join(' ')).toLowerCase();
+                    inds.forEach(ind => {
+                        if (text.includes(ind) && !detectedIndicators[cat].includes(ind)) {
+                            detectedIndicators[cat].push(ind);
+                        }
+                    });
+                });
+            }
+
+            return {
+                entries: entries,
+                grouped: grouped,
+                byCategory: byCategory,
+                flags: flags,
+                hasFlag: flags.length > 0,
+                tools: Array.from(tools),
+                targets: Array.from(targets),
+                endpoints: Array.from(endpoints),
+                indicators: detectedIndicators,
+                total: entries.length
+            };
+        }
+
+        function detectMainCategory(data) {
+            const scores = { web: 0, linux: 0, windows: 0, forensics: 0, network: 0, ir: 0 };
+
+            const catMap = {
+                reconnaissance: { web: 2, linux: 2, windows: 2, network: 3, forensics: 1, ir: 1 },
+                enumeration: { web: 3, linux: 2, windows: 2, network: 2, forensics: 2, ir: 1 },
+                vulnerability: { web: 5, linux: 3, windows: 3, network: 2, forensics: 1, ir: 3 },
+                exploitation: { web: 4, linux: 5, windows: 4, network: 3, forensics: 1, ir: 4 },
+                flag: { web: 2, linux: 2, windows: 2, network: 2, forensics: 2, ir: 2 }
+            };
+
+            entries.forEach(e => {
+                const cat = e.category;
+                if (catMap[cat]) {
+                    for (const [key, val] of Object.entries(catMap[cat])) {
+                        scores[key] += val;
+                    }
+                }
+            });
+
+            for (const [cat, inds] of Object.entries(data.indicators)) {
+                if (scores[cat] !== undefined) {
+                    scores[cat] += inds.length * 3;
+                }
+            }
+
+            data.tools.forEach(tool => {
+                const toolCat = {
+                    nmap: 'network',
+                    gobuster: 'web',
+                    sqlmap: 'web',
+                    metasploit: 'linux',
+                    wireshark: 'network',
+                    autopsy: 'forensics',
+                    volatility: 'forensics'
+                };
+                if (toolCat[tool] && scores[toolCat[tool]] !== undefined) {
+                    scores[toolCat[tool]] += 5;
+                }
+            });
+
+            let best = 'web';
+            let maxScore = 0;
+            for (const [cat, score] of Object.entries(scores)) {
+                if (score > maxScore) {
+                    maxScore = score;
+                    best = cat;
+                }
+            }
+
+            return best;
+        }
+
+        function findScenario(category, data) {
+            const rules = SCENARIO_RULES[category];
+            if (!rules) {
+                return {
+                    name: 'General Report',
+                    sections: MASTER_STRUCTURES[category]?.sections || ['Overview', 'Findings', 'Summary'],
+                    confidence: 50,
+                    description: 'Standard report format'
+                };
+            }
+
+            let bestMatch = null;
+            let bestScore = 0;
+
+            for (const pattern of rules.patterns) {
+                let score = 0;
+                const totalIndicators = pattern.indicators.length;
+                let matchedIndicators = 0;
+
+                pattern.indicators.forEach(ind => {
+                    data.entries.forEach(e => {
+                        const text = (e.data + ' ' + e.tags.join(' ')).toLowerCase();
+                        if (text.includes(ind)) matchedIndicators++;
+                    });
+                });
+
+                if (totalIndicators > 0) {
+                    const indicatorScore = (matchedIndicators / (totalIndicators * data.entries.length || 1)) * 100;
+                    score += indicatorScore * 0.3;
+                }
+
+                const requiredMet = pattern.required.filter(req => {
+                    return data.entries.some(e => {
+                        const text = (e.data + ' ' + e.tags.join(' ')).toLowerCase();
+                        return text.includes(req) || text.includes(req.replace('_', ' '));
+                    });
+                });
+
+                const reqScore = (requiredMet.length / pattern.required.length) * 100;
+                score += reqScore * 0.7;
+
+                if (data.hasFlag) score += 10;
+
+                const catCount = Object.values(data.byCategory).filter(v => v > 0).length;
+                if (catCount >= 4) score += 10;
+
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMatch = {
+                        ...pattern,
+                        confidence: Math.min(Math.round(score), 98),
+                        matchedIndicators: matchedIndicators,
+                        requiredMet: requiredMet.length,
+                        totalRequired: pattern.required.length
+                    };
+                }
+            }
+
+            if (!bestMatch) {
+                return {
+                    name: 'General Security Report',
+                    sections: ['Overview', 'Findings by Category', 'Evidence', 'Summary'],
+                    confidence: 50,
+                    description: 'General report structure'
+                };
+            }
+
+            return bestMatch;
+        }
+
+        function buildReportStructure(scenario, data) {
+            const sections = scenario.sections || ['Overview', 'Findings', 'Summary'];
+
+            if (data.hasFlag && !sections.includes('Flag Acquisition')) {
+                sections.push('Flag Acquisition');
+            }
+            if (data.entries.some(e => e.evidence) && !sections.includes('Evidence')) {
+                sections.push('Evidence');
+            }
+            if (data.entries.length > 5 && !sections.includes('Timeline')) {
+                sections.push('Timeline');
+            }
+
+            return sections;
+        }
+
+        // ============================================
+        // REPORT GENERATOR
+        // ============================================
+        function generateReport(scenario, data, sections) {
+            const challenge = document.getElementById('challengeName').value || 'CTF Challenge';
+            const category = detectMainCategory(data);
+            const catInfo = MASTER_STRUCTURES[category] || MASTER_STRUCTURES.web;
+
+            let report = `# 🏆 ${challenge} - ${scenario.name}\n\n`;
+            report += `**Category:** ${catInfo.icon} ${catInfo.name}\n`;
+            report += `**Generated:** ${new Date().toLocaleString()}\n`;
+            report += `**Total Findings:** ${data.total}\n`;
+            report += `**Flag Status:** ${data.hasFlag ? '✅ Captured' : '❌ Not Found'}\n`;
+            report += `**Confidence:** ${scenario.confidence || 85}%\n\n`;
+            report += '---\n\n';
+
+            sections.forEach(section => {
+                report += `## ${section}\n\n`;
+                report += generateSectionContent(section, data);
+                report += '\n';
+            });
+
+            report += '---\n';
+            report += `*Generated by CTF Report Engine - Ultimate Pro v4.0*\n`;
+            report += '*100% Rule-Based Analysis - No AI Used*\n';
+
+            return report;
+        }
+
+        function generateSectionContent(section, data) {
+            switch (section) {
+                case 'Reconnaissance':
+                case 'Target Information':
+                    return generateReconSection(data);
+                case 'Web Enumeration':
+                case 'Enumeration':
+                    return generateEnumerationSection(data);
+                case 'Vulnerability Assessment':
+                    return generateVulnerabilitySection(data);
+                case 'Exploitation Details':
+                case 'Exploitation':
+                    return generateExploitationSection(data);
+                case 'Flag Acquisition':
+                case 'Flags':
+                    return generateFlagSection(data);
+                case 'Evidence':
+                    return generateEvidenceSection(data);
+                case 'Timeline':
+                    return generateTimelineSection(data);
+                case 'Summary':
+                case 'Takeaways':
+                    return generateSummarySection(data);
+                default:
+                    return generateGenericSection(data);
+            }
+        }
+
+        function generateReconSection(data) {
+            const recon = data.grouped.reconnaissance || [];
+            if (recon.length === 0) return '*No reconnaissance data recorded*\n';
+
+            let content = '| ID | Tool | Finding | Target |\n';
+            content += '|----|------|---------|--------|\n';
+            recon.forEach(e => {
+                content += `| ${e.id} | ${e.tool} | ${e.data} | ${e.target || '-'} |\n`;
+            });
+            return content;
+        }
+
+        function generateEnumerationSection(data) {
+            const enumData = data.grouped.enumeration || [];
+            if (enumData.length === 0) return '*No enumeration data recorded*\n';
+
+            let content = '| ID | Tool | Discovery | Endpoint |\n';
+            content += '|----|------|-----------|----------|\n';
+            enumData.forEach(e => {
+                content += `| ${e.id} | ${e.tool} | ${e.data} | ${e.endpoint || '-'} |\n`;
+            });
+            return content;
+        }
+
+        function generateVulnerabilitySection(data) {
+            const vulns = data.grouped.vulnerability || [];
+            if (vulns.length === 0) return '*No vulnerabilities identified*\n';
+
+            let content = '| ID | Tool | Vulnerability | Endpoint | Evidence |\n';
+            content += '|----|------|--------------|----------|----------|\n';
+            vulns.forEach(e => {
+                content += `| ${e.id} | ${e.tool} | ${e.data} | ${e.endpoint || '-'} | ${e.evidence || '-'} |\n`;
+            });
+            return content;
+        }
+
+        function generateExploitationSection(data) {
+            const exploits = data.grouped.exploitation || [];
+            if (exploits.length === 0) return '*No exploitation steps recorded*\n';
+
+            let content = '| ID | Tool | Action | Result | Evidence |\n';
+            content += '|----|------|--------|--------|----------|\n';
+            exploits.forEach(e => {
+                content += `| ${e.id} | ${e.tool} | ${e.data} | ${e.evidence || 'Success'} | ${e.evidence || '-'} |\n`;
+            });
+            return content;
+        }
+
+        function generateFlagSection(data) {
+            if (!data.hasFlag) return '*Flag not yet acquired*\n';
+
+            let content = '| Flag | Found At | Method |\n';
+            content += '|------|----------|--------|\n';
+            const flagEntries = data.grouped.flag || [];
+            flagEntries.forEach(e => {
+                const flags = extractFlags(e.data);
+                flags.forEach(f => {
+                    content += `| \`${f}\` | ${new Date(e.timestamp).toLocaleString()} | ${e.tool} |\n`;
+                });
+            });
+            return content;
+        }
+
+        function generateEvidenceSection(data) {
+            const withEvidence = data.entries.filter(e => e.evidence);
+            if (withEvidence.length === 0) return '*No evidence attached to findings*\n';
+
+            let content = '| ID | Finding | Evidence | Type |\n';
+            content += '|----|---------|----------|------|\n';
+            withEvidence.forEach(e => {
+                const type = e.evidence.includes('.') ? e.evidence.split('.').pop() : 'file';
+                content += `| ${e.id} | ${e.data.substring(0, 30)}... | ${e.evidence} | ${type} |\n`;
+            });
+            return content;
+        }
+
+        function generateTimelineSection(data) {
+            const sorted = [...data.entries].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            if (sorted.length === 0) return '*No timeline data available*\n';
+
+            let content = '| Time | Category | Tool | Description |\n';
+            content += '|------|----------|------|-------------|\n';
+            sorted.forEach(e => {
+                const time = new Date(e.timestamp).toLocaleString();
+                content += `| ${time} | ${e.category} | ${e.tool} | ${e.data.substring(0, 40)}${e.data.length > 40 ? '...' : ''} |\n`;
+            });
+            return content;
+        }
+
+        function generateSummarySection(data) {
+            let content = '### Attack Summary\n\n';
+            content += `- **Total Steps:** ${data.total}\n`;
+            content += `- **Phases Completed:** ${Object.values(data.byCategory).filter(v => v > 0).length}/5\n`;
+            content += `- **Flag Acquired:** ${data.hasFlag ? '✅ Yes' : '❌ No'}\n\n`;
+
+            const steps = ['reconnaissance', 'enumeration', 'vulnerability', 'exploitation', 'flag'];
+            const missing = steps.filter(s => data.byCategory[s] === 0);
+            if (missing.length > 0) {
+                content += '### Missing Phases\n\n';
+                missing.forEach(m => {
+                    content += `- ❌ ${m}\n`;
+                });
+                content += '\n';
+            }
+
+            content += '### Recommendations\n\n';
+            if (data.hasFlag) {
+                content += '✅ Challenge completed successfully!\n\n';
+            } else {
+                content += '1. Complete missing phases\n';
+                content += '2. Document all exploitation steps\n';
+                content += '3. Add evidence for findings\n';
+                content += '4. Verify flag location\n\n';
+            }
+
+            return content;
+        }
+
+        function generateGenericSection(data) {
+            const entries = data.entries || [];
+            if (entries.length === 0) return '*No findings in this section*\n';
+
+            let content = '| ID | Category | Tool | Description |\n';
+            content += '|----|----------|------|-------------|\n';
+            entries.forEach(e => {
+                content += `| ${e.id} | ${e.category} | ${e.tool} | ${e.data} |\n`;
+            });
+            return content;
+        }
+
+        // ============================================
+        // DISPLAY FUNCTIONS
+        // ============================================
+        function displayScenarioResult(scenario, category, data) {
+            const container = document.getElementById('analysisContainer');
+            const catInfo = MASTER_STRUCTURES[category] || MASTER_STRUCTURES.web;
+
+            let html = `
+                <div class="analysis-result">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <div class="scenario">${catInfo.icon} ${scenario.name}</div>
+                            <div style="font-size: 13px; color: #a0a0a0; margin-top: 5px;">
+                                ${catInfo.name} • ${data.total} findings • ${data.hasFlag ? '✅ Flag Found' : '❌ No Flag'}
+                            </div>
+                        </div>
+                        <div>
+                            <span class="confidence">${scenario.confidence || 85}% Confidence</span>
+                        </div>
+                    </div>
+
+                    <div class="path">
+                        <strong>Attack Path:</strong><br>
+                        ${scenario.sections ? scenario.sections.map((s, i) => 
+                            `<span style="color: #00d2ff;">${s}</span>${i < scenario.sections.length - 1 ? ' <span style="color: #ffd700;">→</span> ' : ''}`
+                        ).join('') : 'Standard path'}
+                    </div>
+
+                    <div style="margin-top: 10px;">
+                        <div style="font-size: 12px; color: #808080;">Report Sections:</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;">
+                            ${scenario.sections ? scenario.sections.map(s => 
+                                `<span class="section-tag">${s}</span>`
+                            ).join('') : ''}
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <div style="font-size: 12px; color: #808080;">Indicators Found:</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;">
+                            ${scenario.indicators ? scenario.indicators.map(ind => 
+                                `<span style="background: rgba(0,210,255,0.1); padding: 2px 8px; border-radius: 8px; font-size: 10px; color: #00d2ff;">${ind}</span>`
+                            ).join('') : 'General analysis'}
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn btn-success btn-sm" onclick="buildReport()">📄 Generate Report</button>
+                        <button class="btn btn-primary btn-sm" onclick="showAllScenarios()">📚 See All Scenarios</button>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function showAllScenarios() {
+            const container = document.getElementById('analysisContainer');
+            const data = prepareAnalysisData();
+            const category = detectMainCategory(data);
+            const rules = SCENARIO_RULES[category] || SCENARIO_RULES.web;
+
+            let html = `
+                <div style="margin-bottom: 10px; font-size: 14px; color: #00d2ff;">📚 Available Scenarios for ${MASTER_STRUCTURES[category]?.name || 'Web'}</div>
+            `;
+
+            rules.patterns.forEach((pattern, idx) => {
+                const isActive = currentScenario && currentScenario.name === pattern.name;
+                html += `
+                    <div class="analysis-result" style="${isActive ? 'border-color: #38ef7d;' : ''}">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 14px; font-weight: bold; color: #00d2ff;">
+                                    ${idx + 1}. ${pattern.name}
+                                    ${isActive ? ' ✅' : ''}
+                                </div>
+                                <div style="font-size: 12px; color: #a0a0a0;">
+                                    Required: ${pattern.required.join(', ')}
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-sm" onclick="selectScenario('${pattern.name}')">
+                                Select
+                            </button>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            ${pattern.sections.map(s => `<span class="section-tag">${s}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <button class="btn btn-warning btn-sm mt-10" onclick="analyzeScenario()">
+                    🔄 Re-analyze
+                </button>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function selectScenario(name) {
+            const data = prepareAnalysisData();
+            const category = detectMainCategory(data);
+            const rules = SCENARIO_RULES[category] || SCENARIO_RULES.web;
+
+            const scenario = rules.patterns.find(p => p.name === name);
+            if (scenario) {
+                currentScenario = scenario;
+                const report = generateReport(scenario, data, scenario.sections);
+                currentReport = report;
+                document.getElementById('reportPreview').textContent = report;
+                displayScenarioResult(scenario, category, data);
+                showToast(`✅ Selected scenario: ${scenario.name}`, 'success');
+            }
+        }
+
+        // ============================================
+        // BUILD REPORT
+        // ============================================
+        function buildReport() {
+            if (entries.length === 0) {
+                showToast('❌ Please add some findings first!', 'error');
+                return;
+            }
+
+            if (!currentScenario) {
+                analyzeScenario();
+                return;
+            }
+
+            const data = prepareAnalysisData();
+            const report = generateReport(currentScenario, data, currentScenario.sections || ['Overview', 'Findings', 'Summary']);
+            currentReport = report;
+            document.getElementById('reportPreview').textContent = report;
+            showToast('✅ Report generated successfully!', 'success');
+        }
+
+        // ============================================
+        // DOWNLOAD & COPY FUNCTIONS
+        // ============================================
+        function copyReport() {
+            if (!currentReport) {
+                showToast('❌ Please generate a report first!', 'error');
+                return;
+            }
+            navigator.clipboard.writeText(currentReport).then(() => {
+                showToast('📋 Report copied to clipboard!', 'success');
+            }).catch(err => {
+                showToast('❌ Failed to copy: ' + err, 'error');
+            });
+        }
+
+        function downloadReport() {
+            if (!currentReport) {
+                showToast('❌ Please generate a report first!', 'error');
+                return;
+            }
+
+            const blob = new Blob([currentReport], { type: 'text/markdown;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            const challenge = document.getElementById('challengeName').value || 'ctf-report';
+            const category = currentScenario ? currentScenario.name.toLowerCase().replace(/\s+/g, '-') : 'report';
+            link.download = `${challenge.toLowerCase().replace(/\s+/g, '-')}-${category}-${Date.now()}.md`;
+            link.click();
+            showToast('⬇️ Report downloaded!', 'success');
+        }
+
+        function downloadAllFormats() {
+            const data = prepareAnalysisData();
+            const category = detectMainCategory(data);
+            const rules = SCENARIO_RULES[category] || SCENARIO_RULES.web;
+
+            const challenge = document.getElementById('challengeName').value || 'ctf-report';
+
+            rules.patterns.forEach(pattern => {
+                const report = generateReport(pattern, data, pattern.sections);
+                const blob = new Blob([report], { type: 'text/markdown;charset=utf-8' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                const name = pattern.name.toLowerCase().replace(/\s+/g, '-');
+                link.download = `${challenge.toLowerCase().replace(/\s+/g, '-')}-${name}-${Date.now()}.md`;
+                link.click();
+            });
+
+            showToast(`📦 Downloaded ${rules.patterns.length} scenario reports!`, 'success');
+        }
+
+        // ============================================
+        // CRUD OPERATIONS
+        // ============================================
+        function addEntry(tool, data, target, evidence, tags, categoryOverride) {
+            const category = classifyEntry(tool, data);
+            const flags = extractFlags(data);
+
+            const entry = {
+                id: generateId(),
+                timestamp: new Date().toISOString(),
+                category: category,
+                tool: tool,
+                data: data,
+                target: target || '',
+                endpoint: target || '',
+                evidence: evidence || '',
+                tags: tags || [],
+                detectedCategory: categoryOverride || detectCategory(tool, data, tags)
+            };
+
+            if (flags.length > 0) {
+                entry.tags.push(...flags);
+                entry.category = 'flag';
+            }
+
+            entries.push(entry);
+            filteredEntries = [...entries];
+            saveData();
+            renderAll();
+            showToast('✅ Finding added successfully!', 'success');
+
+            if (entries.length >= 3) {
+                setTimeout(() => {
+                    showToast('🧠 Ready for analysis! Click "Analyze Scenario" or press Ctrl+A', 'info');
+                }, 1000);
+            }
+
+            return entry;
+        }
+
+        function deleteEntry(id) {
+            entries = entries.filter(e => e.id !== id);
+            filteredEntries = [...entries];
+            saveData();
+            renderAll();
+            showToast('🗑️ Entry deleted', 'warning');
+        }
+
+        function clearAll() {
+            if (confirm('⚠️ Are you sure you want to delete all entries?')) {
+                entries = [];
+                filteredEntries = [];
+                currentScenario = null;
+                currentReport = '';
+                saveData();
+                renderAll();
+                document.getElementById('analysisContainer').innerHTML =
+                    `<div style="text-align: center; color: #808080; padding: 30px; font-size: 13px;">
+                        🔍 Add findings and click<br>
+                        <strong>"Analyze Scenario"</strong><br>
+                        to detect attack path and select report type
+                    </div>`;
+                document.getElementById('reportPreview').textContent = 'No report generated yet. Click "Analyze Scenario" to get started.';
+                document.getElementById('reportTypeDisplay').textContent = '-';
+                document.getElementById('confidenceDisplay').style.display = 'none';
+                showToast('🗑️ All entries cleared', 'warning');
+            }
+        }
+
+        // ============================================
+        // STORAGE
+        // ============================================
+        function loadData() {
+            try {
+                const data = localStorage.getItem('cre_ultimate_entries');
+                if (data) {
+                    entries = JSON.parse(data);
+                }
+                const challenge = localStorage.getItem('cre_ultimate_challenge');
+                if (challenge) {
+                    document.getElementById('challengeName').value = challenge;
+                }
+            } catch (e) {
+                entries = [];
+            }
+            filteredEntries = [...entries];
+        }
+
+        function saveData() {
+            localStorage.setItem('cre_ultimate_entries', JSON.stringify(entries));
+            localStorage.setItem('cre_ultimate_challenge', document.getElementById('challengeName').value);
+        }
+
+        // ============================================
+        // EXPORT/IMPORT
+        // ============================================
+        function exportJSON() {
+            if (entries.length === 0) {
+                showToast('❌ No entries to export!', 'error');
+                return;
+            }
+            const data = {
+                challenge: document.getElementById('challengeName').value,
+                entries: entries,
+                exportedAt: new Date().toISOString(),
+                version: '4.0'
+            };
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `ctf-data-${Date.now()}.json`;
+            link.click();
+            showToast('💾 Data exported successfully!', 'success');
+        }
+
+        function importJSON() {
+            document.getElementById('fileInput').click();
+        }
+
+        function handleImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.entries && Array.isArray(data.entries)) {
+                        entries = data.entries;
+                        if (data.challenge) {
+                            document.getElementById('challengeName').value = data.challenge;
+                        }
+                        filteredEntries = [...entries];
+                        saveData();
+                        renderAll();
+                        showToast(`✅ Imported ${entries.length} entries successfully!`, 'success');
+                    } else {
+                        showToast('❌ Invalid JSON format!', 'error');
+                    }
+                } catch (err) {
+                    showToast('❌ Error parsing JSON: ' + err.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ============================================
+        // RENDER FUNCTIONS
+        // ============================================
+        function renderStats() {
+            const total = entries.length;
+            const flagCount = entries.filter(e => e.category === 'flag').length;
+
+            const grouped = {};
+            const categories = ['reconnaissance', 'enumeration', 'vulnerability', 'exploitation', 'flag'];
+            categories.forEach(c => grouped[c] = []);
+            entries.forEach(e => {
+                if (grouped[e.category]) grouped[e.category].push(e);
+            });
+
+            let gaps = 0;
+            if (flagCount > 0) {
+                const missing = ['reconnaissance', 'enumeration', 'vulnerability', 'exploitation']
+                    .filter(c => (grouped[c] || []).length === 0);
+                gaps += missing.length;
+            }
+
+            const uniqueCategories = new Set(entries.map(e => e.detectedCategory || e.category));
+            const categoryCount = uniqueCategories.size;
+
+            document.getElementById('totalEntries').textContent = total;
+            document.getElementById('flagCount').textContent = flagCount;
+            document.getElementById('gapCount').textContent = gaps;
+            document.getElementById('categoryCount').textContent = categoryCount;
+            document.getElementById('entryCount').textContent = total;
+
+            let completed = 0;
+            categories.forEach(c => {
+                if (entries.some(e => e.category === c)) completed++;
+            });
+            const progress = Math.round((completed / categories.length) * 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressFill').textContent = progress + '%';
+            document.getElementById('progressText').textContent = progress + '%';
+        }
+
+        function renderEntries() {
+            const container = document.getElementById('entriesList');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            let displayEntries = entries;
+            if (searchTerm) {
+                displayEntries = entries.filter(e =>
+                    e.data.toLowerCase().includes(searchTerm) ||
+                    e.tool.toLowerCase().includes(searchTerm) ||
+                    e.category.toLowerCase().includes(searchTerm) ||
+                    (e.tags && e.tags.some(t => t.toLowerCase().includes(searchTerm)))
+                );
+            }
+            filteredEntries = displayEntries;
+
+            if (displayEntries.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; color: #808080; padding: 30px;">
+                        ${entries.length === 0 ? 'No findings recorded yet' : 'No results found'}
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            displayEntries.slice().reverse().forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'entry-item';
+
+                const categoryNames = {
+                    reconnaissance: '🔍 Recon',
+                    enumeration: '📋 Enum',
+                    vulnerability: '🐛 Vuln',
+                    exploitation: '💥 Exploit',
+                    flag: '🏁 Flag',
+                    unknown: '❓ Unknown'
+                };
+
+                const catDisplay = entry.detectedCategory ?
+                    `<span style="font-size: 9px; color: #808080; margin-left: 5px;">[${entry.detectedCategory}]</span>` :
+                    '';
+
+                div.innerHTML = `
+                    <div class="entry-header">
+                        <span class="entry-id">${entry.id}</span>
+                        <span>
+                            <span class="entry-category category-${entry.category}">${categoryNames[entry.category] || 'Unknown'}</span>
+                            ${catDisplay}
+                        </span>
+                    </div>
+                    <div style="font-size: 14px; margin: 5px 0;">${entry.data}</div>
+                    <div class="entry-meta" style="font-size: 11px; color: #a0a0a0; display: flex; flex-wrap: wrap; gap: 10px;">
+                        <span>🔧 ${entry.tool}</span>
+                        ${entry.target ? `<span>📍 ${entry.target}</span>` : ''}
+                        ${entry.evidence ? `<span>📎 ${entry.evidence}</span>` : ''}
+                        <span>🕐 ${new Date(entry.timestamp).toLocaleString()}</span>
+                    </div>
+                    ${entry.tags && entry.tags.length > 0 ? `
+                        <div class="entry-tags" style="margin-top: 5px;">
+                            ${entry.tags.map(t => `<span class="section-tag">${t}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                    <button class="delete-btn" onclick="deleteEntry('${entry.id}')">✕</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderAlerts() {
+            const container = document.getElementById('alertsContainer');
+            const grouped = {};
+            const categories = ['reconnaissance', 'enumeration', 'vulnerability', 'exploitation', 'flag'];
+            categories.forEach(c => grouped[c] = []);
+            entries.forEach(e => {
+                if (grouped[e.category]) grouped[e.category].push(e);
+            });
+
+            container.innerHTML = '';
+            const warnings = [];
+
+            if (entries.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">Add findings to start analyzing</div>';
+                return;
+            }
+
+            const flagCount = grouped.flag.length;
+            if (flagCount > 0) {
+                const missing = ['reconnaissance', 'enumeration', 'vulnerability', 'exploitation']
+                    .filter(c => (grouped[c] || []).length === 0);
+                if (missing.length > 0) {
+                    warnings.push(`⚠️ Flag found but missing: ${missing.join(', ')}`);
+                }
+            }
+
+            entries.forEach(e => {
+                if (['vulnerability', 'exploitation'].includes(e.category) && !e.evidence) {
+                    warnings.push(`⚠️ ${e.id} has no evidence`);
+                }
+            });
+
+            if (warnings.length === 0 && entries.length > 0) {
+                container.innerHTML = '<div class="alert alert-success">✅ All good! No issues detected.</div>';
+            } else {
+                warnings.forEach(w => {
+                    const div = document.createElement('div');
+                    div.className = 'alert alert-warning';
+                    div.textContent = w;
+                    container.appendChild(div);
+                });
+            }
+        }
+
+        function filterEntries() {
+            renderEntries();
+        }
+
+        function renderAll() {
+            renderStats();
+            renderEntries();
+            renderAlerts();
+        }
+
+        // ============================================
+        // TOAST
+        // ============================================
+        function showToast(message, type = 'success') {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <span>${message.replace(/\n/g, '<br>')}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                if (toast.parentElement) toast.remove();
+            }, 5000);
+        }
+
+        // ============================================
+        // EVENT HANDLERS
+        // ============================================
+        document.getElementById('entryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const tool = document.getElementById('tool').value;
+            const data = document.getElementById('data').value.trim();
+            const target = document.getElementById('target').value.trim();
+            const evidence = document.getElementById('evidence').value.trim();
+            const tagsInput = document.getElementById('tags').value.trim();
+            const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()) : [];
+            const categoryOverride = document.getElementById('categorySelect').value;
+
+            if (!data) {
+                showToast('❌ Please enter a description!', 'error');
+                return;
+            }
+
+            addEntry(tool, data, target, evidence, tags, categoryOverride);
+            this.reset();
+            document.getElementById('data').focus();
+        });
+
+        document.getElementById('challengeName').addEventListener('change', function() {
+            saveData();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('entryForm').dispatchEvent(new Event('submit'));
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+                e.preventDefault();
+                analyzeScenario();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                e.preventDefault();
+                buildReport();
+            }
+        });
+
+        // ============================================
+        // INIT
+        // ============================================
+        loadData();
+        renderAll();
+
+        console.log('🛡️ CTF Report Engine - Ultimate Pro v4.0 loaded!');
+        console.log(`📊 ${entries.length} entries loaded from storage`);
+        console.log('💡 Features:');
+        console.log('  - 🧠 Smart Scenario Detection');
+        console.log('  - 📊 6 Master Categories (Web, Linux, Windows, Forensics, Network, IR)');
+        console.log('  - 🎯 Multiple Scenarios per Category');
+        console.log('  - 🔗 Automatic Attack Path Detection');
+        console.log('  - 📄 Dynamic Report Generation');
+        console.log('  - 🎨 Customized Report Sections');
+        console.log('  - 💾 Export/Import Data');
+        console.log('  - ⌨️ Shortcuts: Ctrl+A (Analyze), Ctrl+B (Build), Ctrl+Enter (Add)');
+
+        if (entries.length >= 3) {
+            setTimeout(() => {
+                showToast('🧠 Ready for analysis! Click "Analyze Scenario" or press Ctrl+A', 'info');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

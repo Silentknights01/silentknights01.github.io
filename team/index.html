@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silent Knights Cyber Security Team | Organizational Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050810;
+  --bg-2: #0a1018;
+  --fg: #e6edf6;
+  --muted: #8a96a8;
+  --border: rgba(148, 163, 184, 0.12);
+  --card: rgba(10, 16, 24, 0.7);
+
+  --lead: #fbbf24;       /* Modasir */
+  --infra: #22d3ee;      /* Meysam */
+  --design: #ec4899;     /* Keyhan */
+  --wireless: #f43f5e;   /* Ali */
+  --coord: #34d399;      /* Hesam */
+  
+  --ok: #34d399;
+  --matrix: #34d399;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  line-height: 1.6;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ── لایه‌های پس‌زمینه ── */
+.bg-grid {
+  position: fixed; inset: 0; z-index: -3;
+  background-image:
+    linear-gradient(rgba(52, 211, 153, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(52, 211, 153, 0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(ellipse at center, black 15%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 15%, transparent 80%);
+}
+
+.bg-orbs { position: fixed; inset: 0; z-index: -2; overflow: hidden; }
+.orb { position: absolute; border-radius: 50%; filter: blur(110px); opacity: 0.18; animation: float 32s ease-in-out infinite; }
+.orb-1 { width: 600px; height: 600px; background: var(--lead); top: -150px; left: -100px; }
+.orb-2 { width: 500px; height: 500px; background: var(--matrix); top: 30%; right: -150px; animation-delay: -10s; }
+.orb-3 { width: 450px; height: 450px; background: var(--design); bottom: -100px; left: 35%; animation-delay: -20s; }
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, -50px) scale(1.08); }
+  66% { transform: translate(-50px, 60px) scale(0.95); }
+}
+
+.scanlines {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 3px);
+}
+
+.bp-corners { position: fixed; inset: 16px; z-index: 5; pointer-events: none; }
+.bp-corners span { position: absolute; width: 32px; height: 32px; border: 2px solid rgba(52, 211, 153, 0.2); }
+.bp-corners span:nth-child(1) { top: 0; left: 0; border-right: none; border-bottom: none; }
+.bp-corners span:nth-child(2) { top: 0; right: 0; border-left: none; border-bottom: none; }
+.bp-corners span:nth-child(3) { bottom: 0; left: 0; border-right: none; border-top: none; }
+.bp-corners span:nth-child(4) { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+/* ── Top Bar ── */
+.topbar {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted);
+  padding: 14px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border);
+  background: rgba(5, 8, 16, 0.7); backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 10; direction: ltr;
+}
+.topbar .dots { display: flex; gap: 6px; }
+.topbar .dots span { width: 11px; height: 11px; border-radius: 50%; display: block; }
+.topbar .dots span:nth-child(1) { background: #ff5f57; }
+.topbar .dots span:nth-child(2) { background: #febc2e; }
+.topbar .dots span:nth-child(3) { background: #28c840; }
+.topbar .status { display: flex; gap: 20px; align-items: center; }
+.topbar .live { display: inline-flex; align-items: center; gap: 6px; color: var(--matrix); }
+.topbar .live::before {
+  content: ''; width: 7px; height: 7px; background: var(--matrix); border-radius: 50%;
+  box-shadow: 0 0 8px var(--matrix); animation: blink 1.4s infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.container { max-width: 1240px; margin: 0 auto; padding: 60px 24px 100px; position: relative; }
+
+/* ── HERO ── */
+.hero {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; margin-bottom: 60px;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shield-wrap {
+  position: relative; width: 160px; height: 160px; margin-bottom: 24px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.shield-glow {
+  position: absolute; inset: 0;
+  background: conic-gradient(from 0deg, var(--lead), var(--matrix), var(--design), var(--wireless), var(--infra), var(--lead));
+  border-radius: 50%; filter: blur(35px); opacity: 0.5;
+  animation: rotate 8s linear infinite;
+}
+
+.shield-core {
+  position: relative; width: 150px; height: 150px;
+  background: var(--bg-2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 40px rgba(52, 211, 153, 0.3);
+  overflow: hidden;
+}
+
+.team-logo-img {
+  width: 80%; height: 100%; object-fit: cover;
+}
+
+@keyframes rotate { to { transform: rotate(360deg); } }
+
+.hero-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 14px;
+  letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px;
+}
+.hero-name {
+  font-size: 56px; font-weight: 800;
+  background: linear-gradient(135deg, var(--lead) 0%, var(--matrix) 50%, var(--infra) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  letter-spacing: -0.02em; line-height: 1;
+}
+.hero-subtitle {
+  font-family: 'JetBrains Mono', monospace; font-size: 14px;
+  color: var(--fg); margin-top: 16px; padding: 8px 20px;
+  border: 1px solid var(--matrix); border-radius: 100px;
+  background: rgba(52, 211, 153, 0.05); box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+  direction: ltr;
+}
+
+/* ── Org Chart (Tree) ── */
+.org-chart {
+  max-width: 1000px; margin: 0 auto 80px;
+  background: var(--card); backdrop-filter: blur(14px);
+  border: 1px solid var(--border); border-radius: 22px;
+  padding: 40px; position: relative; overflow: hidden;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
+}
+.org-chart::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--lead), var(--matrix), var(--design), var(--wireless), var(--infra));
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.tree-node {
+  display: flex; flex-direction: column; align-items: center;
+  position: relative; padding: 20px;
+  cursor: pointer;
+}
+.tree-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px 24px;
+  text-align: center; min-width: 180px;
+  transition: all 0.3s ease;
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+}
+.tree-card:hover { transform: translateY(-4px); border-color: var(--c); box-shadow: 0 10px 30px -10px var(--c); }
+.tree-card .node-img {
+  width: 70px; height: 70px; border-radius: 50%; 
+  object-fit: cover; margin-bottom: 10px;
+  border: 2px solid var(--c);
+  box-shadow: 0 0 12px var(--c);
+}
+.tree-card .name { font-weight: 700; font-size: 16px; color: var(--c); margin-bottom: 4px; }
+.tree-card .role { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+
+/* Hierarchy Lines */
+.tree-l1 { margin-bottom: 60px; }
+.tree-l1::after {
+  content: ''; position: absolute; bottom: 0; left: 50%; width: 2px; height: 60px;
+  background: var(--border); transform: translateX(-50%);
+}
+
+.tree-l2 {
+  display: flex; justify-content: space-around; gap: 20px;
+  position: relative; padding-top: 60px;
+}
+.tree-l2::before {
+  content: ''; position: absolute; top: 0; left: 16%; right: 16%; height: 2px;
+  background: var(--border);
+}
+.tree-l2 .tree-node { padding: 20px 0 0 0; flex: 1; max-width: 220px; }
+.tree-l2 .tree-node::before {
+  content: ''; position: absolute; top: -2px; left: 50%; width: 2px; height: 60px;
+  background: var(--border); transform: translateX(-50%);
+}
+
+.tree-l3 {
+  display: flex; justify-content: space-around; gap: 20px;
+  position: relative; padding-top: 60px; max-width: 600px; margin: 0 auto;
+}
+.tree-l3::before {
+  content: ''; position: absolute; top: 0; left: 25%; right: 25%; height: 2px;
+  background: var(--border);
+}
+.tree-l3 .tree-node { padding: 20px 0 0 0; flex: 1; max-width: 220px; }
+.tree-l3 .tree-node::before {
+  content: ''; position: absolute; top: -2px; left: 50%; width: 2px; height: 60px;
+  background: var(--border); transform: translateX(-50%);
+}
+
+/* ── Workflow ── */
+.workflow {
+  max-width: 1000px; margin: 0 auto 80px;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+}
+.flow-container {
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+}
+.flow-step {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 28px; text-align: center;
+  min-width: 280px; position: relative; z-index: 2;
+  transition: all 0.3s ease;
+  display: flex; align-items: center; gap: 14px; justify-content: center;
+}
+.flow-step:hover { border-color: var(--c, var(--matrix)); box-shadow: 0 0 20px var(--c, var(--matrix)); }
+.flow-step .t { font-size: 14px; font-weight: 700; color: var(--c, var(--fg)); }
+.flow-step .s { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+.flow-step img {
+  width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
+  border: 1px solid var(--c, var(--border));
+}
+
+.flow-arrow {
+  width: 2px; height: 30px; background: var(--border);
+  position: relative;
+}
+.flow-arrow::after {
+  content: ''; position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px; height: 8px; border-right: 2px solid var(--border); border-bottom: 2px solid var(--border);
+  margin-bottom: 2px;
+}
+
+.flow-split {
+  display: flex; gap: 16px; justify-content: center; width: 100%;
+  position: relative; padding: 30px 0;
+}
+.flow-split::before {
+  content: ''; position: absolute; top: 0; left: 30%; right: 30%; height: 2px; background: var(--border);
+}
+.flow-split .flow-step { min-width: 180px; flex-direction: column; }
+.flow-split .col { display: flex; flex-direction: column; align-items: center; gap: 0; flex: 1; max-width: 200px; position: relative; }
+.flow-split .col::before {
+  content: ''; position: absolute; top: -30px; left: 50%; width: 2px; height: 30px; background: var(--border);
+}
+
+/* ── Section Divider ── */
+.section-divider {
+  max-width: 940px; margin: 0 auto 30px;
+  display: flex; align-items: center; gap: 14px;
+}
+.section-divider .label {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase;
+  white-space: nowrap; direction: ltr;
+}
+.section-divider .line { flex: 1; height: 1px; background: var(--border); }
+.section-divider .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--matrix); box-shadow: 0 0 10px var(--matrix); }
+
+/* ── Team Grid ── */
+.team-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px; max-width: 1000px; margin: 0 auto 80px;
+}
+.member-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px; position: relative; overflow: hidden;
+  transition: all 0.4s ease;
+  opacity: 0; transform: translateY(20px);
+  display: block;
+}
+.member-card.visible { opacity: 1; transform: translateY(0); }
+.member-card::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+  background: var(--c); box-shadow: 0 0 15px var(--c);
+}
+.member-card:hover { border-color: var(--c); transform: translateY(-5px); }
+.member-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.member-img {
+  width: 50px; height: 50px; border-radius: 50%; object-fit: cover;
+  border: 2px solid var(--c); box-shadow: 0 0 10px var(--c);
+}
+.member-name { font-size: 18px; font-weight: 700; color: var(--fg); }
+.member-role { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--c); text-transform: uppercase; }
+.member-list { list-style: none; font-size: 12px; color: var(--muted); columns: 2; column-gap: 10px; }
+.member-list li { margin-bottom: 4px; break-inside: avoid; }
+
+/* ── Capabilities ── */
+.capabilities {
+  max-width: 1000px; margin: 0 auto 80px;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+}
+.cap-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px; position: relative;
+  opacity: 0; transform: translateY(20px);
+}
+.cap-card.visible { opacity: 1; transform: translateY(0); transition: all 0.5s ease; }
+.cap-head { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px dashed var(--border); }
+.cap-icon { font-size: 24px; filter: drop-shadow(0 0 8px var(--c)); }
+.cap-title { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: var(--c); }
+.cap-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.cap-tag {
+  font-size: 12px; padding: 6px 12px; border-radius: 6px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--fg);
+}
+
+/* ── Gov Services ── */
+.gov-services {
+  max-width: 1000px; margin: 0 auto 80px;
+  background: var(--card); border: 1px solid var(--matrix);
+  border-radius: 22px; padding: 40px; position: relative; overflow: hidden;
+  box-shadow: 0 0 40px rgba(52, 211, 153, 0.05);
+  opacity: 0; transform: translateY(20px);
+}
+.gov-services.visible { opacity: 1; transform: translateY(0); transition: all 0.5s ease; }
+.gov-services::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+  background: var(--matrix); box-shadow: 0 0 20px var(--matrix);
+}
+.gov-head { margin-bottom: 24px; }
+.gov-title { font-size: 22px; font-weight: 700; color: var(--matrix); }
+.gov-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.gov-list { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.gov-list li {
+  font-size: 14px; color: var(--fg); display: flex; align-items: center; gap: 10px;
+  background: rgba(52, 211, 153, 0.03); padding: 12px; border-radius: 8px;
+  border: 1px solid rgba(52, 211, 153, 0.1);
+}
+.gov-list li::before {
+  content: '✓'; color: var(--matrix); font-weight: 700; font-size: 16px;
+}
+
+/* ── Vision ── */
+.vision-block {
+  max-width: 800px; margin: 0 auto;
+  text-align: center; position: relative; padding: 40px;
+  opacity: 0; transform: translateY(20px);
+}
+.vision-block.visible { opacity: 1; transform: translateY(0); transition: all 0.5s ease; }
+.vision-icon { font-size: 40px; margin-bottom: 16px; display: inline-block; filter: drop-shadow(0 0 15px var(--lead)); }
+.vision-text {
+  font-size: 16px; line-height: 1.8; color: var(--fg);
+  background: rgba(255,255,255,0.02); border: 1px dashed var(--border);
+  padding: 24px; border-radius: 16px;
+}
+
+.footer {
+  margin-top: 60px; text-align: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--muted); letter-spacing: 0.1em; direction: ltr;
+}
+.footer .line { width: 60px; height: 1px; background: var(--border); margin: 0 auto 16px; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .org-chart { padding: 20px; }
+  .tree-l2, .tree-l3 { flex-direction: column; gap: 40px; }
+  .tree-l2::before, .tree-l3::before { display: none; }
+  .tree-l2 .tree-node::before, .tree-l3 .tree-node::before { display: none; }
+  .tree-l1 { margin-bottom: 20px; }
+  .capabilities { grid-template-columns: 1fr; }
+  .gov-list { grid-template-columns: 1fr; }
+  .member-list { columns: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="scanlines"></div>
+<div class="bp-corners"><span></span><span></span><span></span><span></span></div>
+
+<div class="topbar">
+  <div class="dots"><span></span><span></span><span></span></div>
+  <div class="status">
+    <span>silent-knights@team:~/organizational-blueprint</span>
+    <span class="live">SECURE SYSTEM</span>
+  </div>
+</div>
+
+<main class="container">
+
+  <!-- ════════ HERO ════════ -->
+  <header class="hero">
+    <div class="shield-wrap">
+      <div class="shield-glow"></div>
+      <div class="shield-core">
+        <img src="assets/newlogo.png" alt="Silent Knights Team"  class="team-logo-img">
+      </div>
+    </div>
+    <div class="hero-title">Organizational Blueprint</div>
+    <div class="hero-name">Silent Knights</div>
+    <div class="hero-subtitle">Cyber Security Team</div>
+  </header>
+
+  <!-- ════════ ORG CHART ════════ -->
+  <div class="org-chart">
+    
+    <!-- Level 1 -->
+    <a href="modasir.html" class="tree-node tree-l1" style="--c: var(--lead);">
+      <div class="tree-card">
+        <img src="assets/modasir.jpg" alt="Modasir" class="node-img">
+        <div class="name">سید مدثر هاشمی</div>
+        <div class="role">Founder & Team Lead</div>
+      </div>
+    </a>
+
+    <!-- Level 2 -->
+    <div class="tree-l2">
+      <a href="meysam.html" class="tree-node" style="--c: var(--infra);">
+        <div class="tree-card">
+          <img src="assets/meysam.jpg" alt="Meysam" class="node-img">
+          <div class="name">میثم</div>
+          <div class="role">Linux & Windows Infra</div>
+        </div>
+      </a>
+      <a href="keyhan.html" class="tree-node" style="--c: var(--design);">
+        <div class="tree-card">
+          <img src="assets/keyhan.jpg" alt="Keyhan" class="node-img">
+          <div class="name">کیهان</div>
+          <div class="role">Frontend & UI/UX</div>
+        </div>
+      </a>
+      <a href="ali.html" class="tree-node" style="--c: var(--wireless);">
+        <div class="tree-card">
+          <img src="assets/ali.jpg" alt="Ali" class="node-img">
+          <div class="name">علی</div>
+          <div class="role">Wireless Pentester</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Level 3 -->
+    <div class="tree-l3">
+      <a href="hesam.html" class="tree-node" style="--c: var(--coord);">
+        <div class="tree-card">
+          <img src="assets/hesam.jpg" alt="Hesam" class="node-img">
+          <div class="name">حسام</div>
+          <div class="role">Project Coordinator</div>
+        </div>
+      </a>
+      <a href="modasir.html" class="tree-node" style="--c: var(--lead);">
+        <div class="tree-card">
+          <img src="assets/modasir.jpg" alt="Modasir" class="node-img">
+          <div class="name">مدثر</div>
+          <div class="role">Senior Sec Engineer</div>
+        </div>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ════════ WORKFLOW ════════ -->
+  <div class="section-divider">
+    <span class="dot"></span>
+    <span class="label">Project Execution Pipeline</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="workflow">
+    <div class="flow-container">
+      
+      <div class="flow-step" style="--c: var(--muted);">
+        <div class="t">Client / Government Organization</div>
+        <div class="s">// Initial Request</div>
+      </div>
+      
+      <div class="flow-arrow"></div>
+      
+      <a href="modasir.html" class="flow-step" style="--c: var(--lead);">
+        <img src="assets/modasir.jpg" alt="Modasir">
+        <div>
+          <div class="t">Team Lead (مدثر)</div>
+          <div class="s">// Planning & Delegation</div>
+        </div>
+      </a>
+      
+      <div class="flow-arrow"></div>
+
+      <div class="flow-split">
+        <div class="col">
+          <a href="meysam.html" class="flow-step" style="--c: var(--infra);">
+            <img src="assets/meysam.jpg" alt="Meysam">
+            <div>
+              <div class="t">System Infra</div>
+              <div class="s">Meysam</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="keyhan.html" class="flow-step" style="--c: var(--design);">
+            <img src="assets/keyhan.jpg" alt="Keyhan">
+            <div>
+              <div class="t">Web/UI Dev</div>
+              <div class="s">Keyhan</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="ali.html" class="flow-step" style="--c: var(--wireless);">
+            <img src="assets/ali.jpg" alt="Ali">
+            <div>
+              <div class="t">Wireless Sec</div>
+              <div class="s">Ali</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="flow-arrow"></div>
+
+      <a href="hesam.html" class="flow-step" style="--c: var(--coord);">
+        <img src="assets/hesam.jpg" alt="Hesam">
+        <div>
+          <div class="t">Project Coordination</div>
+          <div class="s">Hesam // Integration & Support</div>
+        </div>
+      </a>
+
+      <div class="flow-arrow"></div>
+
+      <a href="modasir.html" class="flow-step" style="--c: var(--lead); border-width: 2px;">
+        <img src="assets/modasir.jpg" alt="Modasir">
+        <div>
+          <div class="t">Final Review & Delivery</div>
+          <div class="s">Modasir Hashimi</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ════════ TEAM ROSTER ════════ -->
+  <div class="section-divider">
+    <span class="dot" style="background: var(--design); box-shadow: 0 0 10px var(--design);"></span>
+    <span class="label">Team Roster & Skills</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="team-grid">
+    
+    <a href="modasir.html" class="member-card reveal" style="--c: var(--lead);">
+      <div class="member-head">
+        <img src="assets/modasir.jpg" alt="Modasir" class="member-img">
+        <div>
+          <div class="member-name">سید مدثر هاشمی</div>
+          <div class="member-role">Founder & Team Lead</div>
+        </div>
+      </div>
+      <ul class="member-list">
+        <li>Team Management</li>
+        <li>Project Management</li>
+        <li>Web Security</li>
+        <li>Penetration Testing</li>
+        <li>Digital Forensics</li>
+        <li>Incident Response</li>
+        <li>AI Agent Dev</li>
+        <li>Backend Dev</li>
+        <li>Security Arch</li>
+      </ul>
+    </a>
+
+    <a href="meysam.html" class="member-card reveal" style="--c: var(--infra);">
+      <div class="member-head">
+        <img src="assets/meysam.jpg" alt="Meysam" class="member-img">
+        <div>
+          <div class="member-name">میثم</div>
+          <div class="member-role">Linux & Windows Engineer</div>
+        </div>
+      </div>
+      <ul class="member-list">
+        <li>Linux Admin</li>
+        <li>Windows Admin</li>
+        <li>Active Directory</li>
+        <li>DNS & DHCP</li>
+        <li>Virtualization</li>
+        <li>Docker</li>
+        <li>Hardening</li>
+        <li>Firewall</li>
+        <li>Backup</li>
+      </ul>
+    </a>
+
+    <a href="keyhan.html" class="member-card reveal" style="--c: var(--design);">
+      <div class="member-head">
+        <img src="assets/keyhan.jpg" alt="Keyhan" class="member-img">
+        <div>
+          <div class="member-name">کیهان</div>
+          <div class="member-role">Frontend & UI/UX</div>
+        </div>
+      </div>
+      <ul class="member-list">
+        <li>HTML/CSS/JS</li>
+        <li>React</li>
+        <li>Bootstrap</li>
+        <li>UI Design</li>
+        <li>UX Design</li>
+        <li>Web Redesign</li>
+        <li>Mobile App UI</li>
+        <li>Responsive</li>
+      </ul>
+    </a>
+
+    <a href="ali.html" class="member-card reveal" style="--c: var(--wireless);">
+      <div class="member-head">
+        <img src="assets/ali.jpg" alt="Ali" class="member-img">
+        <div>
+          <div class="member-name">علی</div>
+          <div class="member-role">Wireless Pentester</div>
+        </div>
+      </div>
+      <ul class="member-list">
+        <li>Wireless Assessment</li>
+        <li>Wi-Fi Pentest</li>
+        <li>Wireless Recon</li>
+        <li>Kali Linux</li>
+        <li>Access Point Audit</li>
+        <li>Tech Reporting</li>
+      </ul>
+    </a>
+
+    <a href="hesam.html" class="member-card reveal" style="--c: var(--coord);">
+      <div class="member-head">
+        <img src="assets/hesam.jpg" alt="Hesam" class="member-img">
+        <div>
+          <div class="member-name">حسام</div>
+          <div class="member-role">Project Coordinator</div>
+        </div>
+      </div>
+      <ul class="member-list">
+        <li>Project Coordination</li>
+        <li>Python GUI Dev</li>
+        <li>Frontend Support</li>
+        <li>Windows Support</li>
+        <li>Network Support</li>
+        <li>Documentation</li>
+        <li>Team Support</li>
+      </ul>
+    </a>
+
+  </div>
+
+  <!-- ════════ CAPABILITIES ════════ -->
+  <div class="section-divider">
+    <span class="dot" style="background: var(--infra); box-shadow: 0 0 10px var(--infra);"></span>
+    <span class="label">Team Capabilities Matrix</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="capabilities">
+    <div class="cap-card reveal" style="--c: var(--wireless);">
+      <div class="cap-head">
+        <span class="cap-icon">🔐</span>
+        <span class="cap-title">Cyber Security</span>
+      </div>
+      <div class="cap-tags">
+        <span class="cap-tag">Web Security Assessment</span>
+        <span class="cap-tag">Web Penetration Testing</span>
+        <span class="cap-tag">Wireless Security Assessment</span>
+        <span class="cap-tag">Vulnerability Assessment</span>
+        <span class="cap-tag">Security Architecture Review</span>
+        <span class="cap-tag">System Hardening</span>
+        <span class="cap-tag">Incident Response</span>
+        <span class="cap-tag">Digital Forensics</span>
+        <span class="cap-tag">Security Consultation</span>
+      </div>
+    </div>
+
+    <div class="cap-card reveal" style="--c: var(--infra);">
+      <div class="cap-head">
+        <span class="cap-icon">💻</span>
+        <span class="cap-title">Infrastructure</span>
+      </div>
+      <div class="cap-tags">
+        <span class="cap-tag">Linux Administration</span>
+        <span class="cap-tag">Windows Administration</span>
+        <span class="cap-tag">Active Directory</span>
+        <span class="cap-tag">Domain Management</span>
+        <span class="cap-tag">DNS & DHCP</span>
+        <span class="cap-tag">Virtualization</span>
+        <span class="cap-tag">Docker</span>
+        <span class="cap-tag">Backup & Recovery</span>
+      </div>
+    </div>
+
+    <div class="cap-card reveal" style="--c: var(--design);">
+      <div class="cap-head">
+        <span class="cap-icon">🌐</span>
+        <span class="cap-title">Software Development</span>
+      </div>
+      <div class="cap-tags">
+        <span class="cap-tag">Frontend Development</span>
+        <span class="cap-tag">Responsive Web Design</span>
+        <span class="cap-tag">UI/UX Design</span>
+        <span class="cap-tag">Website Redesign</span>
+        <span class="cap-tag">Mobile Application UI</span>
+        <span class="cap-tag">Backend Development</span>
+        <span class="cap-tag">Python Desktop Applications</span>
+        <span class="cap-tag">AI Agent Development</span>
+      </div>
+    </div>
+
+    <div class="cap-card reveal" style="--c: var(--coord);">
+      <div class="cap-head">
+        <span class="cap-icon">📊</span>
+        <span class="cap-title">Project Services</span>
+      </div>
+      <div class="cap-tags">
+        <span class="cap-tag">Project Management</span>
+        <span class="cap-tag">Technical Documentation</span>
+        <span class="cap-tag">Security Reporting</span>
+        <span class="cap-tag">Lab Deployment</span>
+        <span class="cap-tag">Technical Support</span>
+        <span class="cap-tag">Quality Assurance</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ GOV SERVICES ════════ -->
+  <div class="section-divider">
+    <span class="dot"></span>
+    <span class="label">Government Services Catalog</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="gov-services reveal">
+    <div class="gov-head">
+      <div class="gov-title">🏛️ خدمات قابل ارائه به نهادهای دولتی</div>
+      <div class="gov-sub">// Authorized Cyber Security & Infrastructure Services</div>
+    </div>
+    <ul class="gov-list">
+      <li>ارزیابی امنیت وب‌سایت‌ها و سامانه‌های دولتی</li>
+      <li>تست نفوذ مجاز وب و زیرساخت‌های مرتبط</li>
+      <li>ارزیابی امنیت شبکه‌های بی‌سیم سازمانی</li>
+      <li>امن‌سازی سرورهای Linux و Windows</li>
+      <li>راه‌اندازی و مدیریت Active Directory</li>
+      <li>طراحی و بازطراحی وب‌سایت‌ها و پنل‌های سازمانی</li>
+      <li>توسعه ابزارهای اختصاصی با Python</li>
+      <li>طراحی و توسعه AI Agent برای اتوماسیون</li>
+      <li>بررسی اولیه رخدادهای امنیتی و تحلیل لاگ‌ها</li>
+      <li>مشاوره، آموزش و افزایش آگاهی امنیت سایبری</li>
+      <li>مستندسازی فنی و ارائه گزارش‌های حرفه‌ای</li>
+    </ul>
+  </div>
+
+  <!-- ════════ VISION ════════ -->
+  <div class="section-divider">
+    <span class="dot" style="background: var(--lead); box-shadow: 0 0 10px var(--lead);"></span>
+    <span class="label">Team Vision</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="vision-block reveal">
+    <div class="vision-icon">🎖️</div>
+    <p class="vision-text">
+      <strong>Silent Knights</strong> یک تیم چندتخصصی امنیت سایبری و توسعه نرم‌افزار است که با ترکیب تخصص در 
+      <strong style="color:var(--wireless);">امنیت اطلاعات</strong>، 
+      <strong style="color:var(--infra);">زیرساخت</strong>، 
+      <strong style="color:var(--design);">توسعه وب</strong>، 
+      <strong style="color:var(--wireless);">شبکه‌های بی‌سیم</strong>، 
+      <strong style="color:var(--lead);">هوش مصنوعی</strong> و 
+      <strong style="color:var(--coord);">مدیریت پروژه</strong>، 
+      توانایی اجرای پروژه‌های دولتی و سازمانی را از مرحله طراحی، پیاده‌سازی و ارزیابی امنیت تا پشتیبانی و نگهداری دارد. 
+      این ساختار به هر عضو مسئولیت مشخصی می‌دهد و در عین حال امکان همکاری مؤثر برای اجرای پروژه‌های بزرگ را فراهم می‌کند.
+    </p>
+  </div>
+
+  <footer class="footer">
+    <div class="line"></div>
+    <span>// END_OF_ORGANIZATIONAL_BLUEPRINT — Silent Knights Cyber Security Team</span>
+  </footer>
+
+</main>
+
+<script>
+// Scroll-triggered reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

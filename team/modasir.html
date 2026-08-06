@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Founder | Team Lead | Senior Security Engineer | مدثر هاشمی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050810;
+  --bg-2: #0a1018;
+  --fg: #e6edf6;
+  --muted: #8a96a8;
+  --border: rgba(148, 163, 184, 0.12);
+  --card: rgba(10, 16, 24, 0.7);
+
+  --c1: #fbbf24; /* Leadership      */
+  --c2: #f59e0b; /* Project Mgmt    */
+  --c3: #f43f5e; /* Web Sec & Pentest*/
+  --c4: #fb923c; /* DFIR            */
+  --c5: #a78bfa; /* AI & Automation */
+  --c6: #22d3ee; /* Software Dev    */
+  --c7: #60a5fa; /* Infra & Sec     */
+  --c8: #84cc16; /* Research        */
+  --core: #fbbf24;
+  --matrix: #34d399;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  line-height: 1.6;
+}
+
+/* ── لایه‌های پس‌زمینه ── */
+.bg-grid {
+  position: fixed; inset: 0; z-index: -3;
+  background-image:
+    linear-gradient(rgba(52, 211, 153, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(52, 211, 153, 0.05) 1px, transparent 1px);
+  background-size: 45px 45px;
+  mask-image: radial-gradient(ellipse at center, black 15%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 15%, transparent 80%);
+}
+
+.bg-orbs { position: fixed; inset: 0; z-index: -2; overflow: hidden; }
+.orb { position: absolute; border-radius: 50%; filter: blur(110px); opacity: 0.2; animation: float 30s ease-in-out infinite; }
+.orb-1 { width: 600px; height: 600px; background: var(--core); top: -150px; left: -150px; }
+.orb-2 { width: 500px; height: 500px; background: var(--matrix); top: 30%; right: -150px; animation-delay: -10s; }
+.orb-3 { width: 450px; height: 450px; background: var(--c5); bottom: -100px; left: 35%; animation-delay: -20s; }
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, -50px) scale(1.08); }
+  66% { transform: translate(-50px, 60px) scale(0.95); }
+}
+
+.scanlines {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 3px);
+}
+
+/* گوشه‌های Blueprint */
+.bp-corners { position: fixed; inset: 16px; z-index: 5; pointer-events: none; }
+.bp-corners span { position: absolute; width: 32px; height: 32px; border: 2px solid rgba(251, 191, 36, 0.3); }
+.bp-corners span:nth-child(1) { top: 0; left: 0; border-right: none; border-bottom: none; }
+.bp-corners span:nth-child(2) { top: 0; right: 0; border-left: none; border-bottom: none; }
+.bp-corners span:nth-child(3) { bottom: 0; left: 0; border-right: none; border-top: none; }
+.bp-corners span:nth-child(4) { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+/* ── نوار بالای صفحه ── */
+.topbar {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted);
+  padding: 14px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border);
+  background: rgba(5, 8, 16, 0.7); backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 10; direction: ltr;
+}
+.topbar .dots { display: flex; gap: 6px; }
+.topbar .dots span { width: 11px; height: 11px; border-radius: 50%; display: block; }
+.topbar .dots span:nth-child(1) { background: #ff5f57; }
+.topbar .dots span:nth-child(2) { background: #febc2e; }
+.topbar .dots span:nth-child(3) { background: #28c840; }
+.topbar .status { display: flex; gap: 20px; align-items: center; }
+.topbar .live { display: inline-flex; align-items: center; gap: 6px; color: var(--core); }
+.topbar .live::before {
+  content: ''; width: 7px; height: 7px; background: var(--core); border-radius: 50%;
+  box-shadow: 0 0 8px var(--core); animation: blink 1.4s infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* ── Container ── */
+.container { max-width: 1240px; margin: 0 auto; padding: 60px 24px 100px; position: relative; }
+
+/* ── HERO ── */
+.hero {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; margin-bottom: 40px;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.avatar-wrap { position: relative; width: 180px; height: 180px; margin-bottom: 28px; }
+
+/* لایه‌های هگزاگونال و مداری دور آواتار */
+.hex-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px dashed rgba(251, 191, 36, 0.4);
+  border-radius: 50%;
+  animation: rotate 20s linear infinite;
+}
+.hex-ring.r1 { width: 160px; height: 160px; }
+.hex-ring.r2 { width: 220px; height: 220px; border-color: rgba(52, 211, 153, 0.2); animation-duration: 30s; animation-direction: reverse; }
+
+/* نقاط روی حلقه‌ها */
+.hex-ring.r1::before, .hex-ring.r1::after,
+.hex-ring.r2::before, .hex-ring.r2::after {
+  content: ''; position: absolute;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--core); box-shadow: 0 0 12px var(--core);
+}
+.hex-ring.r1::before { top: 50%; right: -4px; transform: translateY(-50%); }
+.hex-ring.r1::after { bottom: -4px; left: 50%; transform: translateX(-50%); background: var(--c3); box-shadow: 0 0 12px var(--c3); }
+.hex-ring.r2::before { top: -4px; left: 30%; background: var(--matrix); box-shadow: 0 0 12px var(--matrix); }
+.hex-ring.r2::after { bottom: 20%; right: -4px; background: var(--c5); box-shadow: 0 0 12px var(--c5); }
+
+@keyframes rotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+.avatar-core {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px; height: 120px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 58px;
+  background: radial-gradient(circle, var(--bg-2), #060c14);
+  border-radius: 50%;
+  border: 2px solid rgba(251, 191, 36, 0.5);
+  z-index: 2;
+  box-shadow: 0 0 60px rgba(251, 191, 36, 0.3), inset 0 0 25px rgba(52, 211, 153, 0.15);
+  animation: core-pulse 4s ease-in-out infinite;
+}
+
+@keyframes core-pulse {
+  0%, 100% { box-shadow: 0 0 60px rgba(251, 191, 36, 0.3), inset 0 0 25px rgba(52, 211, 153, 0.15); }
+  50% { box-shadow: 0 0 90px rgba(251, 191, 36, 0.5), inset 0 0 40px rgba(52, 211, 153, 0.25); }
+}
+
+.hero-prompt {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--muted);
+  letter-spacing: 0.15em; margin-bottom: 6px; direction: ltr;
+}
+.hero-prompt .cursor {
+  display: inline-block; width: 8px; height: 14px; background: var(--core);
+  margin-right: 4px; vertical-align: middle; animation: blink 1s steps(2) infinite;
+}
+.hero-role {
+  font-family: 'JetBrains Mono', monospace; font-size: 14px;
+  letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px;
+}
+.hero-name {
+  font-size: 72px; font-weight: 800;
+  background: linear-gradient(135deg, var(--core) 0%, var(--matrix) 50%, var(--c5) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  letter-spacing: -0.02em; line-height: 1; text-shadow: 0 0 40px rgba(251, 191, 36, 0.2);
+}
+.hero-tagline {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted);
+  margin-top: 14px; padding: 6px 16px; border: 1px solid var(--border);
+  border-radius: 100px; background: rgba(255,255,255,0.02); direction: ltr;
+}
+.palette-swatch { display: flex; gap: 6px; margin-top: 18px; }
+.palette-swatch span { width: 24px; height: 6px; border-radius: 3px; box-shadow: 0 0 10px currentColor; }
+
+/* ── Title Block ── */
+.title-block {
+  max-width: 940px; margin: 0 auto 50px;
+  background: var(--card); backdrop-filter: blur(14px);
+  border: 1px solid var(--border); border-radius: 18px;
+  overflow: hidden; position: relative;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
+}
+.title-block::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c5), var(--c6), var(--c7), var(--c8));
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+}
+.title-block::after {
+  content: 'BLUEPRINT · REV 1.0 · COMMAND CORE'; position: absolute; top: 12px; left: 20px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted);
+  letter-spacing: 0.2em; direction: ltr;
+}
+
+.tb-grid { display: grid; grid-template-columns: 160px 1fr; margin-top: 36px; }
+.tb-label, .tb-value {
+  padding: 14px 20px; border-top: 1px solid var(--border);
+  display: flex; align-items: center;
+}
+.tb-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase;
+  background: rgba(255,255,255,0.015); direction: ltr; justify-content: flex-start;
+}
+.tb-value { font-size: 14px; color: var(--fg); }
+.tb-value strong { color: var(--core); font-weight: 700; }
+.tb-mission { font-size: 14px; color: var(--fg); line-height: 1.7; }
+
+/* ── Section Divider ── */
+.section-divider {
+  max-width: 940px; margin: 0 auto 30px;
+  display: flex; align-items: center; gap: 14px;
+}
+.section-divider .label {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase;
+  white-space: nowrap; direction: ltr;
+}
+.section-divider .line { flex: 1; height: 1px; background: var(--border); }
+.section-divider .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--core); box-shadow: 0 0 10px var(--core); }
+
+/* ── ۸ بخش وظایف ── */
+.tasks {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 20px; max-width: 940px; margin: 0 auto 50px;
+}
+
+.task-card {
+  background: var(--card); backdrop-filter: blur(14px);
+  border: 1px solid var(--border); border-radius: 16px;
+  padding: 26px; position: relative; overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0; transform: translateY(30px);
+}
+.task-card.visible { opacity: 1; transform: translateY(0); }
+
+.task-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--accent); box-shadow: 0 0 16px var(--accent);
+}
+.task-card::after {
+  content: ''; position: absolute; top: 0; right: 0; width: 160px; height: 160px;
+  background: radial-gradient(circle at top right, var(--accent), transparent 70%);
+  opacity: 0.1; pointer-events: none; transition: opacity 0.4s;
+}
+.task-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 20px 50px -20px var(--accent); }
+.task-card:hover::after { opacity: 0.18; }
+
+.task-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 18px; padding-bottom: 14px;
+  border-bottom: 1px dashed var(--border);
+}
+.task-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 9px;
+  background: var(--accent); color: var(--bg);
+  font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px;
+  box-shadow: 0 0 14px var(--accent); flex-shrink: 0; direction: ltr;
+}
+.task-icon { font-size: 28px; filter: drop-shadow(0 0 10px var(--accent)); line-height: 1; }
+.task-title { font-family: 'JetBrains Mono', monospace; font-size: 17px; font-weight: 700; color: var(--accent); }
+.task-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.task-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.task-list li {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--fg);
+  padding: 7px 12px; border-radius: 7px; background: rgba(255,255,255,0.02);
+  border-right: 2px solid var(--accent); transition: all 0.25s ease;
+  display: flex; align-items: center; gap: 10px;
+}
+.task-list li::before { content: '▸'; color: var(--accent); font-size: 10px; transition: transform 0.25s; }
+.task-list li:hover { background: rgba(255,255,255,0.05); transform: translateX(-4px); }
+.task-list li:hover::before { transform: translateX(-3px); }
+
+.task-card.s1 { --accent: var(--c1); }
+.task-card.s2 { --accent: var(--c2); }
+.task-card.s3 { --accent: var(--c3); }
+.task-card.s4 { --accent: var(--c4); }
+.task-card.s5 { --accent: var(--c5); }
+.task-card.s6 { --accent: var(--c6); }
+.task-card.s7 { --accent: var(--c7); }
+.task-card.s8 { --accent: var(--c8); }
+
+/* ── Expected Outputs ── */
+.outputs {
+  max-width: 940px; margin: 0 auto 50px;
+  background: var(--card); backdrop-filter: blur(14px);
+  border: 1px solid var(--border); border-radius: 18px;
+  padding: 32px; position: relative; overflow: hidden;
+  opacity: 0; transform: translateY(30px);
+}
+.outputs.visible { opacity: 1; transform: translateY(0); transition: all 0.7s cubic-bezier(0.16,1,0.3,1); }
+.outputs::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--c1), var(--c8));
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+}
+
+.outputs-head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.outputs-icon { font-size: 36px; filter: drop-shadow(0 0 12px var(--core)); }
+.outputs-title { font-size: 22px; font-weight: 700; color: var(--fg); }
+.outputs-sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.2em; direction: ltr; }
+
+.outputs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.output-pill {
+  font-size: 13px; padding: 12px 16px;
+  background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+  border-radius: 12px; display: flex; align-items: center; gap: 10px;
+  transition: all 0.3s ease; cursor: default;
+}
+.output-pill span { font-size: 18px; }
+.output-pill:hover { background: rgba(255,255,255,0.05); transform: translateY(-3px); border-color: var(--core); box-shadow: 0 8px 20px -8px var(--core); }
+
+/* ── Core Responsibilities (Scope Replacement) ── */
+.scope {
+  max-width: 940px; margin: 0 auto 50px;
+  opacity: 0; transform: translateY(30px);
+}
+.scope.visible { opacity: 1; transform: translateY(0); transition: all 0.7s cubic-bezier(0.16,1,0.3,1); }
+
+.scope-panel {
+  background: var(--card); backdrop-filter: blur(14px);
+  border: 1px solid var(--border); border-radius: 16px;
+  padding: 28px; position: relative; overflow: hidden;
+}
+.scope-panel::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--core); box-shadow: 0 0 16px var(--core);
+}
+.scope-panel::after {
+  content: ''; position: absolute; top: 0; right: 0; width: 200px; height: 200px;
+  background: radial-gradient(circle at top right, var(--core), transparent 70%);
+  opacity: 0.1; pointer-events: none;
+}
+
+.scope-head { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px dashed var(--border); }
+.scope-head .icon { font-size: 24px; filter: drop-shadow(0 0 8px var(--core)); }
+.scope-head .title { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: var(--core); }
+.scope-head .label { font-size: 13px; color: var(--muted); margin-right: auto; }
+
+.scope-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.scope-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  padding: 8px 14px; border-radius: 8px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.25); color: var(--core);
+  transition: all 0.25s ease;
+}
+.scope-tag::before { content: '✓'; font-weight: 700; }
+.scope-tag:hover { transform: translateY(-2px); background: rgba(251, 191, 36, 0.15); box-shadow: 0 4px 12px -4px var(--core); }
+
+/* ── Team Position ── */
+.position-block {
+  max-width: 760px; margin: 0 auto;
+  background: var(--card); backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(251, 191, 36, 0.3); border-radius: 22px;
+  padding: 40px; text-align: center; position: relative; overflow: hidden;
+  opacity: 0; transform: translateY(30px);
+}
+.position-block.visible { opacity: 1; transform: translateY(0); transition: all 0.7s cubic-bezier(0.16,1,0.3,1); }
+.position-block::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c5), var(--c6), var(--c7), var(--c8));
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+}
+.position-block::after {
+  content: ''; position: absolute; top: -30%; left: 50%; transform: translateX(-50%);
+  width: 80%; height: 200%;
+  background: radial-gradient(ellipse, rgba(251, 191, 36, 0.1), transparent 60%);
+  pointer-events: none;
+}
+
+.pos-icon {
+  font-size: 56px; margin-bottom: 16px; line-height: 1;
+  filter: drop-shadow(0 0 24px var(--core));
+  animation: pulse-glow 3s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes pulse-glow {
+  0%, 100% { filter: drop-shadow(0 0 24px var(--core)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 45px var(--core)); transform: scale(1.06); }
+}
+
+.pos-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--muted); letter-spacing: 0.25em; text-transform: uppercase;
+  margin-bottom: 10px; direction: ltr;
+}
+.pos-title {
+  font-size: 24px; font-weight: 800; margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--core), var(--matrix));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.pos-mission {
+  font-size: 16px; color: var(--fg); line-height: 1.8;
+  padding: 18px 24px; background: rgba(251, 191, 36, 0.06);
+  border: 1px dashed rgba(251, 191, 36, 0.3); border-radius: 14px;
+  display: inline-block; position: relative; z-index: 1; max-width: 600px;
+}
+
+/* ── Footer ── */
+.footer {
+  margin-top: 60px; text-align: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--muted); letter-spacing: 0.1em; direction: ltr;
+}
+.footer .line { width: 60px; height: 1px; background: var(--border); margin: 0 auto 16px; }
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .tasks { grid-template-columns: 1fr; }
+  .tb-grid { grid-template-columns: 1fr; }
+  .tb-label { border-bottom: none; }
+  .hero-name { font-size: 48px; }
+  .container { padding: 40px 16px 60px; }
+  .topbar .status { display: none; }
+  .bp-corners { display: none; }
+  .position-block { padding: 28px 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="scanlines"></div>
+<div class="bp-corners"><span></span><span></span><span></span><span></span></div>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="dots"><span></span><span></span><span></span></div>
+  <div class="status">
+    <span>modather@command-core:~/team-lead</span>
+    <span class="live">CORE ACTIVE</span>
+  </div>
+</div>
+
+<main class="container">
+
+  <!-- ════════ HERO ════════ -->
+  <header class="hero">
+    <div class="avatar-wrap">
+      <div class="hex-ring r2"></div>
+      <div class="hex-ring r1"></div>
+      <div class="avatar-core">👑</div>
+    </div>
+    <div class="hero-prompt">$ whoami<span class="cursor"></span></div>
+    <div class="hero-role">Founder | Team Lead | Senior Security Engineer</div>
+    <div class="hero-name">مدثر هاشمی</div>
+    <div class="hero-tagline">Leadership · Architecture · AI · Security · Innovation</div>
+    <div class="palette-swatch">
+      <span style="background:var(--c1);color:var(--c1)"></span>
+      <span style="background:var(--c2);color:var(--c2)"></span>
+      <span style="background:var(--c3);color:var(--c3)"></span>
+      <span style="background:var(--c4);color:var(--c4)"></span>
+      <span style="background:var(--c5);color:var(--c5)"></span>
+      <span style="background:var(--c6);color:var(--c6)"></span>
+      <span style="background:var(--c7);color:var(--c7)"></span>
+      <span style="background:var(--c8);color:var(--c8)"></span>
+    </div>
+  </header>
+
+  <!-- ════════ TITLE BLOCK ════════ -->
+  <div class="title-block">
+    <div class="tb-grid">
+      <div class="tb-label">Role</div>
+      <div class="tb-value"><strong>Founder | Team Lead | Senior Security Engineer</strong></div>
+
+      <div class="tb-label">Engineer</div>
+      <div class="tb-value">مدثر هاشمی</div>
+
+      <div class="tb-label">Objective</div>
+      <div class="tb-value tb-mission">
+        رهبری فنی و مدیریتی تیم، طراحی معماری پروژه‌ها، نظارت بر اجرای عملیات امنیت سایبری
+        و پشتیبانی از اعضای تیم در حوزه‌های تخصصی.
+      </div>
+
+      <div class="tb-label">Scope</div>
+      <div class="tb-value">Leadership · AI · Forensics · Penetration Testing · Architecture</div>
+    </div>
+  </div>
+
+  <!-- ════════ DIVIDER ════════ -->
+  <div class="section-divider">
+    <span class="dot"></span>
+    <span class="label">Responsibility Matrix · 08 Areas</span>
+    <span class="line"></span>
+  </div>
+
+  <!-- ════════ ۸ بخش وظایف ════════ -->
+  <div class="tasks">
+
+    <article class="task-card s1 reveal">
+      <div class="task-head">
+        <span class="task-badge">01</span>
+        <span class="task-icon">⚡</span>
+        <div>
+          <div class="task-title">Team Leadership</div>
+          <div class="task-sub">رهبری تیم</div>
+        </div>
+      </div>
+      <ul class="task-list">
+        <li>Team Management &amp; Leadership</li>
+        <li>Task Delegation</li>
+        <li>Technical &amp; Managerial Decisions</li>
+        <li>Quality Assurance Oversight</li>
+        <li>Final Output Review &amp; Approval</li>
+        <li>Team Planning &amp; Development</li>
+      </ul>
+    </article>
+
+    <article class="task-card s2 reveal">
+      <div class="task-head">
+        <span class="task-badge">02</span>
+        <span class="task-icon">📋</span>
+        <div>
+          <div class="task-title">Project Management</div>
+          <div class="task-sub">مدیریت پروژه</div>
+        </div>
+      </div>
+      <ul class="task-list">
+        <li>Cybersecurity Project Management</li>
+        <li>Client Communication</li>
+        <li>Project Scope Definition</li>
+        <li>Scheduling &amp; Prioritization</li>
+        <li>Risk Management</li>
+        <li>Final Reporting</li>
+      </ul>
+    </article>
+
+    <article class="task-card s3 reveal">
+      <div class="task-head">
+        <span class="task-badge">03</span>
+        <span class="task-icon">🛡️</span>
+        <div>
+          <div class="task-title">Web Security &amp; Pentest</div>
+          <div class="task-sub">امنیت وب و تست نفوذ</div>
+        </div>
+      </div>
+      <ul class="task-list">
+        <li>Website &amp; API Security Assessment</li>
+        <li>Authorized Penetration Testing</li>
+        <li>Vulnerability Identification &amp; Analysis</li>
+        <li>Technical Reporting &amp; Remediation</li>
+        <li>Vulnerability Fix Validation</li>
+      </ul>
+    </article>
+
+    <article class="task-card s4 reveal">
+      <div class="task-head">
+        <span class="task-badge">04</span>
+        <span class="task-icon">🔍</span>
+        <div>
+          <div class="task-title">Digital Forensics &amp; IR</div>
+          <div class="task-sub">فارنزیک و پاسخ به حادثه</div>
+        </div>
+      </div>
+      <ul class="task-list">
+        <li>Forensics Investigation Leadership</li>
+        <li>Digital Evidence Analysis</li>
+        <li>Security Incident Management</li>
+        <li>Incident Response Direction</li>
+        <li>Technical Reporting</li>
+      </ul>
+    </article>
+
+    <article class="task-card s5 reveal">
+      <div class="task-head">
+        <span class="task-badge">05</span>
+        <span class="task-icon">🧠</span>
+        <div>
+          <div class="task-title">AI &amp; Security Automation</div>
+          <div class="task-sub">هوش مصنوعی و اتوماسیون</div>
+        </div>
+      </div>
+      <ul class="task-list">
+        <li>AI Agent Design &amp; Development</li>
+        <li>Security Process Automation</li>
+        <li>Smart Tool Development</li>
+        <li>AI Integration in Security Projects</li>
+      </ul>
+    </article>
+
+    <article class="task-card s6 reveal">
+      <div class="task-head">
+        <span class="task-badge">06</span>
+        <span class="task-icon">💻</span>
+        <div>
+          <div class="task-title">Software &amp; Web Dev</div>
+          <div class="task-sub">توسعه نرم‌افزار و وب</div>
+        </div>
+      </div>
+      <ul class="task-list">
+        <li>Backend Architecture Design</li>
+        <li>API Development</li>
+        <li>Security Systems Development</li>
+        <li>Frontend Design Collaboration</li>
+        <li>Software Architecture Review</li>
+      </ul>
+    </article>
+
+    <article class="task-card s7 reveal">
+      <div class="task-head">
+        <span class="task-badge">07</span>
+        <span class="task-icon">🏗️</span>
+        <div>
+          <div class="task-title">Infrastructure &amp; Security</div>
+          <div class="task-sub">زیرساخت و امنیت</div>
+        </div>
+      </div>
+      <ul class="task-list">
+        <li>Network Architecture Design</li>
+        <li>Linux &amp; Windows Consulting</li>
+        <li>Network Security Review</li>
+        <li>Wireless Security Collaboration</li>
+        <li>Infra Security Config Audit</li>
+      </ul>
+    </article>
+
+    <article class="task-card s8 reveal">
+      <div class="task-head">
+        <span class="task-badge">08</span>
+        <span class="task-icon">🚀</span>
+        <div>
+          <div class="task-title">Research &amp; Innovation</div>
+          <div class="task-sub">تحقیق و نوآوری</div>
+        </div>
+      </div>
+      <ul class="task-list">
+        <li>New Technology Research</li>
+        <li>Emerging Threat Analysis</li>
+        <li>Custom Tools &amp; Methods</li>
+        <li>New Team Process Design</li>
+      </ul>
+    </article>
+
+  </div>
+
+  <!-- ════════ Expected Outputs ════════ -->
+  <div class="section-divider">
+    <span class="dot" style="background:var(--c8);box-shadow:0 0 10px var(--c8)"></span>
+    <span class="label">Expected Deliverables</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="outputs reveal">
+    <div class="outputs-head">
+      <span class="outputs-icon">🎯</span>
+      <div>
+        <div class="outputs-title">خروجی مورد انتظار</div>
+        <div class="outputs-sub">// DELIVERABLES — مدثر باید بتواند:</div>
+      </div>
+    </div>
+    <div class="outputs-grid">
+      <div class="output-pill"><span>⚡</span> رهبری فنی و مدیریتی تیم</div>
+      <div class="output-pill"><span>📋</span> مدیریت پروژه‌های امنیت سایبری</div>
+      <div class="output-pill"><span>🛡️</span> هدایت عملیات تست نفوذ وب</div>
+      <div class="output-pill"><span>🔍</span> رهبری تحقیقات Digital Forensics</div>
+      <div class="output-pill"><span>🧠</span> توسعه AI Agentها و اتوماسیون</div>
+      <div class="output-pill"><span>🏗️</span> طراحی معماری نرم‌افزار و زیرساخت</div>
+      <div class="output-pill"><span>🤝</span> مشاوره تخصصی به اعضای تیم</div>
+      <div class="output-pill"><span>✅</span> کنترل کیفیت و تأیید خروجی نهایی</div>
+    </div>
+  </div>
+
+  <!-- ════════ Core Responsibilities (Scope) ════════ -->
+  <div class="section-divider">
+    <span class="dot" style="background:var(--core);box-shadow:0 0 10px var(--core)"></span>
+    <span class="label">Core Responsibilities</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="scope reveal">
+    <div class="scope-panel">
+      <div class="scope-head">
+        <span class="icon">✅</span>
+        <span class="title">مسئولیت‌های هسته اصلی</span>
+        <span class="label">Full Spectrum Authority</span>
+      </div>
+      <div class="scope-tags">
+        <span class="scope-tag">Team Leadership</span>
+        <span class="scope-tag">Project Management</span>
+        <span class="scope-tag">Technical Decision Making</span>
+        <span class="scope-tag">Web Security</span>
+        <span class="scope-tag">Penetration Testing</span>
+        <span class="scope-tag">Digital Forensics</span>
+        <span class="scope-tag">AI Agent Development</span>
+        <span class="scope-tag">Backend Development</span>
+        <span class="scope-tag">Security Architecture</span>
+        <span class="scope-tag">Quality Assurance</span>
+        <span class="scope-tag">Research &amp; Innovation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ Team Position ════════ -->
+  <div class="section-divider">
+    <span class="dot" style="background:var(--core);box-shadow:0 0 10px var(--core)"></span>
+    <span class="label">Team Position</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="position-block reveal">
+    <div class="pos-icon">🎖️</div>
+    <div class="pos-label">Position in Team</div>
+    <div class="pos-title">Founder | Team Lead | Senior Security Engineer</div>
+    <div class="pos-mission">
+      هدایت تیم، توسعه توانمندی‌های فنی، مدیریت پروژه‌های امنیت سایبری
+      و اطمینان از ارائه خدمات حرفه‌ای، ایمن و باکیفیت به مشتریان.
+    </div>
+  </div>
+
+  <!-- ════════ Footer ════════ -->
+  <footer class="footer">
+    <div class="line"></div>
+    <span>// END_OF_BLUEPRINT — command core matrix rendered successfully</span>
+  </footer>
+
+</main>
+
+<script>
+// Scroll-triggered reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

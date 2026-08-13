@@ -1,1147 +1,807 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Network 4 Hacker Exam - Dark Mode</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>شبکه برای هکرها — تمرین‌های عملی</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --bg: #050510;
+            --terminal: #0a0f1a;
+            --panel: #0d1321;
+            --border: #1a2235;
+            --red: #ff2a2a;
+            --red-soft: rgba(255,42,42,0.1);
+            --green: #00ff41;
+            --green-soft: rgba(0,255,65,0.1);
+            --cyan: #00d9ff;
+            --dim: #7a8ba8;
+            --light: #e0e6f0;
+            --gold: #ffd700;
+            --blue: #4a9eff;
+            --blue-soft: rgba(74,158,255,0.1);
         }
-        
+        * { box-sizing:border-box; margin:0; padding:0; }
+        html { scroll-behavior:smooth; }
         body {
-            background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #252525);
-            color: #e0e0e0;
-            min-height: 100vh;
-            padding: 20px;
+            background:var(--bg); color:var(--light);
+            font-family:'Vazirmatn',sans-serif; line-height:1.7;
+            padding:20px; min-height:100vh;
+            background-image:linear-gradient(rgba(255,42,42,0.025) 1px,transparent 1px),
+                linear-gradient(90deg,rgba(255,42,42,0.025) 1px,transparent 1px),
+                radial-gradient(ellipse at 20% 0%,rgba(255,42,42,0.08) 0%,transparent 50%),
+                radial-gradient(ellipse at 80% 100%,rgba(0,217,255,0.06) 0%,transparent 50%),
+                linear-gradient(135deg,#020812 0%,#150505 100%);
+            background-size:40px 40px,40px 40px,100% 100%,100% 100%,100% 100%;
+            background-attachment:fixed; position:relative;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        body::before {
+            content:''; position:fixed; inset:0;
+            background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,0,0,0.08) 3px,transparent 4px);
+            pointer-events:none; z-index:1; animation:scan 8s linear infinite;
         }
-        
-        header {
-            text-align: center;
-            padding: 20px 0;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #203a43;
+        @keyframes scan { 100% { background-position:0 100px; } }
+        .container { max-width:1280px; margin:0 auto; position:relative; z-index:2; }
+
+        .banner-wrap {
+            position:relative; border-radius:12px; overflow:hidden;
+            border:1px solid var(--border); box-shadow:0 20px 60px rgba(255,42,42,0.2);
+            margin-bottom:30px; height:280px;
+            background: linear-gradient(135deg, #0a0a2e 0%, #1a0a0a 50%, #0a0a2e 100%);
+            display:flex; align-items:center; justify-content:center;
         }
-        
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            color: #2c5364;
-            text-shadow: 0 0 10px #203a43;
+        .banner-wrap .banner-bg {
+            position:absolute; inset:0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,42,42,0.15) 0%, transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(0,217,255,0.1) 0%, transparent 60%),
+                repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px);
+            z-index:0;
         }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.8;
-            margin-bottom: 20px;
-            color: #aaa;
+        .banner-wrap .banner-content {
+            position:relative; z-index:1;
+            display:flex; flex-direction:column; align-items:center;
+            text-align:center; padding:20px;
         }
-        
-        .timer-container {
-            background: rgba(20, 20, 20, 0.8);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px auto;
-            max-width: 300px;
-            border: 1px solid #203a43;
-            box-shadow: 0 0 15px #203a43;
+        .banner-wrap .banner-title {
+            font-family:'Fira Code',monospace;
+            font-size:3.2rem; font-weight:900;
+            background:linear-gradient(90deg, #ff2a2a, #ff6b6b, #ffd700, #00ff41, #00d9ff);
+            background-size:300% 100%;
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            animation:gradientMove 4s ease-in-out infinite;
+            text-shadow:0 0 40px rgba(255,42,42,0.3);
+            letter-spacing:4px;
+            line-height:1.2;
         }
-        
-        #timer {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #2C5364;
-            text-shadow: 0 0 5px #203a43;
+        @keyframes gradientMove {
+            0%,100% { background-position:0% 50%; }
+            50% { background-position:100% 50%; }
         }
-        
-        .instructions {
-            background: rgba(20, 20, 20, 0.6);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #2C5364;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        .banner-wrap .banner-sub {
+            font-family:'Fira Code',monospace;
+            font-size:1.1rem; color:var(--dim);
+            margin-top:8px; letter-spacing:6px;
+            direction:ltr;
         }
-        
-        .instructions h2 {
-            margin-bottom: 10px;
-            color: #2C5364;
+        .banner-wrap .banner-sub span { color:var(--red); }
+        .banner-wrap .banner-tags {
+            display:flex; gap:15px; margin-top:15px;
+            flex-wrap:wrap; justify-content:center;
         }
-        
-        .instructions ul {
-            margin-left: 20px;
-            line-height: 1.6;
-            color: #ccc;
+        .banner-wrap .banner-tag {
+            font-family:'Fira Code',monospace;
+            font-size:0.7rem; color:var(--light);
+            border:1px solid rgba(255,255,255,0.1);
+            padding:4px 14px; border-radius:20px;
+            background:rgba(255,255,255,0.03);
+            letter-spacing:1px;
+            backdrop-filter:blur(4px);
         }
-        
-        .instructions li {
-            margin-bottom: 8px;
+        .banner-wrap .banner-tag i { margin-left:6px; }
+        .banner-wrap .banner-tag.red { border-color:rgba(255,42,42,0.3); color:var(--red); }
+        .banner-wrap .banner-tag.green { border-color:rgba(0,255,65,0.3); color:var(--green); }
+        .banner-wrap .banner-tag.gold { border-color:rgba(255,215,0,0.3); color:var(--gold); }
+        .banner-wrap .banner-tag.blue { border-color:rgba(74,158,255,0.3); color:var(--blue); }
+
+        .banner-overlay {
+            position:absolute; bottom:20px; right:30px; z-index:3;
+            font-family:'Fira Code',monospace; color:var(--red); font-size:0.75rem;
+            text-shadow:0 0 10px rgba(255,42,42,0.8); direction:ltr;
+            opacity:0.6;
         }
-        
-        .question-container {
-            background: rgba(20, 20, 20, 0.6);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        .banner-overlay span { color:var(--green); }
+
+        .progress-bar-wrap {
+            background:var(--terminal); border:1px solid var(--border); border-radius:8px;
+            padding:15px 20px; margin-bottom:25px;
+            display:flex; align-items:center; gap:20px;
         }
-        
-        .question {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .progress-label {
+            font-family:'Fira Code',monospace; font-size:0.85rem; color:var(--dim);
+            direction:ltr; white-space:nowrap;
         }
-        
-        .question-number {
-            font-weight: bold;
-            color: #2C5364;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
+        .progress-track { flex:1; height:10px; background:#020408; border-radius:5px; overflow:hidden; border:1px solid var(--border); }
+        .progress-fill {
+            height:100%; background:linear-gradient(90deg,var(--red) 0%,var(--gold) 50%,var(--green) 100%);
+            width:0%; transition:width 0.6s ease; box-shadow:0 0 15px rgba(0,255,65,0.5);
         }
-        
-        .question-text {
-            margin-bottom: 15px;
-            line-height: 1.5;
-            color: #e0e0e0;
-        }
-        
-        .options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-        
-        @media (min-width: 768px) {
-            .options {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        .option {
-            background: rgba(30, 30, 30, 0.8);
-            padding: 12px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid #2c5364;
-            color: #ddd;
-        }
-        
-        .option:hover {
-            background: #2c5364;
-            transform: translateY(-2px);
-            border-color: #2C5364;
-        }
-        
-        .option.selected {
-            background: #203a43;
-            border-color: #2C5364;
-            color: #fff;
-        }
-        
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            margin: 30px 0;
-        }
-        
-        #submit-btn {
-            background: linear-gradient(135deg, #2C5364, #0f2027);
-            color: #ffff;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px #0f2027;
-        }
-        
-        #submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px #2c5364;
-        }
-        
-        #submit-btn:active {
-            transform: translateY(0);
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 800px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-            border: 2px solid #2C5364;
-            color: #e0e0e0;
-        }
-        
-        .modal h2 {
-            color: #2C5364;
-            margin-bottom: 20px;
-            font-size: 2rem;
-        }
-        
-        .modal p {
-            margin-bottom: 25px;
-            line-height: 1.6;
-            color: #ccc;
-        }
-        
-        #start-exam {
-            background: linear-gradient(135deg, #2C5364, #ff9900);
-            color: #000;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        #start-exam:hover {
-            transform: scale(1.05);
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.9rem;
+        .progress-count {
+            font-family:'Fira Code',monospace; font-weight:700; color:var(--green);
+            font-size:1.1rem; direction:ltr; min-width:60px; text-align:center;
         }
 
-        .dark-mode-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(30, 30, 30, 0.8);
-            border: 1px solid #2C5364;
-            color: #2C5364;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            z-index: 200;
-            font-weight: bold;
+        .auth-panel {
+            background:var(--terminal); border:1px solid var(--red);
+            padding:18px 22px; border-radius:8px; margin-bottom:30px;
+            display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+            box-shadow:0 0 30px rgba(255,42,42,0.15), inset 0 0 30px rgba(255,42,42,0.03);
+            position:relative; overflow:hidden;
         }
-        
-        /* استایل‌های جدید برای نمایش نتایج */
-        .results-container {
-            text-align: left;
-            margin-top: 20px;
+        .auth-panel::before {
+            content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+            background:linear-gradient(90deg,transparent,rgba(255,42,42,0.05),transparent);
+            animation:sweep 4s infinite;
         }
-        
-        .result-item {
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            background: rgba(30, 30, 30, 0.7);
-            border-left: 5px solid #2C5364;
+        @keyframes sweep { 100% { left:100%; } }
+        .auth-panel .icon-box {
+            width:42px; height:42px; background:var(--red-soft); border:1px solid var(--red);
+            border-radius:6px; display:flex; align-items:center; justify-content:center;
+            color:var(--red); font-size:18px; flex-shrink:0;
         }
-        
-        .result-item.correct {
-            border-left-color: #4CAF50;
+        .auth-panel input {
+            background:#020408; border:1px solid var(--border); color:var(--light);
+            padding:11px 15px; border-radius:5px; font-family:'Fira Code',monospace;
+            flex:1; min-width:180px; transition:0.3s; direction:ltr;
         }
-        
-        .result-item.incorrect {
-            border-left-color: #F44336;
+        .auth-panel input:focus { outline:none; border-color:var(--red); box-shadow:0 0 12px rgba(255,42,42,0.3); }
+        .auth-panel input::placeholder { color:var(--dim); }
+        .auth-panel button {
+            background:var(--red); color:#fff; border:none; padding:11px 24px;
+            border-radius:5px; font-weight:700; cursor:pointer;
+            font-family:'Vazirmatn',sans-serif; transition:0.3s;
+            box-shadow:0 4px 15px rgba(255,42,42,0.3);
         }
-        
-        .result-question {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #e0e0e0;
+        .auth-panel button:hover { background:#ff4040; transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,42,42,0.5); }
+
+        header {
+            text-align:center; margin-bottom:40px; padding-bottom:25px;
+            border-bottom:1px solid var(--border); position:relative;
         }
-        
-        .result-answer {
-            margin: 5px 0;
-            padding: 8px;
-            border-radius: 4px;
+        header h1 {
+            font-family:'Fira Code',monospace; color:var(--red); font-size:2.8rem;
+            font-weight:700; text-shadow:0 0 30px rgba(255,42,42,0.6),0 0 60px rgba(255,42,42,0.3);
+            margin-bottom:12px; direction:ltr; letter-spacing:2px;
         }
-        
-        .user-answer {
-            background: rgba(244, 67, 54, 0.2);
-            border: 1px solid #F44336;
+        header h1 .cursor {
+            display:inline-block; width:12px; height:32px; background:var(--red);
+            margin-left:4px; vertical-align:middle; animation:blink 1s infinite;
         }
-        
-        .correct-answer {
-            background: rgba(76, 175, 80, 0.2);
-            border: 1px solid #4CAF50;
+        @keyframes blink { 50% { opacity:0; } }
+        header p { color:var(--dim); font-size:1.05rem; }
+        header .status-tag {
+            display:inline-block; font-family:'Fira Code',monospace; font-size:0.75rem;
+            color:var(--green); border:1px solid var(--green); padding:2px 10px;
+            border-radius:3px; margin-top:10px; direction:ltr;
         }
-        
-        .score-display {
-            font-size: 1.5rem;
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 8px;
-            background: rgba(30, 30, 30, 0.7);
+
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(480px,1fr)); gap:25px; }
+
+        .terminal-card {
+            background:var(--terminal); border:1px solid var(--border); border-radius:10px;
+            overflow:hidden; transition:all 0.35s ease; display:flex; flex-direction:column;
+            position:relative;
         }
-        
-        .review-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
+        .terminal-card:hover { border-color:rgba(255,42,42,0.5); box-shadow:0 10px 40px rgba(255,42,42,0.15); transform:translateY(-4px); }
+        .terminal-card.completed { border-color:var(--green); }
+        .terminal-card.completed::after {
+            content:'\f058'; font-family:'Font Awesome 6 Free'; font-weight:900;
+            position:absolute; top:14px; left:14px; color:var(--green); font-size:22px;
+            z-index:10; text-shadow:0 0 12px rgba(0,255,65,0.6);
         }
-        
-        .review-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
+        .terminal-card.rejected { border-color:var(--red); }
+        .terminal-card.pending { border-color:var(--gold); }
+
+        .card-header {
+            background:var(--panel); padding:10px 16px; display:flex;
+            align-items:center; justify-content:space-between; border-bottom:1px solid var(--border);
         }
-        
-        #review-answers {
-            background: #2C5364;
-            color: white;
+        .dots { display:flex; gap:6px; }
+        .dot { width:11px; height:11px; border-radius:50%; }
+        .dot.red { background:#ff5f56; }
+        .dot.yellow { background:#ffbd2e; }
+        .dot.green { background:#27c93f; }
+        .card-title {
+            font-family:'Fira Code',monospace; color:var(--light); font-size:0.82rem;
+            direction:ltr; display:flex; align-items:center; gap:8px;
         }
-        
-        #close-results {
-            background: #ff9900;
-            color: black;
+        .card-title .badge {
+            background:var(--red-soft); color:var(--red); padding:1px 7px;
+            border-radius:3px; font-size:0.7rem; border:1px solid rgba(255,42,42,0.3);
         }
-        
-        /* استایل‌های جدید برای فرم کاربر */
-        .user-form {
-            background: rgba(20, 20, 20, 0.6);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #2C5364;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        .card-title .badge.theory { color:var(--cyan); border-color:rgba(0,217,255,0.4); background:rgba(0,217,255,0.1); }
+        .card-title .badge.technical { color:var(--gold); border-color:rgba(255,215,0,0.4); background:rgba(255,215,0,0.1); }
+        .card-title .badge.practical { color:var(--green); border-color:rgba(0,255,65,0.4); background:rgba(0,255,65,0.1); }
+
+        .card-body { padding:20px; flex-grow:1; display:flex; flex-direction:column; }
+        .task-desc {
+            margin-bottom:14px; color:var(--dim); font-size:0.95rem; line-height:1.8;
         }
-        
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
+        .task-desc strong { color:var(--red); font-weight:700; }
+
+        .help-btn {
+            background:transparent; border:1px solid var(--blue); color:var(--blue);
+            padding:6px 16px; border-radius:5px; cursor:pointer;
+            font-family:'Vazirmatn',sans-serif; font-size:0.85rem; transition:0.3s;
+            display:inline-flex; align-items:center; gap:6px; margin:8px 0 4px 0; width:fit-content;
         }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #2C5364;
-            font-weight: bold;
+        .help-btn:hover { background:var(--blue-soft); box-shadow:0 0 20px rgba(74,158,255,0.2); }
+
+        .help-box {
+            background:rgba(74,158,255,0.05); border:1px solid var(--blue);
+            border-radius:6px; padding:12px 16px; margin:6px 0 10px 0;
+            display:none; font-size:0.9rem; color:#b0ccee; line-height:1.8;
         }
-        
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #2C5364;
-            background: rgba(30, 30, 30, 0.8);
-            color: #e0e0e0;
-            font-size: 1rem;
+        .help-box.show { display:block; }
+        .help-box strong { color:var(--blue); }
+
+        .expected-output-label {
+            color:var(--dim); font-size:0.75rem; margin-bottom:6px; margin-top:8px;
+            font-family:'Fira Code',monospace; direction:ltr; display:flex; align-items:center; gap:6px;
         }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: #ff9900;
-            box-shadow: 0 0 8px #ff9900;
+        .expected-output-label i { color:var(--green); }
+
+        .vs-code-container {
+            margin-top:16px; border-radius:6px; overflow:hidden;
+            border:1px solid #2a2a2a; display:flex; flex-direction:column;
+            height:200px; background:#1e1e1e;
         }
-        
-        #user-submit {
-            background: linear-gradient(135deg, #2C5364, #ff9900);
-            color: #000;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+        .vs-code-tab {
+            background:#252526; padding:7px 14px; font-family:'Fira Code',monospace;
+            font-size:0.78rem; color:#cccccc; border-bottom:1px solid #1e1e1e;
+            display:flex; align-items:center; gap:8px; height:34px; flex-shrink:0;
         }
-        
-        #user-submit:hover {
-            transform: scale(1.05);
+        .vs-code-tab i { color:#4584b6; }
+        .vs-code-tab .dot-mod {
+            width:6px; height:6px; background:var(--green); border-radius:50%;
+            margin-right:auto; opacity:0; transition:0.3s;
         }
-        
-        .user-info {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 10px;
-            background: rgba(20, 20, 20, 0.6);
-            border-radius: 8px;
-            border-left: 4px solid #ff9900;
+        .vs-code-tab .dot-mod.show { opacity:1; }
+        .ace-editor { flex-grow:1; width:100%; direction:ltr; }
+
+        .submit-btn {
+            width:100%; margin-top:14px; padding:12px;
+            background:transparent; border:1px dashed var(--dim); color:var(--dim);
+            border-radius:5px; cursor:pointer; transition:0.3s;
+            font-family:'Vazirmatn',sans-serif; font-size:0.95rem; font-weight:700;
+            display:flex; align-items:center; justify-content:center; gap:8px;
         }
-        
-        .sending-email {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(20, 20, 20, 0.6);
-            border-radius: 8px;
-            border-left: 4px solid #ff9900;
+        .submit-btn:hover:not(:disabled) { border-color:var(--red); border-style:solid; color:var(--red); background:var(--red-soft); box-shadow:0 0 15px rgba(255,42,42,0.2); }
+        .submit-btn:disabled { border-style:solid; cursor:default; opacity:0.7; }
+        .submit-btn.approved { border-color:var(--green) !important; color:var(--green) !important; }
+        .submit-btn.rejected { border-color:var(--red) !important; color:var(--red) !important; }
+        .submit-btn.pending { border-color:var(--gold) !important; color:var(--gold) !important; }
+
+        .feedback-msg {
+            margin-top:8px; font-size:0.85rem; color:var(--red);
+            background:var(--red-soft); border-radius:4px; padding:6px 12px;
+            border-right:3px solid var(--red); display:none; direction:rtl;
+        }
+        .feedback-msg.show { display:block; }
+
+        .toast {
+            position:fixed; bottom:25px; left:25px; padding:14px 24px;
+            border-radius:6px; font-weight:700; opacity:0; transform:translateY(20px);
+            transition:all 0.3s; pointer-events:none; z-index:9999;
+            display:flex; align-items:center; gap:10px; font-family:'Vazirmatn',sans-serif;
+            box-shadow:0 10px 30px rgba(0,0,0,0.5);
+        }
+        .toast.success { background:var(--green); color:#000; }
+        .toast.error { background:var(--red); color:#fff; }
+        .toast.show { opacity:1; transform:translateY(0); }
+
+        .locked-overlay {
+            position:absolute; inset:0; background:rgba(5,5,16,0.85);
+            backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center;
+            flex-direction:column; gap:10px; z-index:5; border-radius:10px; transition:0.4s;
+        }
+        .locked-overlay i { font-size:32px; color:var(--dim); }
+        .locked-overlay span { font-family:'Fira Code',monospace; color:var(--dim); font-size:0.85rem; direction:ltr; }
+        .terminal-card.unlocked .locked-overlay { display:none; }
+
+        .modal-overlay {
+            position:fixed; inset:0; background:rgba(0,0,0,0.7);
+            backdrop-filter:blur(5px); z-index:9998; display:none;
+            align-items:center; justify-content:center; padding:30px;
+        }
+        .modal-overlay.show { display:flex; }
+        .modal-box {
+            background:var(--terminal); border:1px solid var(--blue); border-radius:12px;
+            max-width:700px; width:100%; max-height:80vh; overflow-y:auto;
+            padding:30px; box-shadow:0 20px 60px rgba(0,0,0,0.8); position:relative;
+        }
+        .modal-box .close-modal {
+            position:absolute; top:15px; left:20px;
+            background:transparent; border:none; color:var(--dim);
+            font-size:1.5rem; cursor:pointer; transition:0.3s;
+        }
+        .modal-box .close-modal:hover { color:var(--red); }
+        .modal-box h3 { color:var(--blue); font-family:'Fira Code',monospace; margin-bottom:15px; font-size:1.3rem; }
+        .modal-box p { color:var(--light); line-height:1.9; font-size:0.95rem; }
+        .modal-box .highlight-text { color:var(--gold); font-weight:700; }
+
+        @media (max-width:768px) {
+            .grid { grid-template-columns:1fr; }
+            header h1 { font-size:1.8rem; }
+            .banner-wrap { height:220px; }
+            .banner-wrap .banner-title { font-size:2rem; }
+            .banner-wrap .banner-sub { font-size:0.8rem; }
+            .banner-wrap .banner-tag { font-size:0.6rem; padding:2px 10px; }
+            .vs-code-container { height:180px; }
+            .auth-panel input { min-width:100%; }
+            body { padding:12px; }
+            .modal-box { padding:20px; margin:10px; }
         }
     </style>
 </head>
 <body>
+
+    <div id="toast" class="toast"></div>
+
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeHelpModal()"><i class="fas fa-times"></i></button>
+            <h3 id="modalTitle">📖 راهنمای سوال</h3>
+            <div id="modalBody"><p>...</p></div>
+        </div>
+    </div>
+
     <div class="container">
+
+        <div class="banner-wrap">
+            <div class="banner-bg"></div>
+            <div class="banner-content">
+                <div class="banner-title">NETWORK BASICS FOR HACKERS</div>
+                <div class="banner-sub"><span>◈</span> OSI MODEL <span>◈</span> TCP/IP <span>◈</span> SUBNETTING <span>◈</span> PROTOCOLS <span>◈</span></div>
+                <div class="banner-tags">
+                    <span class="banner-tag red"><i class="fas fa-shield-halved"></i> ETHICAL HACKING</span>
+                    <span class="banner-tag gold"><i class="fas fa-network-wired"></i> NETWORK SECURITY</span>
+                    <span class="banner-tag green"><i class="fas fa-terminal"></i> LINUX BASICS</span>
+                    <span class="banner-tag blue"><i class="fas fa-wifi"></i> WIRELESS</span>
+                </div>
+            </div>
+            <div class="banner-overlay">
+                > network.lab.init() <span>OK</span><br />
+                > version: 2.0
+            </div>
+        </div>
+
+        <div class="auth-panel">
+            <div class="icon-box"><i class="fas fa-user-secret"></i></div>
+            <input type="text" id="studentName" placeholder="نام و نام خانوادگی" required />
+            <input type="text" id="studentAlias" placeholder="تخلص هکری" required />
+            <button onclick="loginStudent()"><i class="fas fa-terminal"></i> ورود</button>
+            <button onclick="testConnection()" style="background:#555; box-shadow:none;"><i class="fas fa-plug"></i> تست</button>
+        </div>
+
+        <div class="progress-bar-wrap">
+            <div class="progress-label">پیشرفت</div>
+            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-count" id="progressCount">0 / 20</div>
+        </div>
+
         <header>
-            <h1>Network 4 Hacker Exam</h1>
-            <div class="subtitle">Test your networking knowledge with this challenging 35-question exam</div>
-            <div class="timer-container">
-                <div id="timer">40:00</div>
-            </div>
+            <h1>&gt; شبکه برای هکرها_<span class="cursor"></span></h1>
+            <p id="welcomeMsg">برای شروع، نام و تخلص هکری خود را وارد کنید</p>
+            <div class="status-tag">// ۲۰ تمرین · شبکه · همه سطوح</div>
         </header>
-        
-        <div class="user-info" id="user-info" style="display: none;">
-            <h3>Exam Taker Information</h3>
-            <p>Name: <span id="user-name-display"></span></p>
-            <p>Email: <span id="user-email-display"></span></p>
-        </div>
-        
-        <div class="user-form" id="user-form">
-            <h2>Please Enter Your Information</h2>
-            <div class="form-group">
-                <label for="first-name">First Name</label>
-                <input type="text" id="first-name" placeholder="Enter your first name" required>
-            </div>
-            <div class="form-group">
-                <label for="last-name">Last Name</label>
-                <input type="text" id="last-name" placeholder="Enter your last name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="Enter your email address" required>
-            </div>
-            <button id="user-submit">Continue to Exam</button>
-        </div>
-        
-        <div class="instructions" style="display: none;" id="instructions">
-            <h2>Exam Instructions</h2>
-            <ul>
-                <li>You have 40 minutes to complete this exam</li>
-                <li>This exam contains 35 multiple-choice questions</li>
-                <li>Select the best answer for each question</li>
-                <li>You can change your answers at any time before submitting</li>
-                <li>The timer will start when you click "Start Exam"</li>
-                <li>When finished, click the "Submit Exam" button</li>
-            </ul>
-        </div>
-        
-        <div class="question-container" style="display: none;" id="question-container">
-            <!-- Questions will be dynamically inserted here -->
-        </div>
-        
-        <div class="btn-container" style="display: none;" id="submit-btn-container">
-            <button id="submit-btn">Submit Exam</button>
-        </div>
-        
-        <div class="sending-email" id="sending-email">
-            <h3>Sending exam results to instructor...</h3>
-            <p>Please wait while we process your results.</p>
-        </div>
-        
-        <footer>
-            <p>Network 4 Hacker Exam &copy; 2023 | Good luck!</p>
-        </footer>
-    </div>
-    
-    <div class="modal" id="start-modal">
-        <div class="modal-content">
-            <h2>Ready to Begin?</h2>
-            <p>You will have 40 minutes to complete 35 multiple-choice questions. The timer will start as soon as you click "Start Exam".</p>
-            <button id="start-exam">Start Exam</button>
-        </div>
-    </div>
-    
-    <div class="modal" id="finished-modal">
-        <div class="modal-content">
-            <h2>Exam Submitted!</h2>
-            <p>Your answers have been submitted successfully. Your results will be available soon.</p>
-        </div>
-    </div>
-    
-    <!-- مودال جدید برای نمایش نتایج دقیق -->
-    <div class="modal" id="results-modal">
-        <div class="modal-content">
-            <h2>Exam Results</h2>
-            <div class="score-display">
-                You scored <span id="score-value">0</span> out of <span id="total-questions">35</span>
-            </div>
-            <div class="results-container" id="results-container">
-                <!-- نتایج هر سوال اینجا نمایش داده می‌شود -->
-            </div>
-            <div class="review-buttons">
-                <button class="review-btn" id="review-answers">Review Answers</button>
-                <button class="review-btn" id="close-results">Close</button>
-            </div>
-        </div>
+
+        <div class="grid" id="challengeGrid"></div>
     </div>
 
     <script>
-        // Questions data
-        const questions = [
+        // ===== ۲۰ سوال بر اساس کتاب (با توجه به فصل‌های مشخص شده) =====
+        const CHALLENGES = [
+            // ===== ۱-۷: تشریحی (نظری) - فصل ۱ =====
             {
-                question: "What is the primary difference between a Network and the Internet?",
-                options: [
-                    "A network is wireless, the Internet is wired.",
-                    "A network is a local collection of connected devices, while the Internet is a global network of networks.",
-                    "The Internet uses TCP, and networks use UDP.",
-                    "There is no difference; the terms are interchangeable."
-                ],
-                correct: 1
+                id:'001', type:'theory',
+                title:'آدرس آی‌پی چیست؟ (فصل ۱)',
+                desc:'<strong>آدرس آی‌پی</strong> چیست و از چند بخش ساخته شده است؟ چرا هر دستگاه به یک آی‌پی منحصر‌بفرد نیاز دارد؟',
+                hint:'📘 فصل ۱ — آی‌پی از ۴ بخش ۸ بیتی تشکیل شده.',
+                help:'💡 آی‌پی یک شناسه عددی برای دستگاه در شبکه است. به ساختار بخش‌ها و عدد ۲۵۵ فکر کنید.'
             },
             {
-                question: "In a Client-Server model, what is the role of the client?",
-                options: [
-                    "To provide services and resources",
-                    "To control access and central management",
-                    "To send requests for resources",
-                    "To act as an equal peer to all other systems"
-                ],
-                correct: 2
+                id:'002', type:'theory',
+                title:'TCP Three-Way Handshake (فصل ۱)',
+                desc:'<strong>Three-Way Handshake</strong> در TCP چگونه انجام می‌شود؟ هدف آن چیست؟',
+                hint:'📘 فصل ۱ — سه مرحله: SYN, SYN-ACK, ACK',
+                help:'💡 به مراحل برقراری ارتباط و تأییدیه‌ها فکر کنید.'
             },
             {
-                question: "Which network topology is characterized by a single central device (like a switch) to which all other devices connect?",
-                options: [
-                    "Bus",
-                    "Ring",
-                    "Star",
-                    "Mesh"
-                ],
-                correct: 2
+                id:'003', type:'theory',
+                title:'تفاوت TCP و UDP (فصل ۱)',
+                desc:'<strong>TCP</strong> با <strong>UDP</strong> چه فرقی دارد؟ کدام برای انتقال فایل بهتر است؟',
+                hint:'📘 فصل ۱ — یکی باثبات است، دیگری سریع.',
+                help:'💡 به تفاوت در قابلیت اطمینان و سرعت فکر کنید.'
             },
             {
-                question: "A Bluetooth connection between a phone and a headset is an example of which type of network?",
-                options: [
-                    "LAN",
-                    "PAN/WPAN",
-                    "WAN",
-                    "MAN"
-                ],
-                correct: 1
+                id:'004', type:'theory',
+                title:'پورت چیست؟ (فصل ۱)',
+                desc:'<strong>پورت</strong> چیست؟ چند پورت معروف و سرویس‌های آنها را نام ببرید.',
+                hint:'📘 فصل ۱ — پورت مثل شماره آپارتمان است.',
+                help:'💡 پورت‌ها برای شناسایی سرویس‌ها هستند. به شماره‌های معروف مثل ۸۰ و ۴۴۳ فکر کنید.'
             },
             {
-                question: "Which OSI layer is responsible for routing, logical addressing (IP addresses), and finding the best path across networks?",
-                options: [
-                    "Physical",
-                    "Data Link",
-                    "Network",
-                    "Transport"
-                ],
-                correct: 2
+                id:'005', type:'theory',
+                title:'مدل OSI (فصل ۱)',
+                desc:'<strong>مدل OSI</strong> چند لایه دارد؟ لایه Application و Transport چه کاری انجام می‌دهند؟',
+                hint:'📘 فصل ۱ — ۷ لایه دارد.',
+                help:'💡 به لایه‌های بالایی و وظایف آنها در ارتباط با داده فکر کنید.'
             },
             {
-                question: "At which OSI layer would you find TCP and UDP protocols?",
-                options: [
-                    "Network",
-                    "Transport",
-                    "Session",
-                    "Application"
-                ],
-                correct: 1
+                id:'006', type:'theory',
+                title:'کلاس‌های آی‌پی (فصل ۱)',
+                desc:'کلاس‌های <strong>آی‌پی</strong> کدامند؟ محدوده هر کلاس را توضیح دهید.',
+                hint:'📘 فصل ۱ — کلاس A, B, C',
+                help:'💡 به محدوده اعداد اول هر کلاس فکر کنید: A: 0-127, B: 128-191, C: 192-223'
             },
             {
-                question: "ARP Spoofing is a common attack that manipulates the mapping of IP addresses to MAC addresses. At which OSI layer does this attack occur?",
-                options: [
-                    "Layer 1",
-                    "Layer 2",
-                    "Layer 3",
-                    "Layer 4"
-                ],
-                correct: 1
+                id:'007', type:'theory',
+                title:'آی‌پی عمومی و خصوصی (فصل ۱)',
+                desc:'تفاوت <strong>آی‌پی عمومی</strong> و <strong>خصوصی</strong> چیست؟ محدوده آی‌پی‌های خصوصی را نام ببرید.',
+                hint:'📘 فصل ۱ — ۱۰.۰.۰.۰/۸, ۱۷۲.۱۶.۰.۰/۱۲, ۱۹۲.۱۶۸.۰.۰/۱۶',
+                help:'💡 آی‌پی‌های خصوصی در اینترنت قابل مسیریابی نیستند و در شبکه‌های داخلی استفاده می‌شوند.'
+            },
+
+            // ===== ۸-۱۰: تکنیکی =====
+            {
+                id:'008', type:'technical',
+                title:'iptables و بلاک کردن IP (فصل ۴)',
+                desc:'با <strong>iptables</strong> چگونه ترافیک از یک آی‌پی را بلاک کنیم؟ تفاوت INPUT و OUTPUT چیست؟',
+                hint:'📘 فصل ۴ — گزینه -s و -j DROP',
+                help:'💡 از گزینه -s برای آی‌پی و -j DROP برای بلاک استفاده کنید. INPUT برای ورودی، OUTPUT برای خروجی.'
             },
             {
-                question: "A SQL Injection attack primarily targets which layer of the OSI model?",
-                options: [
-                    "Presentation (Layer 6)",
-                    "Session (Layer 5)",
-                    "Application (Layer 7)",
-                    "Network (Layer 3)"
-                ],
-                correct: 2
+                id:'009', type:'technical',
+                title:'حمله به WPA2-PSK (فصل ۵)',
+                desc:'مراحل اصلی حمله به <strong>WPA2-PSK</strong> را توضیح دهید. از چه ابزارهایی استفاده می‌شود؟',
+                hint:'📘 فصل ۵ — aircrack-ng, airodump-ng, aireplay-ng',
+                help:'💡 به مراحل: مانیتور مود، کپچر هندشیک، داث، و کرک با هش‌کت فکر کنید.'
             },
             {
-                question: "The TCP/IP model combines the functions of the OSI model's top three layers (5,6,7) into a single layer called the:",
-                options: [
-                    "Internet Layer",
-                    "Transport Layer",
-                    "Application Layer",
-                    "Network Access Layer"
-                ],
-                correct: 2
+                id:'010', type:'technical',
+                title:'انواع فریم‌های وای‌فای (فصل ۵)',
+                desc:'انواع <strong>فریم‌های 802.11</strong> را نام ببرید و توضیح دهید هرکدام چه کاربردی دارند.',
+                hint:'📘 فصل ۵ — Management, Control, Data',
+                help:'💡 Management: مدیریت ارتباط، Control: کنترل جریان، Data: انتقال داده'
+            },
+
+            // ===== ۱۱-۲۰: عملی =====
+            {
+                id:'011', type:'practical',
+                title:'مشاهده آی‌پی با ifconfig (فصل ۱ و ۳)',
+                desc:'با خط فرمان لینوکس، <strong>آی‌پی</strong> کارت شبکه خود را پیدا کنید.',
+                hint:'📘 فصل ۱ و ۳ — ip addr یا ifconfig',
+                help:'💡 از دستور ip addr یا ifconfig استفاده کنید.'
             },
             {
-                question: "What is the default subnet mask for a Class B IP address (e.g., 172.16.45.10)?",
-                options: [
-                    "255.0.0.0",
-                    "255.255.0.0",
-                    "255.255.255.0",
-                    "255.255.255.255"
-                ],
-                correct: 1
+                id:'012', type:'practical',
+                title:'ارسال پینگ (فصل ۳)',
+                desc:'به آدرس 8.8.8.8 <strong>۴ بسته</strong> پینگ ارسال کنید.',
+                hint:'📘 فصل ۳ — ping -c 4',
+                help:'💡 از ping با گزینه -c برای تعیین تعداد بسته استفاده کنید.'
             },
             {
-                question: "Which of the following is a private IP address range?",
-                options: [
-                    "192.169.1.10",
-                    "172.32.10.5",
-                    "11.5.10.100",
-                    "10.0.0.5"
-                ],
-                correct: 3
+                id:'013', type:'practical',
+                title:'دیدن پورت‌های باز (فصل ۳)',
+                desc:'همه <strong>پورت‌های TCP</strong> در حال گوش‌دهی روی سیستم را ببینید.',
+                hint:'📘 فصل ۳ — netstat -tulpn یا ss -tulpn',
+                help:'💡 از netstat یا ss با گزینه‌های مناسب استفاده کنید.'
             },
             {
-                question: "The address 127.0.0.1 is known as:",
-                options: [
-                    "A broadcast address",
-                    "A default gateway",
-                    "The loopback address",
-                    "A public IP address"
-                ],
-                correct: 2
+                id:'014', type:'practical',
+                title:'اسکن با nmap (فصل ۱ و ۷)',
+                desc:'با <strong>nmap</strong>، پورت‌های باز روی 127.0.0.1 را اسکن کنید.',
+                hint:'📘 فصل ۱ و ۷ — nmap 127.0.0.1',
+                help:'💡 از nmap بدون گزینه خاص برای اسکن پیش‌فرض استفاده کنید.'
             },
             {
-                question: "The main purpose of subnetting is to:",
-                options: [
-                    "Increase the total number of available public IP addresses",
-                    "Divide a large network into smaller, more manageable sub-networks",
-                    "Convert IPv4 addresses to IPv6",
-                    "Encrypt network traffic"
-                ],
-                correct: 1
+                id:'015', type:'practical',
+                title:'اسکن شبکه محلی (فصل ۷)',
+                desc:'با <strong>nmap</strong>، شبکه 192.168.1.0/24 را برای یافتن دستگاه‌های زنده اسکن کنید.',
+                hint:'📘 فصل ۷ — nmap -sn',
+                help:'💡 از گزینه -sn برای اسکن پینگ (فقط پیدا کردن دستگاه‌های زنده) استفاده کنید.'
             },
             {
-                question: "Which port number is used by HTTPS for secure web browsing?",
-                options: [
-                    "Port 21",
-                    "Port 80",
-                    "Port 443",
-                    "Port 53"
-                ],
-                correct: 2
+                id:'016', type:'practical',
+                title:'کپچر ترافیک با tcpdump (فصل ۳)',
+                desc:'با <strong>tcpdump</strong>، ترافیک پورت ۸۰ را روی eth0 ضبط کنید و در فایل ذخیره کنید.',
+                hint:'📘 فصل ۳ — tcpdump -i eth0 port 80 -w',
+                help:'💡 از گزینه -i برای تعیین رابط، port برای فیلتر، و -w برای ذخیره استفاده کنید.'
             },
             {
-                question: "Which protocol is used for translating domain names (like google.com) into IP addresses?",
-                options: [
-                    "DHCP",
-                    "FTP",
-                    "DNS",
-                    "SMTP"
-                ],
-                correct: 2
+                id:'017', type:'practical',
+                title:'فیلتر در Wireshark (فصل ۳)',
+                desc:'در <strong>Wireshark</strong>، فیلتری بنویسید که فقط ترافیک HTTP را نشان دهد.',
+                hint:'📘 فصل ۳ — فیلتر http',
+                help:'💡 عبارت http را در قسمت فیلتر نمایش وارد کنید.'
             },
             {
-                question: "A hacker sets up a fake Wi-Fi access point with the same name as a legitimate coffee shop network. This is an example of:",
-                options: [
-                    "DNS Poisoning",
-                    "An Evil Twin attack",
-                    "ARP Spoofing",
-                    "A DDoS attack"
-                ],
-                correct: 1
+                id:'018', type:'practical',
+                title:'استعلام DNS با dig (فصل ۸)',
+                desc:'با <strong>dig</strong>، آی‌پی دامنه hackers-arise.com را پیدا کنید و نوع رکورد NS را نیز ببینید.',
+                hint:'📘 فصل ۸ — dig hackers-arise.com و dig hackers-arise.com ns',
+                help:'💡 dig برای جستجوی DNS است. با dig hackers-arise.com آی‌پی و با dig hackers-arise.com ns سرورهای نام را می‌بینید.'
             },
             {
-                question: "Which protocol is connection-oriented, provides reliable delivery, and uses error checking and retransmission?",
-                options: [
-                    "IP",
-                    "UDP",
-                    "TCP",
-                    "ICMP"
-                ],
-                correct: 2
+                id:'019', type:'practical',
+                title:'مشاهده جدول ARP (فصل ۷)',
+                desc:'جدول <strong>ARP</strong> سیستم را ببینید و آی‌پی دروازه را پیدا کنید.',
+                hint:'📘 فصل ۷ — arp -n',
+                help:'💡 از arp -n برای دیدن جدول ARP بدون تبدیل نام استفاده کنید.'
             },
             {
-                question: "The `ping` command uses which protocol to check network connectivity?",
-                options: [
-                    "TCP",
-                    "UDP",
-                    "ICMP",
-                    "IPsec"
-                ],
-                correct: 2
-            },
-            {
-                question: "What is the purpose of a DHCP server on a network?",
-                options: [
-                    "To block malicious traffic",
-                    "To automatically assign IP addresses to clients",
-                    "to resolve domain names",
-                    "To provide secure remote access"
-                ],
-                correct: 1
-            },
-            {
-                question: "In the shared responsibility model of cloud security, what is typically the responsibility of the cloud provider (e.g., AWS, Azure)?",
-                options: [
-                    "Securing the customer's data stored in the cloud",
-                    "Managing user access permissions for the customer's applications",
-                    "Securing the underlying infrastructure (hardware, hypervisor)",
-                    "Ensuring the customer's application code is free of vulnerabilities"
-                ],
-                correct: 2
-            },
-            {
-                question: "Which type of network cable uses light pulses to transmit data and is immune to electromagnetic interference?",
-                options: [
-                    "Coaxial Cable",
-                    "UTP Cable (Cat6)",
-                    "Fiber Optic Cable",
-                    "Console Cable"
-                ],
-                correct: 2
-            },
-            {
-                question: "A network device that operates at Layer 2 and forwards frames based on MAC addresses is a:",
-                options: [
-                    "Hub",
-                    "Router",
-                    "Switch",
-                    "Repeater"
-                ],
-                correct: 2
-            },
-            {
-                question: "What is the key function of a router?",
-                options: [
-                    "To connect devices within the same LAN using MAC addresses",
-                    "To amplify a network signal to cover a longer distance",
-                    "To filter traffic between networks based on IP addresses",
-                    "To broadcast data to every device on the network"
-                ],
-                correct: 2
-            },
-            {
-                question: "A security system that monitors network traffic for suspicious activity and generates alerts is called a(n):",
-                options: [
-                    "Firewall",
-                    "IDS (Intrusion Detection System)",
-                    "IPS (Intrusion Prevention System)",
-                    "VPN Concentrator"
-                ],
-                correct: 1
-            },
-            {
-                question: "The latest and most secure Wi-Fi encryption standard is:",
-                options: [
-                    "WEP",
-                    "WPA",
-                    "WPA2",
-                    "WPA3"
-                ],
-                correct: 3
-            },
-            {
-                question: "The CIA Triad in cybersecurity stands for:",
-                options: [
-                    "Confidentiality, Integrity, Availability",
-                    "Central Intelligence Agency",
-                    "Control, Inspection, Authorization",
-                    "Connection, Internet, Access"
-                ],
-                correct: 0
-            },
-            {
-                question: "Flooding a web server with so much traffic that it becomes unavailable to legitimate users is a:",
-                options: [
-                    "Phishing Attack",
-                    "Man-in-the-Middle (MITM) Attack",
-                    "Denial-of-Service (DoS) Attack",
-                    "SQL Injection Attack"
-                ],
-                correct: 2
-            },
-            {
-                question: "Sending fraudulent emails that appear to be from a reputable source to trick individuals into revealing personal information is called:",
-                options: [
-                    "Spoofing",
-                    "Phishing",
-                    "Ransomware",
-                    "Brute-forcing"
-                ],
-                correct: 1
-            },
-            {
-                question: "Which of the following is a common IoT security risk?",
-                options: [
-                    "Using strong, unique passwords by default",
-                    "Regular automatic security updates",
-                    "Leaving default passwords unchanged",
-                    "Being isolated on a separate network segment"
-                ],
-                correct: 2
-            },
-            {
-                question: "The Windows command `ipconfig /all` is used to:",
-                options: [
-                    "Test connectivity to a host",
-                    "Show detailed IP configuration for all adapters",
-                    "Display the path to a destination",
-                    "Show the ARP table"
-                ],
-                correct: 1
-            },
-            {
-                question: "Which tool is a powerful GUI-based packet analyzer?",
-                options: [
-                    "Nmap",
-                    "Wireshark",
-                    "Traceroute",
-                    "Ping"
-                ],
-                correct: 1
-            },
-            {
-                question: "The Linux command `traceroute 8.8.8.8` is used to:",
-                options: [
-                    "Check if you can reach Google's DNS server",
-                    "Find all open ports on 8.8.8.8",
-                    "Display the route packets take to reach 8.8.8.8",
-                    "Look up the domain name for 8.8.8.8"
-                ],
-                correct: 2
-            },
-            {
-                question: "What does the 'S' in HTTPS provide?",
-                options: [
-                    "Faster page load times",
-                    "Search engine optimization",
-                    "Encryption and secure communication",
-                    "Larger data storage"
-                ],
-                correct: 2
-            },
-            {
-                question: "A VLAN (Virtual LAN) is primarily used for:",
-                options: [
-                    "Extending the wireless signal range",
-                    "Logically segmenting a network without physical changes",
-                    "Connecting to the internet",
-                    "Blocking all incoming traffic"
-                ],
-                correct: 1
-            },
-            {
-                question: "The concept of 'Zero Trust' in security is best described as:",
-                options: [
-                    "Trusting all devices inside the corporate firewall",
-                    "Never trusting any user or device by default, even inside the network",
-                    "Using only the most trusted encryption algorithms",
-                    "Having zero vulnerabilities in your systems"
-                ],
-                correct: 1
+                id:'020', type:'practical',
+                title:'مشاهده نسخه کرنل (فصل ۱۵)',
+                desc:'نسخه <strong>کرنل</strong> لینوکس خود را با خط فرمان ببینید.',
+                hint:'📘 فصل ۱۵ — uname -a',
+                help:'💡 از uname با گزینه -a برای نمایش تمام اطلاعات سیستم استفاده کنید.'
             }
         ];
 
-        // DOM elements
-        const questionContainer = document.querySelector('.question-container');
-        const timerElement = document.getElementById('timer');
-        const startModal = document.getElementById('start-modal');
-        const finishedModal = document.getElementById('finished-modal');
-        const resultsModal = document.getElementById('results-modal');
-        const startExamBtn = document.getElementById('start-exam');
-        const submitBtn = document.getElementById('submit-btn');
-        const resultsContainer = document.getElementById('results-container');
-        const scoreValue = document.getElementById('score-value');
-        const totalQuestions = document.getElementById('total-questions');
-        const reviewAnswersBtn = document.getElementById('review-answers');
-        const closeResultsBtn = document.getElementById('close-results');
-        const userForm = document.getElementById('user-form');
-        const userSubmitBtn = document.getElementById('user-submit');
-        const firstNameInput = document.getElementById('first-name');
-        const lastNameInput = document.getElementById('last-name');
-        const emailInput = document.getElementById('email');
-        const instructions = document.getElementById('instructions');
-        const submitBtnContainer = document.getElementById('submit-btn-container');
-        const userInfo = document.getElementById('user-info');
-        const userNameDisplay = document.getElementById('user-name-display');
-        const userEmailDisplay = document.getElementById('user-email-display');
-        const sendingEmail = document.getElementById('sending-email');
-        
-        // User data
-        let userData = {
-            firstName: '',
-            lastName: '',
-            email: ''
-        };
-        
-        // Timer variables
-        let timeLeft = 40 * 60; // 40 minutes in seconds
-        let timerInterval;
-        let userAnswers = new Array(questions.length).fill(null);
-        
-        // Initialize the exam
-        function initExam() {
-            // Display all questions
-            questions.forEach((q, index) => {
-                const questionEl = document.createElement('div');
-                questionEl.className = 'question';
-                questionEl.innerHTML = `
-                    <div class="question-number">Question ${index + 1}</div>
-                    <div class="question-text">${q.question}</div>
-                    <div class="options">
-                        ${q.options.map((option, i) => `
-                            <div class="option" data-question="${index}" data-option="${i}">${option}</div>
-                        `).join('')}
-                    </div>
+        const WORKER_URL = 'https://python-for-hackers.silentknights0101.workers.dev';
+        let studentData = JSON.parse(localStorage.getItem('hackerStudent')) || null;
+        let completedChallenges = JSON.parse(localStorage.getItem('completedChallenges')) || [];
+        const editors = {};
+
+        function buildCards() {
+            const grid = document.getElementById('challengeGrid');
+            grid.innerHTML = '';
+            CHALLENGES.forEach(ch => {
+                const id = ch.id;
+                const typeMap = { theory:'نظری', technical:'تکنیکی', practical:'عملی' };
+                const badgeClass = ch.type;
+                const card = document.createElement('div');
+                card.className = 'terminal-card locked';
+                card.dataset.challenge = id;
+
+                const overlay = document.createElement('div');
+                overlay.className = 'locked-overlay';
+                overlay.innerHTML = `<i class="fas fa-lock"></i><span>// نیاز به احراز هویت</span>`;
+                card.appendChild(overlay);
+
+                const header = document.createElement('div');
+                header.className = 'card-header';
+                header.innerHTML = `
+                    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <div class="card-title"><span class="badge ${badgeClass}">${id}</span> ${typeMap[ch.type]}: ${ch.title}</div>
                 `;
-                questionContainer.appendChild(questionEl);
+                card.appendChild(header);
+
+                const body = document.createElement('div');
+                body.className = 'card-body';
+
+                const desc = document.createElement('div');
+                desc.className = 'task-desc';
+                desc.innerHTML = ch.desc;
+                body.appendChild(desc);
+
+                const helpBtn = document.createElement('button');
+                helpBtn.className = 'help-btn';
+                helpBtn.innerHTML = '<i class="fas fa-question-circle"></i> 🤔 راهنما';
+                helpBtn.onclick = () => showHelpModal(ch.id);
+                body.appendChild(helpBtn);
+
+                const helpBox = document.createElement('div');
+                helpBox.className = 'help-box';
+                helpBox.id = `helpbox-${ch.id}`;
+                helpBox.innerHTML = `<strong>📘 اشاره:</strong> ${ch.hint}`;
+                body.appendChild(helpBox);
+
+                const label = document.createElement('div');
+                label.className = 'expected-output-label';
+                label.innerHTML = '<i class="fas fa-chevron-right"></i> پاسخ خود را بنویسید:';
+                body.appendChild(label);
+
+                const editorContainer = document.createElement('div');
+                editorContainer.className = 'vs-code-container';
+                const tab = document.createElement('div');
+                tab.className = 'vs-code-tab';
+                tab.innerHTML = `<i class="fas fa-terminal"></i> answer_${id}.txt <div class="dot-mod"></div>`;
+                editorContainer.appendChild(tab);
+                const editorDiv = document.createElement('div');
+                editorDiv.className = 'ace-editor';
+                editorDiv.id = `editor-${id}`;
+                editorContainer.appendChild(editorDiv);
+                body.appendChild(editorContainer);
+
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback-msg';
+                feedback.id = `feedback-${id}`;
+                body.appendChild(feedback);
+
+                const btn = document.createElement('button');
+                btn.className = 'submit-btn';
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> ارسال پاسخ';
+                btn.onclick = () => submitChallenge(btn, id);
+                btn.disabled = true;
+                body.appendChild(btn);
+
+                card.appendChild(body);
+                grid.appendChild(card);
             });
-            
-            // Add event listeners to options
-            document.querySelectorAll('.option').forEach(option => {
-                option.addEventListener('click', function() {
-                    const questionIndex = parseInt(this.dataset.question);
-                    const optionIndex = parseInt(this.dataset.option);
-                    
-                    // Remove selected class from all options in this question
-                    document.querySelectorAll(`.option[data-question="${questionIndex}"]`).forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-                    
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-                    
-                    // Save user's answer
-                    userAnswers[questionIndex] = optionIndex;
+            initEditors();
+        }
+
+        function initEditors() {
+            document.querySelectorAll('.ace-editor').forEach(el => {
+                const id = el.id.replace('editor-', '');
+                const editor = ace.edit(el, {
+                    theme:"ace/theme/monokai", mode:"ace/mode/text",
+                    autoScrollEditorIntoView:true, showPrintMargin:false,
+                    fontSize:"13.5px", fontFamily:"'Fira Code',monospace",
+                    wrap:true, showInvisibles:false, highlightActiveLine:true, tabSize:4
+                });
+                editor.setValue('# پاسخ خود را بنویسید...', -1);
+                editor.session.getUndoManager().reset();
+                editors[id] = editor;
+                editor.on('change', () => {
+                    const dot = el.parentElement.querySelector('.dot-mod');
+                    if (dot && !editor.session.getUndoManager().isClean()) dot.classList.add('show');
                 });
             });
         }
-        
-        // Handle user form submission
-        userSubmitBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Validate form
-            if (!firstNameInput.value.trim() || !lastNameInput.value.trim() || !emailInput.value.trim()) {
-                alert('Please fill in all fields');
-                return;
-            }
-            
-            if (!isValidEmail(emailInput.value)) {
-                alert('Please enter a valid email address');
-                return;
-            }
-            
-            // Save user data
-            userData.firstName = firstNameInput.value.trim();
-            userData.lastName = lastNameInput.value.trim();
-            userData.email = emailInput.value.trim();
-            
-            // Hide form and show exam info
-            userForm.style.display = 'none';
-            userInfo.style.display = 'block';
-            userNameDisplay.textContent = `${userData.firstName} ${userData.lastName}`;
-            userEmailDisplay.textContent = userData.email;
-            
-            // Show instructions and start modal
-            instructions.style.display = 'block';
-            startModal.style.display = 'flex';
+
+        // ===== راهنما با نکته‌های مخصوص هر سوال =====
+        function showHelpModal(id) {
+            const ch = CHALLENGES.find(c => c.id === id);
+            if (!ch) return;
+            document.getElementById('modalTitle').textContent = `📖 راهنما: ${ch.title}`;
+            document.getElementById('modalBody').innerHTML = `
+                <p><span class="highlight-text">📌 سوال:</span> ${ch.desc}</p>
+                <br>
+                <p><span class="highlight-text">📘 اشاره:</span> ${ch.hint}</p>
+                <br>
+                <p><span class="highlight-text">💡 نکته:</span></p>
+                <p>${ch.help}</p>
+            `;
+            document.getElementById('helpModal').classList.add('show');
+        }
+
+        function closeHelpModal() {
+            document.getElementById('helpModal').classList.remove('show');
+        }
+        document.getElementById('helpModal').addEventListener('click', function(e) {
+            if (e.target === this) closeHelpModal();
         });
-        
-        // Email validation
-        function isValidEmail(email) {
-            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(String(email).toLowerCase());
+
+        async function testConnection() {
+            try {
+                const resp = await fetch(WORKER_URL);
+                if (resp.ok) showToast('✅ اتصال برقرار است!', 'success');
+                else showToast(`❌ خطا: ${resp.status}`, 'error');
+            } catch(e) { showToast('❌ اتصال ناموفق!', 'error'); }
         }
-        
-        // Start the exam
-        function startExam() {
-            startModal.style.display = 'none';
-            questionContainer.style.display = 'block';
-            submitBtnContainer.style.display = 'flex';
-            
-            // Start timer
-            timerInterval = setInterval(updateTimer, 1000);
+
+        async function loginStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            const alias = document.getElementById('studentAlias').value.trim();
+            if (!name || !alias) return showToast("نام و تخلص الزامی است!", "error");
+            try { await fetch(`${WORKER_URL}/register`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name,alias}) }); } catch(e) {}
+            studentData = { name, alias };
+            localStorage.setItem('hackerStudent', JSON.stringify(studentData));
+            unlockAllChallenges();
+            document.getElementById('welcomeMsg').innerText = `خوش آمدی ${alias}!`;
+            showToast(`خوش آمدی ${alias}!`, "success");
+            await fetchAndApplyStatus(alias);
         }
-        
-        // Update timer
-        function updateTimer() {
-            timeLeft--;
-            
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                submitExam();
+
+        function unlockAllChallenges() {
+            document.querySelectorAll('.terminal-card.locked').forEach(c => { c.classList.remove('locked'); c.classList.add('unlocked'); });
+            document.querySelectorAll('.submit-btn').forEach(b => { b.disabled = false; });
+        }
+
+        async function fetchStatus(alias) {
+            try {
+                const resp = await fetch(`${WORKER_URL}/status?alias=${encodeURIComponent(alias)}`);
+                if (!resp.ok) throw new Error(`Status ${resp.status}`);
+                return await resp.json();
+            } catch(e) { return {}; }
+        }
+
+        async function fetchAndApplyStatus(alias) {
+            const statusMap = await fetchStatus(alias);
+            let approved = 0;
+            const total = CHALLENGES.length;
+            for (const [id, info] of Object.entries(statusMap)) {
+                const card = document.querySelector(`[data-challenge="${id}"]`);
+                if (!card) continue;
+                const btn = card.querySelector('.submit-btn');
+                const editor = editors[id];
+                const fb = document.getElementById(`feedback-${id}`);
+                card.classList.remove('completed','rejected','pending');
+                btn.classList.remove('approved','rejected','pending');
+                if (info.status === 'approved') {
+                    card.classList.add('completed');
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i> تأیید شد';
+                    btn.disabled = true; btn.classList.add('approved');
+                    if (editor) editor.setReadOnly(true);
+                    approved++;
+                    if (fb) { fb.classList.remove('show'); fb.textContent = ''; }
+                } else if (info.status === 'rejected') {
+                    card.classList.add('rejected');
+                    btn.innerHTML = '<i class="fas fa-redo-alt"></i> ارسال مجدد';
+                    btn.disabled = false; btn.classList.add('rejected');
+                    if (editor) editor.setReadOnly(false);
+                    if (fb) { fb.textContent = info.feedback || 'بدون توضیح'; fb.classList.add('show'); }
+                } else if (info.status === 'pending') {
+                    card.classList.add('pending');
+                    btn.innerHTML = '<i class="fas fa-hourglass-half"></i> در انتظار';
+                    btn.disabled = true; btn.classList.add('pending');
+                    if (editor) editor.setReadOnly(true);
+                    if (fb) { fb.classList.remove('show'); fb.textContent = ''; }
+                } else {
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> ارسال پاسخ';
+                    btn.disabled = false;
+                    if (editor) editor.setReadOnly(false);
+                    if (fb) { fb.classList.remove('show'); fb.textContent = ''; }
+                }
             }
-            
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            
-            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            // Change color when time is running out
-            if (minutes < 5) {
-                timerElement.style.color = '#ff5555';
+            document.getElementById('progressFill').style.width = (approved/total*100)+'%';
+            document.getElementById('progressCount').innerText = `${approved} / ${total}`;
+        }
+
+        async function submitChallenge(button, id) {
+            if (!studentData) return showToast("ابتدا وارد شوید!", "error");
+            const editor = editors[id];
+            const answer = editor.getValue().trim();
+            if (!answer || answer.replace(/#.*/g,'').replace(/\s/g,'').length < 3) {
+                return showToast("پاسخ کامل بنویسید!", "error");
+            }
+            const orig = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ارسال...';
+            button.disabled = true;
+            try {
+                const resp = await fetch(`${WORKER_URL}/submit`, {
+                    method:'POST', headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({ name:studentData.name, alias:studentData.alias, challenge:id, code:answer })
+                });
+                if (!resp.ok) throw new Error(`خطا ${resp.status}`);
+                showToast(`چالش ${id} ارسال شد!`, "success");
+                await fetchAndApplyStatus(studentData.alias);
+            } catch(e) {
+                button.innerHTML = orig; button.disabled = false;
+                showToast(`❌ ارسال نشد: ${e.message}`, 'error');
             }
         }
-        
-        // Submit exam
-        function submitExam() {
-            clearInterval(timerInterval);
-            
-            // Calculate score
-            let score = 0;
-            questions.forEach((q, index) => {
-                if (userAnswers[index] === q.correct) {
-                    score++;
-                }
-            });
-            
-            // Show sending email notification
-            sendingEmail.style.display = 'block';
-            
-            // Send email with results
-            sendEmailResults(score);
-            
-            // Show results modal
-            showResults(score);
+
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            const icon = type==='success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-triangle"></i>';
+            t.innerHTML = icon + ' ' + msg;
+            t.className = `toast ${type} show`;
+            clearTimeout(t._timeout);
+            t._timeout = setTimeout(() => t.classList.remove('show'), 4000);
         }
-        
-        // Send email with results
-        function sendEmailResults(score) {
-            // Prepare email content
-            const subject = `Network 4 Hacker Exam Results - ${userData.firstName} ${userData.lastName}`;
-            
-            let body = `Exam Results for ${userData.firstName} ${userData.lastName}\n`;
-            body += `Email: ${userData.email}\n`;
-            body += `Score: ${score}/${questions.length}\n`;
-            body += `Percentage: ${((score/questions.length)*100).toFixed(2)}%\n\n`;
-            
-            body += "Detailed Results:\n";
-            questions.forEach((q, index) => {
-                const userAnswerIndex = userAnswers[index];
-                const isCorrect = userAnswerIndex === q.correct;
-                
-                body += `\nQuestion ${index + 1}: ${q.question}\n`;
-                body += `User Answer: ${userAnswerIndex !== null ? q.options[userAnswerIndex] : 'Not answered'}\n`;
-                body += `Correct Answer: ${q.options[q.correct]}\n`;
-                body += `Status: ${isCorrect ? 'CORRECT' : 'INCORRECT'}\n`;
-            });
-            
-            // Use EmailJS to send the email
-            emailjs.send("service_b9r47cr", "template_sqx8wkj", {
-                to_email: "modasirhashimi0101@gmail.com",
-                from_name: "Network 4 Hacker Exam",
-                subject: subject,
-                message: body
-            })
-            .then(function(response) {
-                console.log("Email sent successfully", response);
-                sendingEmail.innerHTML = "<h3>Results sent successfully!</h3><p>Your exam results have been delivered to the instructor.</p>";
-            })
-            .catch(function(error) {
-                console.error("Failed to send email", error);
-                sendingEmail.innerHTML = "<h3>Email sending failed</h3><p>But your exam has been submitted. Please contact the instructor directly.</p>";
-            });
-        }
-        
-        // Show detailed results
-        function showResults(score) {
-            scoreValue.textContent = score;
-            totalQuestions.textContent = questions.length;
-            
-            // Clear previous results
-            resultsContainer.innerHTML = '';
-            
-            // Generate results for each question
-            questions.forEach((q, index) => {
-                const userAnswerIndex = userAnswers[index];
-                const isCorrect = userAnswerIndex === q.correct;
-                
-                const resultItem = document.createElement('div');
-                resultItem.className = `result-item ${isCorrect ? 'correct' : 'incorrect'}`;
-                
-                resultItem.innerHTML = `
-                    <div class="result-question">${index + 1}. ${q.question}</div>
-                    ${!isCorrect ? `
-                        <div class="result-answer user-answer">
-                            <strong>Your answer:</strong> ${userAnswerIndex !== null ? q.options[userAnswerIndex] : 'Not answered'}
-                        </div>
-                    ` : ''}
-                    <div class="result-answer correct-answer">
-                        <strong>Correct answer:</strong> ${q.options[q.correct]}
-                    </div>
-                `;
-                
-                resultsContainer.appendChild(resultItem);
-            });
-            
-            // Show results modal
-            resultsModal.style.display = 'flex';
-        }
-        
-        // Event listeners
-        startExamBtn.addEventListener('click', startExam);
-        submitBtn.addEventListener('click', submitExam);
-        
-        reviewAnswersBtn.addEventListener('click', function() {
-            resultsModal.style.display = 'none';
-            // اسکرول به بالای صفحه برای مشاهده سوالات
-            window.scrollTo(0, 0);
-            
-            // علامت‌گذاری پاسخ‌های کاربر و پاسخ‌های صحیح
-            questions.forEach((q, index) => {
-                const userAnswerIndex = userAnswers[index];
-                const isCorrect = userAnswerIndex === q.correct;
-                
-                // علامت‌گذاری پاسخ کاربر
-                if (userAnswerIndex !== null) {
-                    const userOption = document.querySelector(`.option[data-question="${index}"][data-option="${userAnswerIndex}"]`);
-                    if (userOption) {
-                        userOption.classList.add('selected');
-                        if (!isCorrect) {
-                            userOption.style.borderColor = '#F44336';
-                        }
-                    }
-                }
-                
-                // علامت‌گذاری پاسخ صحیح
-                const correctOption = document.querySelector(`.option[data-question="${index}"][data-option="${q.correct}"]`);
-                if (correctOption) {
-                    correctOption.style.borderColor = '#4CAF50';
-                    correctOption.style.boxShadow = '0 0 8px #4CAF50';
-                }
-            });
-        });
-        
-        closeResultsBtn.addEventListener('click', function() {
-            resultsModal.style.display = 'none';
-        });
-        
-        // Initialize the exam when page loads
-        window.addEventListener('load', initExam);
-    </script>
-    
-    <!-- Load EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-        // Initialize EmailJS with your public key
-        (function() {
-            emailjs.init("zTlaq0rOCJbPFLB-t"); // Replace with your actual EmailJS public key
-        })();
+
+        window.onload = function() {
+            buildCards();
+            if (studentData) {
+                document.getElementById('studentName').value = studentData.name;
+                document.getElementById('studentAlias').value = studentData.alias;
+                unlockAllChallenges();
+                document.getElementById('welcomeMsg').innerText = `خوش آمدی ${studentData.alias}!`;
+                fetchAndApplyStatus(studentData.alias);
+            }
+            setInterval(() => {
+                if (studentData?.alias) fetchAndApplyStatus(studentData.alias);
+            }, 15000);
+        };
     </script>
 </body>
 </html>

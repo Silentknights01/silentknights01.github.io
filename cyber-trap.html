@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER TRAP | Silent Knights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Vazirmatn:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --dark-gray: #111111;
+            --red: #ff0033;
+            --red-dim: #b3001f;
+            --white: #f0f0f0;
+            --gray: #888888;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: 'Vazirmatn', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            cursor: crosshair;
+        }
+        .font-tech { font-family: 'Share Tech Mono', monospace; }
+        
+        /* Scanline & Glitch Effects */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9999;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+        .glitch { position: relative; color: var(--white); }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .glitch::before { left: 2px; text-shadow: -2px 0 var(--red); clip: rect(0, 0, 0, 0); animation: glitch-1 2s infinite linear alternate-reverse; }
+        .glitch::after { left: -2px; text-shadow: 2px 0 #00ffea; clip: rect(0, 0, 0, 0); animation: glitch-2 3s infinite linear alternate-reverse; }
+        @keyframes glitch-1 { 0% { clip: rect(20px, 9999px, 30px, 0); } 20% { clip: rect(60px, 9999px, 10px, 0); } 40% { clip: rect(10px, 9999px, 80px, 0); } 100% { clip: rect(80px, 9999px, 20px, 0); } }
+        @keyframes glitch-2 { 0% { clip: rect(40px, 9999px, 50px, 0); } 20% { clip: rect(10px, 9999px, 20px, 0); } 40% { clip: rect(90px, 9999px, 10px, 0); } 100% { clip: rect(30px, 9999px, 60px, 0); } }
+
+        /* Slide System */
+        .slide-container { width: 100%; height: 100%; position: relative; }
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: scale(1.1);
+            padding: 4rem 2rem;
+            z-index: 1;
+        }
+        .slide.active { opacity: 1; visibility: visible; transform: scale(1); z-index: 2; }
+        
+        /* Global UI */
+        .global-ui { position: fixed; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+        .global-ui > * { position: absolute; font-family: 'Share Tech Mono'; color: #555; font-size: 0.8rem; }
+        .progress-bar { position: fixed; bottom: 0; left: 0; height: 3px; background: var(--red); width: 0%; transition: width 0.5s ease; box-shadow: 0 0 10px var(--red); z-index: 20; }
+
+        /* Components */
+        .cyber-card { background: rgba(255,255,255,0.03); border: 1px solid #333; padding: 1.5rem; transition: all 0.3s; position: relative; }
+        .cyber-card:hover { border-color: var(--red); box-shadow: 0 0 15px rgba(255,0,51,0.2); background: rgba(255,0,51,0.05); }
+        .cyber-card::before { content: ''; position: absolute; top: -1px; left: -1px; width: 10px; height: 10px; border-top: 2px solid var(--red); border-left: 2px solid var(--red); }
+        .cyber-card::after { content: ''; position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; border-bottom: 2px solid var(--red); border-right: 2px solid var(--red); }
+        
+        .terminal { font-family: 'Share Tech Mono', monospace; border: 1px solid var(--red); padding: 2rem; background: rgba(0,0,0,0.8); width: 90%; max-width: 800px; text-align: right; box-shadow: 0 0 20px rgba(255,0,51,0.2); position: relative; }
+        .terminal::before { content: '> SECURITY TERMINAL // SILENT KNIGHTS'; position: absolute; top: -15px; right: 10px; background: var(--bg); padding: 0 10px; color: var(--red); font-size: 0.8rem; }
+
+        .flow-node { border: 1px solid var(--red); padding: 10px 20px; background: rgba(255,0,51,0.1); font-family: 'Share Tech Mono'; position: relative; z-index: 2; }
+        .flow-arrow { color: #555; font-size: 1.5rem; margin: 5px 0; }
+        
+        /* Animations */
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 0, 51, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0); } }
+        .pulse { animation: pulse 2s infinite; }
+        
+        @keyframes blink { 50% { opacity: 0; } }
+        .cursor { display: inline-block; width: 10px; height: 20px; background: var(--red); animation: blink 1s infinite; margin-right: 5px; }
+
+        /* Navigation Bar */
+        .nav-controls { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 30; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .nav-controls:hover { opacity: 1; }
+        .nav-btn { background: rgba(0,0,0,0.8); color: var(--red); border: 1px solid var(--red); padding: 5px 15px; font-family: 'Share Tech Mono'; cursor: pointer; pointer-events: auto; font-size: 0.8rem; }
+        
+        .intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 1s; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; }
+        
+        .radial-container { position: relative; width: 600px; height: 600px; display: flex; justify-content: center; align-items: center; }
+        .radial-item { position: absolute; width: 100px; height: 100px; display: flex; justify-content: center; align-items: center; border: 1px solid #333; background: #111; transition: all 0.3s; cursor: pointer; }
+        .radial-item:hover { border-color: var(--red); box-shadow: 0 0 15px var(--red); transform: scale(1.1); }
+        .radial-center { width: 150px; height: 150px; background: #111; border: 2px solid var(--red); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-family: 'Share Tech Mono'; box-shadow: 0 0 30px rgba(255,0,51,0.2); }
+    </style>
+</head>
+<body>
+
+    <!-- Intro Overlay -->
+    <div class="intro-overlay" id="intro">
+        <div class="font-tech text-sm text-red-500 mb-4" id="intro-text">
+            SYSTEM INITIALIZING...<br>
+            NETWORK STATUS: ONLINE<br>
+            SECURITY MONITOR: ACTIVE
+        </div>
+        <h1 class="text-6xl font-black tracking-widest text-white glitch" data-text="CYBER TRAP">CYBER TRAP</h1>
+        <p class="text-xl text-gray-400 mt-4">«هر کلیک می‌تواند یک تله باشد.»</p>
+        <p class="font-tech text-gray-500 mt-8 animate-pulse">PRESS ANY KEY TO ENTER</p>
+    </div>
+
+    <!-- Global UI -->
+    <div class="global-ui">
+        <div class="top-5 left-5 text-red-500 font-bold tracking-wider">CYBER TRAP</div>
+        <div class="top-5 right-5 font-tech text-gray-400" id="day-indicator">DAY 01</div>
+        <div class="bottom-5 left-5 font-tech text-gray-400">SILENT KNIGHTS</div>
+        <div class="bottom-5 center-5 font-tech text-gray-400" style="left: 50%; transform: translateX(-50%);" id="slide-counter">01 / 40</div>
+        <div class="bottom-5 right-5 font-tech text-gray-400">← → NAVIGATE</div>
+    </div>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Navigation Controls -->
+    <div class="nav-controls" id="navControls">
+        <button class="nav-btn" onclick="window.navigate(-1)">[ PREV ]</button>
+        <button class="nav-btn" onclick="window.toggleFullscreen()">[ FSCR ]</button>
+        <button class="nav-btn" onclick="window.goToDay(1)">[ DAY 1 ]</button>
+        <button class="nav-btn" onclick="window.goToDay(2)">[ DAY 2 ]</button>
+        <button class="nav-btn" onclick="window.navigate(1)">[ NEXT ]</button>
+    </div>
+
+    <!-- Slides Container -->
+    <div class="slide-container" id="slides">
+        
+        <!-- SLIDE 1: WHAT IS HACKING -->
+        <div class="slide" data-slide="1" data-day="1">
+            <h1 class="text-6xl font-black mb-12 text-white">هک چیست؟</h1>
+            <div class="flex flex-col items-center gap-4 font-tech text-xl">
+                <div class="flow-node pulse">SYSTEM</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node pulse">WEAKNESS</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node pulse">ACCESS</div>
+            </div>
+            <p class="mt-12 text-center max-w-2xl text-gray-300">هک یعنی پیدا کردن و استفاده از ضعف‌های یک سیستم، شبکه، برنامه یا حتی رفتار انسان.</p>
+        </div>
+
+        <!-- SLIDE 2: WHO IS A HACKER -->
+        <div class="slide" data-slide="2" data-day="1">
+            <h1 class="text-5xl font-black mb-12 text-white">هکر کیست؟</h1>
+            <div class="grid-2">
+                <div class="cyber-card text-center">
+                    <h3 class="font-tech text-red-500 mb-4">PHYSICAL WORLD</h3>
+                    <div class="flex flex-col items-center gap-2 font-tech">
+                        <span>HOUSE</span><span>↓</span><span>LOCK</span><span>↓</span><span>THIEF</span>
+                    </div>
+                </div>
+                <div class="cyber-card text-center">
+                    <h3 class="font-tech text-red-500 mb-4">CYBER WORLD</h3>
+                    <div class="flex flex-col items-center gap-2 font-tech">
+                        <span>SYSTEM</span><span>↓</span><span>AUTH</span><span>↓</span><span>HACKER</span>
+                    </div>
+                </div>
+            </div>
+            <h2 class="mt-12 text-2xl text-red-500 font-bold text-center max-w-3xl">مهاجم همیشه قفل را نمی‌شکند؛ گاهی فقط دنبال درِ باز می‌گردد.</h2>
+        </div>
+
+        <!-- SLIDE 3: TYPES OF HACKING -->
+        <div class="slide" data-slide="3" data-day="1">
+            <h1 class="text-5xl font-black mb-12 text-white">انواع هک</h1>
+            <div class="radial-container scale-75 sm:scale-100">
+                <div class="radial-center">HACKING</div>
+                <div class="radial-item" style="top:0; left:250px;">WEB</div>
+                <div class="radial-item" style="top:100px; right:50px;">NETWORK</div>
+                <div class="radial-item" style="bottom:100px; right:50px;">WI-FI</div>
+                <div class="radial-item" style="bottom:0; left:250px;">MOBILE</div>
+                <div class="radial-item" style="bottom:100px; left:50px;">CLOUD</div>
+                <div class="radial-item" style="top:100px; left:50px;">OSINT</div>
+                <div class="radial-item" style="top:-50px; left:450px;">SOCIAL ENG</div>
+                <div class="radial-item" style="bottom:-50px; left:50px;">PHYSICAL</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: TYPES OF HACKERS -->
+        <div class="slide" data-slide="4" data-day="1">
+            <h1 class="text-5xl font-black mb-12 text-white">هکرها چه کسانی هستند؟</h1>
+            <div class="grid-3">
+                <div class="cyber-card text-center">
+                    <h3 class="text-xl text-white mb-2">WHITE HAT</h3>
+                    <p class="text-sm text-gray-400">Authorized / Ethical</p>
+                </div>
+                <div class="cyber-card text-center">
+                    <h3 class="text-xl text-red-500 mb-2">BLACK HAT</h3>
+                    <p class="text-sm text-gray-400">Unauthorized / Criminal</p>
+                </div>
+                <div class="cyber-card text-center">
+                    <h3 class="text-xl text-gray-400 mb-2">GRAY HAT</h3>
+                    <p class="text-sm text-gray-400">Crosses boundaries</p>
+                </div>
+            </div>
+            <div class="mt-8 flex flex-wrap gap-4 justify-center font-tech text-sm text-gray-500">
+                <span class="border border-gray-700 px-4 py-2">Security Researcher</span>
+                <span class="border border-gray-700 px-4 py-2">Cybercriminal</span>
+                <span class="border border-gray-700 px-4 py-2">Hacktivist</span>
+                <span class="border border-gray-700 px-4 py-2">State-Sponsored</span>
+                <span class="border border-gray-700 px-4 py-2">Script Kiddie</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: WHAT DOES THE ATTACKER WANT -->
+        <div class="slide" data-slide="5" data-day="1">
+            <h1 class="text-5xl font-black mb-12 text-white">مهاجم دنبال چیست؟</h1>
+            <div class="flex flex-col items-center gap-4 font-tech text-lg">
+                <div class="flow-node">ASSET</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">ACCESS</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">CONTROL</div><div class="flow-arrow">↓</div>
+                <div class="flow-node pulse text-red-500">DATA</div>
+            </div>
+            <div class="mt-12 flex flex-wrap gap-4 justify-center text-gray-400 font-tech">
+                <span>Money</span> • <span>Credentials</span> • <span>Personal Data</span> • <span>Intelligence</span> • <span>Reputation</span> • <span>Control</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: MEET THE PRESENTER -->
+        <div class="slide" data-slide="6" data-day="1">
+            <h1 class="text-5xl font-black mb-12 text-white">من کی هستم؟</h1>
+            <div class="terminal max-w-2xl">
+                <h2 class="text-3xl text-white mb-4">Sayed Modasir Hashimi (SMH)</h2>
+                <div class="flex flex-col gap-2 text-gray-300">
+                    <span>> Cybersecurity Instructor</span>
+                    <span>> Ethical Hacker</span>
+                    <span>> Cybersecurity Content Creator</span>
+                    <span>> Team Lead — Silent Knights</span>
+                </div>
+                <p class="text-red-500 mt-6 border-t border-red-500 pt-4">«امنیت سایبری را از یک مفهوم پیچیده به یک مهارت قابل فهم تبدیل کنیم.»</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: WHY CYBERSECURITY -->
+        <div class="slide" data-slide="7" data-day="1">
+            <h1 class="text-5xl font-black mb-12 text-white">چرا Cybersecurity مهم است؟</h1>
+            <div class="grid-2 font-tech text-gray-300 mb-10">
+                <div class="cyber-card">PHONE</div><div class="cyber-card">EMAIL</div>
+                <div class="cyber-card">BANKING</div><div class="cyber-card">SOCIAL MEDIA</div>
+                <div class="cyber-card">CLOUD</div><div class="cyber-card">GOVERNMENT</div>
+            </div>
+            <h2 class="text-xl text-red-500 font-bold">ONE COMPROMISED ACCOUNT</h2>
+            <div class="flow-arrow">↓</div>
+            <h2 class="text-xl text-white font-bold">MULTIPLE CONSEQUENCES</h2>
+        </div>
+
+        <!-- SLIDE 8: ATTACK SURFACE -->
+        <div class="slide" data-slide="8" data-day="1">
+            <h1 class="text-5xl font-black mb-12 text-white">Attack Surface</h1>
+            <div class="flex flex-col items-center gap-3 font-tech text-lg">
+                <div class="flow-node pulse">HUMAN</div><div class="flow-arrow">↓</div>
+                <div class="flow-node pulse">DEVICE</div><div class="flow-arrow">↓</div>
+                <div class="flow-node pulse">NETWORK</div><div class="flow-arrow">↓</div>
+                <div class="flow-node pulse">APPLICATION</div><div class="flow-arrow">↓</div>
+                <div class="flow-node pulse">CLOUD</div><div class="flow-arrow">↓</div>
+                <div class="flow-node pulse text-red-500">DATA</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: CYBER THREAT MAP -->
+        <div class="slide" data-slide="9" data-day="1">
+            <h1 class="text-4xl font-black mb-8 text-white">THE WORLD IS UNDER ATTACK</h1>
+            <div class="cyber-card w-full max-w-4xl h-[400px] flex items-center justify-center bg-black relative overflow-hidden">
+                <iframe src="https://silentknights01.github.io/cyber-threat-map.html" class="w-full h-full opacity-90" style="pointer-events: none;"></iframe>
+                <div class="absolute top-4 left-4 font-tech text-red-500 bg-black/80 p-2 border border-red-500/50">
+                    <h3 class="font-bold">THREAT LEVEL: CRITICAL</h3>
+                    <p class="text-xs text-gray-400 mt-1">DDoS | Malware | Phishing | Exploit Kit</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: TRANSITION -->
+        <div class="slide bg-black" data-slide="10" data-day="1">
+            <h1 class="text-6xl font-black text-red-500 mb-8 glitch" data-text="BUT TODAY...">BUT TODAY...</h1>
+            <h2 class="text-3xl text-white mb-8">THE ATTACK IS NOT ON THE INTERNET.</h2>
+            <h1 class="text-6xl font-black text-white glitch" data-text="IT IS HERE.">IT IS HERE.</h1>
+        </div>
+
+        <!-- SLIDE 11: CONNECT -->
+        <div class="slide" data-slide="11" data-day="1">
+            <div class="w-full max-w-4xl bg-red-500/10 border-2 border-red-500 p-12 text-center relative">
+                <div class="absolute top-0 left-0 w-full h-2 bg-red-500 animate-pulse"></div>
+                <h1 class="text-4xl font-black text-red-500 mb-6">CONNECT TO THE NETWORK</h1>
+                <div class="font-tech text-2xl text-white mb-6">CYBER_TRAP_GUEST</div>
+                <p class="text-gray-300 mb-8">برای ورود به محیط آزمایشی سمینار به شبکه وصل شوید.</p>
+                <div class="font-tech text-sm text-gray-500 border border-gray-700 p-4 inline-block">CONTROLLED LAB ENVIRONMENT // NO ACCESS TO PERSONAL NETWORKS</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: QR CODE -->
+        <div class="slide" data-slide="12" data-day="1">
+            <h1 class="text-4xl font-black mb-8 text-white">SCAN TO ENTER</h1>
+            <div class="bg-white p-4 mb-8 inline-block">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=CYBER_TRAP_LIVE_DEMO" alt="QR">
+            </div>
+            <div class="flex items-center gap-4 font-tech text-2xl text-red-500">
+                <span>SCAN</span> <span>→</span> <span>ENTER</span> <span>→</span> <span>WAIT</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: YOU ARE IN (COUNTDOWN) -->
+        <div class="slide" data-slide="13" data-day="1">
+            <div class="terminal text-center w-full max-w-2xl">
+                <h2 class="text-xl text-red-500 mb-2">CYBER TRAP // SESSION STATUS:</h2>
+                <h2 class="text-3xl text-white mb-2">● CONNECTED</h2>
+                <h2 class="text-xl text-gray-400 mb-8">NETWORK: CYBER_TRAP_GUEST</h2>
+                <p class="text-xl mb-4">SEMINAR STARTS IN</p>
+                <div id="countdown" class="text-8xl font-tech text-red-500 mb-8" style="text-shadow: 0 0 20px var(--red);">30:00</div>
+                <p class="text-xl text-white">«صفحه را نبندید. سمینار از همین‌جا شروع می‌شود.»</p>
+                <div class="mt-8 flex gap-4 justify-center font-tech text-xs text-gray-500">
+                    <button onclick="window.startCountdown()" class="border border-gray-700 px-4 py-2 hover:border-red-500">START</button>
+                    <button onclick="window.pauseCountdown()" class="border border-gray-700 px-4 py-2 hover:border-red-500">PAUSE</button>
+                    <button onclick="window.resetCountdown()" class="border border-gray-700 px-4 py-2 hover:border-red-500">RESET</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 14: WHO IS CONNECTED -->
+        <div class="slide" data-slide="14" data-day="1">
+            <h1 class="text-4xl font-black mb-8 text-white">WHO IS CONNECTED?</h1>
+            <div class="cyber-card w-full max-w-4xl font-tech">
+                <div class="grid grid-cols-3 gap-4 border-b border-gray-700 pb-2 mb-4 text-red-500">
+                    <span>IP ADDRESS</span><span>DEVICE TYPE</span><span>STATUS</span>
+                </div>
+                <div class="space-y-4 text-gray-300">
+                    <div class="grid grid-cols-3 gap-4"><span>192.168.50.21</span><span>Android</span><span class="text-green-500">● ACTIVE</span></div>
+                    <div class="grid grid-cols-3 gap-4"><span>192.168.50.22</span><span>Windows</span><span class="text-green-500">● ACTIVE</span></div>
+                    <div class="grid grid-cols-3 gap-4"><span>192.168.50.23</span><span>iPhone</span><span class="text-yellow-500">● STANDBY</span></div>
+                    <div class="grid grid-cols-3 gap-4"><span>192.168.50.24</span><span>Linux</span><span class="text-green-500">● ACTIVE</span></div>
+                </div>
+            </div>
+            <p class="text-gray-500 text-sm mt-4 font-tech">DEMO DATA ONLY // ISOLATED NETWORK</p>
+        </div>
+
+        <!-- SLIDE 15: RECON -->
+        <div class="slide" data-slide="15" data-day="1">
+            <h1 class="text-5xl font-black mb-12 text-white">RECONNAISSANCE</h1>
+            <div class="flex flex-col items-center gap-4 font-tech text-lg">
+                <div class="flow-node">DISCOVER</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">IDENTIFY</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">MAP</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">ASSESS</div>
+            </div>
+            <p class="mt-12 text-center max-w-2xl text-gray-300">«Nmap یکی از ابزارهای شناخته‌شده برای Network Discovery و Security Testing است.»</p>
+        </div>
+
+        <!-- SLIDE 16: THREE TARGETS -->
+        <div class="slide" data-slide="16" data-day="1">
+            <h1 class="text-4xl font-black mb-12 text-white">THREE DEMO TARGETS</h1>
+            <div class="grid-3">
+                <div class="cyber-card text-center">
+                    <span class="text-red-500 font-tech text-xs">DEMO DATA</span>
+                    <h3 class="text-xl text-white mt-2">AHMAD DEMO</h3>
+                    <p class="text-gray-400 mt-2 font-tech">Android</p>
+                    <p class="text-gray-400 font-tech">192.168.50.21</p>
+                </div>
+                <div class="cyber-card text-center">
+                    <span class="text-red-500 font-tech text-xs">DEMO DATA</span>
+                    <h3 class="text-xl text-white mt-2">SARA DEMO</h3>
+                    <p class="text-gray-400 mt-2 font-tech">Windows</p>
+                    <p class="text-gray-400 font-tech">192.168.50.22</p>
+                </div>
+                <div class="cyber-card text-center">
+                    <span class="text-red-500 font-tech text-xs">DEMO DATA</span>
+                    <h3 class="text-xl text-white mt-2">ALI DEMO</h3>
+                    <p class="text-gray-400 mt-2 font-tech">iPhone</p>
+                    <p class="text-gray-400 font-tech">192.168.50.23</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 17: WHAT CAN A NETWORK REVEAL -->
+        <div class="slide" data-slide="17" data-day="1">
+            <h1 class="text-4xl font-black mb-12 text-white">اتصال به شبکه یعنی چه؟</h1>
+            <div class="grid-2 font-tech text-lg mb-12">
+                <div class="cyber-card text-center">IP ADDRESS</div>
+                <div class="cyber-card text-center">DEVICE TYPE</div>
+                <div class="cyber-card text-center">HOSTNAME</div>
+                <div class="cyber-card text-center">SERVICES</div>
+            </div>
+            <h2 class="text-3xl font-black text-red-500 glitch" data-text="RECON ≠ COMPROMISE">RECON ≠ COMPROMISE</h2>
+        </div>
+
+        <!-- SLIDE 18: THE SECOND LAYER -->
+        <div class="slide bg-black" data-slide="18" data-day="1">
+            <h1 class="text-5xl font-black mb-12 text-white">اما داستان تمام نشده...</h1>
+            <div class="flex flex-col items-center gap-4 font-tech text-lg">
+                <div class="flow-node">WI-FI</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">WEBSITE</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">BROWSER</div><div class="flow-arrow">↓</div>
+                <div class="flow-node text-red-500">CLIENT-SIDE ATTACK SURFACE</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 19: BEEF -->
+        <div class="slide" data-slide="19" data-day="1">
+            <h1 class="text-5xl font-black mb-2 text-white">BeEF</h1>
+            <h2 class="text-xl text-gray-400 mb-12 font-tech">Browser Exploitation Framework</h2>
+            <div class="flex flex-col items-center gap-4 font-tech text-lg">
+                <div class="flow-node">BROWSER</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">HOOK</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">TESTING</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">CLIENT-SIDE SECURITY</div>
+            </div>
+            <p class="mt-12 text-center max-w-2xl text-gray-300">«BeEF یک چارچوب تست امنیت مرورگر است که در محیط‌های کنترل‌شده برای ارزیابی امنیت استفاده می‌شود.»</p>
+            <div class="mt-4 font-tech text-xs text-red-500 border border-red-500 px-4 py-1">CONTROLLED SECURITY LAB</div>
+        </div>
+
+        <!-- SLIDE 20: BROWSER ATTACK SURFACE -->
+        <div class="slide" data-slide="20" data-day="1">
+            <h1 class="text-4xl font-black mb-12 text-white">THE BROWSER IS PART OF THE ATTACK SURFACE</h1>
+            <div class="cyber-card w-full max-w-4xl p-8 font-tech">
+                <div class="border-b border-gray-700 pb-2 mb-4 text-gray-400">CYBER TRAP WEBSITE</div>
+                <div class="grid grid-cols-2 gap-4 text-gray-300">
+                    <div>Browser</div><div>Web Application</div>
+                    <div>JavaScript</div><div>Session</div>
+                    <div>User Interaction</div><div>Permissions</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 21: THE REVEAL -->
+        <div class="slide bg-black" data-slide="21" data-day="1">
+            <div class="font-tech text-3xl text-white mb-8" id="reveal-countdown">30:00<br>29:59<br>29:58</div>
+            <h1 class="text-6xl font-black text-red-500 glitch" data-text="CONNECTION DETECTED">CONNECTION DETECTED</h1>
+            <p class="text-xl text-gray-400 mt-8 font-tech">> FICTIONAL BROWSER SESSION APPEARED IN DASHBOARD</p>
+        </div>
+
+        <!-- SLIDE 22: CLIENT SIDE ATTACKS -->
+        <div class="slide" data-slide="22" data-day="1">
+            <h1 class="text-4xl font-black mb-12 text-white">Client-Side Attacks</h1>
+            <div class="flex flex-col items-center gap-4 font-tech text-lg mb-12">
+                <div class="flow-node">Browser Session</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">Page Context</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">User Interaction</div><div class="flow-arrow">↓</div>
+                <div class="flow-node text-red-500">Potential Risk</div>
+            </div>
+            <h2 class="text-3xl font-black text-white">Browser Session ≠ Full Computer Control</h2>
+        </div>
+
+        <!-- SLIDE 23: YOU WERE NOT HACKED -->
+        <div class="slide bg-black" data-slide="23" data-day="1">
+            <h1 class="text-6xl font-black mb-8 text-white">YOU WERE NOT HACKED.</h1>
+            <h1 class="text-6xl font-black mb-8 text-white">YOU TRUSTED.</h1>
+            <h1 class="text-6xl font-black text-red-500">THAT WAS THE ATTACK SURFACE.</h1>
+        </div>
+
+        <!-- SLIDE 24: ATTACK CHAIN -->
+        <div class="slide" data-slide="24" data-day="1">
+            <h1 class="text-4xl font-black mb-12 text-white">THE ATTACK CHAIN</h1>
+            <div class="flex flex-col items-center gap-3 font-tech text-base">
+                <div class="flow-node">SOCIAL ENGINEERING</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">WI-FI</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">QR CODE</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">WEBSITE</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">TRUST</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">BROWSER</div><div class="flow-arrow">↓</div>
+                <div class="flow-node text-red-500">CLIENT-SIDE RISK</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 25: DAY 1 END -->
+        <div class="slide bg-black" data-slide="25" data-day="1">
+            <h1 class="text-6xl font-black mb-8 text-red-500 glitch" data-text="YOU DIDN'T GET HACKED.">YOU DIDN'T GET HACKED.</h1>
+            <h1 class="text-6xl font-black mb-12 text-white glitch" data-text="YOU GOT TRICKED.">YOU GOT TRICKED.</h1>
+            <h2 class="text-3xl text-gray-400">TOMORROW... WE FOLLOW THE ATTACK.</h2>
+        </div>
+
+        <!-- SLIDE 26: RECAP -->
+        <div class="slide" data-slide="26" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">RECAP</h1>
+            <p class="text-2xl mb-8 text-gray-300">اولین اشتباه کجا اتفاق افتاد؟</p>
+            <h1 class="text-5xl font-black text-red-500 mb-8">BEFORE THE HACK.</h1>
+            <p class="text-xl text-gray-400">The first failure was trust.</p>
+        </div>
+
+        <!-- SLIDE 27: PHISHING -->
+        <div class="slide" data-slide="27" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">PHISHING</h1>
+            <div class="cyber-card max-w-2xl w-full font-tech">
+                <div class="border-b border-gray-700 pb-2 mb-4">
+                    <span class="text-gray-400">FROM: </span><span class="text-red-500">security@fake-bank-verify.com</span>
+                    <br><span class="text-gray-400">SUBJECT: </span><span class="text-white">URGENT: Account Suspension Warning</span>
+                </div>
+                <p class="text-gray-300 mb-4">Dear user, your account will be suspended in 24 hours. Please verify your credentials immediately.</p>
+                <a href="#" class="text-blue-500 underline">http://fake-bank-verify.com/login</a>
+            </div>
+            <div class="mt-8 flex gap-4 font-tech text-sm text-gray-500">
+                <span class="border border-gray-700 px-4 py-2">URGENCY</span>
+                <span class="border border-gray-700 px-4 py-2">FEAR</span>
+                <span class="border border-gray-700 px-4 py-2">FAKE LINK</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 28: SOCIAL ENGINEERING -->
+        <div class="slide" data-slide="28" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">SOCIAL ENGINEERING</h1>
+            <div class="flex flex-col items-center gap-4 font-tech text-lg">
+                <div class="flow-node">ATTACKER</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">TRUST</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">ACTION</div><div class="flow-arrow">↓</div>
+                <div class="flow-node text-red-500">ACCESS</div>
+            </div>
+            <h2 class="mt-12 text-2xl text-white text-center max-w-3xl">«گاهی مهاجم سیستم را هک نمی‌کند؛ انسان را متقاعد می‌کند.»</h2>
+        </div>
+
+        <!-- SLIDE 29: PASSWORD REUSE -->
+        <div class="slide" data-slide="29" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">PASSWORD REUSE</h1>
+            <div class="flex flex-col items-center gap-4 font-tech text-lg">
+                <div class="flow-node">PASSWORD</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">EMAIL</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">SOCIAL MEDIA</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">CLOUD</div><div class="flow-arrow">↓</div>
+                <div class="flow-node text-red-500">WORK ACCOUNT</div>
+            </div>
+            <h2 class="mt-12 text-xl text-red-500 font-bold">ONE PASSWORD = MULTIPLE RISKS</h2>
+        </div>
+
+        <!-- SLIDE 30: MALICIOUS DOCUMENTS -->
+        <div class="slide" data-slide="30" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">MALICIOUS DOCUMENTS</h1>
+            <div class="cyber-card max-w-md w-full text-center font-tech">
+                <p class="text-white mb-4">Important_Report.docx</p>
+                <div class="text-red-500 border border-red-500 p-2 inline-block animate-pulse">[ ENABLE CONTENT ? ]</div>
+            </div>
+            <p class="mt-12 text-xl text-gray-300 text-center max-w-2xl">Unknown documents should not be trusted. Do not enable macros in untrusted files.</p>
+        </div>
+
+        <!-- SLIDE 31: QR PHISHING -->
+        <div class="slide" data-slide="31" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">QR PHISHING</h1>
+            <div class="flex flex-col items-center gap-4 font-tech text-lg">
+                <div class="flow-node">QR CODE</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">URL</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">FAKE WEBSITE</div><div class="flow-arrow">↓</div>
+                <div class="flow-node text-red-500">CREDENTIAL RISK</div>
+            </div>
+            <p class="mt-12 text-xl text-gray-300 text-center">A QR code is not a security guarantee.</p>
+        </div>
+
+        <!-- SLIDE 32: WI-FI SECURITY -->
+        <div class="slide" data-slide="32" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">WI-FI SECURITY</h1>
+            <div class="grid-2">
+                <div class="cyber-card text-center">
+                    <h3 class="text-xl text-white mb-2 font-tech">REAL AP</h3>
+                    <p class="text-gray-400 text-sm">Secure / Trusted</p>
+                </div>
+                <div class="cyber-card text-center border-red-500">
+                    <h3 class="text-xl text-red-500 mb-2 font-tech">FAKE AP</h3>
+                    <p class="text-gray-400 text-sm">EVIL TWIN</p>
+                </div>
+            </div>
+            <p class="mt-12 text-xl text-gray-300 text-center max-w-2xl">Users may connect to a malicious or impersonating access point.</p>
+        </div>
+
+        <!-- SLIDE 33: NETWORK RECON -->
+        <div class="slide" data-slide="33" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">NETWORK RECON</h1>
+            <div class="flex flex-col items-center gap-4 font-tech text-lg">
+                <div class="flow-node">DISCOVERY</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">IDENTIFICATION</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">ASSESSMENT</div>
+            </div>
+            <div class="mt-8 font-tech text-xs text-red-500 border border-red-500 px-4 py-1">AUTHORIZED LAB ONLY // FICTIONAL DEVICES</div>
+        </div>
+
+        <!-- SLIDE 34: BROWSER SECURITY TEST -->
+        <div class="slide" data-slide="34" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">BROWSER SECURITY TEST</h1>
+            <div class="flex flex-col items-center gap-4 font-tech text-lg">
+                <div class="flow-node">CONTROLLED BROWSER</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">SECURITY TEST</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">OBSERVATION</div><div class="flow-arrow">↓</div>
+                <div class="flow-node">DEFENSE</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 35: BREAK THE CHAIN -->
+        <div class="slide" data-slide="35" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">BREAK THE CHAIN</h1>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 font-tech">
+                <div class="cyber-card text-center text-red-500 line-through opacity-50">MFA BYPASSED</div>
+                <div class="cyber-card text-center text-white">PASSWORD MANAGER</div>
+                <div class="cyber-card text-center text-red-500 line-through opacity-50">FAKE WIFI</div>
+                <div class="cyber-card text-center text-white">UPDATES</div>
+                <div class="cyber-card text-center text-white">CSP</div>
+                <div class="cyber-card text-center text-red-500 line-through opacity-50">MALICIOUS DOC</div>
+                <div class="cyber-card text-center text-white">INPUT VALIDATION</div>
+                <div class="cyber-card text-center text-white">USER AWARENESS</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 36: DEFENSE -->
+        <div class="slide" data-slide="36" data-day="2">
+            <h1 class="text-5xl font-black mb-2 text-red-500">DON'T TRUST.</h1>
+            <h1 class="text-5xl font-black mb-12 text-white">VERIFY.</h1>
+            <div class="flex flex-wrap justify-center gap-4 font-tech text-lg">
+                <div class="flow-node">STOP</div>
+                <div class="flow-node">VERIFY</div>
+                <div class="flow-node">LIMIT</div>
+                <div class="flow-node">MONITOR</div>
+                <div class="flow-node">REPORT</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 37: 10 RULES -->
+        <div class="slide" data-slide="37" data-day="2">
+            <h1 class="text-4xl font-black mb-8 text-white">10 RULES</h1>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center font-tech text-sm">
+                <div class="cyber-card p-2">Check QR links</div>
+                <div class="cyber-card p-2">Verify domains</div>
+                <div class="cyber-card p-2">Don't reuse passwords</div>
+                <div class="cyber-card p-2">Enable MFA</div>
+                <div class="cyber-card p-2">Never share OTP</div>
+                <div class="cyber-card p-2">Avoid unknown Wi-Fi</div>
+                <div class="cyber-card p-2">Don't open suspicious files</div>
+                <div class="cyber-card p-2">Don't enable macros</div>
+                <div class="cyber-card p-2">Keep systems updated</div>
+                <div class="cyber-card p-2">STOP & VERIFY</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 38: THE QUESTION -->
+        <div class="slide bg-black" data-slide="38" data-day="2">
+            <h1 class="text-5xl font-black mb-8 text-white">IF AN ATTACKER TARGETS YOU...</h1>
+            <h1 class="text-5xl font-black mb-12 text-gray-500">WHAT WILL THEY ATTACK FIRST?</h1>
+            <h1 class="text-7xl font-black text-red-500 glitch" data-text="YOUR TRUST.">YOUR TRUST.</h1>
+        </div>
+
+        <!-- SLIDE 39: SECURITY -->
+        <div class="slide" data-slide="39" data-day="2">
+            <h1 class="text-5xl font-black mb-12 text-white">SECURITY</h1>
+            <div class="grid-3 mb-12">
+                <div class="cyber-card text-center text-xl">PEOPLE</div>
+                <div class="cyber-card text-center text-xl">PROCESS</div>
+                <div class="cyber-card text-center text-xl">TECHNOLOGY</div>
+            </div>
+            <h2 class="text-2xl text-red-500 font-bold">SECURITY NEEDS ALL THREE.</h2>
+        </div>
+
+        <!-- SLIDE 40: FINAL -->
+        <div class="slide bg-black" data-slide="40" data-day="2">
+            <h1 class="text-6xl font-black mb-4 text-white glitch" data-text="SILENT KNIGHTS">SILENT KNIGHTS</h1>
+            <p class="text-lg text-gray-400 mb-8 font-tech">CYBERSECURITY • AWARENESS • EDUCATION • RESEARCH</p>
+            <div class="bg-white p-4 mb-8 inline-block">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=SilentKnights" alt="QR">
+            </div>
+            <h2 class="text-3xl text-red-500 font-bold">«هر کلیک می‌تواند یک تله باشد.»</h2>
+        </div>
+
+    </div>
+
+    <script>
+        // State Management
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        const progressBar = document.getElementById('progressBar');
+        const slideCounter = document.getElementById('slide-counter');
+        const dayIndicator = document.getElementById('day-indicator');
+        let isAnimating = false;
+
+        // Slide Navigation
+        function showSlide(n) {
+            if (isAnimating || n < 1 || n > totalSlides) return;
+            isAnimating = true;
+            
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            const slide = document.querySelector(`.slide[data-slide="${n}"]`);
+            if (slide) {
+                slide.classList.add('active');
+                currentSlide = n;
+                
+                // Update UI
+                progressBar.style.width = (n / totalSlides) * 100 + '%';
+                slideCounter.innerText = `${String(n).padStart(2, '0')} / ${totalSlides}`;
+                const day = slide.getAttribute('data-day');
+                dayIndicator.innerText = `DAY 0${day}`;
+                
+                // Trigger specific slide events
+                if (n === 13) startCountdown(); // Auto start countdown when reaching slide 13
+            }
+            
+            setTimeout(() => { isAnimating = false; }, 800);
+        }
+
+        window.navigate = function(dir) {
+            showSlide(currentSlide + dir);
+        }
+
+        window.goToDay = function(day) {
+            if (day === 1) showSlide(1);
+            if (day === 2) showSlide(26);
+        }
+
+        window.toggleFullscreen = function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        // Keyboard Controls
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('intro').style.display !== 'none' && e.key !== 'F5') {
+                document.getElementById('intro').style.opacity = '0';
+                setTimeout(() => document.getElementById('intro').style.display = 'none', 1000);
+                showSlide(1);
+                return;
+            }
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+            if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+            if (e.key === 'Home') showSlide(1);
+            if (e.key === 'End') showSlide(totalSlides);
+            if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+        });
+
+        // Mouse Wheel Navigation
+        let scrollTimeout;
+        document.addEventListener('wheel', (e) => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (e.deltaY > 30) navigate(1);
+                if (e.deltaY < -30) navigate(-1);
+            }, 50);
+        });
+
+        // Hover Controls
+        document.addEventListener('mousemove', (e) => {
+            if (e.clientY > window.innerHeight - 100) {
+                document.getElementById('navControls').style.opacity = '1';
+            } else {
+                document.getElementById('navControls').style.opacity = '0';
+            }
+        });
+
+        // Countdown Logic
+        let countdownTime = 30 * 60; // 30 minutes in seconds
+        let countdownInterval;
+        let isPaused = false;
+
+        window.startCountdown = function() {
+            if (countdownInterval) clearInterval(countdownInterval);
+            isPaused = false;
+            countdownInterval = setInterval(updateCountdown, 1000);
+        }
+
+        window.pauseCountdown = function() {
+            clearInterval(countdownInterval);
+            isPaused = true;
+        }
+
+        window.resetCountdown = function() {
+            clearInterval(countdownInterval);
+            countdownTime = 30 * 60;
+            updateCountdownDisplay();
+            isPaused = true;
+        }
+
+        function updateCountdown() {
+            if (countdownTime > 0) {
+                countdownTime--;
+                updateCountdownDisplay();
+            } else {
+                clearInterval(countdownInterval);
+            }
+        }
+
+        function updateCountdownDisplay() {
+            const m = Math.floor(countdownTime / 60);
+            const s = countdownTime % 60;
+            const cd = document.getElementById('countdown');
+            if (cd) cd.innerHTML = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        // Init
+        document.body.addEventListener('click', (e) => {
+            if (document.getElementById('intro').style.display !== 'none' && !e.target.closest('button')) {
+                 document.getElementById('intro').style.opacity = '0';
+                 setTimeout(() => document.getElementById('intro').style.display = 'none', 1000);
+                 showSlide(1);
+            }
+        });
+        
+        updateCountdownDisplay();
+    </script>
+</body>
+</html>

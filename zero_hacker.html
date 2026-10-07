@@ -1,0 +1,1758 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#03050D">
+<meta name="color-scheme" content="dark only">
+<meta name="description" content="SILENT KNIGHTS ACADEMY — دوره ZERO HACKER · ۴۰ روز · ۳ فاز (۱۰/۱۰/۲۰) · ۳۷ لابراتوار · ۲۵ فلگ CTF">
+<meta name="keywords" content="هک, امنیت, آموزش هک, پنتست, CTF, Kali Linux, امنیت سایبری">
+<meta name="author" content="Silent Knights Academy">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://silentknights.academy/hacker-zero">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="SILENT KNIGHTS — ZERO HACKER // ۴۰ روز، ۳ فاز">
+<meta property="og:description" content="از دانش عادی تا نیمه‌هکر — ۳۷ لابراتوار، ۲۵ فلگ CTF، ۳ امتحان، ۱ سرتیفیکیت رسمی">
+<meta property="og:url" content="https://silentknights.academy/hacker-zero">
+<meta property="og:site_name" content="Silent Knights Academy">
+<meta property="og:locale" content="fa_IR">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SILENT KNIGHTS — ZERO HACKER">
+<meta name="twitter:description" content="۴۰ روز · ۳ فاز · از صفر تا نیمه‌هکر">
+
+<title>ZERO HACKER TRAINING SYSTEM</title>
+
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%2300D9FF"/><stop offset=".55" stop-color="%237B3CFF"/><stop offset="1" stop-color="%23D946EF"/></linearGradient></defs><polygon points="50,6 90,28 90,72 50,94 10,72 10,28" fill="none" stroke="url(%23g)" stroke-width="7"/><text x="50" y="64" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="38" fill="url(%23g)">0</text></svg>'>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Course",
+  "name":"ZERO HACKER — Silent Knights Academy",
+  "description":"دوره ۴۰ روزه هک عملی در ۳ فاز (۱۰/۱۰/۲۰) — از دانش عادی تا نیمه‌هکر",
+  "provider":{"@type":"Organization","name":"Silent Knights Academy","url":"https://silentknights.academy"},
+  "inLanguage":"fa-IR",
+  "hasCourseInstance":{
+    "@type":"CourseInstance",
+    "courseMode":"online",
+    "courseWorkload":"PT40H"
+  },
+  "offers":{
+    "@type":"Offer",
+    "priceCurrency":"AFN",
+    "availability":"https://schema.org/LimitedAvailability",
+    "url":"https://hacker-zero-registration.silentknights0101.workers.dev/"
+  }
+}
+</script>
+
+<style>
+:root{
+  --bg:#03050D;--s1:#0A0F1D;--s2:#0D1222;
+  --cyan:#00D9FF;--blue:#1677FF;--violet:#7B3CFF;--mag:#D946EF;--ok:#3EE6A0;
+  --tx:#F5F7FF;--tx2:#A7B0C5;--mut:#68738C;--faint:#4a5470;--faint2:#2C3862;
+  --line:rgba(0,217,255,.15);
+  --lineS:rgba(0,217,255,.12);
+  --lineV:rgba(123,60,255,.22);
+  --lineM:rgba(217,46,239,.22);
+  --lineOk:rgba(62,230,160,.28);
+  --grad:linear-gradient(90deg,#00D9FF,#1677FF 42%,#7B3CFF 76%,#D946EF);
+  --gradD:linear-gradient(135deg,#1677FF,#7B3CFF 55%,#B23CFF);
+  --glowC:rgba(0,217,255,.35);--glowV:rgba(123,60,255,.35);
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+  --disp:'Space Grotesk','Vazirmatn',sans-serif;
+  --fa:'Vazirmatn',system-ui,sans-serif;
+  --rad:16px;--ease:cubic-bezier(.4,0,.2,1);
+  --chamf:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px));
+  --chamfS:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+  --wrap:1200px;
+  --pad:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html.lock{overflow:hidden}
+body{
+  background:var(--bg);color:var(--tx);
+  font:400 15.5px/1.9 var(--fa);
+  overflow-x:hidden;
+  animation:pageIn .7s var(--ease);
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  min-height:100dvh;
+}
+@keyframes pageIn{from{opacity:0}to{opacity:1}}
+body:before{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;background:
+  radial-gradient(900px 500px at 12% -5%,rgba(0,217,255,.06),transparent 60%),
+  radial-gradient(900px 560px at 100% 108%,rgba(123,60,255,.07),transparent 62%),
+  linear-gradient(rgba(0,217,255,.026) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,217,255,.026) 1px,transparent 1px);
+  background-size:auto,auto,56px 56px,56px 56px}
+#bgCircuit{position:fixed;inset:0;z-index:-2;pointer-events:none;width:100%;height:100%}
+#cg{position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:0;opacity:0;transition:opacity .5s;background:radial-gradient(circle,rgba(0,217,255,.06),rgba(123,60,255,.04) 40%,transparent 68%);transform:translate(-50%,-50%);mix-blend-mode:screen;will-change:transform,left,top}
+img,svg,canvas,video{max-width:100%;height:auto;display:block}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit}
+::selection{background:rgba(0,217,255,.3);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#15203a;border-radius:8px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--violet)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+
+.wrap{width:min(var(--wrap),calc(100% - var(--pad) * 2));margin:auto;position:relative;z-index:1}
+.mono{font-family:var(--mono)}
+.ltr{direction:ltr;text-align:left;unicode-bidi:isolate}
+.gtx{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes blink{50%{opacity:0}}
+@keyframes spin{to{transform:rotate(1turn)}}
+@keyframes spinR{to{transform:rotate(-1turn)}}
+
+.certFrame{position:fixed;
+  inset: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+  z-index:9991;pointer-events:none;
+  background:linear-gradient(135deg,rgba(0,217,255,.5),rgba(123,60,255,.25) 45%,rgba(217,46,239,.4));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;padding:1.5px;
+  clip-path:polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px))}
+.certFrame b{position:absolute;width:30px;height:30px;border:2.5px solid}
+.certFrame b:nth-of-type(1){top:-2px;left:-2px;border-color:var(--cyan);border-right:0;border-bottom:0;box-shadow:0 0 14px var(--glowC)}
+.certFrame b:nth-of-type(2){bottom:-2px;right:-2px;border-color:var(--mag);border-left:0;border-top:0;box-shadow:0 0 14px rgba(217,46,239,.3)}
+.certId{position:fixed;top:50%;left:20px;z-index:60;transform:translateY(-50%);writing-mode:vertical-rl;font:600 8px var(--mono);letter-spacing:.4em;color:#3d4a76;direction:ltr;pointer-events:none}
+.certId b{color:rgba(123,60,255,.7);font-weight:600}
+#sbar{position:fixed;top:8px;left:8px;right:8px;height:2px;width:0;margin-left:auto;background:var(--grad);z-index:9999;box-shadow:0 0 10px var(--glowC);transition:width .1s linear}
+
+#nav{position:fixed;top:max(8px, env(safe-area-inset-top));left:8px;right:8px;z-index:80;background:rgba(3,5,13,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(0,217,255,.14);clip-path:var(--chamfS);transition:.3s var(--ease);will-change:backdrop-filter}
+#nav.sc{background:rgba(3,5,13,.88);border-color:rgba(0,217,255,.28);box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.navIn{height:62px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 18px}
+.logo{display:flex;align-items:center;gap:11px;min-width:0;flex-shrink:1}
+.logo svg{width:30px;height:34px;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(0,217,255,.35))}
+.logo b{font:700 14px var(--disp);letter-spacing:.12em;color:var(--tx);direction:ltr;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logo b i{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nlinks{display:flex;gap:2px}
+.nlinks a{font:600 11.5px var(--mono);letter-spacing:.06em;color:var(--tx2);padding:8px 13px;border-radius:8px;transition:.2s;position:relative;white-space:nowrap}
+.nlinks a:hover{color:#fff;background:rgba(0,217,255,.06)}
+.nlinks a.on{color:var(--cyan)}
+.nlinks a.on:after{content:"";position:absolute;left:13px;right:13px;bottom:2px;height:2px;background:var(--grad);border-radius:2px}
+.navR{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 22px;border-radius:11px;font:700 13px var(--fa);transition:.22s var(--ease);border:1px solid transparent;white-space:nowrap;position:relative}
+.btnP{background:var(--gradD);color:#fff;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.22) inset,
+    0 0 0 1px rgba(0,217,255,.25) inset,
+    0 8px 28px rgba(0,110,255,.35),
+    0 0 40px rgba(123,60,255,.18)}
+.btnP:hover{transform:translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.28) inset,
+    0 0 0 1px rgba(0,217,255,.4) inset,
+    0 12px 36px rgba(0,140,255,.5),
+    0 0 50px rgba(123,60,255,.3)}
+.btnG{border-color:var(--line);color:var(--tx);background:rgba(0,217,255,.03)}
+.btnG:hover{border-color:rgba(0,217,255,.45);transform:translateY(-2px);box-shadow:0 0 24px rgba(0,217,255,.1)}
+.btnSm{padding:9px 16px;font-size:12px;border-radius:9px}
+.btn:disabled{opacity:.7;cursor:not-allowed;transform:none!important}
+#burger{width:38px;height:38px;display:none;place-items:center;border:1px solid var(--line);border-radius:10px;color:var(--tx2);flex-shrink:0}
+#burger svg{width:17px;height:17px}
+#mnav{position:fixed;top:max(78px, calc(env(safe-area-inset-top) + 70px));left:8px;right:8px;z-index:79;background:rgba(4,6,16,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);clip-path:var(--chamfS);display:none;flex-direction:column;padding:10px 16px;max-height:calc(100dvh - 90px);overflow-y:auto}
+#mnav.open{display:flex}
+#mnav a{padding:13px 10px;color:var(--tx2);border-bottom:1px solid rgba(0,217,255,.07);font:600 13px var(--mono);display:flex;justify-content:space-between;align-items:center;gap:10px}
+#mnav a:hover{color:var(--cyan)}
+#mnav a:last-child{border-bottom:0}
+
+section{padding:96px 0;scroll-margin-top:80px;position:relative}
+.kick{font:600 10.5px var(--mono);letter-spacing:.26em;color:var(--cyan);display:inline-flex;align-items:center;gap:10px;margin-bottom:14px}
+.kick:before{content:"";width:26px;height:1px;background:var(--grad);flex-shrink:0}
+.kick.center{justify-content:center}
+h2{font:800 clamp(26px,4.4vw,46px)/1.25 var(--fa);letter-spacing:0}
+h2 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{max-width:680px;color:var(--tx2);font-size:15px;line-height:2.05;margin-top:14px}
+.sub b{color:var(--tx);font-weight:700}
+.head{margin-bottom:46px}
+.head.c{text-align:center}
+.head.c .sub{margin-inline:auto}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+.hero{min-height:92vh;min-height:92dvh;display:flex;align-items:center;padding:150px 0 90px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero > .wrap > div:first-child{text-align:center;display:flex;flex-direction:column;align-items:center;min-width:0}
+
+.badge{display:inline-flex;align-items:center;gap:9px;font:600 10px var(--mono);letter-spacing:.2em;color:var(--cyan);border:1px solid var(--line);border-radius:99px;padding:8px 16px;background:rgba(0,217,255,.05);margin-bottom:28px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.badge i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:blink 1.8s steps(2) infinite;font-style:normal;flex-shrink:0}
+
+.hero h1{
+  font:700 clamp(52px,9vw,112px)/.9 var(--disp);
+  letter-spacing:.02em;
+  direction:ltr;
+  text-align:center;
+  margin:0 auto 22px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+  width:100%;
+}
+.hero h1 .l1{
+  display:inline-block;
+  color:#fff;
+  position:relative;
+  letter-spacing:.08em;
+  line-height:1;
+  text-shadow:
+    0 0 30px rgba(0,217,255,.4),
+    0 0 70px rgba(123,60,255,.3);
+}
+.hero h1 .l1:before{
+  content:"";
+  position:absolute;
+  top:-16px;
+  left:50%;
+  transform:translateX(-50%);
+  width:44%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  opacity:.75;
+}
+.hero h1 .l2{
+  display:inline-block;
+  background:var(--grad);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  position:relative;
+  letter-spacing:.08em;
+  line-height:1;
+  padding-bottom:18px;
+  filter:drop-shadow(0 0 34px rgba(123,60,255,.55));
+}
+.hero h1 .l2:after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:76%;
+  height:2px;
+  background:var(--grad);
+  border-radius:2px;
+  box-shadow:
+    0 0 18px var(--glowC),
+    0 0 44px var(--glowV);
+}
+
+.subline{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  direction:ltr;
+  justify-content:center;
+  margin:26px auto 12px;
+  width:min(460px,90%);
+}
+.subline i{
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),var(--violet),var(--mag),transparent);
+  opacity:.85;
+}
+.subline b{
+  font:700 clamp(12px,1.6vw,16px) var(--disp);
+  letter-spacing:.65em;
+  color:var(--tx2);
+  text-shadow:0 0 14px rgba(0,217,255,.45);
+  white-space:nowrap;
+  padding-left:.65em;
+}
+
+.certline{
+  font:600 10px var(--mono);
+  letter-spacing:.32em;
+  direction:ltr;
+  text-align:center;
+  margin:0 auto 26px;
+  background:var(--grad);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  width:fit-content;
+  max-width:100%;
+}
+
+.term{display:inline-flex;max-width:100%;align-items:baseline;gap:8px;background:rgba(4,6,16,.85);border:1px solid var(--line);border-radius:10px;padding:10px 15px;font-size:11.5px;color:var(--ok);margin:0 auto 20px;white-space:nowrap;overflow:hidden;direction:ltr}
+.term .pr{color:var(--cyan);font-weight:600;flex-shrink:0}
+.term .cur{color:var(--mag);animation:blink 1s steps(1) infinite}
+
+.hero .sub{font-size:15px;max-width:580px;margin-inline:auto;text-align:center}
+.manifest{margin-top:24px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font:600 11px var(--mono);direction:ltr}
+.manifest span{color:var(--tx2);letter-spacing:.1em;padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.02)}
+.manifest span:last-child{border:0;background:var(--grad);color:#fff}
+.manifest i{color:var(--violet);font-style:normal}
+.heroCta{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap;justify-content:center;width:100%}
+
+.emWrap{position:relative;display:grid;place-items:center;min-height:620px;isolation:isolate}
+.emWrap .ring{position:absolute;border-radius:50%;pointer-events:none;z-index:1}
+.r1{width:min(460px,80%);aspect-ratio:1/1;height:auto;border:1px solid rgba(0,217,255,.14)}
+.r2{width:min(392px,68%);aspect-ratio:1/1;height:auto;border:1px dashed rgba(123,60,255,.28);animation:spin 50s linear infinite}
+.r3{width:min(320px,56%);aspect-ratio:1/1;height:auto;border:1px solid rgba(0,217,255,.2);background:radial-gradient(circle,rgba(22,119,255,.06),transparent 65%)}
+.r4{width:min(530px,92%);aspect-ratio:1/1;height:auto;border:1px solid rgba(217,46,239,.1);animation:spinR 80s linear infinite}
+.rT{width:min(444px,78%);aspect-ratio:1/1;height:auto;background:repeating-conic-gradient(rgba(0,217,255,.3) 0 .6deg,transparent .6deg 8deg);-webkit-mask:radial-gradient(circle,transparent 0 calc(50% - 6px),#000 calc(50% - 6px) 50%,transparent 50%);mask:radial-gradient(circle,transparent 0 calc(50% - 6px),#000 calc(50% - 6px) 50%,transparent 50%);animation:spinR 120s linear infinite;opacity:.7;z-index:1}
+
+.emblemImg{
+  position:relative;
+  width:min(520px,92%);
+  height:auto;
+  z-index:2;
+  filter:drop-shadow(0 0 44px rgba(0,140,255,.38));
+  animation:emFloat 6s ease-in-out infinite;
+  object-fit:contain;
+  mix-blend-mode:screen;
+}
+@keyframes emFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.emblemTag{position:absolute;bottom:-64px;font:600 8.5px var(--mono);letter-spacing:.36em;color:var(--faint);direction:ltr;z-index:3;text-align:center;width:100%}
+.emblemTag b{color:var(--cyan)}
+
+.ticker{border-block:1px solid var(--lineS);background:rgba(5,8,16,.7);overflow:hidden;padding:12px 0;direction:ltr;position:relative}
+.ticker:before,.ticker:after{content:"";position:absolute;top:0;bottom:0;width:80px;z-index:1;pointer-events:none}
+.ticker:before{left:0;background:linear-gradient(90deg,#03050D,transparent)}
+.ticker:after{right:0;background:linear-gradient(-90deg,#03050D,transparent)}
+.tin{display:flex;align-items:center;gap:26px;width:max-content;animation:tick 36s linear infinite;font:600 10px var(--mono);letter-spacing:.24em;color:var(--faint);will-change:transform}
+.ticker:hover .tin{animation-play-state:paused}
+.tin i{font-style:normal;font-size:8px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tin b{color:var(--cyan);font-weight:600}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+.stats{border-bottom:1px solid var(--lineS);background:rgba(7,10,20,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.stats .wrap{display:grid;grid-template-columns:repeat(6,1fr)}
+.stat{padding:32px 10px;text-align:center;border-inline-start:1px solid rgba(0,217,255,.08)}
+.stat:first-child{border-inline-start:0}
+.stat b{font:700 clamp(28px,3.6vw,44px)/1 var(--disp);background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px rgba(0,180,255,.35));display:block}
+.stat span{display:block;font:600 9px var(--mono);letter-spacing:.2em;color:var(--mut);margin-top:10px;direction:ltr}
+
+.transform{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch}
+.tBox{border:1px solid var(--lineV);border-radius:14px;padding:24px;background:rgba(8,11,28,.85)}
+.tBox.after{border-color:var(--lineOk);background:linear-gradient(135deg,rgba(62,230,160,.04),rgba(8,11,28,.85))}
+.tBox small{font:600 9.5px var(--mono);letter-spacing:.2em;direction:ltr;display:block;text-align:left;color:var(--mut);margin-bottom:10px}
+.tBox small b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tBox.after small b{background:none;color:var(--ok)}
+.tBox h3{font-size:18px;font-weight:800;margin-bottom:8px}
+.tBox p{font-size:12.5px;color:var(--tx2)}
+.tMid{display:grid;place-items:center;gap:8px}
+.hexV{width:54px;height:60px;display:grid;place-items:center;padding:2px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--gradD);filter:drop-shadow(0 0 16px var(--glowV))}
+.hexV i{width:100%;height:100%;display:grid;place-items:center;background:#0A0F1D;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);font:700 12px var(--disp);font-style:normal;color:var(--cyan)}
+.tMid small{font:600 8px var(--mono);color:var(--faint);letter-spacing:.22em;direction:ltr}
+
+.statsBar.v2{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:26px}
+.scell{position:relative;padding:1.5px;border-radius:14px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));background:linear-gradient(160deg,var(--a,var(--cyan)),rgba(70,90,190,.15) 55%,rgba(217,46,239,.3));transition:.28s var(--ease)}
+.scell:hover{transform:translateY(-6px);background:linear-gradient(160deg,var(--a,var(--cyan)),var(--a,var(--cyan)) 45%,#D946EF)}
+.scIn{height:100%;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));background:linear-gradient(180deg,#0A0F1D,#070B18);padding:22px 12px 18px;text-align:center;position:relative;overflow:hidden}
+.scIn:before{content:"";position:absolute;top:0;right:20%;left:20%;height:2px;background:var(--a,var(--cyan));box-shadow:0 0 12px var(--a,var(--cyan))}
+.scIn .ic{width:38px;height:42px;margin:0 auto 12px;display:grid;place-items:center;padding:2px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(160deg,var(--a,var(--cyan)),rgba(123,60,255,.6))}
+.scIn .ic i{width:100%;height:100%;display:grid;place-items:center;background:#0A0F1D;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);color:var(--a,var(--cyan))}
+.scIn .ic svg{width:16px;height:16px}
+.scIn b{display:block;font:700 clamp(26px,3.2vw,40px)/1 var(--disp);direction:ltr;background:linear-gradient(180deg,#fff 15%,var(--a,var(--cyan)) 90%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(0,180,255,.3))}
+.scIn span{font:600 8.5px var(--mono);letter-spacing:.22em;color:var(--mut);direction:ltr;display:block;margin-top:9px}
+
+.routeTag{display:flex;justify-content:center;margin-bottom:24px}
+.routeTag span{padding:10px 22px;border:1px solid rgba(0,217,255,.45);color:var(--cyan);font:600 10px var(--mono);letter-spacing:.18em;direction:ltr;background:rgba(0,217,255,.05);clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);text-align:center}
+
+.rtabs{display:flex;flex-wrap:wrap;gap:6px;direction:ltr;margin-bottom:-1px;position:relative;z-index:2}
+.node-tab{
+  font:600 11px var(--mono);
+  letter-spacing:.06em;
+  color:var(--faint);
+  border:1px solid var(--lineS);
+  padding:11px 16px;
+  transition:.2s;
+  background:var(--bg);
+  border-radius:10px 10px 0 0;
+  text-align:left;
+  direction:ltr;
+  white-space:nowrap;
+}
+.node-tab .br{color:#3a4568}
+.node-tab:hover{color:var(--tx);border-color:var(--line)}
+.node-tab.active{color:var(--cyan);border-color:var(--line);background:#0A0F1D}
+
+.detail{border:1px solid var(--line);background:#0A0F1D;border-radius:0 var(--rad) var(--rad) var(--rad);overflow:hidden;display:none;direction:rtl}
+.detail.show{display:block;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.tbar{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;border-bottom:1px solid rgba(0,217,255,.1);font:400 10.5px var(--mono);color:var(--mut);direction:ltr;letter-spacing:.06em;gap:12px;flex-wrap:wrap}
+.tbar b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+.tbar span:last-child{color:var(--ok)}
+
+.dbody{padding:26px;direction:rtl}
+.detailGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;direction:rtl}
+
+.detail h3{font:700 16px var(--disp);direction:ltr;text-align:left;letter-spacing:.02em;color:#fff}
+.detail h3 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.detail p{font-size:13px;color:var(--tx2);margin-top:12px;line-height:2;text-align:right;direction:rtl}
+.detail p b{color:var(--tx)}
+
+.tagrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;direction:ltr;justify-content:flex-start}
+.tag{font:600 8.5px var(--mono);padding:5px 10px;border:1px solid rgba(0,217,255,.14);border-radius:6px;color:var(--tx2);letter-spacing:.08em;transition:.2s}
+.tag:hover{border-color:var(--cyan);color:#fff}
+.tag.hot{color:var(--mag);border-color:rgba(217,46,239,.4)}
+
+.spec{direction:ltr}
+.srow{display:flex;align-items:baseline;gap:10px;padding:9px 0;font:600 11px var(--mono);letter-spacing:.04em;flex-wrap:wrap;direction:ltr}
+.srow span{color:var(--mut)}
+.srow i{flex:1;border-bottom:1px dotted #2c3862;transform:translateY(-3px);min-width:20px}
+.srow b{color:var(--tx);text-align:left}
+.srow b.r{color:var(--mag)}
+.srow b.g{color:var(--ok)}
+
+.out{margin-top:14px;border:1px solid var(--lineOk);background:rgba(62,230,160,.04);border-radius:12px;padding:13px 16px;font-size:12.5px;color:#d2ffe9;text-align:right;direction:rtl}
+.out b{font:600 9px var(--mono);color:var(--ok);direction:ltr;display:block;letter-spacing:.18em;margin-bottom:4px;text-align:left}
+
+.syl{display:flex;flex-direction:column;gap:12px;max-width:880px;margin:auto}
+.sylWeek{display:flex;align-items:center;gap:12px;direction:ltr;margin:20px 0 4px;font:600 9.5px var(--mono);letter-spacing:.22em;color:var(--faint);flex-wrap:wrap}
+.sylWeek b{color:var(--tx)}
+.sylWeek:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(0,217,255,.4),transparent);min-width:20px}
+.sylItem{--sc:var(--mag);position:relative;padding:1.5px;border-radius:12px;background:linear-gradient(135deg,var(--sc),rgba(70,90,190,.15) 45%,rgba(217,46,239,.3));transition:.25s;opacity:.85}
+.sylItem[open]{opacity:1}
+.sylItem summary{list-style:none;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;transition:background .2s;border-radius:11px;background:linear-gradient(180deg,#0A0F1D,#070B18)}
+.sylItem summary::-webkit-details-marker{display:none}
+.sylItem summary:hover{background:#0D1428}
+.sylNo{display:grid;place-items:center;width:46px;height:50px;padding:2px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--grad);flex-shrink:0}
+.sylNo i{width:100%;height:100%;display:grid;place-items:center;background:#0A0F1D;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);font:600 10px var(--mono);font-style:normal;color:var(--tx);text-align:center;line-height:1.1}
+.sylT{min-width:0}
+.sylT b{display:block;font-size:14px;font-weight:800}
+.sylT small{display:block;color:var(--mut);font-size:11px;margin-top:3px}
+.sylMeta{font:600 9px var(--mono);color:var(--mut);direction:ltr;letter-spacing:.1em;white-space:nowrap}
+.chev{color:var(--sc);font:600 18px var(--mono);transition:.25s;width:26px;text-align:center;transform-origin:center;flex-shrink:0}
+.sylItem[open] .chev{transform:rotate(45deg)}
+.sylBody{padding:12px 20px 20px;display:flex;flex-direction:column;gap:7px}
+.dayRow{display:grid;grid-template-columns:86px 1fr;gap:12px;align-items:start;padding:11px 14px;border:1px solid rgba(0,217,255,.09);border-radius:9px;background:#070B18;transition:.2s;position:relative}
+.dayRow:before{content:"";position:absolute;right:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--sc),transparent)}
+.dayRow:hover{border-color:var(--sc)}
+.dayRow .d{font:600 9.5px var(--mono);color:var(--sc);direction:ltr;text-align:left;letter-spacing:.08em;padding-top:4px;white-space:nowrap}
+.dayRow p{font-size:12.5px;color:var(--tx2);line-height:1.8;margin:0}
+.dayRow p b{color:var(--tx)}
+.dayTag{font-style:normal;font:600 7.5px var(--mono);letter-spacing:.12em;padding:2px 7px;border-radius:4px;direction:ltr;margin-inline-start:6px;display:inline-block;vertical-align:middle}
+.dayTag.lab{color:var(--cyan);border:1px solid rgba(0,217,255,.35);background:rgba(0,217,255,.07)}
+.dayTag.ctf{color:var(--mag);border:1px solid rgba(217,46,239,.35);background:rgba(217,46,239,.07)}
+.dayTag.ex{color:var(--ok);border:1px solid rgba(62,230,160,.35);background:rgba(62,230,160,.07)}
+.sylKit{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kit{border:1px dashed rgba(0,217,255,.28);border-radius:10px;padding:12px 14px;background:#070B18}
+.kit b{font:600 8.5px var(--mono);letter-spacing:.2em;color:var(--cyan);direction:ltr;display:block;margin-bottom:6px}
+.kit.mag{border-color:rgba(217,46,239,.3)}
+.kit.mag b{color:var(--mag)}
+.kit p{font-size:11.5px;color:var(--tx2);margin:0;line-height:1.9}
+
+.exitGrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.exitCard{border-radius:14px;padding:26px;background:linear-gradient(180deg,rgba(11,15,38,.7),rgba(8,11,30,.9));position:relative;overflow:hidden;border:1px solid rgba(123,60,255,.22)}
+.exitCard:before{content:"";position:absolute;top:0;right:0;left:0;height:2px;background:linear-gradient(90deg,var(--mag),transparent)}
+.exitCard.yes{border-color:var(--lineOk)}
+.exitCard.yes:before{background:linear-gradient(90deg,var(--ok),transparent)}
+.exitCard small{font:600 9px var(--mono);letter-spacing:.2em;direction:ltr;display:block;color:var(--mut);margin-bottom:8px;text-align:left}
+.exitCard.yes small{color:var(--ok)}
+.exitCard h3{font-size:19px;font-weight:800;margin-bottom:14px}
+.exitItem{display:flex;gap:11px;align-items:flex-start;font-size:13px;color:var(--tx2);padding:10px 0;border-top:1px solid rgba(0,217,255,.07);line-height:1.8}
+.exitItem i{font-style:normal;font:700 12px var(--mono);width:16px;flex-shrink:0;padding-top:3px}
+.yes .exitItem i{color:var(--ok)}
+.no .exitItem i{color:var(--mag)}
+.exitNote{margin-top:16px;padding-top:14px;border-top:1px solid rgba(0,217,255,.1);font-size:12.5px;color:var(--tx2);max-width:760px;margin-inline:auto}
+.exitNote b{color:var(--violet)}
+
+.creedWrap{max-width:820px;margin:auto;padding:1.5px;border-radius:16px;background:linear-gradient(135deg,rgba(0,217,255,.5),rgba(123,60,255,.25) 50%,rgba(217,46,239,.45));filter:drop-shadow(0 20px 60px rgba(123,60,255,.15))}
+.creed{border-radius:14px;background:linear-gradient(180deg,#0A0F1D,#070B18);padding:clamp(24px,5vw,48px);text-align:center;position:relative;overflow:hidden}
+.creed:before{content:"";position:absolute;inset:0;background:radial-gradient(500px 220px at 50% 0%,rgba(0,217,255,.08),transparent 70%);pointer-events:none}
+.creed .qm{font:700 90px/.4 Georgia,serif;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;display:block;margin-bottom:22px}
+.creed blockquote{font-size:clamp(15px,2.5vw,23px);font-weight:800;line-height:2.1;margin:0;position:relative}
+.creed blockquote b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.creed .who{margin-top:16px;font:600 9.5px var(--mono);letter-spacing:.3em;color:var(--faint);direction:ltr}
+
+.creedCards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:24px;
+  width:100%;
+  max-width:920px;
+  margin:44px auto 0;
+  align-items:stretch;
+  justify-items:center;
+}
+.crt{
+  --sc:var(--cyan);
+  --sc2:var(--violet);
+  position:relative;
+  width:100%;
+  max-width:440px;
+  margin:auto;
+  padding:1.5px;
+  clip-path:var(--chamf);
+  cursor:default;
+  background:linear-gradient(160deg,var(--sc),rgba(70,90,190,.25) 45%,var(--sc2));
+  filter:drop-shadow(0 24px 60px rgba(0,0,0,.55));
+  transition:transform .25s ease-out,filter .3s;
+  animation:cardIn .8s var(--ease) both;
+}
+.crt:hover{filter:drop-shadow(0 30px 70px rgba(0,140,255,.4))}
+.c1{--sc:var(--cyan);--sc2:#7B3CFF}
+.c2{--sc:var(--mag);--sc2:#7B3CFF}
+@keyframes cardIn{from{opacity:0;transform:translateY(28px)}to{opacity:1}}
+
+.crt:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:7;
+  pointer-events:none;
+  opacity:0;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.06) 46%,rgba(0,217,255,.10) 50%,rgba(255,255,255,.06) 54%,transparent 65%);
+}
+.crt:hover:after{animation:holo 1s var(--ease)}
+@keyframes holo{
+  0%{transform:translateX(-130%) skewX(-8deg);opacity:1}
+  100%{transform:translateX(130%) skewX(-8deg);opacity:0}
+}
+.crtIn{position:relative;background:linear-gradient(180deg,#0A0F1D,#070B18);overflow:hidden}
+.crtIn:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 88% -8%,rgba(0,217,255,.09),transparent 52%),
+    repeating-radial-gradient(circle at 108% 118%,rgba(123,60,255,.06) 0 1px,transparent 1px 10px);
+}
+.cb{position:absolute;width:18px;height:18px;border:2px solid var(--sc);opacity:.4;z-index:5;pointer-events:none}
+.tl{top:8px;left:8px;border-right:0;border-bottom:0}
+.tr{top:8px;right:8px;border-left:0;border-bottom:0}
+.bl{bottom:8px;left:8px;border-right:0;border-top:0}
+.br{bottom:8px;right:8px;border-left:0;border-top:0}
+
+.vbar{
+  position:relative;z-index:2;text-align:center;padding:13px 8px 12px;
+  white-space:nowrap;overflow:hidden;
+  font:700 9px var(--mono);letter-spacing:.3em;color:var(--faint);
+  border-bottom:1px solid rgba(0,217,255,.16);background:rgba(0,217,255,.035);
+}
+.c2 .vbar{border-bottom-color:rgba(217,46,239,.18);background:rgba(217,46,239,.045)}
+.vbar b{
+  background:var(--grad);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 8px rgba(0,217,255,.45));
+}
+
+.crtBody{
+  position:relative;z-index:1;padding:34px 22px 24px;
+  text-align:center;display:flex;flex-direction:column;align-items:center;
+}
+.wm{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:.05}
+.wm b{
+  font:700 180px/1 var(--disp);letter-spacing:.04em;
+  background:var(--grad);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+.mono0{
+  width:62px;height:68px;display:grid;place-items:center;padding:2.5px;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  background:linear-gradient(160deg,var(--sc),var(--sc2));
+}
+.c1 .mono0{filter:drop-shadow(0 0 18px rgba(0,217,255,.4))}
+.c2 .mono0{filter:drop-shadow(0 0 18px rgba(217,46,239,.4))}
+.mono0 i{
+  width:100%;height:100%;display:grid;place-items:center;background:#0A0F1D;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  font:700 16px var(--mono);font-style:normal;color:var(--sc);letter-spacing:.04em;
+}
+
+.sig{width:min(230px,78%);height:auto;margin:14px auto 2px;display:block;position:relative;z-index:2}
+.sig path{
+  fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.5s var(--ease) forwards;
+}
+.sig .p1{animation-delay:.45s}
+.sig .p2{stroke-width:1.7;opacity:.85;animation-delay:1.5s;animation-duration:.55s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.sigCap{font:600 7px var(--mono);letter-spacing:.34em;color:var(--faint);margin:2px 0 14px;position:relative;z-index:2}
+
+.name{
+  font:800 21px/1.4 var(--fa);display:block;position:relative;z-index:2;
+  text-shadow:0 0 24px rgba(0,217,255,.12);
+}
+.c2 .name{text-shadow:0 0 24px rgba(217,46,239,.12)}
+.role{
+  display:inline-flex;align-items:center;gap:10px;
+  font:600 9.5px var(--mono);letter-spacing:.32em;
+  color:var(--sc);margin-top:7px;font-style:normal;position:relative;z-index:2;
+}
+.role:before,.role:after{content:"";width:26px;height:1px;background:linear-gradient(90deg,transparent,var(--sc),transparent)}
+
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;position:relative;z-index:2}
+.chip{
+  font:600 7.5px var(--mono);letter-spacing:.16em;padding:5px 10px;border-radius:6px;
+  color:var(--tx2);border:1px solid rgba(0,217,255,.16);background:rgba(255,255,255,.02);
+}
+.chip.ok{color:var(--ok);border-color:rgba(62,230,160,.4);background:rgba(62,230,160,.05)}
+
+.stamp{
+  position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 18px;border-top:1px dashed rgba(0,217,255,.22);
+  font:600 8px var(--mono);letter-spacing:.18em;color:var(--faint);background:rgba(4,7,15,.6);
+}
+.stamp i{font-style:normal;color:var(--faint2)}
+.stamp b{color:var(--sc);letter-spacing:.12em}
+.bcode{
+  width:76px;height:22px;flex-shrink:0;opacity:.85;border-radius:2px;
+  background:repeating-linear-gradient(90deg,
+    var(--faint) 0 2px,transparent 2px 5px,
+    var(--faint) 5px 6px,transparent 6px 10px,
+    var(--faint) 10px 13px,transparent 13px 15px,
+    var(--faint) 15px 16px,transparent 16px 19px,
+    var(--faint) 19px 20px,transparent 20px 24px);
+}
+.micro{
+  position:relative;z-index:2;padding:9px 18px 12px;border-top:1px solid rgba(0,217,255,.06);
+  font:600 6.5px var(--mono);letter-spacing:.2em;color:var(--faint2);text-align:left;
+}
+
+.seal{
+  position:absolute;top:-24px;right:16px;width:58px;height:58px;color:var(--sc);z-index:4;
+  filter:drop-shadow(0 0 10px rgba(0,217,255,.25));
+}
+.c2 .seal{filter:drop-shadow(0 0 10px rgba(217,46,239,.28))}
+.seal .ring{transform-origin:40px 40px;animation:spin 26s linear infinite}
+
+.methGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.methCard{border:1px solid var(--lineS);border-radius:11px;background:rgba(8,11,28,.85);padding:16px 8px;text-align:center;transition:.25s;position:relative;overflow:hidden;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.methCard:before{content:"";position:absolute;top:0;right:0;left:0;height:2px;background:var(--grad)}
+.methCard:hover{transform:translateY(-4px);border-color:rgba(123,60,255,.45);box-shadow:0 12px 30px rgba(123,60,255,.14)}
+.methCard em{font-style:normal;font:600 9px var(--mono);color:var(--cyan);direction:ltr;display:block;letter-spacing:.14em}
+.methCard b{display:block;font:600 9.5px var(--mono);direction:ltr;margin:8px 0 6px;color:#fff;letter-spacing:.05em}
+.methCard span{font-size:10.5px;color:var(--mut);line-height:1.7;display:block}
+.labGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+.labCard{border:1px dashed rgba(123,60,255,.35);border-radius:12px;padding:18px;transition:.25s;background:rgba(8,11,28,.5)}
+.labCard:hover{border-color:var(--cyan);transform:translateY(-3px)}
+.labCard b{font:600 10px var(--mono);direction:ltr;display:block;letter-spacing:.16em;margin-bottom:6px}
+.labCard:nth-child(1) b{color:var(--ok)}
+.labCard:nth-child(2) b{color:var(--cyan)}
+.labCard:nth-child(3) b{color:var(--mag)}
+.labCard span{font-size:12px;color:var(--tx2);line-height:1.9}
+
+.infoGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.infoCard{padding:22px 18px;border:1px solid var(--lineS);background:rgba(8,11,28,.85);border-radius:12px;transition:.25s;position:relative;overflow:hidden}
+.infoCard:before{content:"";position:absolute;top:0;right:0;width:36px;height:2px;background:var(--grad)}
+.infoCard:hover{transform:translateY(-3px);border-color:rgba(123,60,255,.4);box-shadow:0 12px 30px rgba(123,60,255,.14)}
+.infoCard span{display:block;color:var(--mut);font:600 9px var(--mono);letter-spacing:.18em;direction:ltr;text-align:left}
+.infoCard strong{display:block;color:#fff;font-size:17px;margin:9px 0 6px;font-weight:800}
+.infoCard small{display:block;color:var(--mut);font-size:11.5px;line-height:1.8}
+.prereqBox{border:1px solid var(--lineS);border-right:2px solid var(--mag);border-radius:12px;padding:20px 22px;background:rgba(8,11,28,.85)}
+.prereqBox strong{display:block;color:#fff;font-size:15px;margin-bottom:6px;font-weight:800}
+.prereqBox p{color:var(--tx2);font-size:13px;margin:0;line-height:2}
+.prereqBox p b{color:var(--tx)}
+
+.totalLine{margin-top:20px;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;border:1px solid transparent;background:linear-gradient(90deg,rgba(0,217,255,.1),rgba(123,60,255,.1),rgba(217,46,239,.1)) padding-box,var(--grad) border-box;border-radius:14px;color:#fff;font:700 12px var(--mono);direction:ltr;letter-spacing:.14em;position:relative;overflow:hidden}
+.totalLine:before{content:"";position:absolute;inset:0;background:radial-gradient(600px 120px at 50% 0%,rgba(0,217,255,.12),transparent 70%);pointer-events:none}
+.totalLine>span{position:relative;z-index:1}
+.totalLine>span:first-child{color:var(--cyan);font-size:11px;letter-spacing:.28em}
+.totalLine b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+.totalLine .tlItem{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid rgba(0,217,255,.2);border-radius:8px;background:rgba(0,217,255,.04);color:#fff;font-weight:700;margin:3px 0}
+.totalLine .tlItem b{font-size:13px}
+.totalLine .tlItem i{color:var(--violet);font-style:normal}
+.totalLine .tlItem.ok{border-color:var(--lineOk);background:rgba(62,230,160,.06)}
+.totalLine .tlItem.ok b{background:linear-gradient(90deg,#3EE6A0,#8beaff);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.faqs{display:flex;flex-direction:column;gap:12px;max-width:820px;margin:auto}
+.faq{position:relative;padding:1.5px;border-radius:11px;background:linear-gradient(135deg,rgba(0,217,255,.35),rgba(70,90,190,.12) 50%,rgba(0,217,255,.2));transition:.25s}
+.faq[open]{background:linear-gradient(135deg,var(--cyan),var(--violet) 50%,var(--mag))}
+.faq summary{list-style:none;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:13px;padding:15px 20px;cursor:pointer;font-size:14px;font-weight:700;transition:background .2s;background:linear-gradient(180deg,#0A0F1D,#0A0F1D);border-radius:10px 10px 0 0}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{background:#0D1428}
+.qcode{font:600 9px var(--mono);color:var(--cyan);letter-spacing:.1em;direction:ltr;border:1px solid rgba(0,217,255,.35);padding:3px 9px;border-radius:6px;background:rgba(0,217,255,.07);flex-shrink:0}
+.fsum-i{width:24px;height:24px;display:grid;place-items:center;color:var(--cyan);font:600 14px var(--mono);transition:.25s;justify-self:end;flex-shrink:0}
+.faq[open] .fsum-i{transform:rotate(45deg)}
+.faq .ans{padding:2px 20px 18px;font-size:13px;color:var(--tx2);line-height:1.95;background:linear-gradient(180deg,#0A0F1D,#070B18);border-radius:0 0 10px 10px}
+.faq .alabel{font:600 8.5px var(--mono);letter-spacing:.24em;color:var(--ok);direction:ltr;display:block;margin-bottom:8px}
+.faq .key{display:block;margin-top:10px;padding:10px 14px;border:1px solid var(--lineOk);background:rgba(62,230,160,.05);border-radius:9px;color:#d2ffe9;font-size:12.2px}
+.faq .key b{color:var(--ok)}
+
+.regShell{position:relative;max-width:860px;margin:auto;padding:1.5px;border-radius:18px;background:var(--grad);filter:drop-shadow(0 24px 70px rgba(123,60,255,.22))}
+.regTerminal{border-radius:17px;background:linear-gradient(180deg,#0A0F1D,#070B18);overflow:hidden}
+.regTop{display:flex;justify-content:space-between;align-items:center;padding:13px 20px;border-bottom:1px solid rgba(0,217,255,.14);color:var(--mut);font:600 10px var(--mono);letter-spacing:.16em;direction:ltr;gap:10px;flex-wrap:wrap}
+.regTop .live{color:var(--mag);text-shadow:0 0 10px rgba(217,46,239,.6);animation:blink 1.6s steps(2) infinite}
+.regBody{padding:46px clamp(20px,6vw,60px) 50px;text-align:center;position:relative}
+.regKicker{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font:600 10.5px var(--mono);letter-spacing:.3em;direction:ltr;margin-bottom:14px}
+.regBody h2{font-size:clamp(24px,4.6vw,42px)}
+.regBody>p{max-width:600px;margin:14px auto 26px;color:var(--tx2);font-size:14px;line-height:2}
+.seats{display:inline-flex;align-items:center;gap:10px;padding:10px 20px;border:1px solid rgba(217,46,239,.45);background:rgba(217,46,239,.06);color:var(--tx2);font-size:12.5px;margin-bottom:28px;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+.seats i{width:8px;height:8px;background:var(--mag);animation:pulse 1.8s infinite;flex-shrink:0;transform:rotate(45deg);font-style:normal}
+@keyframes pulse{70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.seats b{color:var(--mag)}
+.regActions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.regContact{margin-top:28px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px;color:var(--mut);font-size:12px}
+.copyBtn{background:#070B18;border:1px solid var(--line);border-radius:8px;padding:8px 14px;color:var(--tx);font:600 11px var(--mono);direction:ltr;letter-spacing:.1em;transition:.2s;clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%)}
+.copyBtn:hover{border-color:var(--cyan);color:#fff;box-shadow:0 0 16px var(--glowC)}
+.regSep{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+footer{margin-top:24px;border:1px solid var(--lineS);background:rgba(5,8,16,.8);clip-path:var(--chamfS);position:relative}
+footer:before{content:"";position:absolute;top:-1px;right:22%;left:22%;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--mag),transparent)}
+.console{display:flex;align-items:center;justify-content:center;gap:16px;padding:15px 20px;flex-wrap:wrap}
+.cnum{font:600 10px var(--mono);color:#2c3862;letter-spacing:.14em;direction:ltr}
+.console nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center}
+.console nav a{font:600 9.5px var(--mono);letter-spacing:.14em;color:var(--mut);padding:7px 13px;transition:.2s}
+.console nav a:hover{color:#fff}
+.console nav a.hot{background:var(--grad);color:#fff;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);padding:7px 18px;box-shadow:0 0 18px var(--glowV)}
+.fmeta{text-align:center;padding:0 0 20px;color:#39426f;font:600 9px var(--mono);letter-spacing:.16em;direction:ltr}
+.fmeta b{color:var(--mag)}
+
+#toTop{position:fixed;bottom:max(22px, env(safe-area-inset-bottom));right:max(22px, env(safe-area-inset-right));z-index:70;width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:rgba(10,15,29,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--tx2);display:grid;place-items:center;opacity:0;pointer-events:none;transition:.25s}
+#toTop.v{opacity:1;pointer-events:auto}
+#toTop:hover{border-color:var(--cyan);color:#fff;transform:translateY(-3px);box-shadow:0 0 20px var(--glowC)}
+#stickyCta{position:fixed;bottom:max(18px, env(safe-area-inset-bottom));left:50%;transform:translate(-50%,90px);z-index:70;background:var(--gradD);color:#fff;padding:11px 24px;font-weight:800;font-size:12.5px;clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);box-shadow:0 12px 34px var(--glowV);opacity:0;transition:.35s var(--ease);pointer-events:none;white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
+#stickyCta.v{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#toast{position:fixed;bottom:80px;left:50%;transform:translate(-50%,90px);z-index:9998;background:var(--s2);border:1px solid var(--lineOk);color:#d2ffe9;padding:13px 22px;border-radius:12px;font:600 12px var(--mono);opacity:0;transition:.4s var(--ease);pointer-events:none;max-width:calc(100vw - 40px);text-align:center;box-shadow:0 14px 50px rgba(0,0,0,.6)}
+#toast.v{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:1280px){:root{--wrap:1100px}}
+@media(max-width:1150px){
+  :root{--wrap:1000px}
+  .hero .wrap{grid-template-columns:1fr;gap:70px}
+  .emWrap{min-height:560px;order:-1}
+  .detailGrid{grid-template-columns:1fr}
+  .methGrid{grid-template-columns:repeat(4,1fr)}
+  .certId{display:none}
+  .hero{padding:140px 0 80px}
+}
+@media(max-width:1024px){
+  section{padding:88px 0}
+  .stats .wrap{grid-template-columns:repeat(3,1fr)}
+  .stat:nth-child(4){border-inline-start:0}
+  .stat:nth-child(n+4){border-top:1px solid rgba(0,217,255,.08)}
+  .stat{padding:26px 8px}
+}
+@media(max-width:920px){
+  :root{--wrap:100%;--pad:20px}
+  section{scroll-margin-top:100px;padding:80px 0}
+  .nlinks{display:none}
+  #burger{display:grid}
+  .transform,.exitGrid,.infoGrid,.labGrid{grid-template-columns:1fr}
+  .methGrid{grid-template-columns:repeat(2,1fr)}
+  .sylMeta{display:none}
+  .creedCards{grid-template-columns:1fr;max-width:440px}
+  .statsBar.v2{grid-template-columns:repeat(2,1fr)}
+  #nav{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .hero h1{font-size:clamp(56px,12vw,96px)}
+  .emWrap{min-height:520px}
+  .head{margin-bottom:38px}
+}
+@media(max-width:720px){
+  :root{--pad:16px}
+  section{padding:72px 0;scroll-margin-top:110px}
+  .hero{padding-top:120px;padding-bottom:60px}
+  .hero h1{font-size:clamp(46px,13vw,72px)}
+  .hero h1 .l2{padding-bottom:16px}
+  .hero h1 .l1:before{width:60%}
+  .hero h1 .l2:after{width:88%;height:2px}
+  .subline{width:min(400px,94%);gap:12px;margin-top:20px}
+  .subline b{letter-spacing:.5em;padding-left:.5em}
+  .certline{font-size:9.5px;letter-spacing:.24em}
+  .badge{font-size:9px;padding:7px 13px;letter-spacing:.16em}
+  .term{font-size:10.5px;padding:9px 13px;max-width:100%}
+  .hero .sub{font-size:14px}
+  .manifest span{padding:6px 10px;font-size:10px}
+  .heroCta{width:100%;gap:8px}
+  .heroCta .btn{width:100%}
+  h2{font-size:clamp(24px,5.5vw,36px)}
+  .sub{font-size:14px;line-height:2}
+  .head{margin-bottom:32px}
+  .emWrap{min-height:440px}
+  .emblemImg{width:min(400px,94%)}
+  .emblemTag{font-size:7.5px;bottom:-50px;letter-spacing:.24em}
+  .r1{width:80%}
+  .r2{width:68%}
+  .r3{width:56%}
+  .r4{width:92%}
+  .rT{width:78%}
+  .stats .wrap{grid-template-columns:repeat(2,1fr)}
+  .stat{border-inline-start:0!important;border-top:1px solid rgba(0,217,255,.08)!important;padding:24px 8px}
+  .stat:nth-child(-n+2){border-top:0!important}
+  .stat b{font-size:clamp(26px,7vw,38px)}
+  .statsBar.v2{grid-template-columns:1fr 1fr;gap:10px}
+  .scIn{padding:18px 10px 14px}
+  .scIn .ic{width:34px;height:38px;margin-bottom:10px}
+  .routeTag span{font-size:9px;padding:9px 18px;letter-spacing:.14em}
+  .tbar{font-size:9.5px;padding:10px 14px;letter-spacing:.04em}
+  .dbody{padding:20px 16px}
+  .detail h3{font-size:15px}
+  .detail p{font-size:12.5px}
+  .detail{border-radius:0 12px 12px 12px}
+  .sylItem summary{padding:14px 16px;gap:10px}
+  .sylNo{width:42px;height:46px}
+  .sylNo i{font-size:9px}
+  .sylT b{font-size:13px}
+  .sylT small{font-size:10.5px}
+  .sylBody{padding:10px 14px 16px}
+  .dayRow{grid-template-columns:64px 1fr;gap:10px;padding:10px 12px}
+  .dayRow .d{font-size:9px}
+  .dayRow p{font-size:12px}
+  .sylKit{grid-template-columns:1fr}
+  .exitCard{padding:22px 18px}
+  .exitCard h3{font-size:17px}
+  .exitItem{font-size:12.5px}
+  .creed{padding:clamp(22px,5vw,36px)}
+  .creed .qm{font-size:70px;margin-bottom:16px}
+  .creed blockquote{font-size:clamp(14px,3.6vw,18px);line-height:2}
+  .creedCards{grid-template-columns:1fr;gap:18px;margin-top:32px}
+  .crt{max-width:100%}
+  .crtBody{padding:28px 18px 20px}
+  .wm b{font-size:140px}
+  .name{font-size:18px}
+  .role{font-size:8.5px;letter-spacing:.24em}
+  .chips{gap:6px}
+  .chip{font-size:7px;padding:4px 8px}
+  .stamp{font-size:7px;padding:10px 14px;flex-wrap:wrap}
+  .bcode{width:64px;height:18px}
+  .micro{font-size:6px;padding:8px 14px 10px}
+  .seal{width:48px;height:48px;top:-20px;right:12px}
+  .methGrid{grid-template-columns:repeat(2,1fr)}
+  .methCard{padding:14px 8px}
+  .infoCard{padding:18px 16px}
+  .infoCard strong{font-size:15.5px}
+  .prereqBox{padding:18px}
+  .totalLine{padding:16px 18px;font-size:11px;letter-spacing:.1em;justify-content:center;text-align:center}
+  .totalLine>span:first-child{width:100%;text-align:center;margin-bottom:6px;font-size:10px}
+  .totalLine .tlItem{padding:5px 10px;font-size:10px}
+  .totalLine .tlItem b{font-size:11.5px}
+  .faq summary{padding:13px 16px;font-size:13px;gap:10px}
+  .faq .ans{padding:2px 16px 16px;font-size:12.5px}
+  .qcode{padding:2px 7px;font-size:8px}
+  .regBody{padding:36px clamp(18px,5vw,40px) 40px}
+  .regBody h2{font-size:clamp(22px,5vw,32px)}
+  .regBody>p{font-size:13px}
+  .seats{font-size:11.5px;padding:9px 16px}
+  .regActions{flex-direction:column}
+  .regActions>*{width:100%}
+  .console{gap:10px;padding:13px 16px}
+  .console nav a{font-size:9px;padding:6px 10px}
+  .console nav a.hot{padding:6px 14px}
+  #toTop{bottom:max(16px, env(safe-area-inset-bottom));right:max(12px, env(safe-area-inset-right));width:38px;height:38px}
+  #stickyCta{bottom:max(66px, calc(env(safe-area-inset-bottom) + 62px));font-size:11px;padding:10px 16px}
+  #toast{bottom:130px;font-size:11px;padding:11px 18px}
+  .certFrame b{width:20px;height:20px}
+  .certFrame{inset: max(6px, env(safe-area-inset-top)) max(6px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left))}
+}
+@media(max-width:560px){
+  :root{--pad:14px}
+  .wrap{width:calc(100% - var(--pad) * 2)}
+  .hero h1{font-size:clamp(42px,14vw,60px)}
+  .hero h1 .l2{padding-bottom:14px}
+  .badge{font-size:8.5px;padding:6px 11px;letter-spacing:.12em}
+  .term{font-size:10px;padding:8px 11px}
+  .manifest{gap:6px}
+  .manifest span{padding:5px 9px;font-size:9.5px}
+  .manifest i{font-size:10px}
+  .sylNo{width:38px;height:42px}
+  .sylNo i{font-size:8.5px}
+  .sylT b{font-size:12.5px}
+  .sylT small{display:none}
+  .dayRow{grid-template-columns:56px 1fr;gap:8px;padding:9px 10px}
+  .dayRow .d{font-size:8.5px}
+  .dayRow p{font-size:11.5px;line-height:1.75}
+  .dayTag{font-size:7px;padding:2px 5px;margin-inline-start:4px}
+  .methGrid{grid-template-columns:1fr 1fr;gap:6px}
+  .methCard{padding:12px 6px}
+  .methCard em{font-size:8.5px}
+  .methCard b{font-size:9px}
+  .methCard span{font-size:10px}
+  .scIn b{font-size:24px}
+  .scIn span{font-size:8px;letter-spacing:.16em}
+  .totalLine{gap:8px}
+  .totalLine .tlItem{padding:4px 8px;font-size:9.5px;gap:5px}
+  .totalLine .tlItem b{font-size:10.5px}
+  .creed blockquote{font-size:14px;line-height:1.95}
+  .creed .who{font-size:8.5px;letter-spacing:.2em}
+  .crtBody{padding:24px 14px 18px}
+  .wm b{font-size:110px}
+  .name{font-size:16px}
+  .role:before,.role:after{width:16px}
+  .sig{width:min(200px,90%)}
+  .faq summary{grid-template-columns:auto 1fr auto;font-size:12.5px;padding:12px 14px}
+  .faq .ans{font-size:12px;padding:2px 14px 14px}
+  .faq .key{font-size:11.5px;padding:9px 12px}
+  .regBody{padding:30px 16px 34px}
+  .seats{font-size:11px;padding:8px 14px}
+  .copyBtn{font-size:10px;padding:7px 11px}
+  .console nav{gap:2px}
+  .console nav a{font-size:8.5px;padding:5px 8px;letter-spacing:.1em}
+  .console nav a.hot{padding:5px 11px}
+  .fmeta{font-size:8px;letter-spacing:.12em;padding-bottom:16px}
+}
+@media(max-width:400px){
+  :root{--pad:12px}
+  .hero h1{font-size:clamp(38px,15vw,52px)}
+  .hero h1 .l1:before{top:-12px;width:70%}
+  .subline{width:100%;gap:8px}
+  .subline b{letter-spacing:.35em;padding-left:.35em;font-size:11px}
+  .certline{font-size:8.5px;letter-spacing:.16em}
+  .stats .wrap{grid-template-columns:1fr 1fr}
+  .stat{padding:20px 6px}
+  .stat b{font-size:26px}
+  .stat span{font-size:8px;letter-spacing:.16em}
+  .statsBar.v2{grid-template-columns:1fr}
+  .scell{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
+  .scIn{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));padding:16px 12px}
+  .methGrid{grid-template-columns:1fr}
+  .emWrap{min-height:360px}
+  .emblemImg{width:min(320px,96%)}
+  .emblemTag{bottom:-46px;font-size:7px;letter-spacing:.18em}
+  .badge{white-space:normal;text-align:center;line-height:1.5}
+  h2{font-size:clamp(20px,6vw,28px)}
+  .sub{font-size:13px}
+  .sylItem summary{padding:12px 12px}
+  .dayRow{grid-template-columns:1fr;gap:4px}
+  .dayRow .d{padding-top:0}
+  .exitItem{font-size:12px}
+  .exitCard{padding:18px 14px}
+  .regBody h2{font-size:22px}
+  .regKicker{font-size:9px;letter-spacing:.2em}
+  .faq summary{grid-template-columns:auto 1fr auto;font-size:12px;gap:8px}
+  .qcode{font-size:7.5px;padding:2px 6px}
+  #stickyCta{font-size:10px;padding:9px 12px}
+  #toast{font-size:10px;padding:10px 14px;bottom:120px}
+}
+@media(max-height:500px) and (orientation:landscape){
+  .hero{padding-top:100px;padding-bottom:40px;min-height:auto}
+  .emWrap{min-height:320px;order:0}
+  .emblemImg{width:min(320px,60%)}
+  #nav{position:relative}
+}
+@media(min-width:1600px){
+  :root{--wrap:1320px;--pad:32px}
+  body{font-size:16.5px}
+  .hero h1{font-size:clamp(112px,9vw,140px)}
+  section{padding:120px 0}
+}
+@media(min-width:1920px){
+  :root{--wrap:1440px}
+  body{font-size:17px}
+  .hero h1{font-size:clamp(130px,8vw,160px)}
+}
+@media(hover:none){
+  .btn:hover,.scell:hover,.methCard:hover,.infoCard:hover,.labCard:hover,.tag:hover,#toTop:hover,.copyBtn:hover{transform:none!important}
+}
+@media print{
+  body:before,#bgCircuit,#cg,#nav,#mnav,#sbar,#toTop,#stickyCta,.ticker,.certFrame,.certId{display:none!important}
+  body{background:#fff;color:#000}
+  .hero{padding:20px 0;min-height:auto}
+  section{padding:20px 0;page-break-inside:avoid}
+  .reveal{opacity:1!important;transform:none!important}
+  a{color:#000;text-decoration:underline}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .crt{break-inside:avoid;animation:none}
+  .sig path{stroke-dashoffset:0;animation:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  #bgCircuit{display:none}
+  .tin{animation:none}
+  .sig path{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<linearGradient id="hexGrad" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#00D9FF"/>
+  <stop offset=".55" stop-color="#7B3CFF"/>
+  <stop offset="1" stop-color="#D946EF"/>
+</linearGradient>
+<symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="i-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+<symbol id="i-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v5.2L4.8 17a2 2 0 0 0 1.8 3h10.8a2 2 0 0 0 1.8-3L14 8.2V3"/><path d="M7.5 14h9"/></symbol>
+<symbol id="i-flag2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4m0 0h12l-2.5 4L17 12H5"/></symbol>
+<symbol id="i-target2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+<symbol id="i-report" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></symbol>
+<symbol id="i-exam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 7.6-8 9-4.6-1.4-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+</defs>
+</svg>
+
+<div class="certFrame" aria-hidden="true"><b></b><b></b></div>
+<em class="certId" aria-hidden="true">CERTIFICATE ID NO . <b>SKA-ZH-2026-040D-XXXX</b></em>
+<canvas id="bgCircuit" aria-hidden="true"></canvas>
+<div id="cg" aria-hidden="true"></div>
+<div id="sbar"></div>
+
+<header id="nav">
+<div class="navIn">
+<a class="logo" href="#home" aria-label="Silent Knights Academy">
+<svg viewBox="0 0 40 44" aria-hidden="true"><polygon points="20,3 37,12.5 37,31.5 20,41 3,31.5 3,12.5" fill="none" stroke="url(#hexGrad)" stroke-width="2.4"/><text x="20" y="29" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="19" fill="url(#hexGrad)">0</text></svg>
+<b><i>SILENT KNIGHTS ACADEMY</i></b>
+</a>
+<nav class="nlinks" aria-label="منوی اصلی">
+<a href="#course" class="on">COURSE</a>
+<a href="#roadmap">ROADMAP</a>
+<a href="#syllabus">SYLLABUS</a>
+<a href="#faq">FAQ</a>
+</nav>
+<div class="navR">
+<a class="btn btnP btnSm" href="https://hacker-zero-registration.silentknights0101.workers.dev/" target="_blank" rel="noopener">ثبت‌نام</a>
+<button id="burger" aria-label="باز کردن منو" aria-expanded="false"><svg><use href="#i-menu"/></svg></button>
+</div>
+</div>
+</header>
+<nav id="mnav" aria-label="منوی موبایل">
+<a href="#course">01 -- COURSE<svg width="13" height="13"><use href="#i-arr"/></svg></a>
+<a href="#roadmap">02 -- ROADMAP<svg width="13" height="13"><use href="#i-arr"/></svg></a>
+<a href="#syllabus">03 -- SYLLABUS<svg width="13" height="13"><use href="#i-arr"/></svg></a>
+<a href="#faq">04 -- FAQ<svg width="13" height="13"><use href="#i-arr"/></svg></a>
+<a href="https://hacker-zero-registration.silentknights0101.workers.dev/" target="_blank" rel="noopener" style="color:var(--cyan)">05 // ثبت‌نام ⚡<svg width="13" height="13"><use href="#i-arr"/></svg></a>
+</nav>
+
+<main>
+<section class="hero" id="home">
+<div class="wrap">
+<div>
+<span class="badge"><i></i>SILENT KNIGHTS ACADEMY TRAINING DIVISION</span>
+<h1>
+  <span class="l1">ZERO</span>
+  <span class="l2">HACKER</span>
+</h1>
+<div class="subline"><i></i><b>Z E R O</b><i></i></div>
+<div class="certline">COURSE OF COMPLETION · 40 DAYS · 3 PHASES · 10/10/20</div>
+<div class="term mono" dir="ltr" aria-hidden="true"><span class="pr">knights@range:~$</span><span id="typed"></span><span class="cur">▌</span></div>
+<p class="sub">
+یک دوره به اسم <b>«هکر صفر»</b> داریم: حدود <b>۴۰ روز</b> در <b>۳ فاز</b> — فاز ۰ (۱۰ روز)، فاز ۱ (۱۰ روز) و فاز ۲ (۲۰ روز).
+خروجی این دوره تبدیل یک فرد با دانش عادی به یک <b>نیمه‌هکر</b> است؛ کسی که تازه آماده ورود به صنف‌های اساسی می‌شود.
+</p>
+<div class="manifest">
+<span>PHASE 0 · 10D</span><i>──</i><span>PHASE 1 · 10D</span><i>──</i><span>PHASE 2 · 20D</span>
+</div>
+<div class="heroCta">
+  <a class="btn btnP" href="https://hacker-zero-registration.silentknights0101.workers.dev/" target="_blank" rel="noopener">
+    ثبت‌نام در دوره ⚡
+  </a>
+  <a class="btn btnG" href="#syllabus">اول سرفصل‌ها را ببین</a>
+</div>
+</div>
+
+<div class="emWrap" aria-hidden="true">
+  <i class="ring r4"></i>
+  <i class="ring rT"></i>
+  <i class="ring r1"></i>
+  <i class="ring r2"></i>
+  <i class="ring r3"></i>
+
+  <img src="hacker-zero.png" 
+       alt="نشان رسمی دوره هکر صفر — آکادمی شوالیه‌های خاموش" 
+       class="emblemImg" 
+       width="520" 
+       height="540"
+       loading="eager"
+       fetchpriority="high">
+
+  <div class="emblemTag">EMPOWERING THE <b>NEXT GENERATION</b></div>
+</div>
+
+</div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="tin">
+<span>SILENT KNIGHTS</span><i>◆</i><span>ZERO HACKER</span><i>◆</i><b>40 DAYS</b><i>◆</i><span>3 PHASES · 10/10/20</span><i>◆</i><span>THE RANGE</span><i>◆</i><b>37 LABS</b><i>◆</i><span>25 CTF FLAGS</span><i>◆</i><span>3 FINAL EXAMS</span><i>◆</i><span>1 CERT</span><i>◆</i>
+<span>SILENT KNIGHTS</span><i>◆</i><span>ZERO HACKER</span><i>◆</i><b>40 DAYS</b><i>◆</i><span>3 PHASES · 10/10/20</span><i>◆</i><span>THE RANGE</span><i>◆</i><b>37 LABS</b><i>◆</i><span>25 CTF FLAGS</span><i>◆</i><span>3 FINAL EXAMS</span><i>◆</i><span>1 CERT</span><i>◆</i>
+</div></div>
+
+<div class="stats">
+<div class="wrap">
+<div class="stat"><b data-count="40">0</b><span>DAYS</span></div>
+<div class="stat"><b data-count="3">0</b><span>PHASES</span></div>
+<div class="stat"><b data-count="37">0</b><span>LABS</span></div>
+<div class="stat"><b data-count="25">0</b><span>CTF FLAGS</span></div>
+<div class="stat"><b data-count="40" data-suffix="+">0</b><span>CHALLENGES</span></div>
+<div class="stat"><b data-count="1">0</b><span>CERT</span></div>
+</div>
+</div>
+
+<section id="course">
+<div class="wrap">
+<div class="head c reveal">
+<span class="kick center">-- 01 -- THE COURSE</span>
+<h2>از <span class="g">دانش عادی</span> تا <span class="g">نیمه‌هکر</span></h2>
+<p class="sub">این یک کلاس THEORY نیست — یک <b>سیستم آموزشی عملیاتی</b> است. هر روز یک مأموریت، هر فاز یک امتحان، و در پایان یک <b>ریپورت واقعی</b> به اسم خودت. این دوره پایان مسیر نیست؛ <b>دروازه</b> است.</p>
+</div>
+<div class="transform reveal">
+<div class="tBox">
+<small>ENTRY PROFILE -- <b>STATE 0</b></small>
+<h3>دانش عادی</h3>
+<p>فردی کنجکاو با تصورات فیلمی از هک؛ بدون پایه فنی منظم، بدون متد کار، بدون تجربه عملی روی یک هدف واقعی (حتی آموزشی).</p>
+</div>
+<div class="tMid">
+<div class="hexV"><i>40D</i></div>
+<small>40 DAYS LATER</small>
+</div>
+<div class="tBox after">
+<small>EXIT PROFILE -- <b style="color:var(--ok)">STATE 1</b></small>
+<h3>نیمه‌هکر (Semi-Hacker)</h3>
+<p>سیستم و شبکه و سرویس را عملی می‌فهمی، Attack Surface می‌سازی، Enumerate می‌کنی، با متدولوژی فکر می‌کنی و کارت را مستند می‌کنی — <b>آماده صنف‌های اساسی</b>.</p>
+</div>
+</div>
+<div class="statsBar v2 reveal">
+<div class="scell" style="--a:var(--cyan)"><div class="scIn"><span class="ic"><i><svg><use href="#i-flask"/></svg></i></span><b data-count="37">0</b><span>HANDS-ON LABS</span></div></div>
+<div class="scell" style="--a:var(--violet)"><div class="scIn"><span class="ic"><i><svg><use href="#i-flag2"/></svg></i></span><b data-count="25">0</b><span>CTF FLAGS</span></div></div>
+<div class="scell" style="--a:var(--mag)"><div class="scIn"><span class="ic"><i><svg><use href="#i-target2"/></svg></i></span><b data-count="40" data-suffix="+">0</b><span>CHALLENGES</span></div></div>
+<div class="scell" style="--a:var(--blue)"><div class="scIn"><span class="ic"><i><svg><use href="#i-report"/></svg></i></span><b data-count="1">0</b><span>FULL REPORT</span></div></div>
+<div class="scell" style="--a:var(--ok)"><div class="scIn"><span class="ic"><i><svg><use href="#i-exam"/></svg></i></span><b data-count="3">0</b><span>FINAL EXAMS</span></div></div>
+</div>
+</div>
+</section>
+
+<section id="roadmap">
+<div class="wrap">
+<div class="head c reveal">
+<span class="kick center">02 -- ROADMAP</span>
+<h2>نقشه‌ی <span class="g">۴۰ روز</span></h2>
+<p class="sub">سه فاز پیوسته. ساختار: <b>۱۰ / ۱۰ / ۲۰</b> روز.</p>
+</div>
+<div class="routeTag reveal"><span>ROUTE : ZERO → SEMI-HACKER</span></div>
+<div class="reveal">
+<div class="rtabs" role="tablist">
+<button class="node-tab active" data-t="t0" role="tab" aria-selected="true">PHASE 00 <span class="br">-- DISCOVERY · 10D</span></button>
+<button class="node-tab" data-t="t1" role="tab" aria-selected="false">PHASE 01 <span class="br">-- FIRST BREACH · 10D</span></button>
+<button class="node-tab" data-t="t2" role="tab" aria-selected="false">PHASE 02 <span class="br">-- FULL SCOPE · 20D</span></button>
+</div>
+<div class="detail show" id="t0" role="tabpanel">
+<div class="tbar"><b>SYS:--PHASE_00 — DISCOVERY</b><span>STATUS: UNLOCKED · 10 DAYS</span></div>
+<div class="dbody">
+<div class="detailGrid">
+<div>
+<h3>SOCIAL MEDIA <em>SECURITY</em></h3>
+<p>کشف دنیای هک از لایه‌ای که همه با آن زندگی می‌کنند: <b>حساب کاربری</b>. آناتومی Account، زنجیره Authentication (Password / OTP / 2FA / MFA)، Session و Token، سپس OSINT و Digital Footprint، Phishing، Social Engineering، Investigation و در پایان Defense — قفل‌کردن درهایی که خودت یاد گرفتی از کجا باز می‌شوند.</p>
+<div class="tagrow">
+<span class="tag hot">ACCOUNT</span><span class="tag">AUTH · 2FA · MFA</span><span class="tag">SESSION</span><span class="tag">OSINT</span><span class="tag">PHISHING</span><span class="tag">SOCIAL ENG</span><span class="tag">INVESTIGATION</span><span class="tag">DEFENSE</span>
+</div>
+</div>
+<div class="spec">
+<div class="srow"><span>DURATION</span><i></i><b>10 DAYS</b></div>
+<div class="srow"><span>LESSONS / LABS</span><i></i><b>7 + 7</b></div>
+<div class="srow"><span>CTF</span><i></i><b>7 FLAGS</b></div>
+<div class="srow"><span>FINAL EXAM</span><i></i><b class="r">16T + 8P · PASS 70%</b></div>
+<div class="out"><b>OUTPUT --</b>فهم واقعی هک + اولین Flag + ذهنیت امنیتی — بدون هنوز هیچ نفوذی به سیستم.</div>
+</div>
+</div>
+</div>
+</div>
+<div class="detail" id="t1" role="tabpanel">
+<div class="tbar"><b>SYS:--PHASE_01 — FIRST BREACH</b><span>STATUS: LOCKED → CLEAR P00 · 10 DAYS</span></div>
+<div class="dbody">
+<div class="detailGrid">
+<div>
+<h3>HACKING THE <em>SYSTEM</em></h3>
+<p>ورود به <b>The Range</b> — میدان تمرین ایزوله آکادمی. شناخت سیستم از لایه‌هایش (Hardware تا Service)، زبان شبکه (IP / DNS / TCP-UDP)، درب‌ها (Ports &amp; Services)، حرکت در Linux و Windows، Authentication و Hash، و Processes — و در پایان: <b>اولین Compromise کنترل‌شده</b>.</p>
+<p>قانون طلایی فاز: <b>PORT ≠ VULNERABILITY</b> — درب باز فقط یک نقطه بررسی است، نه حکم.</p>
+<div class="tagrow">
+<span class="tag hot">SYSTEMS</span><span class="tag">NETWORKING</span><span class="tag">PORTS &amp; SERVICES</span><span class="tag">LINUX</span><span class="tag">WINDOWS</span><span class="tag">AUTH &amp; HASH</span><span class="tag">ENUMERATION</span><span class="tag hot">FIRST BREACH</span>
+</div>
+</div>
+<div class="spec">
+<div class="srow"><span>DURATION</span><i></i><b>10 DAYS</b></div>
+<div class="srow"><span>LABS / CHALLENGES</span><i></i><b>10 + 10</b></div>
+<div class="srow"><span>CTF</span><i></i><b>8 FLAGS</b></div>
+<div class="srow"><span>FINAL EXAM</span><i></i><b class="r">20 Q · PASS 70%</b></div>
+<div class="out"><b>OUTPUT --</b>کسی که یک Target را می‌شناسد، Attack Surface می‌سازد و مسیر ورود را در محیط مجاز پیدا می‌کند.</div>
+</div>
+</div>
+</div>
+</div>
+<div class="detail" id="t2" role="tabpanel">
+<div class="tbar"><b>SYS:--PHASE_02 — FULL SCOPE</b><span>STATUS: LOCKED → CLEAR P01 · 20 DAYS</span></div>
+<div class="dbody">
+<div class="detailGrid">
+<div>
+<h3>ATTACKER <em>METHODOLOGY</em></h3>
+<p>پل ورود به تفکر حرفه‌ای. از <b>Pre-Engagement و Scope</b> شروع می‌شود، به Recon و Information Gathering، Scanning و Enumeration متدولوژیک، Vulnerability Assessment و Validation، Exploitation کنترل‌شده، Shells و Metasploit، Post-Exploitation — و با <b>Evidence و گزارش نهایی</b> تمام می‌شود.</p>
+<p>لابراتوارها در <b>۳ سطح</b> عرضه می‌شوند: Guided، Semi-Guided و Independent — هر فاز یک قدم از «راهنمایی» فاصله می‌گیرد.</p>
+<div class="tagrow">
+<span class="tag hot">METHODOLOGY</span><span class="tag hot">EXPLOITATION</span><span class="tag">POST-EXPLOIT</span><span class="tag">SHELLS · METASPLOIT</span><span class="tag hot">REPORT WRITING</span><span class="tag">EVIDENCE</span>
+</div>
+</div>
+<div class="spec">
+<div class="srow"><span>DURATION</span><i></i><b>20 DAYS</b></div>
+<div class="srow"><span>LABS × 3 LEVELS</span><i></i><b>20</b></div>
+<div class="srow"><span>CHALLENGES</span><i></i><b>30+</b></div>
+<div class="srow"><span>CTF</span><i></i><b>10 FLAGS</b></div>
+<div class="srow"><span>FINAL EXAM</span><i></i><b class="r">30 Q + REPORT · 70%</b></div>
+<div class="out"><b>OUTPUT --</b>گیت‌های عبور: کل ≥ ۷۰٪ + Practical ≥ 10/20 — خروجی: متدولوژی کامل + گزارش واقعی.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="syllabus">
+<div class="wrap">
+<div class="head c reveal">
+<span class="kick center">03 -- SYLLABUS</span>
+<h2>۴۰ روز، <span class="g">روز‌به‌روز</span></h2>
+<p class="sub">هر روز یک مأموریت مشخص دارد — تگ رنگی نوع روز را نشان می‌دهد: <b class="mono ltr" style="color:var(--cyan)">LAB</b> تمرین · <b class="mono ltr" style="color:var(--mag)">CTF</b> رقابت · <b class="mono ltr" style="color:var(--ok)">EXAM</b> آزمون</p>
+</div>
+<div class="syl">
+
+<div class="sylWeek"><b>PHASE 00 -- DISCOVERY</b><span>D01–10 · SOCIAL MEDIA SECURITY</span></div>
+<details class="sylItem" style="--sc:var(--cyan)" open>
+<summary>
+<span class="sylNo"><i>D01–10</i></span>
+<span class="sylT"><b>کشف دنیای هک از لایه Account</b><small>Account، Auth، OSINT، Phishing، Social Engineering، Defense</small></span>
+<span class="sylMeta mono">10 DAYS · 7 LABS</span><span class="chev">+</span>
+</summary>
+<div class="sylBody">
+<div class="dayRow"><span class="d">DAY 01</span><p><b>«هک» واقعاً چیست:</b> شکستن افسانه‌ها و ذهنیت درست <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 02</span><p><b>آناتومی Account:</b> هویت دیجیتال و لایه‌هایش <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 03</span><p><b>Authentication:</b> Password، OTP، 2FA، MFA <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 04</span><p><b>Session و Token:</b> چرا ماندن در سیستم خطرناک است <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 05</span><p><b>OSINT و Digital Footprint:</b> ردپای دیجیتال <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 06</span><p><b>Phishing و Social Engineering:</b> شبیه‌ساز تعاملی <em class="dayTag ctf">CTF</em></p></div>
+<div class="dayRow"><span class="d">DAY 07</span><p><b>Investigation:</b> ردیابی یک رخداد واقعی <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 08</span><p><b>Defense:</b> قفل‌کردن درهایی که یاد گرفتی از کجا باز می‌شوند <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 09</span><p><b>مرور فاز + مینی‌CTF:</b> ۷ فلگ فاز ۰ <em class="dayTag ctf">CTF</em></p></div>
+<div class="dayRow"><span class="d">DAY 10</span><p><b>امتحان فاز ۰۰ + باز شدن فاز بعد</b> <em class="dayTag ex">EXAM</em></p></div>
+<div class="sylKit">
+<div class="kit"><b>TOOLS -- KIT</b><p class="mono ltr" style="font-size:10.5px">Browser · OSINT Tools · Phishing Simulator</p></div>
+<div class="kit mag"><b>OUTCOME</b><p>اولین Flag + ذهنیت Evidence-based + امن‌سازی حساب‌های خودت.</p></div>
+</div>
+</div>
+</details>
+
+<div class="sylWeek"><b>PHASE 01 -- FIRST BREACH</b><span>D11–20 · HACKING THE SYSTEM</span></div>
+<details class="sylItem" style="--sc:var(--violet)">
+<summary>
+<span class="sylNo"><i>D11–20</i></span>
+<span class="sylT"><b>ورود به The Range — سیستم، شبکه، اولین نفوذ</b><small>Ports، Linux/Windows، Auth، Hash، اولین Compromise</small></span>
+<span class="sylMeta mono">10 DAYS · 10 LABS</span><span class="chev">+</span>
+</summary>
+<div class="sylBody">
+<div class="dayRow"><span class="d">DAY 11</span><p><b>آناتومی سیستم:</b> از Hardware تا Service <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 12</span><p><b>زبان شبکه:</b> IP، DNS، TCP/UDP <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 13</span><p><b>Ports و Services:</b> درها و پشت درها <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 14</span><p><b>حرکت در Linux:</b> فایل‌سیستم، دسترسی‌ها، فرمان‌ها <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 15</span><p><b>حرکت در Windows:</b> ساختار و ابزارهای پایه <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 16</span><p><b>Authentication و Hash:</b> چرا هش‌ها لو می‌روند <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 17</span><p><b>Processes:</b> چه چیزی روی سیستم در حال اجراست <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 18</span><p><b>Enumeration:</b> ساختن Attack Surface <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 19</span><p><b>اولین Compromise کنترل‌شده در The Range</b> <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 20</span><p><b>امتحان فاز ۰۱ + باز شدن فاز بعد</b> <em class="dayTag ex">EXAM</em></p></div>
+<div class="sylKit">
+<div class="kit"><b>TOOLS -- KIT</b><p class="mono ltr" style="font-size:10.5px">Linux · Windows · Network Tools · Enumeration Tools</p></div>
+<div class="kit mag"><b>OUTCOME</b><p>کسی که یک Target را می‌شناسد، Attack Surface می‌سازد و مسیر ورود را پیدا می‌کند.</p></div>
+</div>
+</div>
+</details>
+
+<div class="sylWeek"><b>PHASE 02 -- FULL SCOPE</b><span>D21–40 · ATTACKER METHODOLOGY</span></div>
+<details class="sylItem" style="--sc:var(--mag)">
+<summary>
+<span class="sylNo"><i>D21–40</i></span>
+<span class="sylT"><b>متدولوژی کامل تست امنیت</b><small>از Pre-Engagement تا Reporting — پروژه واقعی</small></span>
+<span class="sylMeta mono">20 DAYS · 20 LABS</span><span class="chev">+</span>
+</summary>
+<div class="sylBody">
+<div class="dayRow"><span class="d">DAY 21</span><p><b>Pre-Engagement و Scope:</b> قواعد بازی حرفه‌ای <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 22</span><p><b>Recon و Information Gathering:</b> نقشه‌برداری <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 23</span><p><b>Scanning و Enumeration متدولوژیک</b> <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 24</span><p><b>Vulnerability Assessment:</b> شناسایی آسیب‌پذیری <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 25</span><p><b>Validation:</b> تأیید قبل از اقدام <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 26</span><p><b>Exploitation کنترل‌شده — روز ۱</b> <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 27</span><p><b>Exploitation کنترل‌شده — روز ۲</b> <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 28</span><p><b>Shells و Metasploit — روز ۱</b> <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 29</span><p><b>Shells و Metasploit — روز ۲</b> <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 30</span><p><b>Post-Exploitation:</b> ارزیابی عمق دسترسی <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 31</span><p><b>شروع پروژه ریپورت کامل:</b> ساختار حرفه‌ای <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 32</span><p><b>پروژه ریپورت — ادامه:</b> جمع‌آوری Evidence <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 33</span><p><b>CTF بزرگ فاز ۰۲ — روز ۱</b> <em class="dayTag ctf">CTF</em></p></div>
+<div class="dayRow"><span class="d">DAY 34</span><p><b>CTF بزرگ فاز ۰۲ — روز ۲</b> <em class="dayTag ctf">CTF</em></p></div>
+<div class="dayRow"><span class="d">DAY 35</span><p><b>تکمیل ریپورت نهایی</b> <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 36</span><p><b>دفاع ریپورت:</b> ارائه در برابر تیم <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 37</span><p><b>مرور جامع فاز ۰۲</b> <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 38</span><p><b>آماده‌سازی امتحان جامع</b> <em class="dayTag lab">LAB</em></p></div>
+<div class="dayRow"><span class="d">DAY 39</span><p><b>امتحان نهایی جامع (۳۰ سؤال + گزارش)</b> <em class="dayTag ex">EXAM</em></p></div>
+<div class="dayRow"><span class="d">DAY 40</span><p><b>فارغ‌التحصیلی:</b> اعلام نتایج + صدور سرتیفیکیت <em class="dayTag ex">EXAM</em></p></div>
+<div class="sylKit">
+<div class="kit"><b>TOOLS -- KIT</b><p class="mono ltr" style="font-size:10.5px">Methodology · Exploitation · Shells · Metasploit · Reporting</p></div>
+<div class="kit mag"><b>OUTCOME</b><p>متدولوژی کامل، Evidence، گزارش نهایی — آماده صنف‌های اساسی.</p></div>
+</div>
+</div>
+</details>
+
+</div>
+</div>
+</section>
+
+<section id="exit">
+<div class="wrap">
+<div class="head c reveal">
+<span class="kick center">-- EXIT FILTER</span>
+<h2>چه کسی <span class="g">تمامش می‌کند</span>؟</h2>
+</div>
+<div class="exitGrid">
+<div class="exitCard yes reveal">
+<small>-- PROFILE: SUCCESS</small>
+<h3>این‌ها تا آخر می‌مانند</h3>
+<div class="exitItem"><i>&gt;</i>کنجکاوی واقعی دارند — می‌پرسند، می‌شکنند، دوباره امتحان می‌کنند.</div>
+<div class="exitItem"><i>&gt;</i>روزی ۱ تا ۲ ساعت ثبات دارند، نه ۱۰ ساعت یک‌بار در ماه.</div>
+<div class="exitItem"><i>&gt;</i>در CTF تیمی بازی می‌دهند و از باخت درس می‌گیرند.</div>
+<div class="exitItem"><i>&gt;</i>امتحان‌ها را جدی می‌گیرند — حد نصاب برایشان افتخار است.</div>
+</div>
+<div class="exitCard no reveal">
+<small>-- PROFILE: DROP</small>
+<h3>این‌ها وسط راه جا می‌مانند</h3>
+<div class="exitItem"><i>&lt;</i>دنبال «شورت‌کات» و ابزار جادویی بدون فهم اصل ماجرا هستند.</div>
+<div class="exitItem"><i>&lt;</i>نظم روزانه ندارند و منتظرند همه‌چیز را برایشان بجویند.</div>
+<div class="exitItem"><i>&lt;</i>از ترمینال و خطا می‌ترسند و تمرین عملی را رد می‌کنند.</div>
+<div class="exitItem"><i>&lt;</i>فقط «مدرک» می‌خواهند، نه مهارت.</div>
+</div>
+</div>
+<p class="exitNote reveal">فیلتر خروج عمدی است — ما کسی را حذف نمی‌کنیم، <b>خودِ سیستم</b> می‌فهماند چه کسی شایسته‌ی پله‌ی بعد است.</p>
+</div>
+</section>
+
+<section id="creed">
+<div class="wrap">
+<div class="head c reveal">
+<span class="kick center">04 -- ACADEMY CREED</span>
+<h2>وعده <span class="g">قهرمانان</span></h2>
+</div>
+
+<div class="creedWrap reveal">
+<div class="creed">
+<span class="qm">”</span>
+<blockquote>ما اینجا فقط هکر تربیت نمی‌کنیم؛ <b>انسان می‌سازیم</b> که می‌بیند، می‌پرسد و نمی‌شکند — knight اول، hacker بعد.</blockquote>
+<div class="who">— SILENT KNIGHTS -- ACADEMY CREED ·  —</div>
+</div>
+</div>
+
+<div class="creedCards reveal">
+
+  
+    
+
+  <article class="crt c2" style="animation-delay:.24s">
+    <div class="crtIn">
+      <i class="cb tl"></i><i class="cb tr"></i><i class="cb bl"></i><i class="cb br"></i>
+
+      <div class="vbar ltr">★ SILENT KNIGHTS ★ <b>VERIFIED</b> ★ 2026 ★</div>
+
+      <div class="crtBody">
+        <div class="wm ltr"><b>SK</b></div>
+
+        <svg class="seal" viewBox="0 0 80 80" aria-hidden="true">
+          <g class="ring"><circle cx="40" cy="40" r="36" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity=".55"/></g>
+          <polygon points="40,10 66,25 66,55 40,70 14,55 14,25" fill="currentColor" opacity=".08"/>
+          <polygon points="40,10 66,25 66,55 40,70 14,55 14,25" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".9"/>
+          <text x="40" y="45" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="currentColor" letter-spacing="1">SKA</text>
+          <text x="40" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" fill="currentColor" opacity=".7">★★ 2025 ★★</text>
+        </svg>
+
+        <div class="mono0"><i class="ltr">SMH</i></div>
+
+        <svg class="sig" viewBox="0 0 240 70" aria-hidden="true">
+          <defs><linearGradient id="sgB" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#D946EF"/><stop offset="1" stop-color="#7B3CFF"/>
+          </linearGradient></defs>
+          <path class="p1" stroke="url(#sgB)" pathLength="1" d="M14,50 C24,18 40,10 38,26 C36,42 22,56 34,54 C48,51 54,28 68,26 C78,25 72,48 84,46 C98,44 100,22 114,24 C126,26 120,46 134,44 C148,42 152,24 166,28 C178,31 174,42 188,38 C202,34 210,30 226,36"/>
+          <path class="p2" stroke="url(#sgB)" pathLength="1" d="M30,60 C90,54 150,53 212,58"/>
+        </svg>
+        <div class="sigCap ltr">— OFFICIAL SIGNATURE —</div>
+
+        <b class="name">سید مدثر هاشمی</b>
+        <em class="role ltr">TRAINING&nbsp;DIRECTOR</em>
+
+        <div class="chips ltr">
+          <span class="chip ok">✓ SIGNATURE VERIFIED</span>
+          <span class="chip">SHA-512 · BLOCK 2026</span>
+        </div>
+      </div>
+
+      <div class="stamp ltr">
+        <span>SIGNED <i>·</i> ID <b>SKA-001</b> <i>·</i> 2025</span>
+        <span class="bcode" aria-hidden="true"></span>
+      </div>
+      <div class="micro ltr">SILENT KNIGHTS ACADEMY  -- DO NOT DUPLICATE</div>
+    </div>
+  </article>
+
+</div>
+</div>
+</section>
+
+<section id="method">
+<div class="wrap">
+<div class="head c reveal">
+<span class="kick center">THE METHOD</span>
+<h2>هفت گام <span class="g">متد</span></h2>
+</div>
+<div class="methGrid reveal">
+<div class="methCard"><em>01</em><b>DISCOVER</b><span>دنیا را آن‌طور که هست ببین</span></div>
+<div class="methCard"><em>02</em><b>RECON</b><span>قبل از هر حرکت، هدف را نقشه کن</span></div>
+<div class="methCard"><em>03</em><b>ENUM</b><span>هر در بسته، یک سؤال است</span></div>
+<div class="methCard"><em>04</em><b>EXPLOIT</b><span>فقط در لابراتوار، کنترل‌شده</span></div>
+<div class="methCard"><em>05</em><b>PIVOT</b><span>از هر دستاورد، مسیر بعدی</span></div>
+<div class="methCard"><em>06</em><b>REPORT</b><span>کاری که ثبت نشود، انجام نشده</span></div>
+<div class="methCard"><em>07</em><b>LEVEL UP</b><span>هر فاز، پله‌ای به knight واقعی</span></div>
+</div>
+<div class="labGrid reveal">
+<div class="labCard"><b>⚙ THE RANGE</b><span>میدان تمرین ایزوله آکادمی — جایی که اشتباه کردن یعنی یاد گرفتن، نه فاجعه.</span></div>
+<div class="labCard"><b>⚑ CTF ARENA</b><span>۲۵ فلگ در ۳ فاز — از مینی‌CTF تا میدان نهایی با جدول امتیاز.</span></div>
+<div class="labCard"><b>▤ REPORT LAB</b><span>کارگاه گزارش‌نویسی حرفه‌ای — خروجی: ریپورتی که در مصاحبه نشانش می‌دهی.</span></div>
+</div>
+</div>
+</section>
+
+<section id="details">
+<div class="wrap">
+<div class="head c reveal">
+<span class="kick center"> COURSE DETAILS</span>
+<h2>جزئیات <span class="g">دوره</span></h2>
+</div>
+<div class="infoGrid reveal">
+<div class="infoCard"><span>DURATION</span><strong>حدود ۴۰ روز</strong><small>۳ فاز · ۱۰ + ۱۰ + ۲۰ + امتحانات</small></div>
+<div class="infoCard"><span>FORMAT</span><strong>آنلاین + ضبط</strong><small>هر جلسه ضبط می‌شود</small></div>
+<div class="infoCard"><span>LANGUAGE</span><strong>فارسی + EN</strong><small>اصطلاحات فنی به انگلیسی</small></div>
+<div class="infoCard"><span>SUPPORT</span><strong>منتور + تیم</strong><small>پشتیبانی در طول دوره</small></div>
+</div>
+<div class="prereqBox reveal">
+<strong>پیش‌نیاز؟ هیچ.</strong>
+<p>فقط یک <b>لپ‌تاپ معمولی</b>، اینترنت و <b>روزی ۱ تا ۲ ساعت</b>. همه‌چیز — حتی ترمینال — از صفر آموزش داده می‌شود. اگر صفر هستی، دقیقاً جای درستی هستی.</p>
+</div>
+<div class="totalLine reveal">
+<span>TOTAL --</span>
+<span>
+<span class="tlItem"><b>40</b> DAYS</span>
+<span class="tlItem"><b>3</b> PHASES <i>·</i> 10/10/20</span>
+<span class="tlItem"><b>37</b> LABS</span>
+<span class="tlItem"><b>25</b> FLAGS</span>
+<span class="tlItem"><b>40+</b> CHALLENGES</span>
+<span class="tlItem"><b>3</b> EXAMS</span>
+<span class="tlItem ok"><b>1</b> CERT</span>
+</span>
+</div>
+</div>
+</section>
+
+<section id="faq">
+<div class="wrap">
+<div class="head c reveal"><span class="kick center">05 -- FAQ</span><h2>سؤال‌های <span class="g">پرتکرار</span></h2><p class="sub">مستقیم می‌پرسیم، مستقیم جواب می‌دهیم.</p></div>
+<div class="faqs">
+<details class="faq" open>
+<summary><span class="qcode">Q01</span>هکر صفر دقیقاً برای چه کسی ساخته شده؟<span class="fsum-i">+</span></summary>
+<div class="ans"><span class="alabel">ANSWER --</span>برای کسی که هیچ تجربه‌ای ندارد ولی می‌خواهد درست شروع کند — از صفرِ صفر تا اولین عملیات واقعی در لابراتوار کنترل‌شده.<span class="key"><b>خلاصه:</b> اگر امروز صفر هستی، این دوره دقیقاً برای توست.</span></div>
+</details>
+<details class="faq">
+<summary><span class="qcode">Q02</span>قبل از شروع باید چه بلد باشم؟<span class="fsum-i">+</span></summary>
+<div class="ans"><span class="alabel">ANSWER --</span>هیچ پیش‌نیاز فنی لازم نیست — فقط یک لپ‌تاپ معمولی، اینترنت و کمی وقت هر روز. همه‌چیز از پایه آموزش داده می‌شود.<span class="key"><b>خلاصه:</b> پیش‌نیاز فنی = صفر.</span></div>
+</details>
+<details class="faq">
+<summary><span class="qcode">Q03</span>بعد از ۴۰ روز دقیقاً به کجا می‌رسم؟<span class="fsum-i">+</span></summary>
+<div class="ans"><span class="alabel">ANSWER --</span>یک <b>نیمه‌هکر</b> (Semi-Hacker): ۳۷ لابراتوار انجام‌شده، ۲۵ فلگ CTF، ۱ ریپورت کامل و ۳ امتحان پس‌گرفته‌شده — آماده ورود به صنف‌های اساسی.<span class="key"><b>خلاصه:</b> خروجی = نیمه‌هکر + سرتیفیکیت.</span></div>
+</details>
+<details class="faq">
+<summary><span class="qcode">Q04</span>کلاس‌ها کجا و چطور برگزار می‌شود؟<span class="fsum-i">+</span></summary>
+<div class="ans"><span class="alabel">ANSWER --</span>جلسات آنلاین و سازمان‌یافته برگزار می‌شود و هر جلسه ضبط می‌شود؛ همه تمرین‌ها در <b>The Range</b> — لابراتوار امن و ایزوله آکادمی — انجام می‌گیرد.<span class="key"><b>خلاصه:</b> هر جلسه ضبط می‌شود — هیچ‌وقت عقب نمی‌مانی.</span></div>
+</details>
+<details class="faq">
+<summary><span class="qcode">Q05</span>اگر یک روز یا جلسه را از دست بدهم چه می‌شود؟<span class="fsum-i">+</span></summary>
+<div class="ans"><span class="alabel">ANSWER --</span>ضبط جلسه + پشتیبانی منتور + چک‌لیست مهارت هر فاز، جبران را آسان می‌کند. عقب افتادن یعنی حذف‌شدن نیست.<span class="key"><b>خلاصه:</b> جبرانش آسان است — منتور کنارت است.</span></div>
+</details>
+<details class="faq">
+<summary><span class="qcode">Q06</span>در پایان چه مدرکی می‌گیرم؟<span class="fsum-i">+</span></summary>
+<div class="ans"><span class="alabel">ANSWER --</span>سرتیفیکیت رسمی SILENT KNIGHTS با شناسه یکتا، به‌علاوه ریپورت واقعی که خودت نوشته‌ای؛ همان چیزی که در مصاحبه به آن تکیه می‌کنی.<span class="key"><b>خلاصه:</b> سرتیفیکیت + شناسه یکتا + ریپورت شخصی‌ات.</span></div>
+</details>
+<details class="faq">
+<summary><span class="qcode">Q07</span>چرا باید همین حالا ثبت‌نام کنم؟<span class="fsum-i">+</span></summary>
+<div class="ans"><span class="alabel">ANSWER --</span>ظرفیت هر دوره محدود است تا کیفیت تمرین و پشتیبانی حفظ شود — و صف بعدی زمان معلومی ندارد.<span class="key"><b>خلاصه:</b> ظرفیت محدود است — صندلی‌ات را همین حالا بگیر.</span></div>
+</details>
+</div>
+</div>
+</section>
+
+<section id="register">
+<div class="wrap">
+<div class="regShell reveal">
+<div class="regTerminal">
+<div class="regTop"><span>SECURE:--ENROLLMENT — ZERO HACKER</span><span class="live">● LIVE</span></div>
+<div class="regBody">
+<div class="regKicker">-- ENLISTMENT PROTOCOL</div>
+<h2>اولین تجربه <span class="gtx">هکر</span> شدنت راشروع کن</h2>
+<p>ظرفیت محدود است تا کیفیت تمرین و پشتیبانی حفظ شود. برای تکمیل ثبت‌نام، بالای دکمه ثبت نام کلیک کنید.</p>
+<div class="regActions">
+<a class="btn btnP" href="https:--hacker-zero-registration.silentknights0101.workers.dev/" target="_blank" rel="noopener">
+   ثبت‌نام 
+</a>
+<a class="btn btnG" href="#syllabus">اول سرفصل‌ها را ببین</a>
+</div>
+<div class="regContact">
+<span>یا مستقیم پیام بده:</span>
+<button class="copyBtn" data-copy="0744205760">Phone</button>
+<span class="regSep">·</span>
+<button class="copyBtn" data-copy="Silentknights0101@gmail.com">MAIL</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>ظ
+
+<footer>
+<div class="console">
+<span class="cnum">00</span>
+<nav aria-label="فوتر">
+<a href="#home">HOME</a>
+<a href="#course">COURSE</a>
+<a href="#roadmap">ROADMAP</a>
+<a href="#syllabus">SYLLABUS</a>
+<a href="#faq">FAQ</a>
+<a href="https://hacker-zero-registration.silentknights0101.workers.dev/" target="_blank" rel="noopener" class="hot">REGISTER </a>
+</nav>
+<span class="cnum">01</span>
+</div>
+<div class="fmeta"> <b></b> -- CERT EDITION · © 2026 SILENT KNIGHTS ACADEMY</div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<button id="toTop" aria-label="برگشت به بالا"><svg width="16" height="16"><use href="#i-up"/></svg></button>
+<a id="stickyCta" href="https://hacker-zero-registration.silentknights0101.workers.dev/" target="_blank" rel="noopener"> ظرفیت محدود — همین حالا ثبت‌نام کن</a>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s)};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+var mqMobile = window.matchMedia('(max-width:720px)');
+var mqTouch = window.matchMedia('(hover:none)');
+var mqReduce = window.matchMedia('(prefers-reduced-motion:reduce)');
+var isMobile = mqMobile.matches;
+var isTouch = mqTouch.matches;
+var reduceMotion = mqReduce.matches;
+
+if(mqMobile.addEventListener) mqMobile.addEventListener('change',function(e){isMobile=e.matches});
+if(mqTouch.addEventListener) mqTouch.addEventListener('change',function(e){isTouch=e.matches});
+if(mqReduce.addEventListener) mqReduce.addEventListener('change',function(e){reduceMotion=e.matches});
+
+/* ===== SCROLL PROGRESS + NAV ===== */
+var sbar=$('#sbar'),nav=$('#nav'),toTop=$('#toTop'),sticky=$('#stickyCta'),regSec=$('#register');
+var ticking=false;
+function onScroll(){
+  var h=document.documentElement;
+  var max=h.scrollHeight-h.clientHeight||1;
+  var y=window.pageYOffset||h.scrollTop||0;
+  if(sbar)sbar.style.width=(y/max*100)+'%';
+  if(nav)nav.classList.toggle('sc',y>30);
+  if(toTop)toTop.classList.toggle('v',y>700);
+  if(sticky&&regSec)sticky.classList.toggle('v',y>900&&y<regSec.offsetTop-400);
+  var cur=null,ty=y+120;
+  $$('section[id]').forEach(function(s){if(s.offsetTop<=ty)cur=s.id});
+  $$('.nlinks a').forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+cur)});
+  ticking=false;
+}
+window.addEventListener('scroll',function(){
+  if(!ticking){requestAnimationFrame(onScroll);ticking=true;}
+},{passive:true});
+onScroll();
+if(toTop)toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+/* ===== MOBILE NAV ===== */
+var burger=$('#burger'),mnav=$('#mnav');
+if(burger&&mnav){
+  burger.addEventListener('click',function(){
+    var o=mnav.classList.toggle('open');
+    burger.setAttribute('aria-expanded',o?'true':'false');
+  });
+  $$('#mnav a').forEach(function(a){a.addEventListener('click',function(){mnav.classList.remove('open')})});
+}
+
+/* ===== CURSOR GLOW ===== */
+var cg=$('#cg');
+if(cg && !isMobile && !isTouch && !reduceMotion){
+  var cx=0,cy=0,tx=0,ty=0;
+  window.addEventListener('mousemove',function(e){tx=e.clientX;ty=e.clientY;},{passive:true});
+  (function anim(){
+    cx+=(tx-cx)*.15; cy+=(ty-cy)*.15;
+    cg.style.left=cx+'px'; cg.style.top=cy+'px'; cg.style.opacity='1';
+    requestAnimationFrame(anim);
+  })();
+}
+
+/* ===== TYPEWRITER ===== */
+var typed=$('#typed');
+if(typed && !reduceMotion){
+  var cmds=[
+    {c:'nmap -sV 10.10.10.0/24', d:900},
+    {c:'./breach --target=the_range --mode=lab', d:1100},
+    {c:'python3 exploit.py -v --safe', d:800},
+    {c:'cat flags.txt  →  25/25 OK', d:1400},
+    {c:'whoami', d:500},
+    {c:'semi_hacker', d:2000}
+  ];
+  var ci=0,ch=0,del=false;
+  (function type(){
+    var c=cmds[ci].c;
+    if(!del){
+      ch++;typed.textContent=c.slice(0,ch);
+      if(ch>=c.length){del=true;setTimeout(type,cmds[ci].d);return}
+      setTimeout(type,55);
+    } else {
+      ch--;typed.textContent=c.slice(0,ch);
+      if(ch<=0){del=false;ci=(ci+1)%cmds.length;setTimeout(type,400);return}
+      setTimeout(type,25);
+    }
+  })();
+} else if(typed){
+  typed.textContent='semi_hacker';
+}
+
+/* ===== CIRCUIT BACKGROUND ===== */
+var cv=$('#bgCircuit');
+if(cv && cv.getContext && !reduceMotion){
+  var ctx=cv.getContext('2d'),W,H,pts=[],linkDist,rafId=null;
+  function rs(){
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    W=window.innerWidth;H=window.innerHeight;
+    cv.width=W*dpr;cv.height=H*dpr;
+    cv.style.width=W+'px';cv.style.height=H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var maxPts=isMobile?20:70;
+    linkDist=isMobile?90:130;
+    var n=Math.min(maxPts,Math.floor(W*H/26000));
+    pts=[];
+    for(var i=0;i<n;i++)pts.push({
+      x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35
+    });
+  }
+  rs();
+  var rT;
+  window.addEventListener('resize',function(){clearTimeout(rT);rT=setTimeout(rs,180)});
+  function loop(){
+    if(document.hidden){rafId=null;return}
+    ctx.clearRect(0,0,W,H);
+    var i,j,p,a,b,d;
+    for(i=0;i<pts.length;i++){
+      p=pts[i];p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;
+      if(p.y<0||p.y>H)p.vy*=-1;
+      ctx.fillStyle='rgba(0,217,255,.5)';
+      ctx.fillRect(p.x,p.y,1.6,1.6);
+    }
+    for(i=0;i<pts.length;i++)for(j=i+1;j<pts.length;j++){
+      a=pts[i];b=pts[j];
+      d=Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
+      if(d<linkDist){
+        ctx.strokeStyle='rgba(123,60,255,'+(0.12*(1-d/linkDist)).toFixed(3)+')';
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+      }
+    }
+    rafId=requestAnimationFrame(loop);
+  }
+  loop();
+  document.addEventListener('visibilitychange',function(){
+    if(!document.hidden && !rafId) loop();
+  });
+}
+
+/* ===== REVEAL ===== */
+if('IntersectionObserver' in window){
+  var ro=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}});
+  },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  $$('.reveal').forEach(function(el){ro.observe(el)});
+}else{$$('.reveal').forEach(function(el){el.classList.add('in')})}
+
+/* ===== ROADMAP TABS ===== */
+$$('.node-tab[data-t]').forEach(function(n){
+  n.addEventListener('click',function(){
+    $$('.node-tab[data-t]').forEach(function(x){x.classList.remove('active');x.setAttribute('aria-selected','false')});
+    $$('.detail').forEach(function(x){x.classList.remove('show')});
+    n.classList.add('active');n.setAttribute('aria-selected','true');
+    var d=document.getElementById(n.getAttribute('data-t'));
+    if(d)d.classList.add('show');
+  });
+});
+
+/* ===== COUNT-UP ===== */
+function runCount(el){
+  var t=parseInt(el.getAttribute('data-count'),10)||0;
+  var s=el.getAttribute('data-suffix')||'';
+  var dur=1300;
+  var start=performance.now();
+  function tick(now){
+    var p=Math.min(1,(now-start)/dur);
+    var e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(t*e)+s;
+    if(p<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+if('IntersectionObserver' in window){
+  var cio=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){runCount(e.target);cio.unobserve(e.target)}});
+  },{threshold:.5});
+  $$('[data-count]').forEach(function(el){cio.observe(el)});
+}else{$$('[data-count]').forEach(runCount)}
+
+/* ===== FAQ ===== */
+var faqs=$$('.faqs > details.faq');
+faqs.forEach(function(d){
+  d.addEventListener('toggle',function(){
+    if(!d.open)return;
+    faqs.forEach(function(o){if(o!==d && o.open) o.open=false;});
+  },{passive:true});
+});
+
+/* ===== TOAST (برای دکمه‌های کپی) ===== */
+var toast=$('#toast'),tT;
+function showToast(m){
+  if(!toast)return;
+  toast.textContent=m;
+  toast.classList.add('v');
+  clearTimeout(tT);
+  tT=setTimeout(function(){toast.classList.remove('v')},2800);
+}
+
+/* ===== COPY ===== */
+$$('[data-copy]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var txt=b.getAttribute('data-copy');
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(
+        function(){showToast('کپی شد: '+txt)},
+        function(){showToast(txt)}
+      );
+    }else{showToast(txt)}
+  });
+});
+
+/* ===== CREED CARDS — افکت 3D ===== */
+if(!reduceMotion && !isTouch){
+  $$('.crt').forEach(function(c){
+    c.addEventListener('pointermove',function(e){
+      var r=c.getBoundingClientRect();
+      var x=(e.clientX-r.left)/r.width-.5;
+      var y=(e.clientY-r.top)/r.height-.5;
+      c.style.transform='perspective(900px) rotateY('+(x*7).toFixed(2)+'deg) rotateX('+(-y*7).toFixed(2)+'deg) translateY(-4px)';
+    });
+    c.addEventListener('pointerleave',function(){
+      c.style.transform='';
+    });
+  });
+}
+
+console.log('✅ ZERO HACKER — Landing ready');
+})();
+</script>
+</body>
+</html>
